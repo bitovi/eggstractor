@@ -171,6 +171,33 @@ function processFontColor(node: SceneNode, baseName: string, state: PluginState)
   }
 }
 
+// Helper function for base64 encoding
+function toBase64(str: string): string {
+  const base64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  const utf8str = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+    function (_, p1) {
+      return String.fromCharCode(parseInt(p1, 16));
+    }
+  );
+  let i = 0;
+  let result = '';
+  while (i < utf8str.length) {
+    const char1 = utf8str.charCodeAt(i++);
+    const char2 = i < utf8str.length ? utf8str.charCodeAt(i++) : NaN;
+    const char3 = i < utf8str.length ? utf8str.charCodeAt(i++) : NaN;
+
+    const enc1 = char1 >> 2;
+    const enc2 = ((char1 & 3) << 4) | (char2 >> 4);
+    const enc3 = ((char2 & 15) << 2) | (char3 >> 6);
+    const enc4 = char3 & 63;
+
+    result += base64chars[enc1] + base64chars[enc2] +
+      (isNaN(char2) ? '=' : base64chars[enc3]) +
+      (isNaN(char3) ? '=' : base64chars[enc4]);
+  }
+  return result;
+}
+
 async function createGithubPR(token: string, repoPath: string, filePath: string, branchName: string, content: string) {
   const baseUrl = 'https://api.github.com';
   const headers = {
@@ -206,6 +233,13 @@ async function createGithubPR(token: string, repoPath: string, filePath: string,
     const testData = await testResponse.json();
     console.log('Repository access test:', testData);
 
+    console.log('Creating branch with:', {
+      branchName: branchName,
+      sha: sha,
+      repoPath: repoPath,
+      shaLength: sha.length // Should be 40
+    });
+
     // Create new branch
     const createBranchResponse = await fetch(`${baseUrl}/repos/${repoPath}/git/refs`, {
       method: 'POST',
@@ -215,28 +249,30 @@ async function createGithubPR(token: string, repoPath: string, filePath: string,
       },
       body: JSON.stringify({
         ref: `refs/heads/${branchName}`,
-        sha
+        sha: sha,
+        force: true
       })
     });
 
-    // Add debug logging
-    console.log('Creating branch with:', {
-      url: `${baseUrl}/repos/${repoPath}/git/refs`,
-      repoPath,
-      branchName,
-      sha
-    });
-
+    // Add more detailed error logging
     if (!createBranchResponse.ok) {
       const error = await createBranchResponse.json();
-      console.error('Branch creation response:', error);
+      console.error('Branch creation failed:', {
+        status: createBranchResponse.status,
+        statusText: createBranchResponse.statusText,
+        error,
+        requestData: {
+          ref: `refs/heads/${branchName}`,
+          sha,
+          repoPath
+        }
+      });
       
       // Try getting the default branch SHA again to ensure it's valid
       const mainBranchResponse = await fetch(`${baseUrl}/repos/${repoPath}/git/refs/heads/${defaultBranch}`, {
         headers
       });
       const mainBranchData = await mainBranchResponse.json();
-      console.log('Main branch data:', mainBranchData);
 
       if (error.message.includes('Reference already exists')) {
         // If branch exists, try to update it instead
@@ -256,13 +292,12 @@ async function createGithubPR(token: string, repoPath: string, filePath: string,
       }
     }
 
-    // Create file directly (skip checking if it exists)
     const createFileResponse = await fetch(`${baseUrl}/repos/${repoPath}/contents/${filePath}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify({
         message: 'Update SCSS variables from Figma',
-        content: btoa(content),
+        content: toBase64(content),
         branch: branchName
       })
     });
