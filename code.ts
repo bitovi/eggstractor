@@ -21,6 +21,22 @@ interface ScssExportContext {
   variableDeclarations: string;
 }
 
+interface VariableBindings {
+  fills?: VariableAlias | VariableAlias[];
+  strokes?: VariableAlias | VariableAlias[];
+  strokeWeight?: VariableAlias | VariableAlias[];
+  fontSize?: VariableAlias | VariableAlias[];
+  fontWeight?: VariableAlias | VariableAlias[];
+  lineHeight?: VariableAlias | VariableAlias[];
+  letterSpacing?: VariableAlias | VariableAlias[];
+}
+
+interface StyleProcessor {
+  property: string;
+  bindingKey: keyof VariableBindings;
+  process: (value: Variable) => Promise<string>;
+}
+
 async function traverseNode(node: BaseNode, context: ScssExportContext) {
   // Extract any styles from the node if it's a SceneNode
   if ('type' in node) {
@@ -76,50 +92,112 @@ function buildScssMixins(context: ScssExportContext): string {
   return mixinOutput;
 }
 
+// Define processors for different node types
+const textNodeProcessors: StyleProcessor[] = [
+  {
+    property: "color",
+    bindingKey: "fills",
+    process: async (variable) => getVariableFallback(variable)
+  },
+  {
+    property: "font-size",
+    bindingKey: "fontSize",
+    process: async (variable) => getVariableFallback(variable)
+  },
+  {
+    property: "font-weight",
+    bindingKey: "fontWeight",
+    process: async (variable) => getVariableFallback(variable)
+  },
+  {
+    property: "line-height",
+    bindingKey: "lineHeight",
+    process: async (variable) => getVariableFallback(variable)
+  },
+  {
+    property: "letter-spacing",
+    bindingKey: "letterSpacing",
+    process: async (variable) => getVariableFallback(variable)
+  }
+];
+
+const frameNodeProcessors: StyleProcessor[] = [
+  {
+    property: "background-color",
+    bindingKey: "fills",
+    process: async (variable) => getVariableFallback(variable)
+  },
+  {
+    property: "border-color",
+    bindingKey: "strokes",
+    process: async (variable) => getVariableFallback(variable)
+  },
+  {
+    property: "border-width",
+    bindingKey: "strokeWeight",
+    process: async (variable) => getVariableFallback(variable)
+  }
+];
+
 async function extractNodeStyles(node: SceneNode, context: ScssExportContext) {
   if (node.type === "COMPONENT") return;
 
   const pathName = getNodePathName(node);
   if (!pathName) return;
 
-  const styles = new Map<string, ScrapedStyle>(); // Use Map to prevent duplicates
+  // Debug log the entire node's boundVariables
+  console.log('Node bound variables:', {
+    nodeName: node.name,
+    nodeType: node.type,
+    boundVariables: node.boundVariables,
+    // If it's a frame, also log stroke properties
+    strokeWeight: node.type === "FRAME" ? (node as FrameNode).strokeWeight : undefined,
+    strokes: node.type === "FRAME" ? (node as FrameNode).strokes : undefined
+  });
 
-  // Process fills
-  const fillBinding = node.boundVariables?.fills?.[0];
-  if (fillBinding?.id) {
-    const variable = await figma.variables.getVariableByIdAsync(fillBinding.id);
-    if (variable) {
-      const varFallback = await getVariableFallback(variable);
-      const scssName = declareScssVariable(variable.name, varFallback, context);
-      styles.set('background-color', { property: "background-color", scssValue: scssName });
+  const styles = new Map<string, ScrapedStyle>();
+  const processors = getProcessorsForNode(node);
+  
+  // Process each style
+  for (const processor of processors) {
+    const binding = node.boundVariables?.[processor.bindingKey];
+    console.log('Processing:', {
+      nodeType: node.type,
+      property: processor.property,
+      bindingKey: processor.bindingKey,
+      hasBinding: !!binding,
+      binding
+    });
+    const firstBinding = binding && Array.isArray(binding) ? binding[0] : binding;
+
+    if (firstBinding?.id) {
+      const variable = await figma.variables.getVariableByIdAsync(firstBinding.id);
+      if (variable) {
+        const value = await processor.process(variable);
+        const scssName = declareScssVariable(variable.name, value, context);
+        styles.set(processor.property, { 
+          property: processor.property, 
+          scssValue: scssName 
+        });
+      }
     }
   }
 
-  if (node.type === "TEXT") {
-    const textFillBinding = node.boundVariables?.fills?.[0];
-    if (textFillBinding?.id) {
-      const variable = await figma.variables.getVariableByIdAsync(textFillBinding.id);
-      if (variable) {
-        const varFallback = await getVariableFallback(variable);
-        const scssName = declareScssVariable(variable.name, varFallback, context);
-        styles.set('color', { property: "color", scssValue: scssName });
-      }
-    }
-
-    const fontSizeBinding = node.boundVariables?.fontSize?.[0];
-    if (fontSizeBinding?.id) {
-      const variable = await figma.variables.getVariableByIdAsync(fontSizeBinding.id);
-      if (variable) {
-        const fallback = await getVariableFallback(variable);
-        const scssName = declareScssVariable(variable.name, fallback, context);
-        styles.set('font-size', { property: "font-size", scssValue: scssName });
-      }
-    }
-  }
-
-  // Store unique styles in context
   if (styles.size > 0) {
     context.nodeStyles[pathName] = Array.from(styles.values());
+  }
+}
+
+function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
+  switch (node.type) {
+    case "TEXT":
+      return textNodeProcessors;
+    case "FRAME":
+    case "RECTANGLE":
+    case "INSTANCE":
+      return frameNodeProcessors;
+    default:
+      return [];
   }
 }
 
