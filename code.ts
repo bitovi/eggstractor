@@ -139,35 +139,32 @@ const frameNodeProcessors: StyleProcessor[] = [
   }
 ];
 
+// Handle direct properties
+function getDirectNodeValue(node: SceneNode, property: string): string | null {
+  if (node.type === "FRAME" || node.type === "RECTANGLE" || node.type === "INSTANCE") {
+    switch (property) {
+      case "border-width":
+        return node.strokeWeight ? `${String(node.strokeWeight)}px` : null;
+      default:
+        return null;
+    }
+  }
+  return null;
+}
+
 async function extractNodeStyles(node: SceneNode, context: ScssExportContext) {
   if (node.type === "COMPONENT") return;
 
   const pathName = getNodePathName(node);
   if (!pathName) return;
 
-  // Debug log the entire node's boundVariables
-  console.log('Node bound variables:', {
-    nodeName: node.name,
-    nodeType: node.type,
-    boundVariables: node.boundVariables,
-    // If it's a frame, also log stroke properties
-    strokeWeight: node.type === "FRAME" ? (node as FrameNode).strokeWeight : undefined,
-    strokes: node.type === "FRAME" ? (node as FrameNode).strokes : undefined
-  });
-
   const styles = new Map<string, ScrapedStyle>();
   const processors = getProcessorsForNode(node);
   
   // Process each style
   for (const processor of processors) {
+    // First try variable binding
     const binding = node.boundVariables?.[processor.bindingKey];
-    console.log('Processing:', {
-      nodeType: node.type,
-      property: processor.property,
-      bindingKey: processor.bindingKey,
-      hasBinding: !!binding,
-      binding
-    });
     const firstBinding = binding && Array.isArray(binding) ? binding[0] : binding;
 
     if (firstBinding?.id) {
@@ -178,6 +175,15 @@ async function extractNodeStyles(node: SceneNode, context: ScssExportContext) {
         styles.set(processor.property, { 
           property: processor.property, 
           scssValue: scssName 
+        });
+      }
+    } else {
+      // Try direct property
+      const directValue = getDirectNodeValue(node, processor.property);
+      if (directValue) {
+        styles.set(processor.property, {
+          property: processor.property,
+          scssValue: directValue
         });
       }
     }
