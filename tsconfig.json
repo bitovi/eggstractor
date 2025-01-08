@@ -3,10 +3,12 @@
     "target": "es6",
     "lib": ["es6", "dom"],
     "strict": true,
+    "outFile": "code.js",
+    "module": "none",
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@figma"
     ]
   },
-  "include": ["*.ts", "*.js"]
+  "include": ["*.ts"]
 }
