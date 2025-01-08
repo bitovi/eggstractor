@@ -1,0 +1,15 @@
+{
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      }
+    },
+    {
+      "files": ["*.js"],
+      "parser": "espree"
+    }
+  ]
+} 
