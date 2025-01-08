@@ -1,59 +1,199 @@
+/// <reference types="@figma/plugin-typings" />
+/// <reference path="./utils.ts" />
+/// <reference path="./github.ts" />
+
 // Show the UI with resizable window
 figma.showUI(__html__, { 
   width: 600,
-  height: 800,
+  height: 1200,
   themeColors: true,
   title: "SCSS Generator",
 });
 
-function rgbToHex(r: number, g: number, b: number) {
-  return (
-    '#' +
-    [r, g, b]
-      .map((x) => {
-        const hex = Math.round(x * 255).toString(16);
-        return hex.length === 1 ? '0' + hex : hex;
-      })
-      .join('')
-  );
+interface ScrapedStyle {
+  property: string;
+  scssValue: string;
 }
 
-function traverseNodes(node: BaseNode, callback: (node: SceneNode) => void) {
+interface ScssExportContext {
+  nodeStyles: Record<string, ScrapedStyle[]>;
+  declaredVars: Set<string>;
+  variableDeclarations: string;
+}
+
+async function traverseNode(node: BaseNode, context: ScssExportContext) {
+  // Extract any styles from the node if it's a SceneNode
   if ('type' in node) {
-    callback(node as SceneNode);
+    await extractNodeStyles(node as SceneNode, context);
   }
-  if ('children' in node) {
+
+  // Recurse if it has children
+  if ("children" in node) {
     for (const child of node.children) {
-      traverseNodes(child, callback);
+      await traverseNode(child, context);
     }
   }
 }
+async function traverseDocument(context: ScssExportContext) {
+  const page = figma.currentPage;
+  await traverseNode(page, context);
+}
 
-async function generateSCSS() {
-  const state = createState();
+async function generateScss(): Promise<string> {
+  // Prepare context
+  const context: ScssExportContext = {
+    nodeStyles: {},
+    declaredVars: new Set(),
+    variableDeclarations: "// Generated SCSS variables\n"
+  };
 
-  // Iterate over each selected node on the current page
-  traverseNodes(figma.currentPage, (node) => {
-    const baseName = sanitizeName(node.name);
-    processBackgroundColor(node, baseName, state);
-    processFontColor(node, baseName, state);
-  });
+  // Traverse the current page (or the entire document if you prefer)
+  await traverseDocument(context);
 
-  // Format mixins with proper indentation
-  let styleRules = "// Generated SCSS style rules\n";
-  for (const baseName in state.styleRulesByNode) {
-    const styles = state.styleRulesByNode[baseName]
-      .split('\n')
-      .filter(line => line.trim())
-      .map(line => `  ${line.trim()}`)
-      .join('\n');
-    
-    if (styles) {
-      styleRules += `@mixin ${baseName} {\n${styles}\n}\n\n`;
+  // Build mixins from the collected styles
+  const mixins = buildScssMixins(context);
+
+  // Combine final output
+  const scssOutput = context.variableDeclarations + "\n" + mixins;
+  return scssOutput;
+}
+
+function buildScssMixins(context: ScssExportContext): string {
+  let mixinOutput = "// Generated SCSS Mixins\n";
+  const nodePaths = Object.keys(context.nodeStyles);
+
+  for (const path of nodePaths) {
+    const styleArray = context.nodeStyles[path];
+    if (!styleArray || styleArray.length === 0) continue;
+
+    mixinOutput += `@mixin ${path} {\n`;
+    for (const st of styleArray) {
+      mixinOutput += `  ${st.property}: ${st.scssValue};\n`;
     }
+    mixinOutput += `}\n\n`;
+  }
+
+  return mixinOutput;
+}
+
+async function extractNodeStyles(node: SceneNode, context: ScssExportContext) {
+  if (node.type === "COMPONENT") return;
+
+  const pathName = getNodePathName(node);
+  if (!pathName) return;
+
+  const styles = new Map<string, ScrapedStyle>(); // Use Map to prevent duplicates
+
+  // Process fills
+  const fillBinding = node.boundVariables?.fills?.[0];
+  if (fillBinding?.id) {
+    const variable = await figma.variables.getVariableByIdAsync(fillBinding.id);
+    if (variable) {
+      const varFallback = await getVariableFallback(variable);
+      const scssName = declareScssVariable(variable.name, varFallback, context);
+      styles.set('background-color', { property: "background-color", scssValue: scssName });
+    }
+  }
+
+  if (node.type === "TEXT") {
+    const textFillBinding = node.boundVariables?.fills?.[0];
+    if (textFillBinding?.id) {
+      const variable = await figma.variables.getVariableByIdAsync(textFillBinding.id);
+      if (variable) {
+        const varFallback = await getVariableFallback(variable);
+        const scssName = declareScssVariable(variable.name, varFallback, context);
+        styles.set('color', { property: "color", scssValue: scssName });
+      }
+    }
+
+    const fontSizeBinding = node.boundVariables?.fontSize?.[0];
+    if (fontSizeBinding?.id) {
+      const variable = await figma.variables.getVariableByIdAsync(fontSizeBinding.id);
+      if (variable) {
+        const fallback = await getVariableFallback(variable);
+        const scssName = declareScssVariable(variable.name, fallback, context);
+        styles.set('font-size', { property: "font-size", scssValue: scssName });
+      }
+    }
+  }
+
+  // Store unique styles in context
+  if (styles.size > 0) {
+    context.nodeStyles[pathName] = Array.from(styles.values());
+  }
+}
+
+function declareScssVariable(
+  varName: string,
+  fallback: string,
+  context: ScssExportContext
+): string {
+  // e.g. `$global-colour-textonlight`
+  const scssVarName = `$${Utils.sanitizeName(varName)}`;
+  if (!context.declaredVars.has(varName)) {
+    // Append the declaration line
+    context.variableDeclarations += `${scssVarName}: ${fallback};\n`;
+    context.declaredVars.add(varName);
+  }
+  return scssVarName;
+}
+
+async function getVariableFallback(variable: Variable): Promise<string> {
+  const modeId = Object.keys(variable.valuesByMode)[0];
+  const value = variable.valuesByMode[modeId];
+  
+  switch (variable.resolvedType) {
+    case "COLOR": {
+      // Handle direct color values
+      if (typeof value === 'object' && 'r' in value) {
+        return Utils.rgbToHex(value.r, value.g, value.b);
+      }
+      
+      // Handle variable aliases
+      if (value && typeof value === 'object' && value.type === 'VARIABLE_ALIAS') {
+        const aliasVariable = await figma.variables.getVariableByIdAsync(value.id);
+        if (aliasVariable) {
+          // Recursively resolve the alias
+          return getVariableFallback(aliasVariable);
+        }
+      }
+      return '#000000';
+    }
+    case "STRING":
+      return value as string;
+    case "FLOAT":
+      return `${value as number}px`;
+    default:
+      return "inherit";
+  }
+}
+
+function getNodePathName(node: SceneNode): string {
+  const pathParts: string[] = [];
+  let current: SceneNode | null = node;
+  
+  while (current && current.parent) {
+    // Skip if the name is "components"
+    if (current.name.toLowerCase() !== "components") {
+      pathParts.push(current.name);
+    }
+    current = current.parent as SceneNode;
   }
   
-  return state.variableDeclarations + "\n" + styleRules;
+  pathParts.reverse();
+
+  const processed = pathParts.map((p) => parseVariantWithoutKey(p));
+
+  return processed.join("_");
+}
+
+function parseVariantWithoutKey(variant: string): string {
+  const [_, valueRaw] = variant.split("=");
+  if (!valueRaw) {
+    // if no '=' found, just sanitize as fallback
+    return Utils.sanitizeSegment(variant);
+  }
+  return Utils.sanitizeSegment(valueRaw);
 }
 
 // Add this function to handle config
@@ -70,7 +210,7 @@ async function getGithubConfig() {
 // Listen for messages from the UI
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'generate-scss') {
-    const scss = await generateSCSS();
+    const scss = await generateScss();
     figma.ui.postMessage({ type: 'output-scss', scss });
   } else if (msg.type === 'save-config') {
     await figma.root.setPluginData('githubConfig', JSON.stringify({
@@ -84,7 +224,7 @@ figma.ui.onmessage = async (msg) => {
     figma.ui.postMessage({ type: 'config-loaded', config });
   } else if (msg.type === 'create-pr') {
     try {
-      const prUrl = await createGithubPR(
+      const prUrl = await Github.createGithubPR(
         msg.githubToken,
         msg.repoPath,
         msg.filePath,
@@ -98,236 +238,3 @@ figma.ui.onmessage = async (msg) => {
     }
   }
 };
-
-interface PluginState {
-  generatedVariables: Set<string>;
-  styleRulesByNode: { [key: string]: string };
-  variableDeclarations: string;
-}
-
-function createState(): PluginState {
-  return {
-    generatedVariables: new Set(),
-    styleRulesByNode: {},
-    variableDeclarations: "// Generated SCSS variables\n",
-  };
-}
-
-function sanitizeName(name: string) {
-  return name
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-') 
-    .replace(/^-+|-+$/g, '')
-    .replace(/-+/g, '-');
-}
-
-function processBackgroundColor(node: SceneNode, baseName: string, state: PluginState) {
-  if (!('fills' in node) || !node.fills || !Array.isArray(node.fills) || node.fills.length === 0) return;
-  
-  if (!state.styleRulesByNode[baseName]) {
-    state.styleRulesByNode[baseName] = '';
-  }
-  
-  for (const fill of node.fills) {
-    if (fill.type === 'SOLID' && fill.visible !== false) {
-      const hexColor = rgbToHex(fill.color.r, fill.color.g, fill.color.b);
-      const varName = `${baseName}-background-color`;
-
-      if (!state.generatedVariables.has(varName)) {
-        state.variableDeclarations += `$${varName}: ${hexColor};\n`;
-        state.generatedVariables.add(varName);
-      }
-  
-      const styleLine = `background-color: $${varName};`;
-      if (!state.styleRulesByNode[baseName].includes(styleLine)) {
-        state.styleRulesByNode[baseName] += styleLine + '\n';
-      }
-    }
-  }
-}
-
-function processFontColor(node: SceneNode, baseName: string, state: PluginState) {
-  if (node.type !== 'TEXT' || !node.fills || !Array.isArray(node.fills) || node.fills.length === 0) return;
-  
-  if (!state.styleRulesByNode[baseName]) {
-    state.styleRulesByNode[baseName] = '';
-  }
-  
-  const fill = node.fills[0] as Paint;
-  if (fill.type === 'SOLID') {
-    const hexColor = rgbToHex(fill.color.r, fill.color.g, fill.color.b);
-    const varName = `${baseName}-font-color`;
-  
-    if (!state.generatedVariables.has(varName)) {
-      state.variableDeclarations += `$${varName}: ${hexColor};\n`;
-      state.generatedVariables.add(varName);
-    }
-    
-    const styleLine = `color: $${varName};`;
-    if (!state.styleRulesByNode[baseName].includes(styleLine)) {
-      state.styleRulesByNode[baseName] += styleLine + '\n';
-    }
-  }
-}
-
-// Helper function for base64 encoding
-function toBase64(str: string): string {
-  const base64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-  const utf8str = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-    function (_, p1) {
-      return String.fromCharCode(parseInt(p1, 16));
-    }
-  );
-  let i = 0;
-  let result = '';
-  while (i < utf8str.length) {
-    const char1 = utf8str.charCodeAt(i++);
-    const char2 = i < utf8str.length ? utf8str.charCodeAt(i++) : NaN;
-    const char3 = i < utf8str.length ? utf8str.charCodeAt(i++) : NaN;
-
-    const enc1 = char1 >> 2;
-    const enc2 = ((char1 & 3) << 4) | (char2 >> 4);
-    const enc3 = ((char2 & 15) << 2) | (char3 >> 6);
-    const enc4 = char3 & 63;
-
-    result += base64chars[enc1] + base64chars[enc2] +
-      (isNaN(char2) ? '=' : base64chars[enc3]) +
-      (isNaN(char3) ? '=' : base64chars[enc4]);
-  }
-  return result;
-}
-
-async function createGithubPR(token: string, repoPath: string, filePath: string, branchName: string, content: string) {
-  const baseUrl = 'https://api.github.com';
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Accept': 'application/vnd.github.v3+json'
-  };
-
-  try {
-    // Get default branch
-    const repoResponse = await fetch(`${baseUrl}/repos/${repoPath}`, {
-      headers
-    });
-    if (!repoResponse.ok) {
-      throw new Error(`Repository not found: ${repoPath}`);
-    }
-    const repoData = await repoResponse.json();
-    const defaultBranch = repoData.default_branch;
-
-    // Get the SHA of the default branch
-    const refResponse = await fetch(`${baseUrl}/repos/${repoPath}/git/ref/heads/${defaultBranch}`, {
-      headers
-    });
-    if (!refResponse.ok) {
-      throw new Error(`Default branch "${defaultBranch}" not found`);
-    }
-    const refData = await refResponse.json();
-    const sha = refData.object.sha;
-
-    // Add this check at the start of createGithubPR
-    const testResponse = await fetch(`${baseUrl}/repos/${repoPath}`, {
-      headers
-    });
-    const testData = await testResponse.json();
-    console.log('Repository access test:', testData);
-
-    console.log('Creating branch with:', {
-      branchName: branchName,
-      sha: sha,
-      repoPath: repoPath,
-      shaLength: sha.length // Should be 40
-    });
-
-    // Create new branch
-    const createBranchResponse = await fetch(`${baseUrl}/repos/${repoPath}/git/refs`, {
-      method: 'POST',
-      headers: {
-        ...headers,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        ref: `refs/heads/${branchName}`,
-        sha: sha,
-        force: true
-      })
-    });
-
-    // Add more detailed error logging
-    if (!createBranchResponse.ok) {
-      const error = await createBranchResponse.json();
-      console.error('Branch creation failed:', {
-        status: createBranchResponse.status,
-        statusText: createBranchResponse.statusText,
-        error,
-        requestData: {
-          ref: `refs/heads/${branchName}`,
-          sha,
-          repoPath
-        }
-      });
-      
-      // Try getting the default branch SHA again to ensure it's valid
-      const mainBranchResponse = await fetch(`${baseUrl}/repos/${repoPath}/git/refs/heads/${defaultBranch}`, {
-        headers
-      });
-      const mainBranchData = await mainBranchResponse.json();
-
-      if (error.message.includes('Reference already exists')) {
-        // If branch exists, try to update it instead
-        const updateResponse = await fetch(`${baseUrl}/repos/${repoPath}/git/refs/heads/${branchName}`, {
-          method: 'PATCH',
-          headers: {
-            ...headers,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ sha, force: true })
-        });
-        if (!updateResponse.ok) {
-          throw new Error(`Failed to update branch: ${error.message}`);
-        }
-      } else {
-        throw new Error(`Failed to create branch: ${error.message}`);
-      }
-    }
-
-    const createFileResponse = await fetch(`${baseUrl}/repos/${repoPath}/contents/${filePath}`, {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify({
-        message: 'Update SCSS variables from Figma',
-        content: toBase64(content),
-        branch: branchName
-      })
-    });
-    if (!createFileResponse.ok) {
-      const error = await createFileResponse.json();
-      throw new Error(`Failed to create file: ${error.message}`);
-    }
-
-    // Create PR
-    const prResponse = await fetch(`${baseUrl}/repos/${repoPath}/pulls`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        title: 'Update SCSS variables from Figma',
-        body: 'This PR was automatically created by the Figma SCSS plugin.',
-        head: branchName,
-        base: defaultBranch
-      })
-    });
-    if (!prResponse.ok) {
-      const error = await prResponse.json();
-      throw new Error(`Failed to create PR: ${error.message}`);
-    }
-
-    const prData = await prResponse.json();
-    return prData.html_url;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`GitHub API Error: ${error.message}`);
-    }
-    throw new Error('GitHub API Error: An unknown error occurred');
-  }
-}
