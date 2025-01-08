@@ -6,25 +6,104 @@
     <style>
       body { margin: 0; padding: 20px; font-family: sans-serif; }
       button { padding: 8px 16px; font-size: 14px; margin-bottom: 10px; }
-      textarea { width: 100%; height: 70vh; padding: 10px; box-sizing: border-box; }
+      textarea { width: 100%; height: 50vh; padding: 10px; box-sizing: border-box; }
+      .form-group { margin-bottom: 15px; }
+      label { display: block; margin-bottom: 5px; color: white; }
+      input { width: 100%; padding: 8px; box-sizing: border-box; }
     </style>
   </head>
   <body>
-    <button id="exportBtn">Bitovi Export to SCSS</button>
+    <div class="form-group">
+      <label for="githubToken">GitHub Token:</label>
+      <input type="password" id="githubToken" placeholder="ghp_your_token_here" />
+    </div>
+    <div class="form-group">
+      <label for="repoPath">Repository (owner/repo):</label>
+      <input type="text" id="repoPath" placeholder="e.g., bitovi/design-system" />
+    </div>
+    <div class="form-group">
+      <label for="filePath">File Path:</label>
+      <input type="text" id="filePath" placeholder="e.g., src/styles/variables.scss" />
+    </div>
+    <div class="form-group">
+      <label for="branchName">New Branch Name:</label>
+      <input type="text" id="branchName" placeholder="e.g., feature/update-scss-variables" />
+    </div>
+    
+    <button id="generateBtn">Generate SCSS</button>
+    <button id="createPRBtn">Create PR</button>
     <textarea id="output" readonly placeholder="SCSS output will appear here..."></textarea>
 
     <script>
-      const exportBtn = document.getElementById('exportBtn');
+      const generateBtn = document.getElementById('generateBtn');
+      const createPRBtn = document.getElementById('createPRBtn');
       const outputArea = document.getElementById('output');
+      const repoPathInput = document.getElementById('repoPath');
+      const filePathInput = document.getElementById('filePath');
+      const branchNameInput = document.getElementById('branchName');
+      let generatedScss = '';
 
-      exportBtn.onclick = () => {
+      // Load saved config when UI opens
+      window.onload = () => {
+        parent.postMessage({ pluginMessage: { type: 'load-config' } }, '*');
+      };
+
+      // Save config when inputs change
+      repoPathInput.onchange = saveConfig;
+      filePathInput.onchange = saveConfig;
+      branchNameInput.onchange = saveConfig;
+      function saveConfig() {
+        parent.postMessage({
+          pluginMessage: {
+            type: 'save-config',
+            repoPath: repoPathInput.value,
+            filePath: filePathInput.value,
+            branchName: branchNameInput.value
+          }
+        }, '*');
+      }
+
+      generateBtn.onclick = () => {
         parent.postMessage({ pluginMessage: { type: 'generate-scss' } }, '*');
       };
 
+      createPRBtn.onclick = () => {
+        const githubToken = document.getElementById('githubToken').value;
+        const repoPath = document.getElementById('repoPath').value;
+        const filePath = document.getElementById('filePath').value;
+        const branchName = document.getElementById('branchName').value;
+
+        if (!githubToken || !repoPath || !filePath || !branchName || !generatedScss) {
+          alert('Please fill in all fields and generate SCSS first');
+          return;
+        }
+
+        parent.postMessage({
+          pluginMessage: {
+            type: 'create-pr',
+            githubToken,
+            repoPath,
+            filePath,
+            branchName,
+            content: generatedScss
+          }
+        }, '*');
+      };
+
+      // Update the message handler
       window.onmessage = (event) => {
         const message = event.data.pluginMessage;
         if (message.type === 'output-scss') {
+          generatedScss = message.scss;
           outputArea.value = message.scss;
+        } else if (message.type === 'config-loaded' && message.config) {
+          repoPathInput.value = message.config.repoPath || '';
+          filePathInput.value = message.config.filePath || '';
+          branchNameInput.value = message.config.branchName || '';
+        } else if (message.type === 'pr-created') {
+          alert(`PR created successfully! URL: ${message.prUrl}`);
+        } else if (message.type === 'error') {
+          alert(`Error: ${message.message}`);
         }
       };
     </script>
