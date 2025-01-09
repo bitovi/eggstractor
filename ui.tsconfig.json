@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es6",
+    "lib": ["es6", "dom"]
+  },
+  "include": ["src/ui.ts", "src/highlighter.ts"]
+} 

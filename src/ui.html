@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bitovi Figma SCSS Plugin</title>
+    <style>
+      body { margin: 0; padding: 20px; font-family: sans-serif; }
+      button { padding: 8px 16px; font-size: 14px; margin-bottom: 10px; }
+      #output { 
+        width: 100%; 
+        height: 50vh; 
+        padding: 10px; 
+        box-sizing: border-box;
+        background: #1E1E1E;
+        color: #DCDCDC;
+        font-family: monospace;
+        overflow: auto;
+        white-space: pre;
+        line-height: 1.5;
+      }
+      .form-group { margin-bottom: 15px; }
+      label { display: block; margin-bottom: 5px; color: white; }
+      input { width: 100%; padding: 8px; box-sizing: border-box; }
+      pre { margin: 0;}
+      #status { 
+        margin-left: 10px;
+        color: #DCDCDC;
+        font-style: italic;
+      }
+      #status a {
+        color: #7cc4f8;
+        text-decoration: none;
+      }
+      #status a:hover {
+        text-decoration: underline;
+      }
+
+      /* Highlight.js VS2015 Theme */
+      .hljs {
+        display: block;
+        overflow-x: auto;
+        padding: 0.5em;
+        background: #1E1E1E;
+        color: #DCDCDC;
+      }
+      .hljs-keyword,
+      .hljs-literal,
+      .hljs-symbol,
+      .hljs-name {
+        color: #569CD6;
+      }
+      .hljs-link {
+        color: #569CD6;
+        text-decoration: underline;
+      }
+      .hljs-built_in,
+      .hljs-type {
+        color: #4EC9B0;
+      }
+      .hljs-number,
+      .hljs-class {
+        color: #B8D7A3;
+      }
+      .hljs-string,
+      .hljs-meta-string {
+        color: #D69D85;
+      }
+      .hljs-regexp,
+      .hljs-template-tag {
+        color: #9A5334;
+      }
+      .hljs-subst,
+      .hljs-function,
+      .hljs-title,
+      .hljs-params,
+      .hljs-formula {
+        color: #DCDCDC;
+      }
+      .hljs-comment,
+      .hljs-quote {
+        color: #57A64A;
+        font-style: italic;
+      }
+      .hljs-doctag {
+        color: #608B4E;
+      }
+      .hljs-meta,
+      .hljs-meta-keyword,
+      .hljs-tag {
+        color: #9B9B9B;
+      }
+      .hljs-variable,
+      .hljs-template-variable {
+        color: #BD63C5;
+      }
+      .hljs-attr,
+      .hljs-attribute,
+      .hljs-builtin-name {
+        color: #9CDCFE;
+      }
+      .hljs-section {
+        color: gold;
+      }
+      .hljs-emphasis {
+        font-style: italic;
+      }
+      .hljs-strong {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-group">
+      <label for="githubToken">GitHub Token:</label>
+      <input type="password" id="githubToken" placeholder="ghp_your_token_here" />
+    </div>
+    <div class="form-group">
+      <label for="repoPath">Repository (owner/repo):</label>
+      <input type="text" id="repoPath" placeholder="e.g., bitovi/design-system" />
+    </div>
+    <div class="form-group">
+      <label for="filePath">File Path:</label>
+      <input type="text" id="filePath" placeholder="e.g., src/styles/variables.scss" />
+    </div>
+    <div class="form-group">
+      <label for="branchName">New Branch Name:</label>
+      <input type="text" id="branchName" placeholder="e.g., feature/update-scss-variables" />
+    </div>
+    <div>
+      <button id="generateBtn">Generate SCSS</button>
+      <button id="createPRBtn">Create PR</button>
+      <span id="status"></span>
+    </div>
+    <div id="output"></div>
+  </body>
+</html>

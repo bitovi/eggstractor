@@ -1,6 +1,5 @@
-/// <reference types="@figma/plugin-typings" />
-/// <reference path="./utils.ts" />
-/// <reference path="./github.ts" />
+import Utils from './utils';
+import Github from './github';
 
 // Show the UI with resizable window
 figma.showUI(__html__, { 
@@ -98,10 +97,14 @@ async function extractNodeToken(
   path: string[]
 ): Promise<StyleToken | null> {
   const binding = node.boundVariables?.[processor.bindingKey];
-  const firstBinding = binding && Array.isArray(binding) ? binding[0] : binding;
+  
+  // Get the variable ID, handling both single and array cases
+  const variableId = Array.isArray(binding) 
+    ? binding[0]?.id 
+    : binding?.id;
 
-  if (firstBinding?.id) {
-    const variable = await figma.variables.getVariableByIdAsync(firstBinding.id);
+  if (variableId) {
+    const variable = await figma.variables.getVariableByIdAsync(variableId);
     if (variable) {
       const rawValue = await getVariableFallback(variable);
       const name = variable.name;

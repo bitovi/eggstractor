@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2017"],
     "strict": true,
-    "outFile": "code.js",
     "module": "none",
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@figma"
-    ]
+    ],
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true
   },
-  "include": ["*.ts"]
+  "include": ["src/*.ts"],
+  "exclude": ["src/ui.ts"]
 }
