@@ -64,7 +64,7 @@
       }
 
       generateBtn.onclick = () => {
-        parent.postMessage({ pluginMessage: { type: 'generate-scss' } }, '*');
+        parent.postMessage({ pluginMessage: { type: 'generate-styles' } }, '*');
       };
 
       createPRBtn.onclick = () => {
@@ -93,15 +93,17 @@
       // Update the message handler
       window.onmessage = (event) => {
         const message = event.data.pluginMessage;
-        if (message.type === 'output-scss') {
-          generatedScss = message.scss;
-          outputArea.value = message.scss;
+        if (message.type === 'output-styles') {
+          generatedScss = message.styles;
+          outputArea.value = message.styles;
         } else if (message.type === 'config-loaded' && message.config) {
           repoPathInput.value = message.config.repoPath || '';
           filePathInput.value = message.config.filePath || '';
           branchNameInput.value = message.config.branchName || '';
         } else if (message.type === 'pr-created') {
-          alert(`PR created successfully! URL: ${message.prUrl}`);
+          alert(`PR created successfully!
+PR URL: ${message.prUrl}
+Preview URL: ${message.previewUrl}`);
         } else if (message.type === 'error') {
           alert(`Error: ${message.message}`);
         }
