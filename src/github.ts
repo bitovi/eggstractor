@@ -2,44 +2,9 @@ import Utils from './utils';
 
 export interface PRResult {
   prUrl: string;
-  previewUrl: string;
-  workflowUrl?: string;
-}
-
-function getGithubPagesUrl(repoPath: string, branchName: string): string {
-  const [owner, repo] = repoPath.split('/');
-  // Convert slashes to hyphens in branch name
-  const safeBranchName = branchName.replace(/\//g, '-');
-  return `https://${owner}.github.io/${repo}/${safeBranchName}`;
-}
-
-async function getWorkflowStatus(token: string, repoPath: string, branchName: string): Promise<'completed' | 'pending'> {
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Accept': 'application/vnd.github.v3+json'
-  };
-  
-  const response = await fetch(
-    `https://api.github.com/repos/${repoPath}/actions/runs?branch=${branchName}&status=completed`,
-    { headers }
-  );
-  
-  const data = await response.json();
-  return data.total_count > 0 ? 'completed' : 'pending';
-}
-
-async function pollWorkflowStatus(token: string, repoPath: string, branchName: string, maxAttempts = 30): Promise<void> {
-  for (let i = 0; i < maxAttempts; i++) {
-    const status = await getWorkflowStatus(token, repoPath, branchName);
-    if (status === 'completed') return;
-    await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds between polls
-  }
-  throw new Error('Workflow timed out');
 }
 
 export default {
-  getGithubPagesUrl,
-  pollWorkflowStatus,
   createGithubPR: async function createGithubPR(token: string, repoPath: string, filePath: string, branchName: string, content: string): Promise<PRResult> {
     const baseUrl = 'https://api.github.com';
     const headers = {
@@ -153,8 +118,7 @@ export default {
       }
 
       return {
-        prUrl,
-        previewUrl: getGithubPagesUrl(repoPath, branchName)
+        prUrl
       };
     } catch (error) {
       if (error instanceof Error) {

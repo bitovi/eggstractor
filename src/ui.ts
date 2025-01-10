@@ -74,40 +74,10 @@ window.onmessage = async (event) => {
     branchNameInput.value = event.data.pluginMessage.config.branchName || '';
   } else if (event.data.pluginMessage.type === 'pr-created') {
     const statusEl = document.getElementById('status') as HTMLSpanElement;
-    statusEl.textContent = 'Waiting for preview to be ready...';
-    
-    try {
-      await github.pollWorkflowStatus(
-        (document.getElementById('githubToken') as HTMLInputElement).value,
-        repoPathInput.value,
-        branchNameInput.value
-      );
-      statusEl.innerHTML = `Preview is ready! <a href="${event.data.pluginMessage.previewUrl}" target="_blank">View Preview</a>`;
-    } catch (error) {
-      statusEl.textContent = 'Preview timed out, but you can try the URL later.';
-    } finally {
-      createPRBtn.disabled = false;
-    }
+    statusEl.innerHTML = `PR created! <a href="${event.data.pluginMessage.prUrl}" target="_blank">View PR</a>`;
+    createPRBtn.disabled = false;
   } else if (event.data.pluginMessage.type === 'error') {
+    createPRBtn.disabled = false;
     alert(`Error: ${event.data.pluginMessage.message}`);
   }
 };
-
-
-// When we get the SCSS (or Less, etc.) from plugin:
-// window.onmessage = (event) => {
-//   const msg = event.data.pluginMessage;
-//   if (msg?.type === "tokens-output") {
-//     const codeBlock = document.getElementById("outputArea") as HTMLElement;
-
-//     // Insert the code from plugin
-//     codeBlock.textContent = msg.code;
-
-//     // If using SCSS highlighting, set class to "language-scss"
-//     // If you had a dynamic format, you might do something else, e.g. "language-less"
-//     codeBlock.className = `language-scss`;
-
-//     // Apply highlight.js
-//     hljs.highlightElement(codeBlock);
-//   }
-// };

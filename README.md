@@ -11,7 +11,7 @@ This plugin generates SCSS variables and mixins from selected nodes in Figma.
 
 ## Development
 
-Use `npm run watch` to run the typescript compiler in watch mode. This will compile the code.ts file to code.js.
+Use `npm run dev` to run the webpack compiler in watch mode. 
 
 ### Local plugin
 

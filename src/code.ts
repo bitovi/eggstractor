@@ -343,7 +343,6 @@ figma.ui.onmessage = async (msg) => {
       figma.ui.postMessage({ 
         type: 'pr-created', 
         prUrl: result.prUrl,
-        previewUrl: result.previewUrl
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'An unknown error occurred';
