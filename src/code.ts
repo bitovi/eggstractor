@@ -2,7 +2,7 @@ import Utils from './utils';
 import Github from './github';
 
 // Show the UI with resizable window
-figma.showUI(__html__, { 
+figma.showUI(__html__, {
   width: 600,
   height: 1200,
   themeColors: true,
@@ -17,6 +17,7 @@ interface VariableBindings {
   fontWeight?: VariableAlias | VariableAlias[];
   lineHeight?: VariableAlias | VariableAlias[];
   letterSpacing?: VariableAlias | VariableAlias[];
+  cornerRadius?: VariableAlias | VariableAlias[];
 }
 
 interface StyleProcessor {
@@ -62,7 +63,7 @@ async function generateStyles(format: 'scss' | 'less' | 'postcss'): Promise<stri
 // Token Collection
 async function collectTokens(): Promise<TokenCollection> {
   const collection: TokenCollection = { tokens: [] };
-  
+
   async function processNode(node: BaseNode) {
     if ('type' in node && 'boundVariables' in node) {
       if (node.type !== "COMPONENT") {
@@ -96,19 +97,21 @@ async function extractNodeToken(
   processor: StyleProcessor,
   path: string[]
 ): Promise<StyleToken | null> {
-  const binding = node.boundVariables?.[processor.bindingKey];
-  
-  // Get the variable ID, handling both single and array cases
-  const variableId = Array.isArray(binding) 
-    ? binding[0]?.id 
-    : binding?.id;
+  // Cast from the default Figma type to your custom interface
+  const customBoundVariables = node.boundVariables as unknown as VariableBindings;
+
+  // Now TypeScript knows cornerRadius (and others) can exist
+  const binding = customBoundVariables[processor.bindingKey];
+
+  // If it’s an array, pick the first variable ID
+  const variableId = Array.isArray(binding) ? binding[0]?.id : binding?.id;
 
   if (variableId) {
     const variable = await figma.variables.getVariableByIdAsync(variableId);
     if (variable) {
       const rawValue = await getVariableFallback(variable);
       const name = variable.name;
-      
+
       return {
         type: variable.resolvedType.toLowerCase() as 'color' | 'dimension' | 'number' | 'string',
         name,
@@ -230,6 +233,14 @@ const frameNodeProcessors: StyleProcessor[] = [
     property: "border-width",
     bindingKey: "strokeWeight",
     process: async (variable) => getVariableFallback(variable)
+  },
+  {
+    property: "border-radius",
+    bindingKey: "cornerRadius",
+    process: async (variable) => {
+      const value = await getVariableFallback(variable);
+      return value.endsWith('px') ? value : `${value}px`;
+    }
   }
 ];
 
@@ -239,6 +250,8 @@ function getDirectNodeValue(node: SceneNode, property: string): string | null {
     switch (property) {
       case "border-width":
         return node.strokeWeight ? `${String(node.strokeWeight)}px` : null;
+      case "border-radius":
+        return node.cornerRadius ? `${String(node.cornerRadius)}px` : null;
       default:
         return null;
     }
@@ -262,14 +275,14 @@ function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
 async function getVariableFallback(variable: Variable): Promise<string> {
   const modeId = Object.keys(variable.valuesByMode)[0];
   const value = variable.valuesByMode[modeId];
-  
+
   switch (variable.resolvedType) {
     case "COLOR": {
       // Handle direct color values
       if (typeof value === 'object' && 'r' in value) {
         return Utils.rgbToHex(value.r, value.g, value.b);
       }
-      
+
       // Handle variable aliases
       if (value && typeof value === 'object' && value.type === 'VARIABLE_ALIAS') {
         const aliasVariable = await figma.variables.getVariableByIdAsync(value.id);
@@ -291,7 +304,7 @@ async function getVariableFallback(variable: Variable): Promise<string> {
 function getNodePathName(node: SceneNode): string {
   const pathParts: string[] = [];
   let current: SceneNode | null = node;
-  
+
   while (current && current.parent) {
     // Skip if the name is "components"
     if (current.name.toLowerCase() !== "components") {
@@ -299,7 +312,7 @@ function getNodePathName(node: SceneNode): string {
     }
     current = current.parent as SceneNode;
   }
-  
+
   pathParts.reverse();
 
   const processed = pathParts.map((p) => parseVariantWithoutKey(p));
@@ -340,8 +353,8 @@ figma.ui.onmessage = async (msg) => {
         msg.branchName,
         msg.content
       );
-      figma.ui.postMessage({ 
-        type: 'pr-created', 
+      figma.ui.postMessage({
+        type: 'pr-created',
         prUrl: result.prUrl,
       });
     } catch (error) {
