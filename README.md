@@ -14,6 +14,7 @@ This plugin generates SCSS variables and mixins from selected nodes in Figma.
 Use `npm run dev` to run the webpack compiler in watch mode. 
 
 ### Local plugin
+You will need to use Figma Desktop for this
 
   •	In Figma, go to Plugins → Development → Import plugin from manifest…
 	•	Select the manifest.json file.
