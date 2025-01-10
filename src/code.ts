@@ -18,12 +18,13 @@ interface VariableBindings {
   lineHeight?: VariableAlias | VariableAlias[];
   letterSpacing?: VariableAlias | VariableAlias[];
   cornerRadius?: VariableAlias | VariableAlias[];
+  itemSpacing?: VariableAlias | VariableAlias[];
 }
 
 interface StyleProcessor {
   property: string;
   bindingKey: keyof VariableBindings;
-  process: (value: Variable) => Promise<string>;
+  process: (value: Variable | null, node?: SceneNode) => Promise<string>;
 }
 
 // Token Types
@@ -97,6 +98,18 @@ async function extractNodeToken(
   processor: StyleProcessor,
   path: string[]
 ): Promise<StyleToken | null> {
+  // Handle static layout properties
+  if (['display', 'flex-direction', 'align-items'].includes(processor.property)) {
+    return {
+      type: 'string',
+      name: path.join('_'),
+      value: processor.process ? await processor.process(null, node) : '',
+      rawValue: processor.process ? await processor.process(null, node) : '',
+      property: processor.property,
+      path
+    };
+  }
+
   // Cast from the default Figma type to your custom interface
   const customBoundVariables = node.boundVariables as unknown as VariableBindings;
 
@@ -241,6 +254,42 @@ const frameNodeProcessors: StyleProcessor[] = [
       const value = await getVariableFallback(variable);
       return value.endsWith('px') ? value : `${value}px`;
     }
+  },
+  {
+    property: "display",
+    bindingKey: "fills",
+    process: async (_, node?: SceneNode) => {
+      if (node && 'layoutMode' in node) {
+        return node.layoutMode ? "flex" : "block";
+      }
+      return "block";
+    }
+  },
+  {
+    property: "flex-direction",
+    bindingKey: "fills",
+    process: async (_, node?: SceneNode) => {
+      if (node && 'layoutMode' in node) {
+        return node.layoutMode === "VERTICAL" ? "column" : "row";
+      }
+      return "column";
+    }
+  },
+  {
+    property: "align-items",
+    bindingKey: "fills",
+    process: async (_, node?: SceneNode) => {
+      if (node && 'primaryAxisAlignItems' in node) {
+        const alignMap = {
+          MIN: "flex-start",
+          CENTER: "center",
+          MAX: "flex-end",
+          SPACE_BETWEEN: "space-between"
+        };
+        return alignMap[node.primaryAxisAlignItems] || "flex-start";
+      }
+      return "flex-start";
+    }
   }
 ];
 
@@ -272,30 +321,33 @@ function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
   }
 }
 
-async function getVariableFallback(variable: Variable): Promise<string> {
+async function getVariableFallback(variable: Variable | null): Promise<string> {
+  if (!variable) return '';
+
   const modeId = Object.keys(variable.valuesByMode)[0];
   const value = variable.valuesByMode[modeId];
 
+  // Handle variable aliases first
+  if (value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS') {
+    const aliasVariable = await figma.variables.getVariableByIdAsync(value.id);
+    if (aliasVariable) {
+      return getVariableFallback(aliasVariable);
+    }
+  }
+
   switch (variable.resolvedType) {
+    case "FLOAT":
+      return `${value as number}px`;
     case "COLOR": {
       // Handle direct color values
       if (typeof value === 'object' && 'r' in value) {
         return Utils.rgbToHex(value.r, value.g, value.b);
       }
 
-      // Handle variable aliases
-      if (value && typeof value === 'object' && value.type === 'VARIABLE_ALIAS') {
-        const aliasVariable = await figma.variables.getVariableByIdAsync(value.id);
-        if (aliasVariable) {
-          return getVariableFallback(aliasVariable);
-        }
-      }
       return '#000000';
     }
     case "STRING":
       return value as string;
-    case "FLOAT":
-      return `${value as number}px`;
     default:
       return "inherit";
   }
