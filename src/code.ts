@@ -78,10 +78,17 @@ async function collectTokens(): Promise<TokenCollection> {
         );
         
         for (const processor of processors) {
-          const token = await extractNodeToken(node as SceneNode, processor, nodePath);
-          if (token) {
-            // Keep the full path for variants
-            collection.tokens.push(token);
+          // Get the direct value from the component
+          const directValue = getDirectNodeValue(node as SceneNode, processor.property);
+          if (directValue) {
+            collection.tokens.push({
+              type: 'string',
+              name: nodePath.join('_'),
+              value: directValue,
+              rawValue: directValue,
+              property: processor.property,
+              path: nodePath
+            });
           }
         }
       } else {
@@ -376,26 +383,34 @@ const frameNodeProcessors: StyleProcessor[] = [
 
 // Handle direct properties
 function getDirectNodeValue(node: SceneNode, property: string): string | null {
-  if (node.type === "FRAME" || node.type === "RECTANGLE" || node.type === "INSTANCE") {
+  if (node.type === "COMPONENT" || node.type === "FRAME" || node.type === "RECTANGLE" || node.type === "INSTANCE") {
     switch (property) {
       case "border-width":
         return node.strokeWeight ? `${String(node.strokeWeight)}px` : null;
       case "border-radius":
         return node.cornerRadius ? `${String(node.cornerRadius)}px` : null;
       case "gap":
-        return 'itemSpacing' in node ? `${node.itemSpacing}px` : null;
+        if ('layoutMode' in node && 'itemSpacing' in node) {
+          return node.layoutMode ? `${node.itemSpacing}px` : null;
+        }
+        return null;
       case "display":
         if ('layoutMode' in node) {
-          return node.layoutMode ? (node.layoutAlign === "STRETCH" ? "flex" : "inline-flex") : "block";
+          if (!node.layoutMode) return "block";
+          // Check for auto-layout properties
+          const isInline = node.layoutAlign !== "STRETCH";
+          return isInline ? "inline-flex" : "flex";
         }
         return null;
       case "flex-direction":
         if ('layoutMode' in node) {
+          if (!node.layoutMode) return null;
           return node.layoutMode === "VERTICAL" ? "column" : "row";
         }
         return null;
       case "align-items":
-        if ('primaryAxisAlignItems' in node) {
+        if ('layoutMode' in node && 'primaryAxisAlignItems' in node) {
+          if (!node.layoutMode) return null;
           const alignMap = {
             MIN: "flex-start",
             CENTER: "center",
