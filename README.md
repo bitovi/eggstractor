@@ -1,6 +1,6 @@
-## Bitovi Figma SCSS Plugin
+## Eggstractor
 
-This plugin generates SCSS variables and mixins from selected nodes in Figma.
+This plugin generates SCSS variables and mixins from Figma.
 
 ### Features
 
