@@ -17,6 +17,7 @@ interface VariableBindings {
   fontWeight?: VariableAlias | VariableAlias[];
   lineHeight?: VariableAlias | VariableAlias[];
   letterSpacing?: VariableAlias | VariableAlias[];
+  fontFamily?: VariableAlias | VariableAlias[];
   cornerRadius?: VariableAlias | VariableAlias[];
   itemSpacing?: VariableAlias | VariableAlias[];
 }
@@ -228,6 +229,21 @@ const textNodeProcessors: StyleProcessor[] = [
     property: "letter-spacing",
     bindingKey: "letterSpacing",
     process: async (variable) => getVariableFallback(variable)
+  },
+  {
+    property: "font-family",
+    bindingKey: "fontFamily",
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        return getVariableFallback(variable);
+      }
+      // Fallback to direct font family if no variable
+      if (node?.type === "TEXT") {
+        const fontName = node.fontName as FontName;
+        return `"${fontName.family}"`;
+      }
+      return "inherit";
+    }
   }
 ];
 
@@ -387,19 +403,21 @@ figma.ui.onmessage = async (msg) => {
     const styles = await generateStyles(msg.format || 'scss');
     figma.ui.postMessage({ type: 'output-styles', styles });
   } else if (msg.type === 'save-config') {
-    await Github.saveGithubToken(msg.githubToken);
+    await Github.saveUserSettings(msg.githubToken, msg.branchName);
     await Github.saveGithubConfig({
       repoPath: msg.repoPath,
       filePath: msg.filePath,
-      branchName: msg.branchName
     });
     figma.ui.postMessage({ type: 'config-saved' });
   } else if (msg.type === 'load-config') {
-    const [config, token] = await Promise.all([
+    const [config, userSettings] = await Promise.all([
       Github.getGithubConfig(),
-      Github.getGithubToken()
+      Github.getUserSettings()
     ]);
-    if (token) config.githubToken = token;
+    if (userSettings) {
+      config.githubToken = userSettings.token;
+      config.branchName = userSettings.branchName;
+    }
     figma.ui.postMessage({ type: 'config-loaded', config });
   } else if (msg.type === 'create-pr') {
     try {

@@ -4,17 +4,22 @@ export interface PRResult {
   prUrl: string;
 }
 
+interface GithubUserSettings {
+  token: string;
+  branchName: string;
+}
+
 export default {
-  saveGithubToken: async function saveGithubToken(token: string) {
-    await figma.clientStorage.setAsync('githubToken', token);
+  saveUserSettings: async function saveUserSettings(token: string, branchName: string) {
+    await figma.clientStorage.setAsync('githubUserSettings', JSON.stringify({ token, branchName }));
   },
-  getGithubToken: async function getGithubToken(): Promise<string | null> {
-    return figma.clientStorage.getAsync('githubToken');
+  getUserSettings: async function getUserSettings(): Promise<GithubUserSettings | null> {
+    const settings = await figma.clientStorage.getAsync('githubUserSettings');
+    return settings ? JSON.parse(settings) : null;
   },
   saveGithubConfig: async function saveGithubConfig(config: {
     repoPath: string;
     filePath: string;
-    branchName: string;
   }) {
     await figma.root.setPluginData('githubConfig', JSON.stringify(config));
   },
