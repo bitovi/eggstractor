@@ -63,13 +63,59 @@ createPRBtn.onclick = () => {
   }, '*');
 };
 
+// Add this function to handle copying
+function copyToClipboard(text: string) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+}
+
 // Update the message handler
 window.onmessage = async (event) => {
   if (event.data.pluginMessage.type === 'output-styles') {
     const output = document.getElementById('output') as HTMLDivElement;
     const highlightedCode = highlightCode(event.data.pluginMessage.styles);
-    output.innerHTML = `<pre><code class="hljs language-scss">${highlightedCode}</code></pre>`;
-    generatedScss = event.data.pluginMessage.styles;
+    output.innerHTML = `
+      <div class="output-header">
+        <button id="copyButton" class="copy-button" aria-label="Copy to clipboard" title="Copy to clipboard">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <title>Copy icon</title>
+            <path d="M2 4H1V14H11V13H2V4Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 1H14V11H4V1ZM5 2H13V10H5V2Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+      <pre>${highlightedCode}</pre>
+    `;
+
+    const copyButton = document.getElementById('copyButton');
+    if (copyButton) {
+      copyButton.onclick = () => {
+        copyToClipboard(event.data.pluginMessage.styles);
+        copyButton.setAttribute('aria-label', 'Copied!');
+        copyButton.setAttribute('title', 'Copied!');
+        copyButton.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <title>Check mark icon</title>
+            <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z" fill="currentColor"/>
+          </svg>
+        `;
+        setTimeout(() => {
+          copyButton.setAttribute('aria-label', 'Copy to clipboard');
+          copyButton.setAttribute('title', 'Copy to clipboard');
+          copyButton.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <title>Copy icon</title>
+              <path d="M2 4H1V14H11V13H2V4Z" fill="currentColor"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M4 1H14V11H4V1ZM5 2H13V10H5V2Z" fill="currentColor"/>
+            </svg>
+          `;
+        }, 2000);
+      };
+    }
   } else if (event.data.pluginMessage.type === 'config-loaded' && event.data.pluginMessage.config) {
     repoPathInput.value = event.data.pluginMessage.config.repoPath || '';
     filePathInput.value = event.data.pluginMessage.config.filePath || '';

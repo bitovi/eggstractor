@@ -9,19 +9,61 @@
       #output { 
         width: 100%; 
         height: 50vh; 
-        padding: 10px; 
+        padding: 0;
         box-sizing: border-box;
         background: #1E1E1E;
         color: #DCDCDC;
         font-family: monospace;
         overflow: auto;
         white-space: pre;
-        line-height: 1.5;
+        line-height: 1.25;
+        position: relative;
+      }
+      .output-header {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        height: 32px;
+        display: flex;
+        align-items: stretch;
+      }
+      .copy-button {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 8px;
+        border: 1px solid var(--figma-color-border);
+        border-radius: 0;
+        border-top: none;
+        border-right: none;
+        border-bottom-left-radius: 6px;
+        background: var(--figma-color-bg);
+        color: var(--figma-color-text);
+        cursor: pointer;
+        opacity: 0.8;
+        height: 100%;
+        box-sizing: border-box;
+      }
+      .copy-button:hover {
+        background: var(--figma-color-bg-hover);
+        opacity: 1;
+      }
+      .copy-button svg {
+        width: 16px;
+        height: 16px;
       }
       .form-group { margin-bottom: 15px; }
       label { display: block; margin-bottom: 5px; color: white; }
       input { width: 100%; padding: 8px; box-sizing: border-box; }
-      pre { margin: 0;}
+      pre { 
+        margin: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 10px;
+      }
       #status { 
         margin-left: 10px;
         color: #DCDCDC;
@@ -39,7 +81,7 @@
       .hljs {
         display: block;
         overflow-x: auto;
-        padding: 0.5em;
+        padding: 0;
         background: #1E1E1E;
         color: #DCDCDC;
       }
