@@ -1,7 +1,7 @@
 {
-  "name": "bit-figma-sass",
+  "name": "eggstractor",
   "version": "1.0.0",
-  "description": "Your Figma Plugin",
+  "description": "Eggstractor",
   "main": "code.js",
   "scripts": {
     "build": "webpack --mode=production",
@@ -10,8 +10,8 @@
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
     "watch": "npm run build -- --watch"
   },
-  "author": "",
-  "license": "",
+  "author": "Bitovi",
+  "license": "MIT",
   "devDependencies": {
     "@figma/eslint-plugin-figma-plugins": "*",
     "@figma/plugin-typings": "^1.106.0",

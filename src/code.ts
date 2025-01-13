@@ -6,7 +6,7 @@ figma.showUI(__html__, {
   width: 600,
   height: 1200,
   themeColors: true,
-  title: "SCSS Generator",
+  title: "Eggstractor"
 });
 
 interface VariableBindings {
@@ -387,14 +387,19 @@ figma.ui.onmessage = async (msg) => {
     const styles = await generateStyles(msg.format || 'scss');
     figma.ui.postMessage({ type: 'output-styles', styles });
   } else if (msg.type === 'save-config') {
-    await figma.root.setPluginData('githubConfig', JSON.stringify({
+    await Github.saveGithubToken(msg.githubToken);
+    await Github.saveGithubConfig({
       repoPath: msg.repoPath,
       filePath: msg.filePath,
       branchName: msg.branchName
-    }));
+    });
     figma.ui.postMessage({ type: 'config-saved' });
   } else if (msg.type === 'load-config') {
-    const config = await Github.getGithubConfig();
+    const [config, token] = await Promise.all([
+      Github.getGithubConfig(),
+      Github.getGithubToken()
+    ]);
+    if (token) config.githubToken = token;
     figma.ui.postMessage({ type: 'config-loaded', config });
   } else if (msg.type === 'create-pr') {
     try {

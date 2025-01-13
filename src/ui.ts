@@ -1,11 +1,11 @@
 import { highlightCode } from './highlighter';
-import github from './github';
 
 const generateBtn = document.getElementById('generateBtn') as HTMLButtonElement;
 const createPRBtn = document.getElementById('createPRBtn') as HTMLButtonElement;
 const repoPathInput = document.getElementById('repoPath') as HTMLInputElement;
 const filePathInput = document.getElementById('filePath') as HTMLInputElement;
 const branchNameInput = document.getElementById('branchName') as HTMLInputElement;
+const githubTokenInput = document.getElementById('githubToken') as HTMLInputElement;
 let generatedScss = '';
 
 // Load saved config when UI opens
@@ -17,13 +17,15 @@ window.onload = () => {
 repoPathInput.onchange = saveConfig;
 filePathInput.onchange = saveConfig;
 branchNameInput.onchange = saveConfig;
+githubTokenInput.onchange = saveConfig;
 function saveConfig() {
   parent.postMessage({
     pluginMessage: {
       type: 'save-config',
       repoPath: repoPathInput.value,
       filePath: filePathInput.value,
-      branchName: branchNameInput.value
+      branchName: branchNameInput.value,
+      githubToken: githubTokenInput.value
     }
   }, '*');
 }
@@ -72,6 +74,7 @@ window.onmessage = async (event) => {
     repoPathInput.value = event.data.pluginMessage.config.repoPath || '';
     filePathInput.value = event.data.pluginMessage.config.filePath || '';
     branchNameInput.value = event.data.pluginMessage.config.branchName || '';
+    githubTokenInput.value = event.data.pluginMessage.config.githubToken || '';
   } else if (event.data.pluginMessage.type === 'pr-created') {
     const statusEl = document.getElementById('status') as HTMLSpanElement;
     statusEl.innerHTML = `PR created! <a href="${event.data.pluginMessage.prUrl}" target="_blank">View PR</a>`;

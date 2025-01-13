@@ -5,6 +5,29 @@ export interface PRResult {
 }
 
 export default {
+  saveGithubToken: async function saveGithubToken(token: string) {
+    await figma.clientStorage.setAsync('githubToken', token);
+  },
+  getGithubToken: async function getGithubToken(): Promise<string | null> {
+    return figma.clientStorage.getAsync('githubToken');
+  },
+  saveGithubConfig: async function saveGithubConfig(config: {
+    repoPath: string;
+    filePath: string;
+    branchName: string;
+  }) {
+    await figma.root.setPluginData('githubConfig', JSON.stringify(config));
+  },
+  getGithubConfig: async function getGithubConfig() {
+    try {
+      const savedConfig = figma.root.getPluginData('githubConfig');
+      const config = savedConfig ? JSON.parse(savedConfig) : {};
+      return config;
+    } catch (error) {
+      console.error('Error reading config:', error);
+      return null;
+    }
+  },
   createGithubPR: async function createGithubPR(token: string, repoPath: string, filePath: string, branchName: string, content: string): Promise<PRResult> {
     const baseUrl = 'https://api.github.com';
     const headers = {
@@ -125,15 +148,6 @@ export default {
         throw new Error(`GitHub API Error: ${error.message}`);
       }
       throw new Error('GitHub API Error: An unknown error occurred');
-    }
-  },
-  getGithubConfig: async function getGithubConfig() {
-    try {
-      const savedConfig = figma.root.getPluginData('githubConfig');
-      return savedConfig ? JSON.parse(savedConfig) : null;
-    } catch (error) {
-      console.error('Error reading config:', error);
-      return null;
     }
   }
 }
