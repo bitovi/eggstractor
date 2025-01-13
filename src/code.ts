@@ -140,11 +140,15 @@ async function extractNodeToken(
   ];
   if (layoutProperties.includes(processor.property)) {
     const directValue = getDirectNodeValue(node, processor.property);
+    // Skip if the value is inherit or null
+    if (!directValue || directValue === 'inherit') {
+      return null;
+    }
     return {
       type: 'string',
       name: path.join('_'),
-      value: directValue || 'inherit',
-      rawValue: directValue || 'inherit',
+      value: directValue,
+      rawValue: directValue,
       property: processor.property,
       path,
     };
@@ -224,9 +228,6 @@ function transformToScss(tokens: TokenCollection): string {
   Object.entries(variantGroups).forEach(([variantPath, tokens]) => {
     if (!variantPath) return;
 
-    // Output mixin without curly braces
-    output += `@mixin ${variantPath}\n`;
-    
     // Sort tokens to put layout properties first
     const layoutProperties = [
       'display', 
@@ -248,19 +249,23 @@ function transformToScss(tokens: TokenCollection): string {
       return aIndex - bIndex;
     });
 
-    // Remove duplicate properties
+    // Remove duplicate and inherited properties
     const uniqueTokens = sortedTokens.reduce((acc, token) => {
       const existing = acc.find(t => t.property === token.property);
-      if (!existing) {
+      if (!existing && token.value !== 'inherit') {
         acc.push(token);
       }
       return acc;
     }, [] as StyleToken[]);
 
-    uniqueTokens.forEach(token => {
-      output += `  ${token.property}: ${token.value}\n`;
-    });
-    output += "\n";
+    // Only output mixin if there are non-inherited properties
+    if (uniqueTokens.length > 0) {
+      output += `@mixin ${variantPath}\n`;
+      uniqueTokens.forEach(token => {
+        output += `  ${token.property}: ${token.value}\n`;
+      });
+      output += "\n";
+    }
   });
 
   return output;
