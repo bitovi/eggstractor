@@ -16,6 +16,6 @@ Use `npm run dev` to run the webpack compiler in watch mode.
 ### Local plugin
 You will need to use Figma Desktop for this
 
-  •	In Figma, go to Plugins → Development → Import plugin from manifest…
-	•	Select the manifest.json file.
-	•	The plugin will now be available under Plugins → Development.
+1. In Figma, go to Plugins → Development → Import plugin from manifest…
+2. Select the manifest.json file.
+3. The plugin will now be available under Plugins → Development.
