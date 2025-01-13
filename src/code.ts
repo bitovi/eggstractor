@@ -21,6 +21,10 @@ interface VariableBindings {
   cornerRadius?: VariableAlias | VariableAlias[];
   itemSpacing?: VariableAlias | VariableAlias[];
   gap?: VariableAlias | VariableAlias[];
+  paddingTop?: VariableAlias | VariableAlias[];
+  paddingRight?: VariableAlias | VariableAlias[];
+  paddingBottom?: VariableAlias | VariableAlias[];
+  paddingLeft?: VariableAlias | VariableAlias[];
 }
 
 interface StyleProcessor {
@@ -74,7 +78,8 @@ async function collectTokens(): Promise<TokenCollection> {
       // Process layout properties for variant components
       if (node.type === "COMPONENT") {
         const processors = frameNodeProcessors.filter(p => 
-          ['display', 'flex-direction', 'align-items', 'gap'].includes(p.property)
+          ['display', 'flex-direction', 'align-items', 'gap', 
+           'padding-top', 'padding-right', 'padding-bottom', 'padding-left'].includes(p.property)
         );
         
         for (const processor of processors) {
@@ -122,7 +127,17 @@ async function extractNodeToken(
   path: string[]
 ): Promise<StyleToken | null> {
   // Handle layout properties
-  const layoutProperties = ['display', 'flex-direction', 'align-items', 'gap'];
+  const layoutProperties = [
+    'display', 
+    'flex-direction', 
+    'align-items', 
+    'gap',
+    'padding',
+    'padding-top',
+    'padding-right',
+    'padding-bottom',
+    'padding-left'
+  ];
   if (layoutProperties.includes(processor.property)) {
     const directValue = getDirectNodeValue(node, processor.property);
     return {
@@ -131,7 +146,7 @@ async function extractNodeToken(
       value: directValue || 'inherit',
       rawValue: directValue || 'inherit',
       property: processor.property,
-      path
+      path,
     };
   }
 
@@ -204,26 +219,26 @@ function transformToScss(tokens: TokenCollection): string {
   // Generate mixins section
   output += "\n// Generated SCSS Mixins\n";
   
-  // Group tokens by their variant path
-  const variantGroups = groupBy(tokens.tokens, t => {
-    // For component variants, use the full path
-    // This will give us paths like "input_resting", "input_hover", etc.
-    return t.path.join('_');
-  });
+  const variantGroups = groupBy(tokens.tokens, t => t.path.join('_'));
 
   Object.entries(variantGroups).forEach(([variantPath, tokens]) => {
     if (!variantPath) return;
 
-    // Skip child elements (those with more than 2 segments in their path)
-    if (variantPath.split('_').length > 2) {
-      output += `@mixin ${variantPath} {\n`;
-    } else {
-      // This is a variant-level mixin
-      output += `@mixin ${variantPath} {\n`;
-    }
+    // Output mixin without curly braces
+    output += `@mixin ${variantPath}\n`;
     
     // Sort tokens to put layout properties first
-    const layoutProperties = ['display', 'flex-direction', 'align-items', 'gap'];
+    const layoutProperties = [
+      'display', 
+      'flex-direction', 
+      'align-items', 
+      'gap',
+      'padding',
+      'padding-top',
+      'padding-right',
+      'padding-bottom',
+      'padding-left'
+    ];
     const sortedTokens = tokens.sort((a, b) => {
       const aIndex = layoutProperties.indexOf(a.property);
       const bIndex = layoutProperties.indexOf(b.property);
@@ -243,9 +258,9 @@ function transformToScss(tokens: TokenCollection): string {
     }, [] as StyleToken[]);
 
     uniqueTokens.forEach(token => {
-      output += `  ${token.property}: ${token.value};\n`;
+      output += `  ${token.property}: ${token.value}\n`;
     });
-    output += "}\n\n";
+    output += "\n";
   });
 
   return output;
@@ -378,6 +393,30 @@ const frameNodeProcessors: StyleProcessor[] = [
       }
       return "0";
     }
+  },
+  {
+    property: "padding",
+    bindingKey: "fills",
+    process: async (_, node?: SceneNode) => {
+      if (node && 'paddingTop' in node) {
+        const top = node.paddingTop;
+        const right = node.paddingRight;
+        const bottom = node.paddingBottom;
+        const left = node.paddingLeft;
+
+        // If all sides are equal
+        if (top === right && right === bottom && bottom === left) {
+          return `${top}px`;
+        }
+        // If vertical and horizontal padding are different
+        if (top === bottom && left === right) {
+          return `${top}px ${left}px`;
+        }
+        // All sides different
+        return `${top}px ${right}px ${bottom}px ${left}px`;
+      }
+      return "0";
+    }
   }
 ];
 
@@ -391,7 +430,7 @@ function getDirectNodeValue(node: SceneNode, property: string): string | null {
         return node.cornerRadius ? `${String(node.cornerRadius)}px` : null;
       case "gap":
         if ('layoutMode' in node && 'itemSpacing' in node) {
-          return node.layoutMode ? `${node.itemSpacing}px` : null;
+          return node.layoutMode && node.itemSpacing > 0 ? `${node.itemSpacing}px` : null;
         }
         return null;
       case "display":
@@ -420,6 +459,33 @@ function getDirectNodeValue(node: SceneNode, property: string): string | null {
           return alignMap[node.primaryAxisAlignItems] || "flex-start";
         }
         return null;
+      case "padding":
+        if ('paddingTop' in node) {
+          const top = node.paddingTop;
+          const right = node.paddingRight;
+          const bottom = node.paddingBottom;
+          const left = node.paddingLeft;
+
+          // If all sides are equal
+          if (top === right && right === bottom && bottom === left) {
+            return `${top}px`;
+          }
+          // If vertical and horizontal padding are different
+          if (top === bottom && left === right) {
+            return `${top}px ${left}px`;
+          }
+          // All sides different
+          return `${top}px ${right}px ${bottom}px ${left}px`;
+        }
+        return null;
+      case "padding-top":
+        return 'paddingTop' in node ? `${node.paddingTop}px` : null;
+      case "padding-right":
+        return 'paddingRight' in node ? `${node.paddingRight}px` : null;
+      case "padding-bottom":
+        return 'paddingBottom' in node ? `${node.paddingBottom}px` : null;
+      case "padding-left":
+        return 'paddingLeft' in node ? `${node.paddingLeft}px` : null;
       default:
         return null;
     }
