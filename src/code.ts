@@ -20,6 +20,11 @@ interface VariableBindings {
   fontFamily?: VariableAlias | VariableAlias[];
   cornerRadius?: VariableAlias | VariableAlias[];
   itemSpacing?: VariableAlias | VariableAlias[];
+  gap?: VariableAlias | VariableAlias[];
+  paddingTop?: VariableAlias | VariableAlias[];
+  paddingRight?: VariableAlias | VariableAlias[];
+  paddingBottom?: VariableAlias | VariableAlias[];
+  paddingLeft?: VariableAlias | VariableAlias[];
 }
 
 interface StyleProcessor {
@@ -68,10 +73,32 @@ async function collectTokens(): Promise<TokenCollection> {
 
   async function processNode(node: BaseNode) {
     if ('type' in node && 'boundVariables' in node) {
-      if (node.type !== "COMPONENT") {
+      const nodePath = getNodePathName(node as SceneNode).split('_');
+      
+      // Process layout properties for variant components
+      if (node.type === "COMPONENT") {
+        const processors = frameNodeProcessors.filter(p => 
+          ['display', 'flex-direction', 'align-items', 'gap', 
+           'padding-top', 'padding-right', 'padding-bottom', 'padding-left'].includes(p.property)
+        );
+        
+        for (const processor of processors) {
+          // Get the direct value from the component
+          const directValue = getDirectNodeValue(node as SceneNode, processor.property);
+          if (directValue) {
+            collection.tokens.push({
+              type: 'string',
+              name: nodePath.join('_'),
+              value: directValue,
+              rawValue: directValue,
+              property: processor.property,
+              path: nodePath
+            });
+          }
+        }
+      } else {
+        // Process other nodes as before
         const processors = getProcessorsForNode(node as SceneNode);
-        const nodePath = getNodePathName(node as SceneNode).split('_');
-
         for (const processor of processors) {
           const token = await extractNodeToken(node as SceneNode, processor, nodePath);
           if (token) {
@@ -81,7 +108,7 @@ async function collectTokens(): Promise<TokenCollection> {
       }
     }
 
-    // Always process children, even for component sets
+    // Process children
     if ("children" in node) {
       for (const child of node.children) {
         await processNode(child);
@@ -99,15 +126,27 @@ async function extractNodeToken(
   processor: StyleProcessor,
   path: string[]
 ): Promise<StyleToken | null> {
-  // Handle static layout properties
-  if (['display', 'flex-direction', 'align-items'].includes(processor.property)) {
+  // Handle layout properties
+  const layoutProperties = [
+    'display', 
+    'flex-direction', 
+    'align-items', 
+    'gap',
+    'padding',
+    'padding-top',
+    'padding-right',
+    'padding-bottom',
+    'padding-left'
+  ];
+  if (layoutProperties.includes(processor.property)) {
+    const directValue = getDirectNodeValue(node, processor.property);
     return {
       type: 'string',
       name: path.join('_'),
-      value: processor.process ? await processor.process(null, node) : '',
-      rawValue: processor.process ? await processor.process(null, node) : '',
+      value: directValue || 'inherit',
+      rawValue: directValue || 'inherit',
       property: processor.property,
-      path
+      path,
     };
   }
 
@@ -179,12 +218,46 @@ function transformToScss(tokens: TokenCollection): string {
 
   // Generate mixins section
   output += "\n// Generated SCSS Mixins\n";
-  const componentGroups = groupBy(tokens.tokens, t => t.path.join('_'));
+  
+  const variantGroups = groupBy(tokens.tokens, t => t.path.join('_'));
 
-  Object.entries(componentGroups).forEach(([componentPath, tokens]) => {
-    if (!componentPath) return;
-    output += `@mixin ${componentPath}\n`;
-    tokens.forEach(token => {
+  Object.entries(variantGroups).forEach(([variantPath, tokens]) => {
+    if (!variantPath) return;
+
+    // Output mixin without curly braces
+    output += `@mixin ${variantPath}\n`;
+    
+    // Sort tokens to put layout properties first
+    const layoutProperties = [
+      'display', 
+      'flex-direction', 
+      'align-items', 
+      'gap',
+      'padding',
+      'padding-top',
+      'padding-right',
+      'padding-bottom',
+      'padding-left'
+    ];
+    const sortedTokens = tokens.sort((a, b) => {
+      const aIndex = layoutProperties.indexOf(a.property);
+      const bIndex = layoutProperties.indexOf(b.property);
+      if (aIndex === -1 && bIndex === -1) return 0;
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+      return aIndex - bIndex;
+    });
+
+    // Remove duplicate properties
+    const uniqueTokens = sortedTokens.reduce((acc, token) => {
+      const existing = acc.find(t => t.property === token.property);
+      if (!existing) {
+        acc.push(token);
+      }
+      return acc;
+    }, [] as StyleToken[]);
+
+    uniqueTokens.forEach(token => {
       output += `  ${token.property}: ${token.value}\n`;
     });
     output += "\n";
@@ -276,7 +349,7 @@ const frameNodeProcessors: StyleProcessor[] = [
     bindingKey: "fills",
     process: async (_, node?: SceneNode) => {
       if (node && 'layoutMode' in node) {
-        return node.layoutMode ? "flex" : "block";
+        return node.layoutMode ? (node.layoutAlign === "STRETCH" ? "flex" : "inline-flex") : "block";
       }
       return "block";
     }
@@ -306,17 +379,113 @@ const frameNodeProcessors: StyleProcessor[] = [
       }
       return "flex-start";
     }
+  },
+  {
+    property: "gap",
+    bindingKey: "itemSpacing",
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        return getVariableFallback(variable);
+      }
+      // Fallback to direct itemSpacing if no variable
+      if (node && 'itemSpacing' in node) {
+        return `${node.itemSpacing}px`;
+      }
+      return "0";
+    }
+  },
+  {
+    property: "padding",
+    bindingKey: "fills",
+    process: async (_, node?: SceneNode) => {
+      if (node && 'paddingTop' in node) {
+        const top = node.paddingTop;
+        const right = node.paddingRight;
+        const bottom = node.paddingBottom;
+        const left = node.paddingLeft;
+
+        // If all sides are equal
+        if (top === right && right === bottom && bottom === left) {
+          return `${top}px`;
+        }
+        // If vertical and horizontal padding are different
+        if (top === bottom && left === right) {
+          return `${top}px ${left}px`;
+        }
+        // All sides different
+        return `${top}px ${right}px ${bottom}px ${left}px`;
+      }
+      return "0";
+    }
   }
 ];
 
 // Handle direct properties
 function getDirectNodeValue(node: SceneNode, property: string): string | null {
-  if (node.type === "FRAME" || node.type === "RECTANGLE" || node.type === "INSTANCE") {
+  if (node.type === "COMPONENT" || node.type === "FRAME" || node.type === "RECTANGLE" || node.type === "INSTANCE") {
     switch (property) {
       case "border-width":
         return node.strokeWeight ? `${String(node.strokeWeight)}px` : null;
       case "border-radius":
         return node.cornerRadius ? `${String(node.cornerRadius)}px` : null;
+      case "gap":
+        if ('layoutMode' in node && 'itemSpacing' in node) {
+          return node.layoutMode && node.itemSpacing > 0 ? `${node.itemSpacing}px` : null;
+        }
+        return null;
+      case "display":
+        if ('layoutMode' in node) {
+          if (!node.layoutMode) return "block";
+          // Check for auto-layout properties
+          const isInline = node.layoutAlign !== "STRETCH";
+          return isInline ? "inline-flex" : "flex";
+        }
+        return null;
+      case "flex-direction":
+        if ('layoutMode' in node) {
+          if (!node.layoutMode) return null;
+          return node.layoutMode === "VERTICAL" ? "column" : "row";
+        }
+        return null;
+      case "align-items":
+        if ('layoutMode' in node && 'primaryAxisAlignItems' in node) {
+          if (!node.layoutMode) return null;
+          const alignMap = {
+            MIN: "flex-start",
+            CENTER: "center",
+            MAX: "flex-end",
+            SPACE_BETWEEN: "space-between"
+          };
+          return alignMap[node.primaryAxisAlignItems] || "flex-start";
+        }
+        return null;
+      case "padding":
+        if ('paddingTop' in node) {
+          const top = node.paddingTop;
+          const right = node.paddingRight;
+          const bottom = node.paddingBottom;
+          const left = node.paddingLeft;
+
+          // If all sides are equal
+          if (top === right && right === bottom && bottom === left) {
+            return `${top}px`;
+          }
+          // If vertical and horizontal padding are different
+          if (top === bottom && left === right) {
+            return `${top}px ${left}px`;
+          }
+          // All sides different
+          return `${top}px ${right}px ${bottom}px ${left}px`;
+        }
+        return null;
+      case "padding-top":
+        return 'paddingTop' in node ? `${node.paddingTop}px` : null;
+      case "padding-right":
+        return 'paddingRight' in node ? `${node.paddingRight}px` : null;
+      case "padding-bottom":
+        return 'paddingBottom' in node ? `${node.paddingBottom}px` : null;
+      case "padding-left":
+        return 'paddingLeft' in node ? `${node.paddingLeft}px` : null;
       default:
         return null;
     }
