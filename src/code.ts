@@ -20,6 +20,7 @@ interface VariableBindings {
   fontFamily?: VariableAlias | VariableAlias[];
   cornerRadius?: VariableAlias | VariableAlias[];
   itemSpacing?: VariableAlias | VariableAlias[];
+  gap?: VariableAlias | VariableAlias[];
 }
 
 interface StyleProcessor {
@@ -68,10 +69,24 @@ async function collectTokens(): Promise<TokenCollection> {
 
   async function processNode(node: BaseNode) {
     if ('type' in node && 'boundVariables' in node) {
-      if (node.type !== "COMPONENT") {
+      const nodePath = getNodePathName(node as SceneNode).split('_');
+      
+      // Process layout properties for variant components
+      if (node.type === "COMPONENT") {
+        const processors = frameNodeProcessors.filter(p => 
+          ['display', 'flex-direction', 'align-items', 'gap'].includes(p.property)
+        );
+        
+        for (const processor of processors) {
+          const token = await extractNodeToken(node as SceneNode, processor, nodePath);
+          if (token) {
+            // Keep the full path for variants
+            collection.tokens.push(token);
+          }
+        }
+      } else {
+        // Process other nodes as before
         const processors = getProcessorsForNode(node as SceneNode);
-        const nodePath = getNodePathName(node as SceneNode).split('_');
-
         for (const processor of processors) {
           const token = await extractNodeToken(node as SceneNode, processor, nodePath);
           if (token) {
@@ -81,7 +96,7 @@ async function collectTokens(): Promise<TokenCollection> {
       }
     }
 
-    // Always process children, even for component sets
+    // Process children
     if ("children" in node) {
       for (const child of node.children) {
         await processNode(child);
@@ -99,13 +114,15 @@ async function extractNodeToken(
   processor: StyleProcessor,
   path: string[]
 ): Promise<StyleToken | null> {
-  // Handle static layout properties
-  if (['display', 'flex-direction', 'align-items'].includes(processor.property)) {
+  // Handle layout properties
+  const layoutProperties = ['display', 'flex-direction', 'align-items', 'gap'];
+  if (layoutProperties.includes(processor.property)) {
+    const directValue = getDirectNodeValue(node, processor.property);
     return {
       type: 'string',
       name: path.join('_'),
-      value: processor.process ? await processor.process(null, node) : '',
-      rawValue: processor.process ? await processor.process(null, node) : '',
+      value: directValue || 'inherit',
+      rawValue: directValue || 'inherit',
       property: processor.property,
       path
     };
@@ -179,15 +196,49 @@ function transformToScss(tokens: TokenCollection): string {
 
   // Generate mixins section
   output += "\n// Generated SCSS Mixins\n";
-  const componentGroups = groupBy(tokens.tokens, t => t.path.join('_'));
+  
+  // Group tokens by their variant path
+  const variantGroups = groupBy(tokens.tokens, t => {
+    // For component variants, use the full path
+    // This will give us paths like "input_resting", "input_hover", etc.
+    return t.path.join('_');
+  });
 
-  Object.entries(componentGroups).forEach(([componentPath, tokens]) => {
-    if (!componentPath) return;
-    output += `@mixin ${componentPath}\n`;
-    tokens.forEach(token => {
-      output += `  ${token.property}: ${token.value}\n`;
+  Object.entries(variantGroups).forEach(([variantPath, tokens]) => {
+    if (!variantPath) return;
+
+    // Skip child elements (those with more than 2 segments in their path)
+    if (variantPath.split('_').length > 2) {
+      output += `@mixin ${variantPath} {\n`;
+    } else {
+      // This is a variant-level mixin
+      output += `@mixin ${variantPath} {\n`;
+    }
+    
+    // Sort tokens to put layout properties first
+    const layoutProperties = ['display', 'flex-direction', 'align-items', 'gap'];
+    const sortedTokens = tokens.sort((a, b) => {
+      const aIndex = layoutProperties.indexOf(a.property);
+      const bIndex = layoutProperties.indexOf(b.property);
+      if (aIndex === -1 && bIndex === -1) return 0;
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+      return aIndex - bIndex;
     });
-    output += "\n";
+
+    // Remove duplicate properties
+    const uniqueTokens = sortedTokens.reduce((acc, token) => {
+      const existing = acc.find(t => t.property === token.property);
+      if (!existing) {
+        acc.push(token);
+      }
+      return acc;
+    }, [] as StyleToken[]);
+
+    uniqueTokens.forEach(token => {
+      output += `  ${token.property}: ${token.value};\n`;
+    });
+    output += "}\n\n";
   });
 
   return output;
@@ -276,7 +327,7 @@ const frameNodeProcessors: StyleProcessor[] = [
     bindingKey: "fills",
     process: async (_, node?: SceneNode) => {
       if (node && 'layoutMode' in node) {
-        return node.layoutMode ? "flex" : "block";
+        return node.layoutMode ? (node.layoutAlign === "STRETCH" ? "flex" : "inline-flex") : "block";
       }
       return "block";
     }
@@ -306,6 +357,20 @@ const frameNodeProcessors: StyleProcessor[] = [
       }
       return "flex-start";
     }
+  },
+  {
+    property: "gap",
+    bindingKey: "itemSpacing",
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        return getVariableFallback(variable);
+      }
+      // Fallback to direct itemSpacing if no variable
+      if (node && 'itemSpacing' in node) {
+        return `${node.itemSpacing}px`;
+      }
+      return "0";
+    }
   }
 ];
 
@@ -317,6 +382,29 @@ function getDirectNodeValue(node: SceneNode, property: string): string | null {
         return node.strokeWeight ? `${String(node.strokeWeight)}px` : null;
       case "border-radius":
         return node.cornerRadius ? `${String(node.cornerRadius)}px` : null;
+      case "gap":
+        return 'itemSpacing' in node ? `${node.itemSpacing}px` : null;
+      case "display":
+        if ('layoutMode' in node) {
+          return node.layoutMode ? (node.layoutAlign === "STRETCH" ? "flex" : "inline-flex") : "block";
+        }
+        return null;
+      case "flex-direction":
+        if ('layoutMode' in node) {
+          return node.layoutMode === "VERTICAL" ? "column" : "row";
+        }
+        return null;
+      case "align-items":
+        if ('primaryAxisAlignItems' in node) {
+          const alignMap = {
+            MIN: "flex-start",
+            CENTER: "center",
+            MAX: "flex-end",
+            SPACE_BETWEEN: "space-between"
+          };
+          return alignMap[node.primaryAxisAlignItems] || "flex-start";
+        }
+        return null;
       default:
         return null;
     }
