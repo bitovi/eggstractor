@@ -74,14 +74,14 @@ async function collectTokens(): Promise<TokenCollection> {
   async function processNode(node: BaseNode) {
     if ('type' in node && 'boundVariables' in node) {
       const nodePath = getNodePathName(node as SceneNode).split('_');
-      
+
       // Process layout properties for variant components
       if (node.type === "COMPONENT") {
-        const processors = frameNodeProcessors.filter(p => 
-          ['display', 'flex-direction', 'align-items', 'gap', 
-           'padding-top', 'padding-right', 'padding-bottom', 'padding-left'].includes(p.property)
+        const processors = frameNodeProcessors.filter(p =>
+          ['display', 'flex-direction', 'align-items', 'gap',
+            'padding-top', 'padding-right', 'padding-bottom', 'padding-left'].includes(p.property)
         );
-        
+
         for (const processor of processors) {
           // Get the direct value from the component
           const directValue = getDirectNodeValue(node as SceneNode, processor.property);
@@ -158,52 +158,7 @@ async function extractNodeToken(
 
   // Handle text node properties
   if (node.type === "TEXT") {
-    switch (processor.property) {
-      case "color":
-        if (node.fills && Array.isArray(node.fills)) {
-          const fill = node.fills[0] as Paint;
-          if (fill?.type === "SOLID") {
-            const { r, g, b } = fill.color;
-            const a = fill.opacity ?? 1;
-            directValue = a === 1 ? 
-              Utils.rgbToHex(r, g, b) : 
-              `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${a})`;
-          }
-        }
-        break;
-      case "font-family":
-        if (!variableId && node.fontName && typeof node.fontName === 'object') {
-          const fontName = node.fontName as FontName;
-          directValue = fontName.family;
-        }
-        break;
-      case "font-size":
-        directValue = `${String(node.fontSize)}px`;
-        break;
-      case "font-weight":
-        directValue = String(node.fontWeight);
-        break;
-      case "line-height":
-        if ('lineHeight' in node) {
-          const lineHeight = node.lineHeight;
-          if (typeof lineHeight === 'object') {
-            if (lineHeight.unit === "AUTO") {
-              directValue = "normal";
-            } else {
-              directValue = `${lineHeight.value}${lineHeight.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
-            }
-          }
-        }
-        break;
-      case "letter-spacing":
-        if ('letterSpacing' in node) {
-          const letterSpacing = node.letterSpacing;
-          if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
-            directValue = `${letterSpacing.value}${letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
-          }
-        }
-        break;
-    }
+    directValue = getDirectTextNodeValue(node as TextNode, processor.property);
   }
   // Handle frame/component/instance properties
   else if (node.type === "FRAME" || node.type === "COMPONENT" || node.type === "INSTANCE" || node.type === "RECTANGLE") {
@@ -245,7 +200,7 @@ function transformToScss(tokens: TokenCollection): string {
 
   // Generate mixins section
   output += "\n// Generated SCSS Mixins\n";
-  
+
   const variantGroups = groupBy(tokens.tokens, t => t.path.join('_'));
 
   Object.entries(variantGroups).forEach(([variantPath, tokens]) => {
@@ -253,9 +208,9 @@ function transformToScss(tokens: TokenCollection): string {
 
     // Sort tokens to put layout properties first
     const layoutProperties = [
-      'display', 
-      'flex-direction', 
-      'align-items', 
+      'display',
+      'flex-direction',
+      'align-items',
       'gap',
       'padding',
       'padding-top',
@@ -625,3 +580,50 @@ figma.ui.onmessage = async (msg) => {
     }
   }
 };
+
+function getDirectTextNodeValue(node: TextNode, property: string): string | null {
+  switch (property) {
+    case "color":
+      if (node.fills && Array.isArray(node.fills)) {
+        const fill = node.fills[0] as Paint;
+        if (fill?.type === "SOLID") {
+          const { r, g, b } = fill.color;
+          const a = fill.opacity ?? 1;
+          return a === 1 ?
+            Utils.rgbToHex(r, g, b) :
+            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${a})`;
+        }
+      }
+      return null;
+    case "font-family":
+      if (node.fontName && typeof node.fontName === 'object') {
+        return node.fontName.family;
+      }
+      return null;
+    case "font-size":
+      return `${String(node.fontSize)}px`;
+    case "font-weight":
+      return String(node.fontWeight);
+    case "line-height":
+      if ('lineHeight' in node) {
+        const lineHeight = node.lineHeight;
+        if (typeof lineHeight === 'object') {
+          if (lineHeight.unit === "AUTO") {
+            return "normal";
+          }
+          return `${lineHeight.value}${lineHeight.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
+        }
+      }
+      return null;
+    case "letter-spacing":
+      if ('letterSpacing' in node) {
+        const letterSpacing = node.letterSpacing;
+        if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
+          return `${letterSpacing.value}${letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
+        }
+      }
+      return null;
+    default:
+      return null;
+  }
+}
