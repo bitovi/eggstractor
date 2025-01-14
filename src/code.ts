@@ -1,6 +1,9 @@
 import Utils from './utils';
 import Github from './github';
 
+// At the top of the file, add a variable to store the generated SCSS
+let generatedScss: string = '';
+
 // Show the UI with resizable window
 figma.showUI(__html__, {
   width: 600,
@@ -285,7 +288,10 @@ const textNodeProcessors: StyleProcessor[] = [
     property: "font-size",
     bindingKey: "fontSize",
     process: async (variable, node?: SceneNode) => {
-      if (variable) return getVariableFallback(variable);
+      if (variable) {
+        const value = await getVariableFallback(variable);
+        return `${value}px`;
+      }
       if (node?.type === "TEXT") {
         return `${String(node.fontSize)}px`;
       }
@@ -295,17 +301,50 @@ const textNodeProcessors: StyleProcessor[] = [
   {
     property: "font-weight",
     bindingKey: "fontWeight",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variable, node?: SceneNode) => {
+      if (variable) return getVariableFallback(variable);
+      if (node?.type === "TEXT") {
+        return String(node.fontWeight);
+      }
+      return "inherit";
+    }
   },
   {
     property: "line-height",
     bindingKey: "lineHeight",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        const value = await getVariableFallback(variable);
+        return value === "normal" ? value : value; // Keep unitless for better inheritance
+      }
+      if (node?.type === "TEXT" && 'lineHeight' in node) {
+        const lineHeight = node.lineHeight;
+        if (typeof lineHeight === 'object') {
+          if (lineHeight.unit === "AUTO") {
+            return "normal";
+          }
+          return `${lineHeight.value}${lineHeight.unit.toLowerCase() === "percent" ? '%' : ''}`;
+        }
+      }
+      return "inherit";
+    }
   },
   {
     property: "letter-spacing",
     bindingKey: "letterSpacing",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        const value = await getVariableFallback(variable);
+        return `${value}px`; // Letter-spacing should have units
+      }
+      if (node?.type === "TEXT" && 'letterSpacing' in node) {
+        const letterSpacing = node.letterSpacing;
+        if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
+          return `${letterSpacing.value}${letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
+        }
+      }
+      return "inherit";
+    }
   },
   {
     property: "font-family",
@@ -530,13 +569,11 @@ async function getVariableFallback(variable: Variable | null): Promise<string> {
 
   switch (variable.resolvedType) {
     case "FLOAT":
-      return `${value as number}px`;
+      return String(value as number);
     case "COLOR": {
-      // Handle direct color values
       if (typeof value === 'object' && 'r' in value) {
         return Utils.rgbToHex(value.r, value.g, value.b);
       }
-
       return '#000000';
     }
     case "STRING":
@@ -578,6 +615,7 @@ function parseVariantWithoutKey(variant: string): string {
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'generate-styles') {
     const styles = await generateStyles(msg.format || 'scss');
+    generatedScss = styles; // Store the generated SCSS
     figma.ui.postMessage({ type: 'output-styles', styles });
   } else if (msg.type === 'save-config') {
     await Github.saveUserSettings(msg.githubToken, msg.branchName);
@@ -603,7 +641,7 @@ figma.ui.onmessage = async (msg) => {
         msg.repoPath,
         msg.filePath,
         msg.branchName,
-        msg.content
+        generatedScss  // Use the stored SCSS content instead of msg.content
       );
       figma.ui.postMessage({
         type: 'pr-created',

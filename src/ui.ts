@@ -44,7 +44,7 @@ createPRBtn.onclick = () => {
   const filePath = (document.getElementById('filePath') as HTMLInputElement).value;
   const branchName = (document.getElementById('branchName') as HTMLInputElement).value;
 
-  if (!githubToken || !repoPath || !filePath || !branchName || !generatedScss) {
+  if (!githubToken || !repoPath || !filePath || !branchName) {
     alert('Please fill in all fields and generate SCSS first');
     createPRBtn.disabled = false;
     statusEl.textContent = '';
@@ -58,7 +58,6 @@ createPRBtn.onclick = () => {
       repoPath,
       filePath,
       branchName,
-      content: generatedScss
     }
   }, '*');
 };
