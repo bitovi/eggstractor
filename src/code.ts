@@ -1,6 +1,9 @@
 import Utils from './utils';
 import Github from './github';
 
+// At the top of the file, add a variable to store the generated SCSS
+let generatedScss: string = '';
+
 // Show the UI with resizable window
 figma.showUI(__html__, {
   width: 600,
@@ -29,7 +32,7 @@ interface VariableBindings {
 
 interface StyleProcessor {
   property: string;
-  bindingKey: keyof VariableBindings;
+  bindingKey: keyof VariableBindings | undefined;
   process: (value: Variable | null, node?: SceneNode) => Promise<string>;
 }
 
@@ -74,14 +77,14 @@ async function collectTokens(): Promise<TokenCollection> {
   async function processNode(node: BaseNode) {
     if ('type' in node && 'boundVariables' in node) {
       const nodePath = getNodePathName(node as SceneNode).split('_');
-      
+
       // Process layout properties for variant components
       if (node.type === "COMPONENT") {
-        const processors = frameNodeProcessors.filter(p => 
-          ['display', 'flex-direction', 'align-items', 'gap', 
-           'padding-top', 'padding-right', 'padding-bottom', 'padding-left'].includes(p.property)
+        const processors = frameNodeProcessors.filter(p =>
+          ['display', 'flex-direction', 'align-items', 'gap',
+            'padding-top', 'padding-right', 'padding-bottom', 'padding-left'].includes(p.property)
         );
-        
+
         for (const processor of processors) {
           // Get the direct value from the component
           const directValue = getDirectNodeValue(node as SceneNode, processor.property);
@@ -126,47 +129,15 @@ async function extractNodeToken(
   processor: StyleProcessor,
   path: string[]
 ): Promise<StyleToken | null> {
-  // Handle layout properties
-  const layoutProperties = [
-    'display', 
-    'flex-direction', 
-    'align-items', 
-    'gap',
-    'padding',
-    'padding-top',
-    'padding-right',
-    'padding-bottom',
-    'padding-left'
-  ];
-  if (layoutProperties.includes(processor.property)) {
-    const directValue = getDirectNodeValue(node, processor.property);
-    // Skip if the value is inherit or null
-    if (!directValue || directValue === 'inherit') {
-      return null;
-    }
-    return {
-      type: 'string',
-      name: path.join('_'),
-      value: directValue,
-      rawValue: directValue,
-      property: processor.property,
-      path,
-    };
-  }
-
-  // Cast from the default Figma type to your custom interface
+  // First check for variable bindings
   const customBoundVariables = node.boundVariables as unknown as VariableBindings;
-
-  // Now TypeScript knows cornerRadius (and others) can exist
-  const binding = customBoundVariables[processor.bindingKey];
-
-  // If it’s an array, pick the first variable ID
+  const binding = processor.bindingKey ? customBoundVariables[processor.bindingKey] : undefined;
   const variableId = Array.isArray(binding) ? binding[0]?.id : binding?.id;
 
   if (variableId) {
     const variable = await figma.variables.getVariableByIdAsync(variableId);
     if (variable) {
-      const rawValue = await getVariableFallback(variable);
+      const rawValue = await getVariableFallback(variable, processor.property);
       const name = variable.name;
 
       return {
@@ -185,11 +156,12 @@ async function extractNodeToken(
     }
   }
 
-  // Handle direct values
-  const directValue = getDirectNodeValue(node, processor.property);
-  if (directValue) {
+  // If no variable binding, use the processor's process function
+  const directValue = await processor.process(null, node);
+  
+  if (directValue && directValue !== "inherit") {
     return {
-      type: 'dimension',
+      type: 'string',
       name: path.join('_'),
       value: directValue,
       rawValue: directValue,
@@ -222,7 +194,7 @@ function transformToScss(tokens: TokenCollection): string {
 
   // Generate mixins section
   output += "\n// Generated SCSS Mixins\n";
-  
+
   const variantGroups = groupBy(tokens.tokens, t => t.path.join('_'));
 
   Object.entries(variantGroups).forEach(([variantPath, tokens]) => {
@@ -230,9 +202,9 @@ function transformToScss(tokens: TokenCollection): string {
 
     // Sort tokens to put layout properties first
     const layoutProperties = [
-      'display', 
-      'flex-direction', 
-      'align-items', 
+      'display',
+      'flex-direction',
+      'align-items',
       'gap',
       'padding',
       'padding-top',
@@ -286,42 +258,101 @@ const textNodeProcessors: StyleProcessor[] = [
   {
     property: "color",
     bindingKey: "fills",
-    process: async (variable) => getVariableFallback(variable)
-  },
-  {
-    property: "font-size",
-    bindingKey: "fontSize",
-    process: async (variable) => getVariableFallback(variable)
-  },
-  {
-    property: "font-weight",
-    bindingKey: "fontWeight",
-    process: async (variable) => getVariableFallback(variable)
-  },
-  {
-    property: "line-height",
-    bindingKey: "lineHeight",
-    process: async (variable) => getVariableFallback(variable)
-  },
-  {
-    property: "letter-spacing",
-    bindingKey: "letterSpacing",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variable, node?: SceneNode) => {
+      if (variable) return getVariableFallback(variable);
+      if (node?.type === "TEXT" && node.fills && Array.isArray(node.fills)) {
+        const fill = node.fills[0] as Paint;
+        if (fill?.type === "SOLID") {
+          const { r, g, b } = fill.color;
+          const a = fill.opacity ?? 1;
+          return a === 1 ? 
+            Utils.rgbToHex(r, g, b) : 
+            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${a})`;
+        }
+      }
+      return "inherit";
+    }
   },
   {
     property: "font-family",
     bindingKey: "fontFamily",
     process: async (variable, node?: SceneNode) => {
-      if (variable) {
-        return getVariableFallback(variable);
-      }
-      // Fallback to direct font family if no variable
-      if (node?.type === "TEXT") {
-        const fontName = node.fontName as FontName;
-        return `"${fontName.family}"`;
+      if (variable) return getVariableFallback(variable);
+      if (node?.type === "TEXT" && node.fontName && typeof node.fontName === 'object') {
+        return node.fontName.family;
       }
       return "inherit";
     }
+  },
+  {
+    property: "font-size",
+    bindingKey: "fontSize",
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        const value = await getVariableFallback(variable);
+        return `${value}px`;
+      }
+      if (node?.type === "TEXT") {
+        return `${String(node.fontSize)}px`;
+      }
+      return "inherit";
+    }
+  },
+  {
+    property: "font-weight",
+    bindingKey: "fontWeight",
+    process: async (variable, node?: SceneNode) => {
+      if (variable) return getVariableFallback(variable);
+      if (node?.type === "TEXT") {
+        return String(node.fontWeight);
+      }
+      return "inherit";
+    }
+  },
+  {
+    property: "line-height",
+    bindingKey: "lineHeight",
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        const value = await getVariableFallback(variable, "line-height");
+        return value;
+      }
+      if (node?.type === "TEXT" && 'lineHeight' in node) {
+        const lineHeight = node.lineHeight;
+        if (typeof lineHeight === 'object') {
+          if (lineHeight.unit === "AUTO") {
+            return "normal";
+          }
+          const value = lineHeight.value;
+          return lineHeight.unit.toLowerCase() === "percent" ? 
+            `${value}%` : 
+            (value > 4 ? `${value}px` : String(value));
+        }
+      }
+      return "inherit";
+    }
+  },
+  {
+    property: "letter-spacing",
+    bindingKey: "letterSpacing",
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        const value = await getVariableFallback(variable);
+        return `${value}px`; // Letter-spacing should have units
+      }
+      if (node?.type === "TEXT" && 'letterSpacing' in node) {
+        const letterSpacing = node.letterSpacing;
+        if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
+          return `${letterSpacing.value}${letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
+        }
+      }
+      return "inherit";
+    }
+  },
+  {
+    property: "font-family",
+    bindingKey: "fontFamily",
+    process: async (variable) => getVariableFallback(variable)
   }
 ];
 
@@ -339,29 +370,43 @@ const frameNodeProcessors: StyleProcessor[] = [
   {
     property: "border-width",
     bindingKey: "strokeWeight",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variable, node?: SceneNode) => {
+      if (variable) return getVariableFallback(variable);
+      if (node && 'strokeWeight' in node && node.strokeWeight) {
+        return `${String(node.strokeWeight)}px`;
+      }
+      return "inherit";
+    }
   },
   {
     property: "border-radius",
     bindingKey: "cornerRadius",
-    process: async (variable) => {
-      const value = await getVariableFallback(variable);
-      return value.endsWith('px') ? value : `${value}px`;
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        const value = await getVariableFallback(variable);
+        return value.endsWith('px') ? value : `${value}px`;
+      }
+      if (node && 'cornerRadius' in node && node.cornerRadius) {
+        return `${String(node.cornerRadius)}px`;
+      }
+      return "inherit";
     }
   },
   {
     property: "display",
-    bindingKey: "fills",
+    bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
       if (node && 'layoutMode' in node) {
-        return node.layoutMode ? (node.layoutAlign === "STRETCH" ? "flex" : "inline-flex") : "block";
+        if (!node.layoutMode) return "block";
+        const isInline = node.layoutAlign !== "STRETCH";
+        return isInline ? "inline-flex" : "flex";
       }
       return "block";
     }
   },
   {
     property: "flex-direction",
-    bindingKey: "fills",
+    bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
       if (node && 'layoutMode' in node) {
         return node.layoutMode === "VERTICAL" ? "column" : "row";
@@ -371,7 +416,7 @@ const frameNodeProcessors: StyleProcessor[] = [
   },
   {
     property: "align-items",
-    bindingKey: "fills",
+    bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
       if (node && 'primaryAxisAlignItems' in node) {
         const alignMap = {
@@ -401,7 +446,7 @@ const frameNodeProcessors: StyleProcessor[] = [
   },
   {
     property: "padding",
-    bindingKey: "fills",
+    bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
       if (node && 'paddingTop' in node) {
         const top = node.paddingTop;
@@ -511,7 +556,26 @@ function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
   }
 }
 
-async function getVariableFallback(variable: Variable | null): Promise<string> {
+// Add a helper function to determine if a property needs units
+// TODO: This needs some improvement to ensure we are capturing the correct values
+function shouldHaveUnits(propertyName: string, value: number): boolean {
+  const unitlessProperties = ['font-weight', 'opacity'];
+  const propertyLower = propertyName.toLowerCase();
+  
+  // Check if it's a unitless property
+  if (unitlessProperties.some(prop => propertyLower.includes(prop))) {
+    return false;
+  }
+  // Line-height special case: if > 4, probably pixels, if <= 4, probably unitless
+  if (propertyLower.includes('line-height')) {
+    return value > 4;
+  }
+  
+  return true;
+}
+
+// Update getVariableFallback to use property context
+async function getVariableFallback(variable: Variable | null, propertyName: string = ''): Promise<string> {
   if (!variable) return '';
 
   const modeId = Object.keys(variable.valuesByMode)[0];
@@ -521,19 +585,19 @@ async function getVariableFallback(variable: Variable | null): Promise<string> {
   if (value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS') {
     const aliasVariable = await figma.variables.getVariableByIdAsync(value.id);
     if (aliasVariable) {
-      return getVariableFallback(aliasVariable);
+      return getVariableFallback(aliasVariable, propertyName);
     }
   }
 
   switch (variable.resolvedType) {
-    case "FLOAT":
-      return `${value as number}px`;
+    case "FLOAT": {
+      const numValue = value as number;
+      return shouldHaveUnits(propertyName, numValue) ? `${numValue}px` : String(numValue);
+    }
     case "COLOR": {
-      // Handle direct color values
       if (typeof value === 'object' && 'r' in value) {
         return Utils.rgbToHex(value.r, value.g, value.b);
       }
-
       return '#000000';
     }
     case "STRING":
@@ -575,6 +639,7 @@ function parseVariantWithoutKey(variant: string): string {
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'generate-styles') {
     const styles = await generateStyles(msg.format || 'scss');
+    generatedScss = styles; // Store the generated SCSS
     figma.ui.postMessage({ type: 'output-styles', styles });
   } else if (msg.type === 'save-config') {
     await Github.saveUserSettings(msg.githubToken, msg.branchName);
@@ -600,7 +665,7 @@ figma.ui.onmessage = async (msg) => {
         msg.repoPath,
         msg.filePath,
         msg.branchName,
-        msg.content
+        generatedScss  // Use the stored SCSS content instead of msg.content
       );
       figma.ui.postMessage({
         type: 'pr-created',

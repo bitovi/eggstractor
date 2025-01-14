@@ -70,7 +70,6 @@ createPRBtn.onclick = () => {
       repoPath,
       filePath,
       branchName,
-      content: generatedScss
     }
   }, '*');
 };
