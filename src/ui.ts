@@ -44,8 +44,20 @@ createPRBtn.onclick = () => {
   const filePath = (document.getElementById('filePath') as HTMLInputElement).value;
   const branchName = (document.getElementById('branchName') as HTMLInputElement).value;
 
-  if (!githubToken || !repoPath || !filePath || !branchName) {
-    alert('Please fill in all fields and generate SCSS first');
+  const checks = [
+    {value: githubToken, warning: "Please add a github token"},
+    {value: repoPath, warning: "Please add path to the repository"},
+    {value: filePath, warning: "Please add the path to your generated SCSS file"},
+    {value: branchName, warning: "Please specify the name of the branch to create or add the commit to"},
+    {value: generatedScss, warning: "Please generate the SCSS first"}
+  ];
+
+  const missing = checks.filter( check => !check.value)
+
+
+
+  if (missing.length) {
+    alert(missing[0].warning);
     createPRBtn.disabled = false;
     statusEl.textContent = '';
     return;
@@ -75,6 +87,7 @@ function copyToClipboard(text: string) {
 // Update the message handler
 window.onmessage = async (event) => {
   if (event.data.pluginMessage.type === 'output-styles') {
+    generatedScss = event.data.pluginMessage.styles;
     const output = document.getElementById('output') as HTMLDivElement;
     const highlightedCode = highlightCode(event.data.pluginMessage.styles);
     output.innerHTML = `
