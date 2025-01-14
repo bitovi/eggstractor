@@ -6,7 +6,7 @@ const repoPathInput = document.getElementById('repoPath') as HTMLInputElement;
 const filePathInput = document.getElementById('filePath') as HTMLInputElement;
 const branchNameInput = document.getElementById('branchName') as HTMLInputElement;
 const githubTokenInput = document.getElementById('githubToken') as HTMLInputElement;
-let generatedScss = '';
+let generatedScss = false;
 
 // Load saved config when UI opens
 window.onload = () => {
@@ -53,9 +53,6 @@ createPRBtn.onclick = () => {
   ];
 
   const missing = checks.filter( check => !check.value)
-
-
-
   if (missing.length) {
     alert(missing[0].warning);
     createPRBtn.disabled = false;
@@ -87,7 +84,7 @@ function copyToClipboard(text: string) {
 // Update the message handler
 window.onmessage = async (event) => {
   if (event.data.pluginMessage.type === 'output-styles') {
-    generatedScss = event.data.pluginMessage.styles;
+    generatedScss = true;
     const output = document.getElementById('output') as HTMLDivElement;
     const highlightedCode = highlightCode(event.data.pluginMessage.styles);
     output.innerHTML = `
