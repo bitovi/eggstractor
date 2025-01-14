@@ -137,7 +137,7 @@ async function extractNodeToken(
   if (variableId) {
     const variable = await figma.variables.getVariableByIdAsync(variableId);
     if (variable) {
-      const rawValue = await getVariableFallback(variable);
+      const rawValue = await getVariableFallback(variable, processor.property);
       const name = variable.name;
 
       return {
@@ -314,8 +314,8 @@ const textNodeProcessors: StyleProcessor[] = [
     bindingKey: "lineHeight",
     process: async (variable, node?: SceneNode) => {
       if (variable) {
-        const value = await getVariableFallback(variable);
-        return value === "normal" ? value : value; // Keep unitless for better inheritance
+        const value = await getVariableFallback(variable, "line-height");
+        return value;
       }
       if (node?.type === "TEXT" && 'lineHeight' in node) {
         const lineHeight = node.lineHeight;
@@ -323,7 +323,10 @@ const textNodeProcessors: StyleProcessor[] = [
           if (lineHeight.unit === "AUTO") {
             return "normal";
           }
-          return `${lineHeight.value}${lineHeight.unit.toLowerCase() === "percent" ? '%' : ''}`;
+          const value = lineHeight.value;
+          return lineHeight.unit.toLowerCase() === "percent" ? 
+            `${value}%` : 
+            (value > 4 ? `${value}px` : String(value));
         }
       }
       return "inherit";
@@ -553,7 +556,27 @@ function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
   }
 }
 
-async function getVariableFallback(variable: Variable | null): Promise<string> {
+// Add a helper function to determine if a property needs units
+// TODO: This needs some improvement to ensure we are capturing the correct values
+function shouldHaveUnits(propertyName: string, value: number): boolean {
+  const unitlessProperties = ['line-height', 'font-weight', 'opacity'];
+  const propertyLower = propertyName.toLowerCase();
+  
+  // Check if it's a unitless property
+  if (unitlessProperties.some(prop => propertyLower.includes(prop))) {
+    return false;
+  }
+  
+  // Line-height special case: if > 4, probably pixels, if <= 4, probably unitless
+  if (propertyLower.includes('line-height')) {
+    return value > 4;
+  }
+  
+  return true;
+}
+
+// Update getVariableFallback to use property context
+async function getVariableFallback(variable: Variable | null, propertyName: string = ''): Promise<string> {
   if (!variable) return '';
 
   const modeId = Object.keys(variable.valuesByMode)[0];
@@ -563,13 +586,15 @@ async function getVariableFallback(variable: Variable | null): Promise<string> {
   if (value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS') {
     const aliasVariable = await figma.variables.getVariableByIdAsync(value.id);
     if (aliasVariable) {
-      return getVariableFallback(aliasVariable);
+      return getVariableFallback(aliasVariable, propertyName);
     }
   }
 
   switch (variable.resolvedType) {
-    case "FLOAT":
-      return String(value as number);
+    case "FLOAT": {
+      const numValue = value as number;
+      return shouldHaveUnits(propertyName, numValue) ? `${numValue}px` : String(numValue);
+    }
     case "COLOR": {
       if (typeof value === 'object' && 'r' in value) {
         return Utils.rgbToHex(value.r, value.g, value.b);
