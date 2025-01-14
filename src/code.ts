@@ -29,7 +29,7 @@ interface VariableBindings {
 
 interface StyleProcessor {
   property: string;
-  bindingKey: keyof VariableBindings;
+  bindingKey: keyof VariableBindings | undefined;
   process: (value: Variable | null, node?: SceneNode) => Promise<string>;
 }
 
@@ -126,41 +126,9 @@ async function extractNodeToken(
   processor: StyleProcessor,
   path: string[]
 ): Promise<StyleToken | null> {
-  // Handle layout properties
-  const layoutProperties = [
-    'display', 
-    'flex-direction', 
-    'align-items', 
-    'gap',
-    'padding',
-    'padding-top',
-    'padding-right',
-    'padding-bottom',
-    'padding-left'
-  ];
-  if (layoutProperties.includes(processor.property)) {
-    const directValue = getDirectNodeValue(node, processor.property);
-    // Skip if the value is inherit or null
-    if (!directValue || directValue === 'inherit') {
-      return null;
-    }
-    return {
-      type: 'string',
-      name: path.join('_'),
-      value: directValue,
-      rawValue: directValue,
-      property: processor.property,
-      path,
-    };
-  }
-
-  // Cast from the default Figma type to your custom interface
+  // First check for variable bindings
   const customBoundVariables = node.boundVariables as unknown as VariableBindings;
-
-  // Now TypeScript knows cornerRadius (and others) can exist
-  const binding = customBoundVariables[processor.bindingKey];
-
-  // If it’s an array, pick the first variable ID
+  const binding = processor.bindingKey ? customBoundVariables[processor.bindingKey] : undefined;
   const variableId = Array.isArray(binding) ? binding[0]?.id : binding?.id;
 
   if (variableId) {
@@ -185,11 +153,66 @@ async function extractNodeToken(
     }
   }
 
-  // Handle direct values
-  const directValue = getDirectNodeValue(node, processor.property);
-  if (directValue) {
+  // If no variable binding, get direct value
+  let directValue: string | null = null;
+
+  // Handle text node properties
+  if (node.type === "TEXT") {
+    switch (processor.property) {
+      case "color":
+        if (node.fills && Array.isArray(node.fills)) {
+          const fill = node.fills[0] as Paint;
+          if (fill?.type === "SOLID") {
+            const { r, g, b } = fill.color;
+            const a = fill.opacity ?? 1;
+            directValue = a === 1 ? 
+              Utils.rgbToHex(r, g, b) : 
+              `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${a})`;
+          }
+        }
+        break;
+      case "font-family":
+        if (!variableId && node.fontName && typeof node.fontName === 'object') {
+          const fontName = node.fontName as FontName;
+          directValue = fontName.family;
+        }
+        break;
+      case "font-size":
+        directValue = `${String(node.fontSize)}px`;
+        break;
+      case "font-weight":
+        directValue = String(node.fontWeight);
+        break;
+      case "line-height":
+        if ('lineHeight' in node) {
+          const lineHeight = node.lineHeight;
+          if (typeof lineHeight === 'object') {
+            if (lineHeight.unit === "AUTO") {
+              directValue = "normal";
+            } else {
+              directValue = `${lineHeight.value}${lineHeight.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
+            }
+          }
+        }
+        break;
+      case "letter-spacing":
+        if ('letterSpacing' in node) {
+          const letterSpacing = node.letterSpacing;
+          if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
+            directValue = `${letterSpacing.value}${letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
+          }
+        }
+        break;
+    }
+  }
+  // Handle frame/component/instance properties
+  else if (node.type === "FRAME" || node.type === "COMPONENT" || node.type === "INSTANCE" || node.type === "RECTANGLE") {
+    directValue = getDirectNodeValue(node, processor.property);
+  }
+
+  if (directValue && directValue !== "inherit") {
     return {
-      type: 'dimension',
+      type: 'string',
       name: path.join('_'),
       value: directValue,
       rawValue: directValue,
@@ -311,17 +334,7 @@ const textNodeProcessors: StyleProcessor[] = [
   {
     property: "font-family",
     bindingKey: "fontFamily",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) {
-        return getVariableFallback(variable);
-      }
-      // Fallback to direct font family if no variable
-      if (node?.type === "TEXT") {
-        const fontName = node.fontName as FontName;
-        return `"${fontName.family}"`;
-      }
-      return "inherit";
-    }
+    process: async (variable) => getVariableFallback(variable)
   }
 ];
 
@@ -351,7 +364,7 @@ const frameNodeProcessors: StyleProcessor[] = [
   },
   {
     property: "display",
-    bindingKey: "fills",
+    bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
       if (node && 'layoutMode' in node) {
         return node.layoutMode ? (node.layoutAlign === "STRETCH" ? "flex" : "inline-flex") : "block";
@@ -361,7 +374,7 @@ const frameNodeProcessors: StyleProcessor[] = [
   },
   {
     property: "flex-direction",
-    bindingKey: "fills",
+    bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
       if (node && 'layoutMode' in node) {
         return node.layoutMode === "VERTICAL" ? "column" : "row";
@@ -371,7 +384,7 @@ const frameNodeProcessors: StyleProcessor[] = [
   },
   {
     property: "align-items",
-    bindingKey: "fills",
+    bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
       if (node && 'primaryAxisAlignItems' in node) {
         const alignMap = {
@@ -401,7 +414,7 @@ const frameNodeProcessors: StyleProcessor[] = [
   },
   {
     property: "padding",
-    bindingKey: "fills",
+    bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
       if (node && 'paddingTop' in node) {
         const top = node.paddingTop;
