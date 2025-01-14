@@ -153,18 +153,9 @@ async function extractNodeToken(
     }
   }
 
-  // If no variable binding, get direct value
-  let directValue: string | null = null;
-
-  // Handle text node properties
-  if (node.type === "TEXT") {
-    directValue = getDirectTextNodeValue(node as TextNode, processor.property);
-  }
-  // Handle frame/component/instance properties
-  else if (node.type === "FRAME" || node.type === "COMPONENT" || node.type === "INSTANCE" || node.type === "RECTANGLE") {
-    directValue = getDirectNodeValue(node, processor.property);
-  }
-
+  // If no variable binding, use the processor's process function
+  const directValue = await processor.process(null, node);
+  
   if (directValue && directValue !== "inherit") {
     return {
       type: 'string',
@@ -264,12 +255,42 @@ const textNodeProcessors: StyleProcessor[] = [
   {
     property: "color",
     bindingKey: "fills",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variable, node?: SceneNode) => {
+      if (variable) return getVariableFallback(variable);
+      if (node?.type === "TEXT" && node.fills && Array.isArray(node.fills)) {
+        const fill = node.fills[0] as Paint;
+        if (fill?.type === "SOLID") {
+          const { r, g, b } = fill.color;
+          const a = fill.opacity ?? 1;
+          return a === 1 ? 
+            Utils.rgbToHex(r, g, b) : 
+            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${a})`;
+        }
+      }
+      return "inherit";
+    }
+  },
+  {
+    property: "font-family",
+    bindingKey: "fontFamily",
+    process: async (variable, node?: SceneNode) => {
+      if (variable) return getVariableFallback(variable);
+      if (node?.type === "TEXT" && node.fontName && typeof node.fontName === 'object') {
+        return node.fontName.family;
+      }
+      return "inherit";
+    }
   },
   {
     property: "font-size",
     bindingKey: "fontSize",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variable, node?: SceneNode) => {
+      if (variable) return getVariableFallback(variable);
+      if (node?.type === "TEXT") {
+        return `${String(node.fontSize)}px`;
+      }
+      return "inherit";
+    }
   },
   {
     property: "font-weight",
@@ -307,14 +328,26 @@ const frameNodeProcessors: StyleProcessor[] = [
   {
     property: "border-width",
     bindingKey: "strokeWeight",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variable, node?: SceneNode) => {
+      if (variable) return getVariableFallback(variable);
+      if (node && 'strokeWeight' in node && node.strokeWeight) {
+        return `${String(node.strokeWeight)}px`;
+      }
+      return "inherit";
+    }
   },
   {
     property: "border-radius",
     bindingKey: "cornerRadius",
-    process: async (variable) => {
-      const value = await getVariableFallback(variable);
-      return value.endsWith('px') ? value : `${value}px`;
+    process: async (variable, node?: SceneNode) => {
+      if (variable) {
+        const value = await getVariableFallback(variable);
+        return value.endsWith('px') ? value : `${value}px`;
+      }
+      if (node && 'cornerRadius' in node && node.cornerRadius) {
+        return `${String(node.cornerRadius)}px`;
+      }
+      return "inherit";
     }
   },
   {
@@ -322,7 +355,9 @@ const frameNodeProcessors: StyleProcessor[] = [
     bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
       if (node && 'layoutMode' in node) {
-        return node.layoutMode ? (node.layoutAlign === "STRETCH" ? "flex" : "inline-flex") : "block";
+        if (!node.layoutMode) return "block";
+        const isInline = node.layoutAlign !== "STRETCH";
+        return isInline ? "inline-flex" : "flex";
       }
       return "block";
     }
@@ -580,50 +615,3 @@ figma.ui.onmessage = async (msg) => {
     }
   }
 };
-
-function getDirectTextNodeValue(node: TextNode, property: string): string | null {
-  switch (property) {
-    case "color":
-      if (node.fills && Array.isArray(node.fills)) {
-        const fill = node.fills[0] as Paint;
-        if (fill?.type === "SOLID") {
-          const { r, g, b } = fill.color;
-          const a = fill.opacity ?? 1;
-          return a === 1 ?
-            Utils.rgbToHex(r, g, b) :
-            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${a})`;
-        }
-      }
-      return null;
-    case "font-family":
-      if (node.fontName && typeof node.fontName === 'object') {
-        return node.fontName.family;
-      }
-      return null;
-    case "font-size":
-      return `${String(node.fontSize)}px`;
-    case "font-weight":
-      return String(node.fontWeight);
-    case "line-height":
-      if ('lineHeight' in node) {
-        const lineHeight = node.lineHeight;
-        if (typeof lineHeight === 'object') {
-          if (lineHeight.unit === "AUTO") {
-            return "normal";
-          }
-          return `${lineHeight.value}${lineHeight.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
-        }
-      }
-      return null;
-    case "letter-spacing":
-      if ('letterSpacing' in node) {
-        const letterSpacing = node.letterSpacing;
-        if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
-          return `${letterSpacing.value}${letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
-        }
-      }
-      return null;
-    default:
-      return null;
-  }
-}
