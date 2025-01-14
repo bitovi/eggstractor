@@ -559,14 +559,13 @@ function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
 // Add a helper function to determine if a property needs units
 // TODO: This needs some improvement to ensure we are capturing the correct values
 function shouldHaveUnits(propertyName: string, value: number): boolean {
-  const unitlessProperties = ['line-height', 'font-weight', 'opacity'];
+  const unitlessProperties = ['font-weight', 'opacity'];
   const propertyLower = propertyName.toLowerCase();
   
   // Check if it's a unitless property
   if (unitlessProperties.some(prop => propertyLower.includes(prop))) {
     return false;
   }
-  
   // Line-height special case: if > 4, probably pixels, if <= 4, probably unitless
   if (propertyLower.includes('line-height')) {
     return value > 4;
