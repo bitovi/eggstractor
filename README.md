@@ -1,10 +1,14 @@
-## Eggstractor
+# Eggstractor
+
+<img align="left" src="img/eggstractor.png" height="80px" style="margin-right: 20px;">
 
 This plugin generates SCSS variables and mixins from Figma.
 
-### Features
+<br>
 
-- Extracts fill colors from selected nodes.
+## Features
+
+- Extracts colors, background colors, padding, margin, font size, line height, font weight, opacity, and more from current page.
 - Generates SCSS variables for each color.
 - Handles text nodes to extract font colors.
 - Outputs the generated SCSS code to the plugin UI.
