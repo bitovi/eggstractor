@@ -13,7 +13,7 @@ This plugin generates SCSS variables and mixins from Figma, it also enables you 
 - Handles text nodes to extract font colors.
 - Outputs the generated SCSS code to the plugin UI.
 
-<a href="(https://www.youtube.com/watch?v=m7i-IexlZqQ">
+<a href="https://www.youtube.com/watch?v=m7i-IexlZqQ">
   <img src="https://github.com/user-attachments/assets/3b8925f5-2fd5-47b3-8a7b-7763cec1eeec" alt="Eggstractor Introduction - Figma to CSS Mixins - Design and Development working in harmony" width="300">
 </a>
 
