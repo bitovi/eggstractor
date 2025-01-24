@@ -33,12 +33,11 @@ interface VariableBindings {
 interface StyleProcessor {
   property: string;
   bindingKey: keyof VariableBindings | undefined;
-  process: (value: Variable | null, node?: SceneNode) => Promise<string | GradientToken>;
+  process: (variables: VariableToken[], node?: SceneNode) => Promise<ProcessedValue | null>;
 }
 
 // Token Types
 interface DesignToken {
-  type: 'color' | 'dimension' | 'number' | 'string';
   name: string;
   value: any;
   originalValue?: any;
@@ -49,15 +48,33 @@ interface DesignToken {
   };
 }
 
-interface StyleToken extends DesignToken {
+interface BaseToken {
+  type: 'variable' | 'style';
+  name: string;
   property: string;
   path: string[];
-  rawValue: string | GradientValue | GradientToken;
-  value: string | GradientValue | GradientToken;
+  metadata?: {
+    figmaId?: string;
+    variableId?: string;
+    variableName?: string;
+  };
+}
+
+interface VariableToken extends BaseToken {
+  type: 'variable';
+  value: string; // SASS variable reference e.g. $color-primary
+  rawValue: string; // Actual value e.g. #FF0000
+}
+
+interface StyleToken extends BaseToken {
+  type: 'style';
+  value: string; // CSS with variable references e.g. background: $color-primary
+  rawValue: string; // CSS with actual values e.g. background: #FF0000
+  variables?: VariableToken[]; // Associated variable tokens
 }
 
 interface TokenCollection {
-  tokens: StyleToken[];
+  tokens: (StyleToken | VariableToken)[];
 }
 
 interface GradientStop {
@@ -77,6 +94,12 @@ interface GradientValue {
 interface GradientToken {
   type: 'gradient';
   value: GradientValue;
+}
+
+// First add the ProcessedValue interface
+interface ProcessedValue {
+  value: string;   // Value with variable references
+  rawValue: string; // Value with actual values
 }
 
 // Main generation function
@@ -112,7 +135,7 @@ async function collectTokens(): Promise<TokenCollection> {
           const directValue = getDirectNodeValue(node as SceneNode, processor.property);
           if (directValue) {
             collection.tokens.push({
-              type: 'string',
+              type: 'style',
               name: nodePath.join('_'),
               value: directValue,
               rawValue: directValue,
@@ -122,13 +145,11 @@ async function collectTokens(): Promise<TokenCollection> {
           }
         }
       } else {
-        // Process other nodes as before
+        // Process other nodes with the new token structure
         const processors = getProcessorsForNode(node as SceneNode);
         for (const processor of processors) {
-          const token = await extractNodeToken(node as SceneNode, processor, nodePath);
-          if (token) {
-            collection.tokens.push(token);
-          }
+          const tokens = await extractNodeToken(node as SceneNode, processor, nodePath);
+          collection.tokens.push(...tokens);
         }
       }
     }
@@ -150,76 +171,98 @@ async function extractNodeToken(
   node: SceneNode,
   processor: StyleProcessor,
   path: string[]
-): Promise<StyleToken | null> {
-  // First check for variable bindings
+): Promise<(StyleToken | VariableToken)[]> {
+  const tokens: (StyleToken | VariableToken)[] = [];
+
+  // Step 1: Handle Variable Bindings
   const customBoundVariables = node.boundVariables as unknown as VariableBindings;
-  const binding = processor.bindingKey ? customBoundVariables[processor.bindingKey] : undefined;
-  const variableId = Array.isArray(binding) ? binding[0]?.id : binding?.id;
+  const bindings = processor.bindingKey
+    ? (Array.isArray(customBoundVariables[processor.bindingKey])
+      ? customBoundVariables[processor.bindingKey] as VariableAlias[]
+      : [customBoundVariables[processor.bindingKey]] as VariableAlias[])
+    : [];
 
-  if (variableId) {
-    const variable = await figma.variables.getVariableByIdAsync(variableId);
-    if (variable) {
-      const rawValue = await getVariableFallback(variable, processor.property);
-      const name = variable.name;
+  // Step 2: Create Variable Tokens
+  const variableTokens: VariableToken[] = [];
+  for (const binding of bindings) {
+    if (!binding?.id) continue;
 
-      return {
-        type: variable.resolvedType.toLowerCase() as 'color' | 'dimension' | 'number' | 'string',
-        name,
-        value: `$${Utils.sanitizeName(variable.name)}`,
-        rawValue,
-        property: processor.property,
-        path,
-        metadata: {
-          figmaId: node.id,
-          variableId: variable.id,
-          variableName: variable.name
-        }
-      };
-    }
-  }
+    const variable = await figma.variables.getVariableByIdAsync(binding.id);
+    if (!variable) continue;
 
-  // If no variable binding, use the processor's process function
-  const directValue = await processor.process(null, node);
-  
-  if (directValue && directValue !== "inherit") {
-    return {
-      type: 'string',
-      name: path.join('_'),
-      value: directValue,
-      rawValue: directValue,
+    const rawValue = await getVariableFallback(variable, processor.property);
+    const variableToken: VariableToken = {
+      type: 'variable',
+      name: variable.name,
+      value: `$${Utils.sanitizeName(variable.name)}`,
+      rawValue,
       property: processor.property,
       path,
+      metadata: {
+        figmaId: node.id,
+        variableId: variable.id,
+        variableName: variable.name,
+      }
     };
+
+    variableTokens.push(variableToken);
+    tokens.push(variableToken);
   }
 
-  return null;
+  // Step 3: Process the node and create Style Token
+  const processedValue = await processor.process(variableTokens, node);
+  if (processedValue) {
+    const styleToken: StyleToken = {
+      type: 'style',
+      name: path.join('_'),
+      value: processedValue.value,
+      rawValue: processedValue.rawValue,
+      property: processor.property,
+      path,
+      variables: variableTokens.length > 0 ? variableTokens : undefined,
+      metadata: {
+        figmaId: node.id,
+      }
+    };
+
+    tokens.push(styleToken);
+  }
+
+  return tokens;
 }
 
 // SCSS Transform
 function transformToScss(tokens: TokenCollection): string {
-  // First collect all unique variables
-  const variables = new Set<string>();
-  tokens.tokens.forEach(token => {
+  let output = "// Generated SCSS Variables\n";
+
+  // Filter for variable tokens and ensure uniqueness by variable name
+  const variableTokens = tokens.tokens.filter((token): token is VariableToken => 
+    token.type === 'variable'
+  );
+
+  const uniqueVariables = new Map<string, VariableToken>();
+  variableTokens.forEach(token => {
     if (token.metadata?.variableName) {
-      variables.add(token.metadata.variableName);
+      uniqueVariables.set(token.metadata.variableName, token);
     }
   });
 
-  // Generate variables section
-  let output = "// Generated SCSS Variables\n";
-  Array.from(variables).forEach(varName => {
-    const token = tokens.tokens.find(t => t.metadata?.variableName === varName);
-    if (token?.rawValue) {
-      output += `$${Utils.sanitizeName(varName)}: ${token.rawValue}\n`;
-    }
+  // Output variables
+  uniqueVariables.forEach(token => {
+    output += `$${Utils.sanitizeName(token.name)}: ${token.rawValue};\n`;
   });
 
   // Generate mixins section
   output += "\n// Generated SCSS Mixins\n";
 
-  const variantGroups = groupBy(tokens.tokens, t => t.path.join('_'));
+  // Filter for style tokens and group by path
+  const styleTokens = tokens.tokens.filter((token): token is StyleToken => 
+    token.type === 'style'
+  );
 
-  Object.entries(variantGroups).forEach(([variantPath, tokens]) => {
+  const variantGroups = groupBy(styleTokens, t => t.path.join('_'));
+
+  Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
     if (!variantPath) return;
 
     // Sort tokens to put layout properties first
@@ -234,7 +277,8 @@ function transformToScss(tokens: TokenCollection): string {
       'padding-bottom',
       'padding-left'
     ];
-    const sortedTokens = tokens.sort((a, b) => {
+
+    const sortedTokens = groupTokens.sort((a, b) => {
       const aIndex = layoutProperties.indexOf(a.property);
       const bIndex = layoutProperties.indexOf(b.property);
       if (aIndex === -1 && bIndex === -1) return 0;
@@ -243,22 +287,23 @@ function transformToScss(tokens: TokenCollection): string {
       return aIndex - bIndex;
     });
 
-    // Remove duplicate and inherited properties
+    // Remove duplicates keeping the last occurrence
     const uniqueTokens = sortedTokens.reduce((acc, token) => {
-      const existing = acc.find(t => t.property === token.property);
-      if (!existing && token.value !== 'inherit') {
+      const existingIndex = acc.findIndex(t => t.property === token.property);
+      if (existingIndex !== -1) {
+        acc[existingIndex] = token;
+      } else {
         acc.push(token);
       }
       return acc;
     }, [] as StyleToken[]);
 
-    // Only output mixin if there are non-inherited properties
     if (uniqueTokens.length > 0) {
-      output += `@mixin ${variantPath}\n`;
+      output += `@mixin ${variantPath} {\n`;
       uniqueTokens.forEach(token => {
-        output += `  ${token.property}: ${token.value}\n`;
+        output += `  ${token.property}: ${token.value};\n`;
       });
-      output += "\n";
+      output += "}\n\n";
     }
   });
 
@@ -269,7 +314,12 @@ function transformToScss(tokens: TokenCollection): string {
 function transformToCss(tokens: TokenCollection): string {
   let output = "/* Generated CSS */";
 
-  const variantGroups = groupBy(tokens.tokens, t => t.path.join('_'));
+  // Filter for style tokens only
+  const styleTokens = tokens.tokens.filter((token): token is StyleToken => 
+    token.type === 'style'
+  );
+
+  const variantGroups = groupBy(styleTokens, t => t.path.join('_'));
   Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
     if (!variantPath) return;
     // Remove properties with zero values and unnecessary defaults
@@ -318,101 +368,137 @@ const textNodeProcessors: StyleProcessor[] = [
   {
     property: "color",
     bindingKey: "fills",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) return getVariableFallback(variable);
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      // Check for variable first
+      const colorVariable = variables.find(v => v.property === 'color');
+      if (colorVariable) {
+        return {
+          value: colorVariable.value,
+          rawValue: colorVariable.rawValue
+        };
+      }
+
+      // Handle direct node value
       if (node?.type === "TEXT" && node.fills && Array.isArray(node.fills)) {
         const fill = node.fills[0] as Paint;
         if (fill?.type === "SOLID") {
           const { r, g, b } = fill.color;
           const a = fill.opacity ?? 1;
-          return a === 1 ? 
+          const value = a === 1 ? 
             Utils.rgbToHex(r, g, b) : 
             `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+          return { value, rawValue: value };
         }
       }
-      return "inherit";
+      return null;
     }
   },
   {
     property: "font-family",
     bindingKey: "fontFamily",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) return getVariableFallback(variable);
-      if (node?.type === "TEXT" && node.fontName && typeof node.fontName === 'object') {
-        return node.fontName.family;
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const fontVariable = variables.find(v => v.property === 'font-family');
+      if (fontVariable) {
+        return {
+          value: fontVariable.value,
+          rawValue: fontVariable.rawValue
+        };
       }
-      return "inherit";
+
+      if (node?.type === "TEXT" && node.fontName && typeof node.fontName === 'object') {
+        const value = node.fontName.family;
+        return { value, rawValue: value };
+      }
+      return null;
     }
   },
   {
     property: "font-size",
     bindingKey: "fontSize",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) {
-        const value = await getVariableFallback(variable);
-        return `${value}px`;
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const sizeVariable = variables.find(v => v.property === 'font-size');
+      if (sizeVariable) {
+        return {
+          value: sizeVariable.value,
+          rawValue: sizeVariable.rawValue
+        };
       }
+
       if (node?.type === "TEXT") {
-        return `${String(node.fontSize)}px`;
+        const value = `${String(node.fontSize)}px`;
+        return { value, rawValue: value };
       }
-      return "inherit";
+      return null;
     }
   },
   {
     property: "font-weight",
     bindingKey: "fontWeight",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) return getVariableFallback(variable);
-      if (node?.type === "TEXT") {
-        return String(node.fontWeight);
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const weightVariable = variables.find(v => v.property === 'font-weight');
+      if (weightVariable) {
+        return {
+          value: weightVariable.value,
+          rawValue: weightVariable.rawValue
+        };
       }
-      return "inherit";
+
+      if (node?.type === "TEXT") {
+        const value = String(node.fontWeight);
+        return { value, rawValue: value };
+      }
+      return null;
     }
   },
   {
     property: "line-height",
     bindingKey: "lineHeight",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) {
-        const value = await getVariableFallback(variable, "line-height");
-        return value;
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const heightVariable = variables.find(v => v.property === 'line-height');
+      if (heightVariable) {
+        return {
+          value: heightVariable.value,
+          rawValue: heightVariable.rawValue
+        };
       }
+
       if (node?.type === "TEXT" && 'lineHeight' in node) {
         const lineHeight = node.lineHeight;
         if (typeof lineHeight === 'object') {
           if (lineHeight.unit === "AUTO") {
-            return "normal";
+            return { value: "normal", rawValue: "normal" };
           }
           const value = lineHeight.value;
-          return lineHeight.unit.toLowerCase() === "percent" ? 
+          const formatted = lineHeight.unit.toLowerCase() === "percent" ? 
             `${value}%` : 
             (value > 4 ? `${value}px` : String(value));
+          return { value: formatted, rawValue: formatted };
         }
       }
-      return "inherit";
+      return null;
     }
   },
   {
     property: "letter-spacing",
     bindingKey: "letterSpacing",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) {
-        const value = await getVariableFallback(variable);
-        return `${value}px`; // Letter-spacing should have units
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const spacingVariable = variables.find(v => v.property === 'letter-spacing');
+      if (spacingVariable) {
+        return {
+          value: spacingVariable.value,
+          rawValue: spacingVariable.rawValue
+        };
       }
+
       if (node?.type === "TEXT" && 'letterSpacing' in node) {
         const letterSpacing = node.letterSpacing;
         if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
-          return `${letterSpacing.value}${letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
+          const value = `${letterSpacing.value}${letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
+          return { value, rawValue: value };
         }
       }
-      return "inherit";
+      return null;
     }
-  },
-  {
-    property: "font-family",
-    bindingKey: "fontFamily",
-    process: async (variable) => getVariableFallback(variable)
   }
 ];
 
@@ -420,117 +506,200 @@ const frameNodeProcessors: StyleProcessor[] = [
   {
     property: "background",
     bindingKey: "fills",
-    process: async (variable, node?: SceneNode) => {
-      // Handle variables first
-      if (variable) {
-        return getVariableFallback(variable);
-      }
-      
-      // Rest of the fill processing...
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      // Handle direct node values if no variables
       if (node && 'fills' in node && Array.isArray(node.fills)) {
         const visibleFills = node.fills.filter(fill => fill.visible);
-        if (!visibleFills.length) return "inherit";
+        if (!visibleFills.length) return null;
 
-        const backgrounds = visibleFills.map((fill: Paint) => {
+        const backgrounds = await Promise.all(visibleFills.map(async (fill: Paint) => {
           if (fill.type === "SOLID") {
+            // Check if we have a variable for this fill
+            const fillVariable = variables.find(v => v.property === 'background');
+            if (fillVariable) {
+              return {
+                value: fillVariable.value,
+                rawValue: fillVariable.rawValue
+              };
+            }
+
+            // No variable, use direct value
             const { r, g, b } = fill.color;
             const a = fill.opacity ?? 1;
-            return a === 1 ? 
+            const value = a === 1 ? 
               Utils.rgbToHex(r, g, b) : 
               `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+            return { value, rawValue: value };
           }
           
           if (fill.type === "GRADIENT_LINEAR" || fill.type === "GRADIENT_RADIAL") {
             const gradientFill = fill as GradientPaint;
-            const stops = gradientFill.gradientStops.map(stop => {
-              const { r, g, b, a } = stop.color;
-              const color = a === 1 ? 
-                Utils.rgbToHex(r * 255, g * 255, b * 255) : 
-                `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+            const stops = await Promise.all(gradientFill.gradientStops.map(async (stop, index) => {
+              // Check if we have a variable for this stop
+              const stopVariable = variables.find(v => 
+                v.metadata?.figmaId === `${node.id}-gradient-stop-${index}`
+              );
+
+              let color;
+              if (stopVariable) {
+                color = {
+                  value: stopVariable.value,
+                  rawValue: stopVariable.rawValue
+                };
+              } else {
+                const { r, g, b, a } = stop.color;
+                const directColor = a === 1 ? 
+                  Utils.rgbToHex(r, g, b) : 
+                  `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+                color = { value: directColor, rawValue: directColor };
+              }
+
+              return `${color.value} ${Math.round(stop.position * 100)}%`;
+            }));
+
+            const rawStops = await Promise.all(gradientFill.gradientStops.map(async (stop, index) => {
+              const stopVariable = variables.find(v => 
+                v.metadata?.figmaId === `${node.id}-gradient-stop-${index}`
+              );
+
+              let color;
+              if (stopVariable) {
+                color = stopVariable.rawValue;
+              } else {
+                const { r, g, b, a } = stop.color;
+                color = a === 1 ? 
+                  Utils.rgbToHex(r, g, b) : 
+                  `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+              }
+
               return `${color} ${Math.round(stop.position * 100)}%`;
-            }).join(', ');
+            }));
 
             if (fill.type === "GRADIENT_RADIAL") {
               const [[a, b], [c, d]] = gradientFill.gradientTransform;
               // Convert transform matrix to percentage positions
-              const centerX = Math.round((c + 1) * 50); // Convert to 0-100 range
-              const centerY = Math.round((d + 1) * 50); // Convert to 0-100 range
+              const centerX = Math.round((c + 1) * 50);
+              const centerY = Math.round((d + 1) * 50);
               // Calculate radius based on transform scale
               const radiusX = Math.round(Math.sqrt(a * a + b * b) * 50);
               const radiusY = Math.round(Math.sqrt(c * c + d * d) * 50);
               
-              return `radial-gradient(ellipse ${radiusX}% ${radiusY}% at ${centerX}% ${centerY}%, ${stops})`;
+              return {
+                value: `radial-gradient(ellipse ${radiusX}% ${radiusY}% at ${centerX}% ${centerY}%, ${stops.join(', ')})`,
+                rawValue: `radial-gradient(ellipse ${radiusX}% ${radiusY}% at ${centerX}% ${centerY}%, ${rawStops.join(', ')})`
+              };
             }
 
-            return `linear-gradient(${Math.round(getGradientAngle(gradientFill.gradientTransform))}deg, ${stops})`;
+            const angle = Math.round(getGradientAngle(gradientFill.gradientTransform));
+            return {
+              value: `linear-gradient(${angle}deg, ${stops.join(', ')})`,
+              rawValue: `linear-gradient(${angle}deg, ${rawStops.join(', ')})`
+            };
           }
-
           return null;
-        }).filter(Boolean);
+        }));
 
-        return backgrounds.length > 0 ? backgrounds.join(', ') : "inherit";
+        const validBackgrounds = backgrounds.filter((b): b is NonNullable<typeof b> => b !== null);
+        if (validBackgrounds.length > 0) {
+          return {
+            value: validBackgrounds.map(b => b.value).join(', '),
+            rawValue: validBackgrounds.map(b => b.rawValue).join(', ')
+          };
+        }
       }
-      return "inherit";
+      return null;
     }
   },
   {
     property: "border-color",
     bindingKey: "strokes",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const borderVariable = variables.find(v => v.property === 'border-color');
+      if (borderVariable) {
+        return {
+          value: borderVariable.value,
+          rawValue: borderVariable.rawValue
+        };
+      }
+
+      if (node && 'strokes' in node && Array.isArray(node.strokes) && node.strokes.length > 0) {
+        const stroke = node.strokes[0] as Paint;
+        if (stroke?.type === "SOLID") {
+          const { r, g, b } = stroke.color;
+          const a = stroke.opacity ?? 1;
+          const value = a === 1 ? 
+            Utils.rgbToHex(r, g, b) : 
+            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+          return { value, rawValue: value };
+        }
+      }
+      return null;
+    }
   },
   {
     property: "border-width",
     bindingKey: "strokeWeight",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) return getVariableFallback(variable);
-      if (node && 'strokeWeight' in node && node.strokeWeight) {
-        return `${String(node.strokeWeight)}px`;
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const widthVariable = variables.find(v => v.property === 'border-width');
+      if (widthVariable) {
+        return {
+          value: widthVariable.value,
+          rawValue: widthVariable.rawValue
+        };
       }
-      return "inherit";
+
+      if (node && 'strokeWeight' in node && node.strokeWeight) {
+        const value = `${String(node.strokeWeight)}px`;
+        return { value, rawValue: value };
+      }
+      return null;
     }
   },
   {
     property: "border-radius",
     bindingKey: "cornerRadius",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) {
-        const value = await getVariableFallback(variable);
-        return value.endsWith('px') ? value : `${value}px`;
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const radiusVariable = variables.find(v => v.property === 'border-radius');
+      if (radiusVariable) {
+        return {
+          value: radiusVariable.value,
+          rawValue: radiusVariable.rawValue
+        };
       }
+
       if (node && 'cornerRadius' in node && node.cornerRadius) {
-        return `${String(node.cornerRadius)}px`;
+        const value = `${String(node.cornerRadius)}px`;
+        return { value, rawValue: value };
       }
-      return "inherit";
+      return null;
     }
   },
   {
     property: "display",
     bindingKey: undefined,
-    process: async (_, node?: SceneNode) => {
-      // Only process if layout mode is explicitly set to something other than NONE
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
       if (node && 'layoutMode' in node && node.layoutMode && node.layoutMode !== "NONE") {
-        const isInline = node.layoutAlign !== "STRETCH";
-        return isInline ? "inline-flex" : "flex";
+        const value = node.layoutAlign !== "STRETCH" ? "inline-flex" : "flex";
+        return { value, rawValue: value };
       }
-      return "inherit";
+      return null;
     }
   },
   {
     property: "flex-direction",
     bindingKey: undefined,
-    process: async (_, node?: SceneNode) => {
-      // Only process if layout mode is explicitly set to something other than NONE
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
       if (node && 'layoutMode' in node && node.layoutMode && node.layoutMode !== "NONE") {
-        return node.layoutMode === "VERTICAL" ? "column" : "row";
+        const value = node.layoutMode === "VERTICAL" ? "column" : "row";
+        return { value, rawValue: value };
       }
-      return "inherit";
+      return null;
     }
   },
   {
     property: "align-items",
     bindingKey: undefined,
-    process: async (_, node?: SceneNode) => {
-      // Only process if layout mode is explicitly set to something other than NONE
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
       if (node && 'layoutMode' in node && node.layoutMode && node.layoutMode !== "NONE" && 'primaryAxisAlignItems' in node) {
         const alignMap = {
           MIN: "flex-start",
@@ -538,47 +707,72 @@ const frameNodeProcessors: StyleProcessor[] = [
           MAX: "flex-end",
           SPACE_BETWEEN: "space-between"
         };
-        return alignMap[node.primaryAxisAlignItems] || "inherit";
+        const value = alignMap[node.primaryAxisAlignItems] || "flex-start";
+        return { value, rawValue: value };
       }
-      return "inherit";
+      return null;
     }
   },
   {
     property: "gap",
     bindingKey: "itemSpacing",
-    process: async (variable, node?: SceneNode) => {
-      if (variable) {
-        return getVariableFallback(variable);
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const gapVariable = variables.find(v => v.property === 'gap');
+      if (gapVariable) {
+        return {
+          value: gapVariable.value,
+          rawValue: gapVariable.rawValue
+        };
       }
-      // Fallback to direct itemSpacing if no variable
+
       if (node && 'itemSpacing' in node) {
-        return `${node.itemSpacing}px`;
+        const value = `${node.itemSpacing}px`;
+        return { value, rawValue: value };
       }
-      return "0";
+      return null;
     }
   },
   {
     property: "padding",
     bindingKey: undefined,
-    process: async (_, node?: SceneNode) => {
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      // Handle individual padding variables
+      const top = variables.find(v => v.property === 'padding-top');
+      const right = variables.find(v => v.property === 'padding-right');
+      const bottom = variables.find(v => v.property === 'padding-bottom');
+      const left = variables.find(v => v.property === 'padding-left');
+
+      if (top || right || bottom || left) {
+        const getValue = (v: VariableToken | undefined, fallback: string) => v ? v.value : fallback;
+        const getRawValue = (v: VariableToken | undefined, fallback: string) => v ? v.rawValue : fallback;
+
+        return {
+          value: `${getValue(top, '0')} ${getValue(right, '0')} ${getValue(bottom, '0')} ${getValue(left, '0')}`,
+          rawValue: `${getRawValue(top, '0')} ${getRawValue(right, '0')} ${getRawValue(bottom, '0')} ${getRawValue(left, '0')}`
+        };
+      }
+
+      // Handle direct node values
       if (node && 'paddingTop' in node) {
-        const top = node.paddingTop;
-        const right = node.paddingRight;
-        const bottom = node.paddingBottom;
-        const left = node.paddingLeft;
+        const topVal = `${node.paddingTop}px`;
+        const rightVal = `${node.paddingRight}px`;
+        const bottomVal = `${node.paddingBottom}px`;
+        const leftVal = `${node.paddingLeft}px`;
 
         // If all sides are equal
-        if (top === right && right === bottom && bottom === left) {
-          return `${top}px`;
+        if (topVal === rightVal && rightVal === bottomVal && bottomVal === leftVal) {
+          return { value: topVal, rawValue: topVal };
         }
         // If vertical and horizontal padding are different
-        if (top === bottom && left === right) {
-          return `${top}px ${left}px`;
+        if (topVal === bottomVal && leftVal === rightVal) {
+          const value = `${topVal} ${leftVal}`;
+          return { value, rawValue: value };
         }
         // All sides different
-        return `${top}px ${right}px ${bottom}px ${left}px`;
+        const value = `${topVal} ${rightVal} ${bottomVal} ${leftVal}`;
+        return { value, rawValue: value };
       }
-      return "0";
+      return null;
     }
   }
 ];
@@ -607,7 +801,9 @@ function getDirectNodeValue(node: SceneNode, property: string): string | null {
       case "flex-direction":
         if ('layoutMode' in node) {
           if (!node.layoutMode) return null;
-          return node.layoutMode === "VERTICAL" ? "column" : "row";
+          // Check for auto-layout properties
+          const isInline = node.layoutAlign !== "STRETCH";
+          return isInline ? "inline-flex" : "flex";
         }
         return null;
       case "align-items":
