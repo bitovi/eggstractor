@@ -168,6 +168,12 @@
       <label for="branchName">New Branch Name:</label>
       <input type="text" id="branchName" placeholder="e.g., feature/update-scss-variables" />
     </div>
+    <div id="devControls" style="display: none; margin-bottom: 10px;">
+      <select id="formatSelect">
+        <option value="css">CSS</option>
+        <option value="scss">SCSS</option>
+      </select>
+    </div>
     <div>
       <button id="generateBtn">Generate SCSS</button>
       <button id="createPRBtn">Create PR</button>

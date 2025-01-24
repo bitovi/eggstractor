@@ -60,11 +60,13 @@ interface TokenCollection {
 }
 
 // Main generation function
-async function generateStyles(format: 'scss' | 'less' | 'postcss'): Promise<string> {
+async function generateStyles(format: 'scss' | 'css'): Promise<string> {
   const tokens = await collectTokens();
   switch (format) {
     case 'scss':
       return transformToScss(tokens);
+    case 'css':
+      return transformToCss(tokens);
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
@@ -243,6 +245,49 @@ function transformToScss(tokens: TokenCollection): string {
   return output;
 }
 
+// Add new CSS transform function
+function transformToCss(tokens: TokenCollection): string {
+  let output = "/* Generated CSS */";
+
+  const variantGroups = groupBy(tokens.tokens, t => t.path.join('_'));
+
+  Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
+    if (!variantPath) return;
+
+    // Remove properties with zero values and unnecessary defaults
+    const uniqueTokens = groupTokens.reduce((acc, token) => {
+      const existing = acc.find(t => t.property === token.property);
+      if (!existing && token.value !== 'inherit') {
+        // Skip zero values for certain properties
+        if (['gap', 'padding'].includes(token.property) && 
+            (token.value === '0' || token.value === '0px')) {
+          return acc;
+        }
+        // Skip default values
+        if (token.property === 'border-width' && token.value === '1px') {
+          return acc;
+        }
+        acc.push(token);
+      }
+      return acc;
+    }, [] as StyleToken[]);
+
+    // Only output class if there are non-inherited properties
+    if (uniqueTokens.length > 0) {
+      output += `\n.${variantPath} {\n`;
+      uniqueTokens.forEach(token => {
+        const value = token.value.startsWith('$') ? 
+          groupTokens.find(t => `$${Utils.sanitizeName(t.name)}` === token.value)?.rawValue || token.value :
+          token.value;
+        output += `  ${token.property}: ${value};\n`;
+      });
+      output += "}\n";
+    }
+  });
+
+  return output;
+}
+
 // Helper function
 function groupBy<T>(arr: T[], key: (item: T) => string): Record<string, T[]> {
   return arr.reduce((groups, item) => {
@@ -267,7 +312,7 @@ const textNodeProcessors: StyleProcessor[] = [
           const a = fill.opacity ?? 1;
           return a === 1 ? 
             Utils.rgbToHex(r, g, b) : 
-            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${a})`;
+            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
         }
       }
       return "inherit";
@@ -360,7 +405,21 @@ const frameNodeProcessors: StyleProcessor[] = [
   {
     property: "background-color",
     bindingKey: "fills",
-    process: async (variable) => getVariableFallback(variable)
+    process: async (variable, node?: SceneNode) => {
+      if (variable) return getVariableFallback(variable);
+      // Handle direct fill colors
+      if (node && 'fills' in node && Array.isArray(node.fills)) {
+        const fill = node.fills[0] as Paint;
+        if (fill?.type === "SOLID") {
+          const { r, g, b } = fill.color;
+          const a = fill.opacity ?? 1;
+          return a === 1 ? 
+            Utils.rgbToHex(r, g, b) : 
+            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+        }
+      }
+      return "inherit";
+    }
   },
   {
     property: "border-color",
@@ -396,38 +455,40 @@ const frameNodeProcessors: StyleProcessor[] = [
     property: "display",
     bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
-      if (node && 'layoutMode' in node) {
-        if (!node.layoutMode) return "block";
+      // Only process if layout mode is explicitly set to something other than NONE
+      if (node && 'layoutMode' in node && node.layoutMode && node.layoutMode !== "NONE") {
         const isInline = node.layoutAlign !== "STRETCH";
         return isInline ? "inline-flex" : "flex";
       }
-      return "block";
+      return "inherit";
     }
   },
   {
     property: "flex-direction",
     bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
-      if (node && 'layoutMode' in node) {
+      // Only process if layout mode is explicitly set to something other than NONE
+      if (node && 'layoutMode' in node && node.layoutMode && node.layoutMode !== "NONE") {
         return node.layoutMode === "VERTICAL" ? "column" : "row";
       }
-      return "column";
+      return "inherit";
     }
   },
   {
     property: "align-items",
     bindingKey: undefined,
     process: async (_, node?: SceneNode) => {
-      if (node && 'primaryAxisAlignItems' in node) {
+      // Only process if layout mode is explicitly set to something other than NONE
+      if (node && 'layoutMode' in node && node.layoutMode && node.layoutMode !== "NONE" && 'primaryAxisAlignItems' in node) {
         const alignMap = {
           MIN: "flex-start",
           CENTER: "center",
           MAX: "flex-end",
           SPACE_BETWEEN: "space-between"
         };
-        return alignMap[node.primaryAxisAlignItems] || "flex-start";
+        return alignMap[node.primaryAxisAlignItems] || "inherit";
       }
-      return "flex-start";
+      return "inherit";
     }
   },
   {

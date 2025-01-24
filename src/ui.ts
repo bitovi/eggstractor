@@ -6,11 +6,18 @@ const repoPathInput = document.getElementById('repoPath') as HTMLInputElement;
 const filePathInput = document.getElementById('filePath') as HTMLInputElement;
 const branchNameInput = document.getElementById('branchName') as HTMLInputElement;
 const githubTokenInput = document.getElementById('githubToken') as HTMLInputElement;
+const devControls = document.getElementById('devControls') as HTMLDivElement;
+const formatSelect = document.getElementById('formatSelect') as HTMLSelectElement;
 let generatedScss = false;
 
 // Load saved config when UI opens
 window.onload = () => {
   parent.postMessage({ pluginMessage: { type: 'load-config' } }, '*');
+  // Check if we're in development mode (you can customize this check)
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  if (isDevelopment) {
+    devControls.style.display = 'block';
+  }
 };
 
 // Save config when inputs change
@@ -31,7 +38,13 @@ function saveConfig() {
 }
 
 generateBtn.onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'generate-styles' } }, '*');
+  const format = formatSelect.value;
+  parent.postMessage({ 
+    pluginMessage: { 
+      type: 'generate-styles',
+      format 
+    } 
+  }, '*');
 };
 
 createPRBtn.onclick = () => {
