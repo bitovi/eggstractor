@@ -33,7 +33,7 @@ interface VariableBindings {
 interface StyleProcessor {
   property: string;
   bindingKey: keyof VariableBindings | undefined;
-  process: (value: Variable | null, node?: SceneNode) => Promise<string>;
+  process: (value: Variable | null, node?: SceneNode) => Promise<string | GradientToken>;
 }
 
 // Token Types
@@ -52,11 +52,31 @@ interface DesignToken {
 interface StyleToken extends DesignToken {
   property: string;
   path: string[];
-  rawValue: string;
+  rawValue: string | GradientValue | GradientToken;
+  value: string | GradientValue | GradientToken;
 }
 
 interface TokenCollection {
   tokens: StyleToken[];
+}
+
+interface GradientStop {
+  color: {
+    variable: string;
+    value: RGBA;
+  };
+  position: number;
+}
+
+interface GradientValue {
+  type: string;
+  stops: GradientStop[];
+  transform: Transform;
+}
+
+interface GradientToken {
+  type: 'gradient';
+  value: GradientValue;
 }
 
 // Main generation function
@@ -250,10 +270,8 @@ function transformToCss(tokens: TokenCollection): string {
   let output = "/* Generated CSS */";
 
   const variantGroups = groupBy(tokens.tokens, t => t.path.join('_'));
-
   Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
     if (!variantPath) return;
-
     // Remove properties with zero values and unnecessary defaults
     const uniqueTokens = groupTokens.reduce((acc, token) => {
       const existing = acc.find(t => t.property === token.property);
@@ -276,10 +294,7 @@ function transformToCss(tokens: TokenCollection): string {
     if (uniqueTokens.length > 0) {
       output += `\n.${variantPath} {\n`;
       uniqueTokens.forEach(token => {
-        const value = token.value.startsWith('$') ? 
-          groupTokens.find(t => `$${Utils.sanitizeName(t.name)}` === token.value)?.rawValue || token.value :
-          token.value;
-        output += `  ${token.property}: ${value};\n`;
+        output += `  ${token.property}: ${token.rawValue};\n`;
       });
       output += "}\n";
     }
@@ -403,20 +418,57 @@ const textNodeProcessors: StyleProcessor[] = [
 
 const frameNodeProcessors: StyleProcessor[] = [
   {
-    property: "background-color",
+    property: "background",
     bindingKey: "fills",
     process: async (variable, node?: SceneNode) => {
-      if (variable) return getVariableFallback(variable);
-      // Handle direct fill colors
+      // Handle variables first
+      if (variable) {
+        return getVariableFallback(variable);
+      }
+      
+      // Rest of the fill processing...
       if (node && 'fills' in node && Array.isArray(node.fills)) {
-        const fill = node.fills[0] as Paint;
-        if (fill?.type === "SOLID") {
-          const { r, g, b } = fill.color;
-          const a = fill.opacity ?? 1;
-          return a === 1 ? 
-            Utils.rgbToHex(r, g, b) : 
-            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
-        }
+        const visibleFills = node.fills.filter(fill => fill.visible);
+        if (!visibleFills.length) return "inherit";
+
+        const backgrounds = visibleFills.map((fill: Paint) => {
+          if (fill.type === "SOLID") {
+            const { r, g, b } = fill.color;
+            const a = fill.opacity ?? 1;
+            return a === 1 ? 
+              Utils.rgbToHex(r, g, b) : 
+              `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+          }
+          
+          if (fill.type === "GRADIENT_LINEAR" || fill.type === "GRADIENT_RADIAL") {
+            const gradientFill = fill as GradientPaint;
+            const stops = gradientFill.gradientStops.map(stop => {
+              const { r, g, b, a } = stop.color;
+              const color = a === 1 ? 
+                Utils.rgbToHex(r * 255, g * 255, b * 255) : 
+                `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+              return `${color} ${Math.round(stop.position * 100)}%`;
+            }).join(', ');
+
+            if (fill.type === "GRADIENT_RADIAL") {
+              const [[a, b], [c, d]] = gradientFill.gradientTransform;
+              // Convert transform matrix to percentage positions
+              const centerX = Math.round((c + 1) * 50); // Convert to 0-100 range
+              const centerY = Math.round((d + 1) * 50); // Convert to 0-100 range
+              // Calculate radius based on transform scale
+              const radiusX = Math.round(Math.sqrt(a * a + b * b) * 50);
+              const radiusY = Math.round(Math.sqrt(c * c + d * d) * 50);
+              
+              return `radial-gradient(ellipse ${radiusX}% ${radiusY}% at ${centerX}% ${centerY}%, ${stops})`;
+            }
+
+            return `linear-gradient(${Math.round(getGradientAngle(gradientFill.gradientTransform))}deg, ${stops})`;
+          }
+
+          return null;
+        }).filter(Boolean);
+
+        return backgrounds.length > 0 ? backgrounds.join(', ') : "inherit";
       }
       return "inherit";
     }
@@ -681,9 +733,7 @@ function getNodePathName(node: SceneNode): string {
   }
 
   pathParts.reverse();
-
   const processed = pathParts.map((p) => parseVariantWithoutKey(p));
-
   return processed.join("_");
 }
 
@@ -694,6 +744,15 @@ function parseVariantWithoutKey(variant: string): string {
     return Utils.sanitizeSegment(variant);
   }
   return Utils.sanitizeSegment(valueRaw);
+}
+
+// Helper function to calculate gradient angle from transform matrix
+function getGradientAngle(transform: Transform): number {
+  // Extract the angle from the transform matrix
+  const [[a, b], [c, d]] = transform;
+  const angle = Math.atan2(b, a) * (180 / Math.PI);
+  // Normalize angle to 0-360 range
+  return (angle + 360) % 360;
 }
 
 // Listen for messages from the UI
