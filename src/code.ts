@@ -102,6 +102,11 @@ interface ProcessedValue {
   rawValue: string; // Value with actual values
 }
 
+interface GradientProcessing {
+  value: string;
+  rawValue: string;
+}
+
 // Main generation function
 async function generateStyles(format: 'scss' | 'css'): Promise<string> {
   const tokens = await collectTokens();
@@ -505,137 +510,32 @@ const frameNodeProcessors: StyleProcessor[] = [
     property: "background",
     bindingKey: "fills",
     process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
-      // Handle direct node values if no variables
       if (node && 'fills' in node && Array.isArray(node.fills)) {
         const visibleFills = node.fills.filter(fill => fill.visible);
         if (!visibleFills.length) return null;
 
         const backgrounds = await Promise.all(visibleFills.map(async (fill: Paint) => {
           if (fill.type === "SOLID") {
-            // Check if we have a variable for this fill
             const fillVariable = variables.find(v => v.property === 'background');
             if (fillVariable) {
-              console.log('fillVariable', fillVariable);
               return {
                 value: fillVariable.value,
                 rawValue: fillVariable.rawValue
               };
             }
 
-            // No variable, use direct value
             const { r, g, b } = fill.color;
             const a = fill.opacity ?? 1;
             const value = Utils.rgbaToString(r, g, b, a);
             return { value, rawValue: value };
           }
           
-          if (fill.type === "GRADIENT_LINEAR" || fill.type === "GRADIENT_RADIAL") {
+          if (fill.type.startsWith('GRADIENT_')) {
             const gradientFill = fill as GradientPaint;
-            const stops = await Promise.all(gradientFill.gradientStops.map(async (stop, index) => {
-              // Check if we have a variable for this stop
-              const stopVariable = variables.find(v => 
-                v.metadata?.figmaId === `${node.id}-gradient-stop-${index}`
-              );
-
-              let color;
-              if (stopVariable) {
-                color = {
-                  value: stopVariable.value,
-                  rawValue: stopVariable.rawValue
-                };
-              } else {
-                const { r, g, b, a } = stop.color;
-                // Use exact percentage from stop position
-                const directColor = a === 1 ? 
-                  Utils.rgbToHex(r, g, b) : 
-                  `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
-                color = { value: directColor, rawValue: directColor };
-              }
-
-              // Use exact percentage from stop position
-              return `${color.value} ${(stop.position * 100).toFixed(2)}%`;
-            }));
-
-            const rawStops = await Promise.all(gradientFill.gradientStops.map(async (stop, index) => {
-              const stopVariable = variables.find(v => 
-                v.metadata?.figmaId === `${node.id}-gradient-stop-${index}`
-              );
-
-              let color;
-              if (stopVariable) {
-                color = stopVariable.rawValue;
-              } else {
-                const { r, g, b, a } = stop.color;
-                color = a === 1 ? 
-                  Utils.rgbToHex(r, g, b) : 
-                  `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
-              }
-
-              // Use exact percentage from stop position
-              return `${color} ${(stop.position * 100).toFixed(2)}%`;
-            }));
-
-            if (fill.type === "GRADIENT_RADIAL") {
-              const [[a, b], [c, d]] = gradientFill.gradientTransform;
-              // Convert transform matrix to percentage positions
-              const centerX = Math.round((c + 1) * 50);
-              const centerY = Math.round((d + 1) * 50);
-              // Calculate radius based on transform scale
-              const radiusX = Math.round(Math.sqrt(a * a + b * b) * 50);
-              const radiusY = Math.round(Math.sqrt(c * c + d * d) * 50);
-              
-              return {
-                value: `radial-gradient(ellipse ${radiusX}% ${radiusY}% at ${centerX}% ${centerY}%, ${stops.join(', ')})`,
-                rawValue: `radial-gradient(ellipse ${radiusX}% ${radiusY}% at ${centerX}% ${centerY}%, ${rawStops.join(', ')})`
-              };
-            }
-
-            if (fill.type === "GRADIENT_LINEAR") {
-              const angle = 360 - Math.round(getGradientAngle(gradientFill.gradientTransform));
-              const stops = await Promise.all(gradientFill.gradientStops.map(async (stop, index) => {
-                const stopVariable = variables.find(v => 
-                  v.metadata?.figmaId === `${node.id}-gradient-stop-${index}`
-                );
-
-                let color;
-                if (stopVariable) {
-                  color = stopVariable.value;
-                } else {
-                  const { r, g, b, a } = stop.color;
-                  color = a === 1 ? 
-                    Utils.rgbToHex(r, g, b) : 
-                    `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
-                }
-
-                // Use the exact position from Figma without rounding
-                return `${color} ${(stop.position * 100).toFixed(2)}%`;
-              }));
-
-              const rawStops = await Promise.all(gradientFill.gradientStops.map(async (stop, index) => {
-                const stopVariable = variables.find(v => 
-                  v.metadata?.figmaId === `${node.id}-gradient-stop-${index}`
-                );
-
-                let color;
-                if (stopVariable) {
-                  color = stopVariable.rawValue;
-                } else {
-                  const { r, g, b, a } = stop.color;
-                  color = a === 1 ? 
-                    Utils.rgbToHex(r, g, b) : 
-                    `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
-                }
-
-                // Use the exact position from Figma without rounding
-                return `${color} ${(stop.position * 100).toFixed(2)}%`;
-              }));
-
-              return {
-                value: `linear-gradient(${angle}deg, ${stops.join(', ')})`,
-                rawValue: `linear-gradient(${angle}deg, ${rawStops.join(', ')})`
-              };
-            }
+            const stops = await processGradientStops(gradientFill.gradientStops, variables, node.id);
+            return processGradient(gradientFill, stops);
           }
+
           return null;
         }));
 
@@ -986,11 +886,101 @@ function parseVariantWithoutKey(variant: string): string {
 
 // Helper function to calculate gradient angle from transform matrix
 function getGradientAngle(transform: Transform): number {
-  // Extract the angle from the transform matrix
   const [[a, b], [c, d]] = transform;
+  // Calculate angle using arctangent of the transform matrix values
   const angle = Math.atan2(b, a) * (180 / Math.PI);
-  // Normalize angle to 0-360 range
-  return (angle + 360) % 360;
+  // Normalize to 0-360 range and add 90 to match Figma's angle system
+  return ((angle + 90 + 360) % 360);
+}
+
+// Helper function to process gradient stops
+async function processGradientStops(
+  stops: readonly ColorStop[],
+  variables: VariableToken[],
+  nodeId: string
+): Promise<GradientProcessing[]> {
+  return Promise.all(stops.map(async (stop, index) => {
+    const stopVariable = variables.find(v => 
+      v.metadata?.figmaId === `${nodeId}-gradient-stop-${index}`
+    );
+
+    let color;
+    if (stopVariable) {
+      color = {
+        value: stopVariable.value,
+        rawValue: stopVariable.rawValue
+      };
+    } else {
+      const { r, g, b, a } = stop.color;
+      const directColor = Utils.rgbaToString(r, g, b, a ?? 1);
+      color = { value: directColor, rawValue: directColor };
+    }
+
+    return {
+      value: `${color.value} ${(stop.position * 100).toFixed(2)}%`,
+      rawValue: `${color.rawValue} ${(stop.position * 100).toFixed(2)}%`
+    };
+  }));
+}
+
+// Process different gradient types
+function processGradient(
+  fill: GradientPaint,
+  stops: GradientProcessing[]
+): GradientProcessing {
+  switch (fill.type) {
+    case "GRADIENT_LINEAR": {
+      const angle = 360 - Math.round(getGradientAngle(fill.gradientTransform));
+      return {
+        value: `linear-gradient(${angle}deg, ${stops.map(s => s.value).join(', ')})`,
+        rawValue: `linear-gradient(${angle}deg, ${stops.map(s => s.rawValue).join(', ')})`
+      };
+    }
+    case "GRADIENT_RADIAL": {
+      const [[a, b], [c, d]] = fill.gradientTransform;
+      // Calculate center point from transform
+      const centerX = Math.round((1 + c) * 100); // Map -1,1 to 0,200 then take half
+      const centerY = Math.round((1 + d) * 100);
+      
+      return {
+        value: `radial-gradient(100% 100% at ${centerX}% ${centerY}%, ${stops.map(s => s.value).join(', ')})`,
+        rawValue: `radial-gradient(100% 100% at ${centerX}% ${centerY}%, ${stops.map(s => s.rawValue).join(', ')})`
+      };
+    }
+    case "GRADIENT_ANGULAR": {
+      const angle = Math.round(getGradientAngle(fill.gradientTransform));
+      return {
+        value: `conic-gradient(from ${angle}deg at 50% 50%, ${stops.map(s => {
+          const position = s.value.split(' ')[1];
+          const color = s.value.split(' ')[0];
+          const degrees = Math.round(parseFloat(position) * 3.6); // Convert percentage to degrees (100% = 360deg)
+          return `${color} ${degrees}deg`;
+        }).join(', ')})`,
+        rawValue: `conic-gradient(from ${angle}deg at 50% 50%, ${stops.map(s => {
+          const position = s.rawValue.split(' ')[1];
+          const color = s.rawValue.split(' ')[0];
+          const degrees = Math.round(parseFloat(position) * 3.6);
+          return `${color} ${degrees}deg`;
+        }).join(', ')})`
+      };
+    }
+    case "GRADIENT_DIAMOND": {
+      // Create four gradients for diamond effect
+      const directions = ['to bottom right', 'to bottom left', 'to top left', 'to top right'];
+      const positions = ['bottom right', 'bottom left', 'top left', 'top right'];
+      
+      return {
+        value: directions.map((dir, i) => 
+          `linear-gradient(${dir}, ${stops.map(s => s.value).join(', ')}) ${positions[i]} / 50% 50% no-repeat`
+        ).join(', '),
+        rawValue: directions.map((dir, i) => 
+          `linear-gradient(${dir}, ${stops.map(s => s.rawValue).join(', ')}) ${positions[i]} / 50% 50% no-repeat`
+        ).join(', ')
+      };
+    }
+    default:
+      return { value: '', rawValue: '' };
+  }
 }
 
 // Listen for messages from the UI
