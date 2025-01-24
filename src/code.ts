@@ -384,9 +384,7 @@ const textNodeProcessors: StyleProcessor[] = [
         if (fill?.type === "SOLID") {
           const { r, g, b } = fill.color;
           const a = fill.opacity ?? 1;
-          const value = a === 1 ? 
-            Utils.rgbToHex(r, g, b) : 
-            `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+          const value = Utils.rgbaToString(r, g, b, a);
           return { value, rawValue: value };
         }
       }
@@ -517,6 +515,7 @@ const frameNodeProcessors: StyleProcessor[] = [
             // Check if we have a variable for this fill
             const fillVariable = variables.find(v => v.property === 'background');
             if (fillVariable) {
+              console.log('fillVariable', fillVariable);
               return {
                 value: fillVariable.value,
                 rawValue: fillVariable.rawValue
@@ -526,9 +525,7 @@ const frameNodeProcessors: StyleProcessor[] = [
             // No variable, use direct value
             const { r, g, b } = fill.color;
             const a = fill.opacity ?? 1;
-            const value = a === 1 ? 
-              Utils.rgbToHex(r, g, b) : 
-              `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+            const value = Utils.rgbaToString(r, g, b, a);
             return { value, rawValue: value };
           }
           
@@ -548,13 +545,15 @@ const frameNodeProcessors: StyleProcessor[] = [
                 };
               } else {
                 const { r, g, b, a } = stop.color;
+                // Use exact percentage from stop position
                 const directColor = a === 1 ? 
                   Utils.rgbToHex(r, g, b) : 
                   `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
                 color = { value: directColor, rawValue: directColor };
               }
 
-              return `${color.value} ${Math.round(stop.position * 100)}%`;
+              // Use exact percentage from stop position
+              return `${color.value} ${(stop.position * 100).toFixed(2)}%`;
             }));
 
             const rawStops = await Promise.all(gradientFill.gradientStops.map(async (stop, index) => {
@@ -572,7 +571,8 @@ const frameNodeProcessors: StyleProcessor[] = [
                   `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
               }
 
-              return `${color} ${Math.round(stop.position * 100)}%`;
+              // Use exact percentage from stop position
+              return `${color} ${(stop.position * 100).toFixed(2)}%`;
             }));
 
             if (fill.type === "GRADIENT_RADIAL") {
@@ -590,11 +590,51 @@ const frameNodeProcessors: StyleProcessor[] = [
               };
             }
 
-            const angle = Math.round(getGradientAngle(gradientFill.gradientTransform));
-            return {
-              value: `linear-gradient(${angle}deg, ${stops.join(', ')})`,
-              rawValue: `linear-gradient(${angle}deg, ${rawStops.join(', ')})`
-            };
+            if (fill.type === "GRADIENT_LINEAR") {
+              const angle = 360 - Math.round(getGradientAngle(gradientFill.gradientTransform));
+              const stops = await Promise.all(gradientFill.gradientStops.map(async (stop, index) => {
+                const stopVariable = variables.find(v => 
+                  v.metadata?.figmaId === `${node.id}-gradient-stop-${index}`
+                );
+
+                let color;
+                if (stopVariable) {
+                  color = stopVariable.value;
+                } else {
+                  const { r, g, b, a } = stop.color;
+                  color = a === 1 ? 
+                    Utils.rgbToHex(r, g, b) : 
+                    `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+                }
+
+                // Use the exact position from Figma without rounding
+                return `${color} ${(stop.position * 100).toFixed(2)}%`;
+              }));
+
+              const rawStops = await Promise.all(gradientFill.gradientStops.map(async (stop, index) => {
+                const stopVariable = variables.find(v => 
+                  v.metadata?.figmaId === `${node.id}-gradient-stop-${index}`
+                );
+
+                let color;
+                if (stopVariable) {
+                  color = stopVariable.rawValue;
+                } else {
+                  const { r, g, b, a } = stop.color;
+                  color = a === 1 ? 
+                    Utils.rgbToHex(r, g, b) : 
+                    `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${Number(a).toFixed(2)})`;
+                }
+
+                // Use the exact position from Figma without rounding
+                return `${color} ${(stop.position * 100).toFixed(2)}%`;
+              }));
+
+              return {
+                value: `linear-gradient(${angle}deg, ${stops.join(', ')})`,
+                rawValue: `linear-gradient(${angle}deg, ${rawStops.join(', ')})`
+              };
+            }
           }
           return null;
         }));
@@ -905,7 +945,9 @@ async function getVariableFallback(variable: Variable | null, propertyName: stri
     }
     case "COLOR": {
       if (typeof value === 'object' && 'r' in value) {
-        return Utils.rgbToHex(value.r, value.g, value.b);
+        const color = value as RGB | RGBA;
+        const opacity = 'a' in color ? color.a : 1;
+        return Utils.rgbaToString(color.r, color.g, color.b, opacity);
       }
       return '#000000';
     }
