@@ -1,4 +1,4 @@
-import { collectTokens } from './services/collection.service';
+import { collectTokens } from './services';
 import { transformToScss, transformToCss } from './transformers';
 import Github from './github';
 

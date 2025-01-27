@@ -1,6 +1,6 @@
 import { TokenCollection } from '../types';
 import { getProcessorsForNode } from '../processors';
-import { extractNodeToken } from './token.service';
+import { extractNodeToken } from '../services';
 import { getNodePathName } from '../utils/node.utils';
 
 export async function collectTokens(): Promise<TokenCollection> {

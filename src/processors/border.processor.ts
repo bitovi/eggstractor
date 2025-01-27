@@ -38,9 +38,11 @@ export const borderProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && 'strokeWeight' in node && node.strokeWeight) {
-        const value = `${String(node.strokeWeight)}px`;
-        return { value, rawValue: value };
+      if (node && 'strokes' in node && Array.isArray(node.strokes) && node.strokes.length > 0) {
+        if ('strokeWeight' in node && node.strokeWeight) {
+          const value = `${String(node.strokeWeight)}px`;
+          return { value, rawValue: value };
+        }
       }
       return null;
     }

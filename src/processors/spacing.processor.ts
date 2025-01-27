@@ -13,7 +13,7 @@ export const spacingProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && 'paddingTop' in node) {
+      if (node && 'paddingTop' in node && node.paddingTop > 0) {
         const value = `${node.paddingTop}px`;
         return { value, rawValue: value };
       }
@@ -32,7 +32,7 @@ export const spacingProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && 'paddingRight' in node) {
+      if (node && 'paddingRight' in node && node.paddingRight > 0) {
         const value = `${node.paddingRight}px`;
         return { value, rawValue: value };
       }
@@ -51,7 +51,7 @@ export const spacingProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && 'paddingBottom' in node) {
+      if (node && 'paddingBottom' in node && node.paddingBottom > 0) {
         const value = `${node.paddingBottom}px`;
         return { value, rawValue: value };
       }
@@ -70,7 +70,7 @@ export const spacingProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && 'paddingLeft' in node) {
+      if (node && 'paddingLeft' in node && node.paddingLeft > 0) {
         const value = `${node.paddingLeft}px`;
         return { value, rawValue: value };
       }

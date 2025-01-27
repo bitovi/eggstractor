@@ -5,7 +5,7 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: "color",
     bindingKey: "fills",
-    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
       const colorVariable = variables.find(v => v.property === 'color');
       if (colorVariable) {
         return {
@@ -14,7 +14,7 @@ export const fontProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node?.type === "TEXT" && node.fills && Array.isArray(node.fills)) {
+      if (node?.type === "TEXT" && node.fills && Array.isArray(node.fills) && node.fills.length > 0) {
         const fill = node.fills[0] as Paint;
         if (fill?.type === "SOLID") {
           const { r, g, b } = fill.color;
