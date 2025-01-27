@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Processors should process background gradient correctly: gradient styles 1`] = `
+{
+  "angular": "background: conic-gradient(from 134deg at 50% 50%, #00464A 0deg, #04646A 360deg);",
+  "linear": "background: linear-gradient(224deg, #00464A 3.74%, #04646A 98.29%);",
+  "linearAlpha": "background:  linear-gradient(224deg, rgba(0, 70, 74, 0.50) 3.74%, #04646A 98.29%);",
+  "radial": "background: radial-gradient(100% 100% at 100% 100%, #00464A 0%, #04646A 100%);",
+}
+`;

@@ -1,6 +1,7 @@
 import { collectTokens } from './services';
 import { transformToScss, transformToCss } from './transformers';
 import Github from './github';
+import { serializeFigmaData } from './utils/test.utils';
 
 // Store the generated SCSS
 let generatedScss: string = '';
@@ -66,5 +67,11 @@ figma.ui.onmessage = async (msg) => {
       const message = error instanceof Error ? error.message : 'An unknown error occurred';
       figma.ui.postMessage({ type: 'error', message });
     }
+  } else if (msg.type === 'export-test-data') {
+    const testData = await serializeFigmaData(figma.currentPage);
+    figma.ui.postMessage({ 
+      type: 'test-data-exported', 
+      data: JSON.stringify(testData, null, 2)
+    });
   }
 };
