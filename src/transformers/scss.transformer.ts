@@ -7,11 +7,8 @@ export function transformToScss(tokens: TokenCollection): string {
   // First, collect and output color variables
   const colorVariables = new Map<string, string>();
   tokens.tokens.forEach(token => {
-    if (token.type === 'variable' && token.property === 'background') {
-      // Check if it's a color value (not a gradient)
-      if (token.rawValue.startsWith('#') || token.rawValue.startsWith('rgba')) {
-        colorVariables.set(Utils.sanitizeName(token.name), token.rawValue);
-      }
+    if (token.type === 'variable') {
+      colorVariables.set(Utils.sanitizeName(token.name), token.rawValue);
     }
   });
 
@@ -21,14 +18,14 @@ export function transformToScss(tokens: TokenCollection): string {
 
   // Output color variables
   colorVariables.forEach((value, name) => {
-    output += `$${name}: ${value};\n`;
+    output += `$${name}: ${value}\n`;
   });
   
   // Then collect and output gradient variables
   const gradientVariables = new Map<string, StyleToken>();
   tokens.tokens.forEach(token => {
     if (token.type === 'style' && 
-        token.property === 'background' && 
+        token.property === 'fills' && 
         (token.rawValue.includes('gradient'))) {
       const name = `gradient-${Utils.sanitizeName(token.name)}`;
       gradientVariables.set(name, token);
@@ -46,7 +43,7 @@ export function transformToScss(tokens: TokenCollection): string {
     colorVariables.forEach((value, colorName) => {
       gradientValue = gradientValue.replace(value, `$${colorName}`);
     });
-    output += `$${name}: ${gradientValue};\n`;
+    output += `$${name}: ${gradientValue}\n`;
   });
 
   // Generate mixins section
@@ -68,17 +65,17 @@ export function transformToScss(tokens: TokenCollection): string {
     if (uniqueTokens.length > 0) {
       output += `@mixin ${variantPath}\n`;
       uniqueTokens.forEach(token => {
-        if (token.property === 'background' && token.rawValue.includes('gradient')) {
+        if (token.property === 'fills' && token.rawValue.includes('gradient')) {
           // Only use CSS variables if the token has associated variables
           if (token.variables && token.variables.length > 0) {
             const gradientName = `gradient-${Utils.sanitizeName(token.name)}`;
-            output += ` ${token.property}: var(--${gradientName}, #{$${gradientName}});\n`;
+            output += ` ${token.property}: var(--${gradientName}, #{$${gradientName}})\n`;
           } else {
             // Use the raw value directly if no variables are involved
-            output += ` ${token.property}: ${token.rawValue};\n`;
+            output += ` ${token.property}: ${token.rawValue}\n`;
           }
         } else {
-          output += ` ${token.property}: ${token.value};\n`;
+          output += ` ${token.property}: ${token.value}\n`;
         }
       });
       output += "\n";

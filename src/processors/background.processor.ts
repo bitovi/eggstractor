@@ -12,7 +12,7 @@ export const backgroundProcessor: StyleProcessor = {
 
       const backgrounds = await Promise.all(visibleFills.map(async (fill: Paint) => {
         if (fill.type === "SOLID") {
-          const fillVariable = variables.find(v => v.property === 'background');
+          const fillVariable = variables.find(v => v.property === 'fills');
           if (fillVariable) {
             return {
               value: fillVariable.value,

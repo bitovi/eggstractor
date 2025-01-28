@@ -1,78 +1,56 @@
 import { StyleProcessor, ProcessedValue } from '../types';
 
+interface NodeWithPadding {
+  paddingTop: number;
+  paddingRight: number;
+  paddingBottom: number;
+  paddingLeft: number;
+}
+
+function hasNodePadding(node: SceneNode): node is SceneNode & NodeWithPadding {
+  return 'paddingTop' in node && 'paddingRight' in node && 'paddingBottom' in node && 'paddingLeft' in node;
+}
+
+const getVarName = async (key: string, boundVars: Record<string, { type: string, id: string }>) => {
+  const varAlias = boundVars[key];
+  if (varAlias?.type === 'VARIABLE_ALIAS') {
+    const variable = await figma.variables.getVariableByIdAsync(varAlias.id);
+    return `$${variable?.name}`;
+  }
+  return null;
+};
+
 export const spacingProcessors: StyleProcessor[] = [
   {
-    property: "padding-top",
-    bindingKey: "paddingTop",
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const paddingVariable = variables.find(v => v.property === 'padding-top');
-      if (paddingVariable) {
-        return {
-          value: paddingVariable.value,
-          rawValue: paddingVariable.rawValue
-        };
-      }
+    property: "padding",
+    bindingKey: undefined,
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (node && hasNodePadding(node)) {
+        const topVal = `${node.paddingTop}px`;
+        const rightVal = `${node.paddingRight}px`;
+        const bottomVal = `${node.paddingBottom}px`;
+        const leftVal = `${node.paddingLeft}px`;
+        let topVar, rightVar, bottomVar, leftVar;
 
-      if (node && 'paddingTop' in node && node.paddingTop > 0) {
-        const value = `${node.paddingTop}px`;
-        return { value, rawValue: value };
-      }
-      return null;
-    }
-  },
-  {
-    property: "padding-right",
-    bindingKey: "paddingRight",
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const paddingVariable = variables.find(v => v.property === 'padding-right');
-      if (paddingVariable) {
-        return {
-          value: paddingVariable.value,
-          rawValue: paddingVariable.rawValue
-        };
-      }
+        if ('boundVariables' in node && node.boundVariables) {
+          const boundVars = node.boundVariables as Record<string, { type: string, id: string }>;
+          topVar = await getVarName('paddingTop', boundVars);
+          rightVar = await getVarName('paddingRight', boundVars);
+          bottomVar = await getVarName('paddingBottom', boundVars);
+          leftVar = await getVarName('paddingLeft', boundVars);
+        }
 
-      if (node && 'paddingRight' in node && node.paddingRight > 0) {
-        const value = `${node.paddingRight}px`;
-        return { value, rawValue: value };
-      }
-      return null;
-    }
-  },
-  {
-    property: "padding-bottom",
-    bindingKey: "paddingBottom",
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const paddingVariable = variables.find(v => v.property === 'padding-bottom');
-      if (paddingVariable) {
-        return {
-          value: paddingVariable.value,
-          rawValue: paddingVariable.rawValue
-        };
-      }
-
-      if (node && 'paddingBottom' in node && node.paddingBottom > 0) {
-        const value = `${node.paddingBottom}px`;
-        return { value, rawValue: value };
-      }
-      return null;
-    }
-  },
-  {
-    property: "padding-left",
-    bindingKey: "paddingLeft",
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const paddingVariable = variables.find(v => v.property === 'padding-left');
-      if (paddingVariable) {
-        return {
-          value: paddingVariable.value,
-          rawValue: paddingVariable.rawValue
-        };
-      }
-
-      if (node && 'paddingLeft' in node && node.paddingLeft > 0) {
-        const value = `${node.paddingLeft}px`;
-        return { value, rawValue: value };
+        if (topVal === rightVal && rightVal === bottomVal && bottomVal === leftVal) {
+          return { value: topVar || topVal, rawValue: topVal };
+        }
+        if (topVal === bottomVal && leftVal === rightVal) {
+          const value = `${topVar || topVal} ${leftVar || leftVal}`;
+          const rawValue = `${topVal} ${leftVal}`;
+          return { value, rawValue };
+        }
+        const value = `${topVar || topVal} ${rightVar || rightVal} ${bottomVar || bottomVal} ${leftVar || leftVal}`;
+        const rawValue = `${topVal} ${rightVal} ${bottomVal} ${leftVal}`;
+          return { value, rawValue };
       }
       return null;
     }

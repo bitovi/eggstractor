@@ -141,7 +141,7 @@ export async function createTestVariableResolver(testData: any) {
 
     return {
       ...variable,
-      resolvedType: "COLOR",
+      resolvedType: variable.resolvedType,
       valuesByMode: {
         [modeId]: resolvedValue
       }
