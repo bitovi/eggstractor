@@ -1,4 +1,4 @@
-import Utils from '../utils';
+import { rgbaToString } from '../utils/color.utils';
 
 export async function getVariableFallback(variable: Variable | null, propertyName: string = ''): Promise<string> {
   if (!variable) return '';
@@ -23,7 +23,7 @@ export async function getVariableFallback(variable: Variable | null, propertyNam
       if (typeof value === 'object' && 'r' in value) {
         const color = value as RGB | RGBA;
         const opacity = 'a' in color ? color.a : 1;
-        return Utils.rgbaToString(color.r, color.g, color.b, opacity);
+        return rgbaToString(color.r, color.g, color.b, opacity);
       }
       return '#000000';
     }
