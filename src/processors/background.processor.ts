@@ -1,7 +1,6 @@
 import { StyleProcessor, VariableToken, ProcessedValue } from '../types';
 import { rgbaToString } from '../utils/color.utils';
 import { processGradient } from '../utils/gradient.utils';
-import { processGradientStops } from './gradient.processor';
 
 export const backgroundProcessor: StyleProcessor = {
   property: "background",
@@ -26,11 +25,11 @@ export const backgroundProcessor: StyleProcessor = {
           const value = rgbaToString(r, g, b, a);
           return { value, rawValue: value };
         }
-        
+
+        // TODO get gradient working
         if (fill.type.startsWith('GRADIENT_')) {
-          const gradientFill = fill as GradientPaint;
-          const stops = await processGradientStops(gradientFill.gradientStops, variables, node.id);
-          return processGradient(gradientFill, stops);
+          // const value = processGradient(fill as GradientPaint, node.width, node.height);
+          // return { value, rawValue: value };
         }
 
         return null;
@@ -46,4 +45,4 @@ export const backgroundProcessor: StyleProcessor = {
     }
     return null;
   }
-}; 
+};
