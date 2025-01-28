@@ -44,25 +44,11 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
         if (Array.isArray(vars)) {
           for (const v of vars) {
             if (v.id) {
-              const variable = await figma.variables.getVariableByIdAsync(v.id);
-              if (variable) {
-                variables[v.id] = {
-                  id: variable.id,
-                  name: variable.name,
-                  valuesByMode: variable.valuesByMode
-                };
-              }
+              await collectVariableAndAliases(v.id, variables);
             }
           }
         } else if (vars?.id) {
-          const variable = await figma.variables.getVariableByIdAsync(vars.id);
-          if (variable) {
-            variables[vars.id] = {
-              id: variable.id,
-              name: variable.name,
-              valuesByMode: variable.valuesByMode
-            };
-          }
+          await collectVariableAndAliases(vars.id, variables);
         }
       }
     }
@@ -72,6 +58,27 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
     }
   };
 
+  async function collectVariableAndAliases(variableId: string, variables: Record<string, any>) {
+    const variable = await figma.variables.getVariableByIdAsync(variableId);
+    if (!variable) return;
+
+    // Store the current variable
+    variables[variableId] = {
+      id: variable.id,
+      name: variable.name,
+      resolvedType: variable.resolvedType,
+      valuesByMode: variable.valuesByMode
+    };
+
+    // Check for aliases in all modes
+    for (const modeId in variable.valuesByMode) {
+      const value = variable.valuesByMode[modeId];
+      if (isVariableAlias(value)) {
+        await collectVariableAndAliases(value.id, variables);
+      }
+    }
+  }
+
   // Collect variables if it's a SceneNode
   if ('type' in node) {
     await collectVariables(node as SceneNode);
@@ -80,5 +87,64 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
   return {
     ...baseData,
     variables
+  };
+}
+
+function isVariableAlias(value: any): value is { type: 'VARIABLE_ALIAS', id: string } {
+  return value && typeof value === 'object' && value.type === 'VARIABLE_ALIAS' && 'id' in value;
+}
+
+export async function createTestVariableResolver(testData: any) {
+  // Collect all variables including aliases
+  const collectAllVariables = (variables: Record<string, any>) => {
+    const allVariables: Record<string, any> = {};
+    
+    const resolveVariable = (varId: string) => {
+      const variable = variables[varId];
+      if (!variable) return;
+      
+      allVariables[varId] = variable;
+      
+      // Check for aliases in all modes
+      Object.values(variable.valuesByMode).forEach((value: any) => {
+        if (isVariableAlias(value)) {
+          resolveVariable(value.id);
+        }
+      });
+    };
+
+    // Start with all root variables
+    Object.keys(variables).forEach(resolveVariable);
+    return allVariables;
+  };
+
+  const allVariables = collectAllVariables(testData.variables);
+
+  return async (id: string): Promise<Variable | null> => {
+    const variable = allVariables[id];
+    if (!variable) return null;
+
+    // Resolve any aliases in the variable
+    const resolveValue = async (value: any): Promise<any> => {
+      if (isVariableAlias(value)) {
+        const aliasVar = allVariables[value.id];
+        if (!aliasVar) return null;
+        
+        const modeId = Object.keys(aliasVar.valuesByMode)[0];
+        return resolveValue(aliasVar.valuesByMode[modeId]);
+      }
+      return value;
+    };
+
+    const modeId = Object.keys(variable.valuesByMode)[0];
+    const resolvedValue = await resolveValue(variable.valuesByMode[modeId]);
+
+    return {
+      ...variable,
+      resolvedType: "COLOR",
+      valuesByMode: {
+        [modeId]: resolvedValue
+      }
+    } as unknown as Variable;
   };
 } 

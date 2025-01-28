@@ -42,10 +42,35 @@
         "VariableID:5:20": {
           "id": "VariableID:5:20",
           "name": "brand-primary",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:2": {
               "type": "VARIABLE_ALIAS",
               "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
             }
           }
         }
@@ -90,6 +115,7 @@
         "VariableID:5:22": {
           "id": "VariableID:5:22",
           "name": "teal-800-50",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:0": {
               "r": 0,
@@ -177,6 +203,7 @@
         "VariableID:5:18": {
           "id": "VariableID:5:18",
           "name": "teal-medium",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:1": {
               "type": "VARIABLE_ALIAS",
@@ -184,13 +211,40 @@
             }
           }
         },
+        "VariableID:5:15": {
+          "id": "VariableID:5:15",
+          "name": "teal-500",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.01568627543747425,
+              "g": 0.3921568691730499,
+              "b": 0.4156862795352936,
+              "a": 1
+            }
+          }
+        },
         "VariableID:5:17": {
           "id": "VariableID:5:17",
           "name": "teal-dark",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:1": {
               "type": "VARIABLE_ALIAS",
               "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
             }
           }
         }
@@ -272,6 +326,7 @@
         "VariableID:5:18": {
           "id": "VariableID:5:18",
           "name": "teal-medium",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:1": {
               "type": "VARIABLE_ALIAS",
@@ -279,13 +334,51 @@
             }
           }
         },
+        "VariableID:5:15": {
+          "id": "VariableID:5:15",
+          "name": "teal-500",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.01568627543747425,
+              "g": 0.3921568691730499,
+              "b": 0.4156862795352936,
+              "a": 1
+            }
+          }
+        },
         "VariableID:5:20": {
           "id": "VariableID:5:20",
           "name": "brand-primary",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:2": {
               "type": "VARIABLE_ALIAS",
               "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
             }
           }
         }
@@ -367,6 +460,7 @@
         "VariableID:5:18": {
           "id": "VariableID:5:18",
           "name": "teal-medium",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:1": {
               "type": "VARIABLE_ALIAS",
@@ -374,13 +468,40 @@
             }
           }
         },
+        "VariableID:5:15": {
+          "id": "VariableID:5:15",
+          "name": "teal-500",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.01568627543747425,
+              "g": 0.3921568691730499,
+              "b": 0.4156862795352936,
+              "a": 1
+            }
+          }
+        },
         "VariableID:5:17": {
           "id": "VariableID:5:17",
           "name": "teal-dark",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:1": {
               "type": "VARIABLE_ALIAS",
               "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
             }
           }
         }
@@ -462,6 +583,7 @@
         "VariableID:5:21": {
           "id": "VariableID:5:21",
           "name": "brand-secondary",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:2": {
               "type": "VARIABLE_ALIAS",
@@ -469,13 +591,62 @@
             }
           }
         },
+        "VariableID:5:18": {
+          "id": "VariableID:5:18",
+          "name": "teal-medium",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:15"
+            }
+          }
+        },
+        "VariableID:5:15": {
+          "id": "VariableID:5:15",
+          "name": "teal-500",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.01568627543747425,
+              "g": 0.3921568691730499,
+              "b": 0.4156862795352936,
+              "a": 1
+            }
+          }
+        },
         "VariableID:5:20": {
           "id": "VariableID:5:20",
           "name": "brand-primary",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:2": {
               "type": "VARIABLE_ALIAS",
               "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
             }
           }
         }
@@ -557,6 +728,7 @@
         "VariableID:5:18": {
           "id": "VariableID:5:18",
           "name": "teal-medium",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:1": {
               "type": "VARIABLE_ALIAS",
@@ -564,9 +736,23 @@
             }
           }
         },
+        "VariableID:5:15": {
+          "id": "VariableID:5:15",
+          "name": "teal-500",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.01568627543747425,
+              "g": 0.3921568691730499,
+              "b": 0.4156862795352936,
+              "a": 1
+            }
+          }
+        },
         "VariableID:5:22": {
           "id": "VariableID:5:22",
           "name": "teal-800-50",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:0": {
               "r": 0,
@@ -654,6 +840,7 @@
         "VariableID:5:21": {
           "id": "VariableID:5:21",
           "name": "brand-secondary",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:2": {
               "type": "VARIABLE_ALIAS",
@@ -661,9 +848,34 @@
             }
           }
         },
+        "VariableID:5:18": {
+          "id": "VariableID:5:18",
+          "name": "teal-medium",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:15"
+            }
+          }
+        },
+        "VariableID:5:15": {
+          "id": "VariableID:5:15",
+          "name": "teal-500",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.01568627543747425,
+              "g": 0.3921568691730499,
+              "b": 0.4156862795352936,
+              "a": 1
+            }
+          }
+        },
         "VariableID:5:22": {
           "id": "VariableID:5:22",
           "name": "teal-800-50",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:0": {
               "r": 0,
@@ -751,6 +963,7 @@
         "VariableID:5:18": {
           "id": "VariableID:5:18",
           "name": "teal-medium",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:1": {
               "type": "VARIABLE_ALIAS",
@@ -758,9 +971,23 @@
             }
           }
         },
+        "VariableID:5:15": {
+          "id": "VariableID:5:15",
+          "name": "teal-500",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.01568627543747425,
+              "g": 0.3921568691730499,
+              "b": 0.4156862795352936,
+              "a": 1
+            }
+          }
+        },
         "VariableID:5:22": {
           "id": "VariableID:5:22",
           "name": "teal-800-50",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:0": {
               "r": 0,
@@ -848,6 +1075,7 @@
         "VariableID:5:21": {
           "id": "VariableID:5:21",
           "name": "brand-secondary",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:2": {
               "type": "VARIABLE_ALIAS",
@@ -855,9 +1083,34 @@
             }
           }
         },
+        "VariableID:5:18": {
+          "id": "VariableID:5:18",
+          "name": "teal-medium",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:15"
+            }
+          }
+        },
+        "VariableID:5:15": {
+          "id": "VariableID:5:15",
+          "name": "teal-500",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.01568627543747425,
+              "g": 0.3921568691730499,
+              "b": 0.4156862795352936,
+              "a": 1
+            }
+          }
+        },
         "VariableID:5:22": {
           "id": "VariableID:5:22",
           "name": "teal-800-50",
+          "resolvedType": "COLOR",
           "valuesByMode": {
             "5:0": {
               "r": 0,
@@ -1523,6 +1776,7 @@
     "VariableID:5:20": {
       "id": "VariableID:5:20",
       "name": "brand-primary",
+      "resolvedType": "COLOR",
       "valuesByMode": {
         "5:2": {
           "type": "VARIABLE_ALIAS",
@@ -1533,6 +1787,7 @@
     "VariableID:5:22": {
       "id": "VariableID:5:22",
       "name": "teal-800-50",
+      "resolvedType": "COLOR",
       "valuesByMode": {
         "5:0": {
           "r": 0,
@@ -1545,6 +1800,7 @@
     "VariableID:5:18": {
       "id": "VariableID:5:18",
       "name": "teal-medium",
+      "resolvedType": "COLOR",
       "valuesByMode": {
         "5:1": {
           "type": "VARIABLE_ALIAS",
@@ -1555,6 +1811,7 @@
     "VariableID:5:21": {
       "id": "VariableID:5:21",
       "name": "brand-secondary",
+      "resolvedType": "COLOR",
       "valuesByMode": {
         "5:2": {
           "type": "VARIABLE_ALIAS",
@@ -1565,10 +1822,37 @@
     "VariableID:5:17": {
       "id": "VariableID:5:17",
       "name": "teal-dark",
+      "resolvedType": "COLOR",
       "valuesByMode": {
         "5:1": {
           "type": "VARIABLE_ALIAS",
           "id": "VariableID:5:14"
+        }
+      }
+    },
+    "VariableID:5:15": {
+      "id": "VariableID:5:15",
+      "name": "teal-500",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "5:0": {
+          "r": 0.01568627543747425,
+          "g": 0.3921568691730499,
+          "b": 0.4156862795352936,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:5:14": {
+      "id": "VariableID:5:14",
+      "name": "teal-800",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "5:0": {
+          "r": 0,
+          "g": 0.27450981736183167,
+          "b": 0.29019609093666077,
+          "a": 1
         }
       }
     }

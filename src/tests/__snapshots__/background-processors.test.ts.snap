@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Background Processors should process background solid correctly: solid styles 1`] = `
+{
+  "alpha": "background: #00464a80;",
+  "solid": "background: #00464a;",
+}
+`;
