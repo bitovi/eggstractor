@@ -1,5 +1,5 @@
 import { TokenCollection, StyleToken } from '../types';
-import Utils from '../utils';
+import { sanitizeName, groupBy } from '../utils/index';
 
 export function transformToScss(tokens: TokenCollection): string {
   let output = "";
@@ -8,7 +8,7 @@ export function transformToScss(tokens: TokenCollection): string {
   const colorVariables = new Map<string, string>();
   tokens.tokens.forEach(token => {
     if (token.type === 'variable') {
-      colorVariables.set(Utils.sanitizeName(token.name), token.rawValue);
+      colorVariables.set(sanitizeName(token.name), token.rawValue);
     }
   });
 
@@ -27,7 +27,7 @@ export function transformToScss(tokens: TokenCollection): string {
     if (token.type === 'style' && 
         token.property === 'fills' && 
         (token.rawValue.includes('gradient'))) {
-      const name = `gradient-${Utils.sanitizeName(token.name)}`;
+      const name = `gradient-${sanitizeName(token.name)}`;
       gradientVariables.set(name, token);
     }
   });
@@ -54,7 +54,7 @@ export function transformToScss(tokens: TokenCollection): string {
     token.type === 'style'
   );
 
-  const variantGroups = Utils.groupBy(styleTokens, t => t.path.join('_'));
+  const variantGroups = groupBy(styleTokens, t => t.path.join('_'));
 
   Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
     if (!variantPath) return;
@@ -68,7 +68,7 @@ export function transformToScss(tokens: TokenCollection): string {
         if (token.property === 'fills' && token.rawValue.includes('gradient')) {
           // Only use CSS variables if the token has associated variables
           if (token.variables && token.variables.length > 0) {
-            const gradientName = `gradient-${Utils.sanitizeName(token.name)}`;
+            const gradientName = `gradient-${sanitizeName(token.name)}`;
             output += ` ${token.property}: var(--${gradientName}, #{$${gradientName}})\n`;
           } else {
             // Use the raw value directly if no variables are involved

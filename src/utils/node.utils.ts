@@ -1,4 +1,4 @@
-import Utils from '../utils';
+import { sanitizeSegment } from "./string.utils";
 
 export function getNodePathName(node: SceneNode): string {
   const pathParts: string[] = [];
@@ -19,7 +19,7 @@ export function getNodePathName(node: SceneNode): string {
 export function parseVariantWithoutKey(variant: string): string {
   const [_, valueRaw] = variant.split("=");
   if (!valueRaw) {
-    return Utils.sanitizeSegment(variant);
+    return sanitizeSegment(variant);
   }
-  return Utils.sanitizeSegment(valueRaw);
+  return sanitizeSegment(valueRaw);
 } 

@@ -1,5 +1,5 @@
 import { StyleProcessor, ProcessedValue } from '../types';
-import Utils from '../utils';
+import { rgbaToString } from '../utils/index';
 
 export const borderProcessors: StyleProcessor[] = [
   {
@@ -19,7 +19,7 @@ export const borderProcessors: StyleProcessor[] = [
         if (stroke?.type === "SOLID") {
           const { r, g, b } = stroke.color;
           const a = stroke.opacity ?? 1;
-          const value = Utils.rgbaToString(r, g, b, a);
+          const value = rgbaToString(r, g, b, a);
           return { value, rawValue: value };
         }
       }
