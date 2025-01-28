@@ -2,7 +2,7 @@ import { TokenCollection, StyleToken } from '../types';
 import Utils from '../utils';
 
 export function transformToScss(tokens: TokenCollection): string {
-  let output = "// Generated SCSS Variables\n";
+  let output = "";
 
   // First, collect and output color variables
   const colorVariables = new Map<string, string>();
@@ -15,12 +15,14 @@ export function transformToScss(tokens: TokenCollection): string {
     }
   });
 
+  if (colorVariables.size > 0) {
+    output += "// Generated SCSS Variables\n";
+  }
+
   // Output color variables
   colorVariables.forEach((value, name) => {
     output += `$${name}: ${value};\n`;
   });
-
-  output += "\n// Generated Gradient Variables\n";
   
   // Then collect and output gradient variables
   const gradientVariables = new Map<string, StyleToken>();
@@ -32,6 +34,10 @@ export function transformToScss(tokens: TokenCollection): string {
       gradientVariables.set(name, token);
     }
   });
+
+  if (gradientVariables.size > 0) {
+    output += "\n// Generated Gradient Variables\n";
+  }
 
   // Output gradient variables
   gradientVariables.forEach((token, name) => {
