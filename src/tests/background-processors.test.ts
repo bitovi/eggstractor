@@ -1,5 +1,5 @@
 import { collectTokens } from '../services';
-import { transformToCss } from '../transformers';
+import { transformToCss, transformToScss } from '../transformers';
 import testData from './fixtures/figma-test-data.json';
 import { createTestVariableResolver } from '../utils/test.utils';
 
@@ -52,6 +52,41 @@ describe('Background Processors', () => {
     expect(styles).toMatchSnapshot('solid styles');
     expect(styles.solid).toBe('background: #00464a;');
     expect(styles.alpha).toBe('background: #00464a80;');
+  });
+
+  it('should process background solid correctly - sass', async () => {    
+    const pageNode = {
+      ...testData,
+      type: 'PAGE',
+      name: 'background',
+      parent: null,
+      width: 100,
+      height: 100
+    };
+
+    const children = testData.children.map((child: BaseNode) => ({
+      ...child,
+      parent: pageNode,
+      width: 100,
+      height: 100
+    }));
+    pageNode.children = children;
+
+    // Create variable resolver with complete test data
+    const getVariableByIdAsync = await createTestVariableResolver(testData);
+
+    // Mock Figma API
+    global.figma = {
+      currentPage: pageNode,
+      variables: {
+        getVariableByIdAsync
+      }
+    };
+
+    const tokens = await collectTokens();    
+    const scss = transformToScss(tokens);
+
+    expect(scss).toMatchSnapshot('solid styles');
   });
 
   it.skip('should process background gradient correctly', async () => {    
