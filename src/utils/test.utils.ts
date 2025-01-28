@@ -95,39 +95,41 @@ function isVariableAlias(value: any): value is { type: 'VARIABLE_ALIAS', id: str
 }
 
 export async function createTestVariableResolver(testData: any) {
-  // Collect all variables including aliases
+  // Helper to collect and flatten all variables including aliases
   const collectAllVariables = (variables: Record<string, any>) => {
-    const allVariables: Record<string, any> = {};
+    const allVariables = new Map<string, any>();
     
-    const resolveVariable = (varId: string) => {
+    const addVariable = (varId: string) => {
+      if (allVariables.has(varId)) return;
+      
       const variable = variables[varId];
       if (!variable) return;
       
-      allVariables[varId] = variable;
+      allVariables.set(varId, variable);
       
-      // Check for aliases in all modes
+      // Recursively collect any alias references
       Object.values(variable.valuesByMode).forEach((value: any) => {
         if (isVariableAlias(value)) {
-          resolveVariable(value.id);
+          addVariable(value.id);
         }
       });
     };
 
-    // Start with all root variables
-    Object.keys(variables).forEach(resolveVariable);
+    // Start with root variables
+    Object.keys(variables).forEach(addVariable);
     return allVariables;
   };
 
-  const allVariables = collectAllVariables(testData.variables);
+  const variableMap = collectAllVariables(testData.variables);
 
   return async (id: string): Promise<Variable | null> => {
-    const variable = allVariables[id];
+    const variable = variableMap.get(id);
     if (!variable) return null;
 
-    // Resolve any aliases in the variable
+    // Helper to resolve any alias values
     const resolveValue = async (value: any): Promise<any> => {
       if (isVariableAlias(value)) {
-        const aliasVar = allVariables[value.id];
+        const aliasVar = variableMap.get(value.id);
         if (!aliasVar) return null;
         
         const modeId = Object.keys(aliasVar.valuesByMode)[0];
@@ -145,6 +147,6 @@ export async function createTestVariableResolver(testData: any) {
       valuesByMode: {
         [modeId]: resolvedValue
       }
-    } as unknown as Variable;
+    } as Variable;
   };
 } 

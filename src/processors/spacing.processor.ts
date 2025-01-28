@@ -1,4 +1,4 @@
-import { StyleProcessor, ProcessedValue } from '../types';
+import { StyleProcessor, ProcessedValue, VariableToken } from '../types';
 
 interface NodeWithPadding {
   paddingTop: number;
@@ -11,48 +11,65 @@ function hasNodePadding(node: SceneNode): node is SceneNode & NodeWithPadding {
   return 'paddingTop' in node && 'paddingRight' in node && 'paddingBottom' in node && 'paddingLeft' in node;
 }
 
-const getVarName = async (key: string, boundVars: Record<string, { type: string, id: string }>) => {
-  const varAlias = boundVars[key];
-  if (varAlias?.type === 'VARIABLE_ALIAS') {
-    const variable = await figma.variables.getVariableByIdAsync(varAlias.id);
-    return `$${variable?.name}`;
-  }
-  return null;
-};
+interface PaddingValues {
+  top: string;
+  right: string;
+  bottom: string;
+  left: string;
+}
 
 export const spacingProcessors: StyleProcessor[] = [
   {
     property: "padding",
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && hasNodePadding(node)) {
-        const topVal = `${node.paddingTop}px`;
-        const rightVal = `${node.paddingRight}px`;
-        const bottomVal = `${node.paddingBottom}px`;
-        const leftVal = `${node.paddingLeft}px`;
-        let topVar, rightVar, bottomVar, leftVar;
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (!node || !hasNodePadding(node)) return null;
 
-        if ('boundVariables' in node && node.boundVariables) {
-          const boundVars = node.boundVariables as Record<string, { type: string, id: string }>;
-          topVar = await getVarName('paddingTop', boundVars);
-          rightVar = await getVarName('paddingRight', boundVars);
-          bottomVar = await getVarName('paddingBottom', boundVars);
-          leftVar = await getVarName('paddingLeft', boundVars);
-        }
+      // Get pixel values
+      const pixelValues: PaddingValues = {
+        top: `${node.paddingTop}px`,
+        right: `${node.paddingRight}px`,
+        bottom: `${node.paddingBottom}px`,
+        left: `${node.paddingLeft}px`,
+      };
 
-        if (topVal === rightVal && rightVal === bottomVal && bottomVal === leftVal) {
-          return { value: topVar || topVal, rawValue: topVal };
-        }
-        if (topVal === bottomVal && leftVal === rightVal) {
-          const value = `${topVar || topVal} ${leftVar || leftVal}`;
-          const rawValue = `${topVal} ${leftVal}`;
-          return { value, rawValue };
-        }
-        const value = `${topVar || topVal} ${rightVar || rightVal} ${bottomVar || bottomVal} ${leftVar || leftVal}`;
-        const rawValue = `${topVal} ${rightVal} ${bottomVal} ${leftVal}`;
-          return { value, rawValue };
+      // Find variable values from passed in variables
+      const varValues: Partial<PaddingValues> = {
+        top: variables.find(v => v.property === 'paddingTop')?.value,
+        right: variables.find(v => v.property === 'paddingRight')?.value,
+        bottom: variables.find(v => v.property === 'paddingBottom')?.value,
+        left: variables.find(v => v.property === 'paddingLeft')?.value,
+      };
+
+      // Helper to get final value (variable or pixel)
+      const getValue = (key: keyof PaddingValues) => varValues[key] || pixelValues[key];
+
+      // Determine the most concise padding format
+      if (allEqual([pixelValues.top, pixelValues.right, pixelValues.bottom, pixelValues.left])) {
+        // All sides equal - use single value
+        return {
+          value: getValue('top'),
+          rawValue: pixelValues.top
+        };
       }
-      return null;
+
+      if (pixelValues.top === pixelValues.bottom && pixelValues.left === pixelValues.right) {
+        // Vertical/horizontal pairs equal - use two values
+        return {
+          value: `${getValue('top')} ${getValue('left')}`,
+          rawValue: `${pixelValues.top} ${pixelValues.left}`
+        };
+      }
+
+      // All sides different - use four values
+      return {
+        value: `${getValue('top')} ${getValue('right')} ${getValue('bottom')} ${getValue('left')}`,
+        rawValue: `${pixelValues.top} ${pixelValues.right} ${pixelValues.bottom} ${pixelValues.left}`
+      };
     }
   }
-]; 
+];
+
+function allEqual(values: string[]): boolean {
+  return values.every(v => v === values[0]);
+} 
