@@ -152,27 +152,38 @@
     </style>
   </head>
   <body>
-    <div class="form-group">
-      <label for="githubToken">GitHub Token:</label>
-      <input type="password" id="githubToken" placeholder="Github PAT token" />
+    <div class="container">
+      <div class="form-group">
+        <label for="githubToken">GitHub Token:</label>
+        <input type="password" id="githubToken" placeholder="Github PAT token" />
+      </div>
+      <div class="form-group">
+        <label for="repoPath">Repository (owner/repo):</label>
+        <input type="text" id="repoPath" placeholder="e.g., bitovi/design-system" />
+      </div>
+      <div class="form-group">
+        <label for="filePath">File Path:</label>
+        <input type="text" id="filePath" placeholder="e.g., src/styles/variables.scss" />
+      </div>
+      <div class="form-group">
+        <label for="branchName">New Branch Name:</label>
+        <input type="text" id="branchName" placeholder="e.g., feature/update-scss-variables" />
+      </div>
+      <div id="devControls" style="display: none; margin-bottom: 10px;">
+        <select id="formatSelect">
+          <option value="css">CSS</option>
+          <option value="scss">SCSS</option>
+        </select>
+      </div>
+      <div class="button-group">
+        <button id="generateBtn" class="button">Generate Styles</button>
+        <button id="exportTestDataBtn" class="button" style="display: none;">Export Test Data</button>
+        <button id="createPRBtn">Create PR</button>
+        <span id="status"></span>
+      </div>
+      <div class="output">
+        <pre id="output"></pre>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="repoPath">Repository (owner/repo):</label>
-      <input type="text" id="repoPath" placeholder="e.g., bitovi/design-system" />
-    </div>
-    <div class="form-group">
-      <label for="filePath">File Path:</label>
-      <input type="text" id="filePath" placeholder="e.g., src/styles/variables.scss" />
-    </div>
-    <div class="form-group">
-      <label for="branchName">New Branch Name:</label>
-      <input type="text" id="branchName" placeholder="e.g., feature/update-scss-variables" />
-    </div>
-    <div>
-      <button id="generateBtn">Generate SCSS</button>
-      <button id="createPRBtn">Create PR</button>
-      <span id="status"></span>
-    </div>
-    <div id="output"></div>
   </body>
 </html>

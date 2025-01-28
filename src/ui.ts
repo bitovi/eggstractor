@@ -6,11 +6,22 @@ const repoPathInput = document.getElementById('repoPath') as HTMLInputElement;
 const filePathInput = document.getElementById('filePath') as HTMLInputElement;
 const branchNameInput = document.getElementById('branchName') as HTMLInputElement;
 const githubTokenInput = document.getElementById('githubToken') as HTMLInputElement;
+const devControls = document.getElementById('devControls') as HTMLDivElement;
+const formatSelect = document.getElementById('formatSelect') as HTMLSelectElement;
 let generatedScss = false;
 
 // Load saved config when UI opens
 window.onload = () => {
   parent.postMessage({ pluginMessage: { type: 'load-config' } }, '*');
+  // Check if we're in development mode
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  if (isDevelopment) {
+    devControls.style.display = 'block';
+    const exportBtn = document.getElementById('exportTestDataBtn');
+    if (exportBtn) {
+      exportBtn.style.display = 'inline-block';
+    }
+  }
 };
 
 // Save config when inputs change
@@ -31,7 +42,13 @@ function saveConfig() {
 }
 
 generateBtn.onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'generate-styles' } }, '*');
+  const format = formatSelect.value;
+  parent.postMessage({ 
+    pluginMessage: { 
+      type: 'generate-styles',
+      format 
+    } 
+  }, '*');
 };
 
 createPRBtn.onclick = () => {
@@ -81,12 +98,18 @@ function copyToClipboard(text: string) {
   document.body.removeChild(textarea);
 }
 
+document.getElementById('exportTestDataBtn')?.addEventListener('click', () => {
+  parent.postMessage({ pluginMessage: { type: 'export-test-data' } }, '*');
+});
+
 // Update the message handler
 window.onmessage = async (event) => {
-  if (event.data.pluginMessage.type === 'output-styles') {
-    generatedScss = true;
-    const output = document.getElementById('output') as HTMLDivElement;
-    const highlightedCode = highlightCode(event.data.pluginMessage.styles);
+  const msg = event.data.pluginMessage;
+  switch (msg.type) {
+    case 'output-styles':
+      generatedScss = true;
+      const output = document.getElementById('output') as HTMLDivElement;
+      const highlightedCode = highlightCode(event.data.pluginMessage.styles);
     output.innerHTML = `
       <div class="output-header">
         <button id="copyButton" class="copy-button" aria-label="Copy to clipboard" title="Copy to clipboard">
@@ -125,17 +148,33 @@ window.onmessage = async (event) => {
         }, 2000);
       };
     }
-  } else if (event.data.pluginMessage.type === 'config-loaded' && event.data.pluginMessage.config) {
+    break;
+  case 'config-loaded':
     repoPathInput.value = event.data.pluginMessage.config.repoPath || '';
     filePathInput.value = event.data.pluginMessage.config.filePath || '';
     branchNameInput.value = event.data.pluginMessage.config.branchName || '';
     githubTokenInput.value = event.data.pluginMessage.config.githubToken || '';
-  } else if (event.data.pluginMessage.type === 'pr-created') {
+    break;
+  case 'pr-created':
     const statusEl = document.getElementById('status') as HTMLSpanElement;
     statusEl.innerHTML = `PR created! <a href="${event.data.pluginMessage.prUrl}" target="_blank">View PR</a>`;
     createPRBtn.disabled = false;
-  } else if (event.data.pluginMessage.type === 'error') {
+    break;
+  case 'error':
     createPRBtn.disabled = false;
     alert(`Error: ${event.data.pluginMessage.message}`);
+    break;
+  case 'test-data-exported':
+    // Create and trigger download
+    const blob = new Blob([msg.data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'figma-test-data.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    break;
   }
 };
