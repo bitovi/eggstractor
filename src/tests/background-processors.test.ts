@@ -51,7 +51,7 @@ describe('Background Processors', () => {
 
     expect(styles).toMatchSnapshot('solid styles');
     expect(styles.solid).toBe('background: #00464a;');
-    expect(styles.alpha).toBe('background: #00464a80;');
+    expect(styles.alpha).toBe('background: rgba(0, 70, 74, 0.5);');
   });
 
   it('should process background solid correctly - sass', async () => {    
