@@ -79,5 +79,11 @@ figma.ui.onmessage = async (msg) => {
       type: 'test-data-exported', 
       data: JSON.stringify(testData, null, 2)
     });
+  } else if (msg.type === 'select-node') {
+    const node = await figma.getNodeByIdAsync(msg.nodeId);
+    if (node && 'type' in node) {  // This checks if it's a SceneNode
+      figma.currentPage.selection = [node as SceneNode];
+      figma.viewport.scrollAndZoomIntoView([node]);
+    }
   }
 };

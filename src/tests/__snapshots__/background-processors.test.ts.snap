@@ -9,9 +9,18 @@ exports[`Background Processors should process background gradient correctly: gra
 
 exports[`Background Processors should process background gradient correctly: gradient warnings 1`] = `
 [
-  "GRADIENT_RADIAL gradients are not yet implemented",
-  "GRADIENT_ANGULAR gradients are not yet implemented",
-  "GRADIENT_DIAMOND gradients are not yet implemented",
+  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:27)",
+  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:29)",
+  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:30)",
+  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:39)",
+  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:41)",
+  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:42)",
+  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:7)",
+  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:10)",
+  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:11)",
+  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:43)",
+  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:45)",
+  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:46)",
 ]
 `;
 

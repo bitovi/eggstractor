@@ -32,7 +32,7 @@ function calculateStopPositions(
   });
 }
 
-export function processGradient(fill: GradientPaint): ProcessorResult {
+export function processGradient(fill: GradientPaint, nodeId?: string): ProcessorResult {
   switch (fill.type) {
     case 'GRADIENT_LINEAR': {
       const angle = calculateGradientAngle(fill.gradientTransform);
@@ -46,13 +46,13 @@ export function processGradient(fill: GradientPaint): ProcessorResult {
     case 'GRADIENT_DIAMOND': {
       return {
         value: '',
-        warnings: [`${fill.type} gradients are not yet implemented`]
+        warnings: [`${fill.type} gradients are not yet implemented (node: ${nodeId})`]
       };
     }
     default:
       return {
         value: '',
-        errors: [`Unknown gradient type: ${fill.type}`]
+        errors: [`Unknown gradient type: ${fill.type} (node: ${nodeId})`]
       };
   }
 } 

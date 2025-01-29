@@ -30,7 +30,7 @@ export const backgroundProcessor: StyleProcessor = {
         }
 
         if (fill.type.startsWith('GRADIENT_')) {
-          const result = processGradient(fill as GradientPaint);
+          const result = processGradient(fill as GradientPaint, node.id);
           if (result.warnings) {
             result.warnings.forEach(warning => warningsSet.add(warning));
           }

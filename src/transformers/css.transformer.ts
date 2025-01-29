@@ -10,9 +10,13 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
     tokens.tokens.filter((token): token is StyleToken => token.type === 'style')
   );
 
-  // Filter for style tokens only
+  // Filter for style tokens only and ensure they have valid values
   const styleTokens = tokens.tokens.filter((token): token is StyleToken => 
-    token.type === 'style'
+    token.type === 'style' && 
+    token.value != null && 
+    token.value !== '' &&
+    token.rawValue != null && 
+    token.rawValue !== ''
   );
 
   const variantGroups = groupBy(styleTokens, t => t.path.join('_'));

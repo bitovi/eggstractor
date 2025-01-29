@@ -43,11 +43,11 @@ function saveConfig() {
 
 generateBtn.onclick = () => {
   const format = formatSelect.value;
-  parent.postMessage({ 
-    pluginMessage: { 
+  parent.postMessage({
+    pluginMessage: {
       type: 'generate-styles',
-      format 
-    } 
+      format
+    }
   }, '*');
 };
 
@@ -62,14 +62,14 @@ createPRBtn.onclick = () => {
   const branchName = (document.getElementById('branchName') as HTMLInputElement).value;
 
   const checks = [
-    {value: githubToken, warning: "Please add a github token"},
-    {value: repoPath, warning: "Please add path to the repository"},
-    {value: filePath, warning: "Please add the path to your generated SCSS file"},
-    {value: branchName, warning: "Please specify the name of the branch to create or add the commit to"},
-    {value: generatedScss, warning: "Please generate the SCSS first"}
+    { value: githubToken, warning: "Please add a github token" },
+    { value: repoPath, warning: "Please add path to the repository" },
+    { value: filePath, warning: "Please add the path to your generated SCSS file" },
+    { value: branchName, warning: "Please specify the name of the branch to create or add the commit to" },
+    { value: generatedScss, warning: "Please generate the SCSS first" }
   ];
 
-  const missing = checks.filter( check => !check.value)
+  const missing = checks.filter(check => !check.value)
   if (missing.length) {
     alert(missing[0].warning);
     createPRBtn.disabled = false;
@@ -112,17 +112,45 @@ window.onmessage = async (event) => {
       const output = document.getElementById('output') as HTMLDivElement;
       const highlightedCode = highlightCode(msg.styles);
 
-      // Add warnings section if there are any
-      const warningsHtml = msg.warnings?.length 
-        ? `<div>
+      if (msg.warnings?.length) {
+        // Add warnings section if there are any
+        const warningsHtml = msg.warnings?.length
+          ? `<div>
             <h3>⚠️ Warnings ⚠️</h3>
             <ul>
-              ${msg.warnings.map(warning => `<li>${warning}</li>`).join('')}
+              ${msg.warnings.map(warning => {
+            const nodeMatch = warning.match(/\(node: ([^)]+)\)/);
+            const nodeId = nodeMatch?.[1];
+            return nodeId
+              ? `<li><a href="#" data-node-id="${nodeId}">${warning}</a></li>`
+              : `<li>${warning}</li>`;
+          }).join('')}
             </ul>
           </div>`
-        : '';
-      warnings.innerHTML = warningsHtml;
-      warnings.style.display = 'block';
+          : '';
+        warnings.innerHTML = warningsHtml;
+        warnings.style.display = 'block';
+      } else {
+        warnings.style.display = 'none';
+      }
+
+      // Add click handler for node links
+      warnings.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.tagName === 'A') {
+          e.preventDefault();
+          const nodeId = target.dataset.nodeId;
+          if (nodeId) {
+            parent.postMessage({
+              pluginMessage: {
+                type: 'select-node',
+                nodeId
+              }
+            }, '*');
+          }
+        }
+      });
+
       output.innerHTML = `
         <div class="output-header">
           <button id="copyButton" class="copy-button" aria-label="Copy to clipboard" title="Copy to clipboard">

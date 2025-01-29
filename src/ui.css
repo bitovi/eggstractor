@@ -154,7 +154,8 @@ pre {
 
 #warnings h3 {
   margin: 0 0 8px;
-  font-size: 14px;
+  text-align: center;
+  font-size: large;
   color: #856404;
 }
 
@@ -166,4 +167,15 @@ pre {
 
 #warnings li {
   margin: 4px 0;
+}
+
+#warnings li a {
+  font-size: small;
+  color: #856404;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#warnings li a:hover {
+  opacity: 0.8;
 }

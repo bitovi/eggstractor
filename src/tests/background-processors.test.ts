@@ -133,7 +133,7 @@ describe('Background Processors', () => {
     expect(warnings).toMatchSnapshot('gradient warnings');
     expect(styles).toMatchSnapshot('gradient styles');
 
-    expect(warnings).toHaveLength(3);
+    expect(warnings).toHaveLength(12);
 
     // Keep direct assertions for critical values
     expect(styles.linear).toBe('background: linear-gradient(224deg, #00464A 0%, #04646A 100%);');
