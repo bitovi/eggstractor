@@ -2,11 +2,26 @@
 
 exports[`Background Processors should process background gradient correctly: gradient styles 1`] = `
 {
-  "angular": null,
   "linear": "background: linear-gradient(224deg, #00464A 0%, #04646A 100%);",
   "linearAlpha": "background: linear-gradient(224deg, rgba(0, 70, 74, 0.5) 0%, #04646A 100%);",
-  "radial": null,
 }
+`;
+
+exports[`Background Processors should process background gradient correctly: gradient warnings 1`] = `
+[
+  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:27)",
+  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:29)",
+  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:30)",
+  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:39)",
+  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:41)",
+  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:42)",
+  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:7)",
+  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:10)",
+  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:11)",
+  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:43)",
+  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:45)",
+  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:46)",
+]
 `;
 
 exports[`Background Processors should process background solid correctly - sass: solid styles 1`] = `

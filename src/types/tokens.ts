@@ -29,9 +29,11 @@ export interface VariableToken extends BaseToken {
 
 export interface StyleToken extends BaseToken {
   type: 'style';
-  value: string; // CSS with variable references e.g. background: $color-primary
-  rawValue: string; // CSS with actual values e.g. background: #FF0000
+  value: string | null; // CSS with variable references e.g. background: $color-primary
+  rawValue: string | null; // CSS with actual values e.g. background: #FF0000
   variables?: VariableToken[]; // Associated variable tokens
+  warnings?: string[];
+  errors?: string[];
 }
 
 export interface TokenCollection {
@@ -39,6 +41,8 @@ export interface TokenCollection {
 } 
 
 export interface ProcessedValue {
-  value: string;   // Value with variable references
-  rawValue: string; // Value with actual values
+  value: string | null;   // Value with variable references
+  rawValue: string | null; // Value with actual values
+  warnings?: string[];
+  errors?: string[];
 }

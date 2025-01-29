@@ -69,7 +69,9 @@ export async function extractNodeToken(
       variables: variableTokensMap.size > 0 ? [...variableTokensMap.values()] : undefined,
       metadata: {
         figmaId: node.id,
-      }
+      },
+      warnings: processedValue.warnings,
+      errors: processedValue.errors
     };
     tokens.push(styleToken);
   }
