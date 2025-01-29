@@ -1,6 +1,6 @@
 import { collectTokens } from '../services';
 import { transformToCss, transformToScss } from '../transformers';
-import testData from './fixtures/figma-test-data.json';
+import testData from './fixtures/figma-test-data_background.json';
 import { createTestVariableResolver } from '../utils/test.utils';
 
 // Add this helper function at the top of the test file

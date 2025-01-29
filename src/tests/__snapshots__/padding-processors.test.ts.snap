@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Padding Processors should process padding correctly: padding 1`] = `
+"// Generated SCSS Variables
+$brand-primary: #00464a
+$corner-radius-primary: 16px
+$size-null: 0px
+$border-size-primary: 4px
+
+// Generated SCSS Mixins
+@mixin padding-left-right
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: 0px 16px
+ background: #ffffff
+
+@mixin padding-top-bottom
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: 24px 0px
+ background: #ffffff
+
+@mixin padding-top-bottom-left-right
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: 16px
+ background: #ffffff
+
+@mixin padding-topright-bottomleft
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: 16px 16px 24px 24px
+ background: #ffffff
+
+@mixin padding-topbottom-leftright
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: 24px 16px
+ background: #ffffff
+
+@mixin padding-left-right-variable
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: $size-null $corner-radius-primary
+ background: #ffffff
+
+@mixin padding-top-bottom-variable
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: $corner-radius-primary $size-null
+ background: #ffffff
+
+@mixin padding-top-bottom-left-right-variable
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: $corner-radius-primary
+ background: #ffffff
+
+@mixin padding-topright-bottomleft-variable
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: $corner-radius-primary $corner-radius-primary $border-size-primary $border-size-primary
+ background: #ffffff
+
+@mixin padding-topbottom-leftright-variable
+ display: inline-flex
+ flex-direction: row
+ gap: 8px
+ padding: $border-size-primary $corner-radius-primary
+ background: #ffffff
+
+"
+`;

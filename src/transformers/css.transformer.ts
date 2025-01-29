@@ -1,5 +1,6 @@
 import { StyleToken, TokenCollection } from '../types';
-import Utils from '../utils';
+import { groupBy } from '../utils/index';
+
 export function transformToCss(tokens: TokenCollection): string {
   let output = "/* Generated CSS */";
 
@@ -8,7 +9,7 @@ export function transformToCss(tokens: TokenCollection): string {
     token.type === 'style'
   );
 
-  const variantGroups = Utils.groupBy(styleTokens, t => t.path.join('_'));
+  const variantGroups = groupBy(styleTokens, t => t.path.join('_'));
   Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
     if (!variantPath) return;
     // Remove properties with zero values and unnecessary defaults

@@ -2,37 +2,37 @@
 
 exports[`Background Processors should process background solid correctly - sass: solid styles 1`] = `
 "// Generated SCSS Variables
-$brand-primary: #00464a;
-$teal-800-50: rgba(0, 70, 74, 0.5);
-$teal-medium: #04646a;
-$teal-dark: #00464a;
-$brand-secondary: #04646a;
-$teal-800: #00464a;
+$brand-primary: #00464a
+$teal-800-50: rgba(0, 70, 74, 0.5)
+$teal-medium: #04646a
+$teal-dark: #00464a
+$brand-secondary: #04646a
+$teal-800: #00464a
 
 // Generated SCSS Mixins
 @mixin background-solid-variable
- background: $brand-primary;
+ background: $brand-primary
 
 @mixin background-solid-alpha-variable
- background: $teal-800-50;
+ background: $teal-800-50
 
 @mixin background-solid-custom
- background: #00464a;
+ background: #00464a
 
 @mixin background-solid-alpha-custom
- background: rgba(0, 70, 74, 0.5);
+ background: rgba(0, 70, 74, 0.5)
 
 @mixin background-solid-hex-style
- background: #00464a;
+ background: #00464a
 
 @mixin background-solid-variable-style
- background: $teal-800;
+ background: $teal-800
 
 @mixin background-solid-alpha-hex-style
- background: rgba(0, 70, 74, 0.5);
+ background: rgba(0, 70, 74, 0.5)
 
 @mixin background-solid-alpha-variable-style
- background: $teal-800-50;
+ background: $teal-800-50
 
 "
 `;

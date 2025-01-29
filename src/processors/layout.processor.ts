@@ -59,42 +59,4 @@ export const layoutProcessors: StyleProcessor[] = [
       return null;
     }
   },
-  {
-    property: "padding",
-    bindingKey: undefined,
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const top = variables.find(v => v.property === 'padding-top');
-      const right = variables.find(v => v.property === 'padding-right');
-      const bottom = variables.find(v => v.property === 'padding-bottom');
-      const left = variables.find(v => v.property === 'padding-left');
-
-      if (top || right || bottom || left) {
-        const getValue = (v: VariableToken | undefined, fallback: string) => v ? v.value : fallback;
-        const getRawValue = (v: VariableToken | undefined, fallback: string) => v ? v.rawValue : fallback;
-
-        return {
-          value: `${getValue(top, '0')} ${getValue(right, '0')} ${getValue(bottom, '0')} ${getValue(left, '0')}`,
-          rawValue: `${getRawValue(top, '0')} ${getRawValue(right, '0')} ${getRawValue(bottom, '0')} ${getRawValue(left, '0')}`
-        };
-      }
-
-      if (node && 'paddingTop' in node) {
-        const topVal = `${node.paddingTop}px`;
-        const rightVal = `${node.paddingRight}px`;
-        const bottomVal = `${node.paddingBottom}px`;
-        const leftVal = `${node.paddingLeft}px`;
-
-        if (topVal === rightVal && rightVal === bottomVal && bottomVal === leftVal) {
-          return { value: topVal, rawValue: topVal };
-        }
-        if (topVal === bottomVal && leftVal === rightVal) {
-          const value = `${topVal} ${leftVal}`;
-          return { value, rawValue: value };
-        }
-        const value = `${topVal} ${rightVal} ${bottomVal} ${leftVal}`;
-        return { value, rawValue: value };
-      }
-      return null;
-    }
-  }
 ]; 

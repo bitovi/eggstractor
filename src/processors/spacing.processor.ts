@@ -1,80 +1,75 @@
-import { StyleProcessor, ProcessedValue } from '../types';
+import { StyleProcessor, ProcessedValue, VariableToken } from '../types';
+
+interface NodeWithPadding {
+  paddingTop: number;
+  paddingRight: number;
+  paddingBottom: number;
+  paddingLeft: number;
+}
+
+function hasNodePadding(node: SceneNode): node is SceneNode & NodeWithPadding {
+  return 'paddingTop' in node && 'paddingRight' in node && 'paddingBottom' in node && 'paddingLeft' in node;
+}
+
+interface PaddingValues {
+  top: string;
+  right: string;
+  bottom: string;
+  left: string;
+}
 
 export const spacingProcessors: StyleProcessor[] = [
   {
-    property: "padding-top",
-    bindingKey: "paddingTop",
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const paddingVariable = variables.find(v => v.property === 'padding-top');
-      if (paddingVariable) {
+    property: "padding",
+    bindingKey: undefined,
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (!node || !hasNodePadding(node)) return null;
+
+      // Get pixel values
+      const pixelValues: PaddingValues = {
+        top: `${node.paddingTop}px`,
+        right: `${node.paddingRight}px`,
+        bottom: `${node.paddingBottom}px`,
+        left: `${node.paddingLeft}px`,
+      };
+
+      // Find variable values from passed in variables
+      const varValues: Partial<PaddingValues> = {
+        top: variables.find(v => v.property === 'paddingTop')?.value,
+        right: variables.find(v => v.property === 'paddingRight')?.value,
+        bottom: variables.find(v => v.property === 'paddingBottom')?.value,
+        left: variables.find(v => v.property === 'paddingLeft')?.value,
+      };
+
+      // Helper to get final value (variable or pixel)
+      const getValue = (key: keyof PaddingValues) => varValues[key] || pixelValues[key];
+
+      // Determine the most concise padding format
+      if (allEqual([pixelValues.top, pixelValues.right, pixelValues.bottom, pixelValues.left])) {
+        // All sides equal - use single value
         return {
-          value: paddingVariable.value,
-          rawValue: paddingVariable.rawValue
+          value: getValue('top'),
+          rawValue: pixelValues.top
         };
       }
 
-      if (node && 'paddingTop' in node && node.paddingTop > 0) {
-        const value = `${node.paddingTop}px`;
-        return { value, rawValue: value };
-      }
-      return null;
-    }
-  },
-  {
-    property: "padding-right",
-    bindingKey: "paddingRight",
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const paddingVariable = variables.find(v => v.property === 'padding-right');
-      if (paddingVariable) {
+      if (pixelValues.top === pixelValues.bottom && pixelValues.left === pixelValues.right) {
+        // Vertical/horizontal pairs equal - use two values
         return {
-          value: paddingVariable.value,
-          rawValue: paddingVariable.rawValue
+          value: `${getValue('top')} ${getValue('left')}`,
+          rawValue: `${pixelValues.top} ${pixelValues.left}`
         };
       }
 
-      if (node && 'paddingRight' in node && node.paddingRight > 0) {
-        const value = `${node.paddingRight}px`;
-        return { value, rawValue: value };
-      }
-      return null;
-    }
-  },
-  {
-    property: "padding-bottom",
-    bindingKey: "paddingBottom",
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const paddingVariable = variables.find(v => v.property === 'padding-bottom');
-      if (paddingVariable) {
-        return {
-          value: paddingVariable.value,
-          rawValue: paddingVariable.rawValue
-        };
-      }
-
-      if (node && 'paddingBottom' in node && node.paddingBottom > 0) {
-        const value = `${node.paddingBottom}px`;
-        return { value, rawValue: value };
-      }
-      return null;
-    }
-  },
-  {
-    property: "padding-left",
-    bindingKey: "paddingLeft",
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const paddingVariable = variables.find(v => v.property === 'padding-left');
-      if (paddingVariable) {
-        return {
-          value: paddingVariable.value,
-          rawValue: paddingVariable.rawValue
-        };
-      }
-
-      if (node && 'paddingLeft' in node && node.paddingLeft > 0) {
-        const value = `${node.paddingLeft}px`;
-        return { value, rawValue: value };
-      }
-      return null;
+      // All sides different - use four values
+      return {
+        value: `${getValue('top')} ${getValue('right')} ${getValue('bottom')} ${getValue('left')}`,
+        rawValue: `${pixelValues.top} ${pixelValues.right} ${pixelValues.bottom} ${pixelValues.left}`
+      };
     }
   }
-]; 
+];
+
+function allEqual(values: string[]): boolean {
+  return values.every(v => v === values[0]);
+} 

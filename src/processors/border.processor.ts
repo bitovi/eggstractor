@@ -1,12 +1,12 @@
 import { StyleProcessor, ProcessedValue } from '../types';
-import Utils from '../utils';
+import { rgbaToString } from '../utils/index';
 
 export const borderProcessors: StyleProcessor[] = [
   {
     property: "border-color",
     bindingKey: "strokes",
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const borderVariable = variables.find(v => v.property === 'border-color');
+      const borderVariable = variables.find(v => v.property === 'strokes');
       if (borderVariable) {
         return {
           value: borderVariable.value,
@@ -19,7 +19,7 @@ export const borderProcessors: StyleProcessor[] = [
         if (stroke?.type === "SOLID") {
           const { r, g, b } = stroke.color;
           const a = stroke.opacity ?? 1;
-          const value = Utils.rgbaToString(r, g, b, a);
+          const value = rgbaToString(r, g, b, a);
           return { value, rawValue: value };
         }
       }
@@ -30,7 +30,7 @@ export const borderProcessors: StyleProcessor[] = [
     property: "border-width",
     bindingKey: "strokeWeight",
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const widthVariable = variables.find(v => v.property === 'border-width');
+      const widthVariable = variables.find(v => v.property === 'strokeWeight');
       if (widthVariable) {
         return {
           value: widthVariable.value,

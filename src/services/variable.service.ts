@@ -1,3 +1,4 @@
+import { VariableToken } from '../types';
 import { rgbaToString } from '../utils/color.utils';
 
 export async function getVariableFallback(variable: Variable | null, propertyName: string = ''): Promise<string> {
@@ -34,6 +35,25 @@ export async function getVariableFallback(variable: Variable | null, propertyNam
   }
 }
 
+export async function collectBoundVariable(varId: string, property: string, path: string[], node: SceneNode): Promise<VariableToken | null> {
+  const variable = await figma.variables.getVariableByIdAsync(varId);
+  if (!variable) return null;
+
+  return {
+    type: 'variable',
+    path,
+    property,
+    name: variable.name,
+    value: `$${variable.name}`,
+    rawValue: await getVariableFallback(variable, property),
+    metadata: {
+      figmaId: node.id,
+      variableId: variable.id,
+      variableName: variable.name,
+    }
+  };
+}
+
 function shouldHaveUnits(propertyName: string, value: number): boolean {
   const unitlessProperties = ['font-weight', 'opacity'];
   const propertyLower = propertyName.toLowerCase();
@@ -46,4 +66,4 @@ function shouldHaveUnits(propertyName: string, value: number): boolean {
   }
   
   return true;
-} 
+}

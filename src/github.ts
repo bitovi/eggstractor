@@ -1,4 +1,4 @@
-import Utils from './utils';
+import { toBase64 } from './utils/index';
 
 export interface PRResult {
   prUrl: string;
@@ -102,7 +102,7 @@ export default {
         headers,
         body: JSON.stringify({
           message: 'Update SCSS variables from Figma',
-          content: Utils.toBase64(content),
+          content: toBase64(content),
           branch: branchName,
           ...(fileSha && { sha: fileSha }) // Include SHA if file exists
         })
