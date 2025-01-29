@@ -120,7 +120,7 @@ describe('Background Processors', () => {
     };
 
     const tokens = await collectTokens();    
-    const { result: css, warnings, errors } = transformToCss(tokens);
+    const { result: css, warnings } = transformToCss(tokens);
 
     // Test specific styles with snapshots
     const styles = {
@@ -128,10 +128,12 @@ describe('Background Processors', () => {
       linearAlpha: parseCssClass(css, 'background-gradient-linear-alpha-style')
     };
 
-    console.log({ warnings, errors });
-
+    
     // Snapshot all styles
+    expect(warnings).toMatchSnapshot('gradient warnings');
     expect(styles).toMatchSnapshot('gradient styles');
+
+    expect(warnings).toHaveLength(3);
 
     // Keep direct assertions for critical values
     expect(styles.linear).toBe('background: linear-gradient(224deg, #00464A 0%, #04646A 100%);');

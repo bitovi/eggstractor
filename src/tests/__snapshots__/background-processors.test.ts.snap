@@ -7,6 +7,14 @@ exports[`Background Processors should process background gradient correctly: gra
 }
 `;
 
+exports[`Background Processors should process background gradient correctly: gradient warnings 1`] = `
+[
+  "GRADIENT_RADIAL gradients are not yet implemented",
+  "GRADIENT_ANGULAR gradients are not yet implemented",
+  "GRADIENT_DIAMOND gradients are not yet implemented",
+]
+`;
+
 exports[`Background Processors should process background solid correctly - sass: solid styles 1`] = `
 "// Generated SCSS Variables
 $brand-primary: #00464a

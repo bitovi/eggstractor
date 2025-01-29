@@ -10,8 +10,8 @@ export const backgroundProcessor: StyleProcessor = {
       const visibleFills = node.fills.filter(fill => fill.visible);
       if (!visibleFills.length) return null;
 
-      const warnings: string[] = [];
-      const errors: string[] = [];
+      const warningsSet = new Set<string>();
+      const errorsSet = new Set<string>();
 
       const backgrounds = await Promise.all(visibleFills.map(async (fill: Paint) => {
         if (fill.type === "SOLID") {
@@ -31,8 +31,12 @@ export const backgroundProcessor: StyleProcessor = {
 
         if (fill.type.startsWith('GRADIENT_')) {
           const result = processGradient(fill as GradientPaint);
-          if (result.warnings) warnings.push(...result.warnings);
-          if (result.errors) errors.push(...result.errors);
+          if (result.warnings) {
+            result.warnings.forEach(warning => warningsSet.add(warning));
+          }
+          if (result.errors) {
+            result.errors.forEach(error => errorsSet.add(error));
+          }
           
           if (result.value) {
             return { 
@@ -46,8 +50,8 @@ export const backgroundProcessor: StyleProcessor = {
       }));
 
       const result: ProcessedValue = {
-        warnings: warnings.length > 0 ? warnings : undefined,
-        errors: errors.length > 0 ? errors : undefined,
+        warnings: warningsSet.size > 0 ? Array.from(warningsSet) : undefined,
+        errors: errorsSet.size > 0 ? Array.from(errorsSet) : undefined,
         value: null,
         rawValue: null
       };

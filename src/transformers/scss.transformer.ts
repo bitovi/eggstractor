@@ -1,20 +1,14 @@
 import { TokenCollection, StyleToken, TransformerResult } from '../types';
 import { sanitizeName, groupBy } from '../utils/index';
+import { deduplicateMessages } from '../utils/error.utils';
 
 export function transformToScss(tokens: TokenCollection): TransformerResult {
   let output = "";
-  const warnings: string[] = [];
-  const errors: string[] = [];
-
-  // Collect warnings and errors from tokens
-  tokens.tokens.forEach(token => {
-    if ('warnings' in token && token.warnings) {
-      warnings.push(...token.warnings);
-    }
-    if ('errors' in token && token.errors) {
-      errors.push(...token.errors);
-    }
-  });
+  
+  // Deduplicate warnings and errors from style tokens only
+  const { warnings, errors } = deduplicateMessages(
+    tokens.tokens.filter((token): token is StyleToken => token.type === 'style')
+  );
 
   // First, collect and output color variables
   const colorVariables = new Map<string, string>();
@@ -98,8 +92,8 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
 
   return {
     result: output,
-    warnings: warnings,
-    errors: errors
+    warnings,
+    errors
   };
 } 
 
