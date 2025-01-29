@@ -1,3 +1,5 @@
+import { ProcessorResult } from '../types/processor.types';
+
 function calculateGradientAngle(matrix: Transform): number {
   const [[a], [b]] = matrix;
   
@@ -30,44 +32,27 @@ function calculateStopPositions(
   });
 }
 
-export function processGradient(fill: GradientPaint): string {
+export function processGradient(fill: GradientPaint): ProcessorResult {
   switch (fill.type) {
     case 'GRADIENT_LINEAR': {
       const angle = calculateGradientAngle(fill.gradientTransform);
       const stops = calculateStopPositions(fill.gradientStops);
-      return `linear-gradient(${angle}deg, ${stops.join(', ')})`;
+      return {
+        value: `linear-gradient(${angle}deg, ${stops.join(', ')})`
+      };
     }
-    // case 'GRADIENT_RADIAL': {
-    //   const stops = fill.gradientStops.map(stop => {
-    //     const color = stop.color.a !== 1
-    //       ? `rgba(${Math.round(stop.color.r * 255)}, ${Math.round(stop.color.g * 255)}, ${Math.round(stop.color.b * 255)}, ${stop.color.a})`
-    //       : `#${Math.round(stop.color.r * 255).toString(16).padStart(2, '0')}${Math.round(stop.color.g * 255).toString(16).padStart(2, '0')}${Math.round(stop.color.b * 255).toString(16).padStart(2, '0')}`.toUpperCase();
-    //     return `${color} ${stop.position * 100}%`;
-    //   }).join(', ');
-    //   return `radial-gradient(100% 100% at 100% 100%, ${stops})`;
-    // }
-    // case 'GRADIENT_ANGULAR': {
-    //   const stops = fill.gradientStops.map(stop => {
-    //     const color = stop.color.a !== 1
-    //       ? `rgba(${Math.round(stop.color.r * 255)}, ${Math.round(stop.color.g * 255)}, ${Math.round(stop.color.b * 255)}, ${stop.color.a})`
-    //       : `#${Math.round(stop.color.r * 255).toString(16).padStart(2, '0')}${Math.round(stop.color.g * 255).toString(16).padStart(2, '0')}${Math.round(stop.color.b * 255).toString(16).padStart(2, '0')}`.toUpperCase();
-    //     return `${color} ${stop.position * 360}deg`;
-    //   }).join(', ');
-    //   return `conic-gradient(from 134deg at 50% 50%, ${stops})`;
-    // }
-    // case 'GRADIENT_DIAMOND': {
-    //   const stops = fill.gradientStops.map(stop => {
-    //     const color = stop.color.a !== 1
-    //       ? `rgba(${Math.round(stop.color.r * 255)}, ${Math.round(stop.color.g * 255)}, ${Math.round(stop.color.b * 255)}, ${stop.color.a})`
-    //       : `#${Math.round(stop.color.r * 255).toString(16).padStart(2, '0')}${Math.round(stop.color.g * 255).toString(16).padStart(2, '0')}${Math.round(stop.color.b * 255).toString(16).padStart(2, '0')}`.toUpperCase();
-    //     return `${color} ${stop.position * 100}%`;
-    //   }).join(', ');
-    //   return `linear-gradient(to bottom right, ${stops}) bottom right / 50% 50% no-repeat, ` +
-    //     `linear-gradient(to bottom left, ${stops}) bottom left / 50% 50% no-repeat, ` +
-    //     `linear-gradient(to top left, ${stops}) top left / 50% 50% no-repeat, ` +
-    //     `linear-gradient(to top right, ${stops}) top right / 50% 50% no-repeat`;
-    // }
+    case 'GRADIENT_RADIAL':
+    case 'GRADIENT_ANGULAR':
+    case 'GRADIENT_DIAMOND': {
+      return {
+        value: '',
+        warnings: [`${fill.type} gradients are not yet implemented`]
+      };
+    }
     default:
-      return '';
+      return {
+        value: '',
+        errors: [`Unknown gradient type: ${fill.type}`]
+      };
   }
 } 

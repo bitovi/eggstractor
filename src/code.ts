@@ -2,6 +2,7 @@ import { collectTokens } from './services';
 import { transformToScss, transformToCss } from './transformers';
 import Github from './github';
 import { serializeFigmaData } from './utils/test.utils';
+import { TransformerResult } from './types/processors';
 
 // Store the generated SCSS
 let generatedScss: string = '';
@@ -15,7 +16,7 @@ figma.showUI(__html__, {
 });
 
 // Main generation function
-async function generateStyles(format: 'scss' | 'css'): Promise<string> {
+async function generateStyles(format: 'scss' | 'css'): Promise<TransformerResult> {
   const tokens = await collectTokens();
   switch (format) {
     case 'scss':
@@ -30,9 +31,14 @@ async function generateStyles(format: 'scss' | 'css'): Promise<string> {
 // Listen for messages from the UI
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'generate-styles') {
-    const styles = await generateStyles(msg.format || 'scss');
-    generatedScss = styles;
-    figma.ui.postMessage({ type: 'output-styles', styles });
+    const result = await generateStyles(msg.format || 'scss');
+    generatedScss = result.result; // Store just the generated code
+    figma.ui.postMessage({ 
+      type: 'output-styles', 
+      styles: result.result,
+      warnings: result.warnings,
+      errors: result.errors
+    });
   } else if (msg.type === 'save-config') {
     await Github.saveUserSettings(msg.githubToken, msg.branchName);
     await Github.saveGithubConfig({

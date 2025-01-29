@@ -1,8 +1,20 @@
-import { StyleToken, TokenCollection } from '../types';
+import { StyleToken, TokenCollection, TransformerResult } from '../types';
 import { groupBy } from '../utils/index';
 
-export function transformToCss(tokens: TokenCollection): string {
+export function transformToCss(tokens: TokenCollection): TransformerResult {
   let output = "/* Generated CSS */";
+  const warnings: string[] = [];
+  const errors: string[] = [];
+
+  // Collect warnings and errors from tokens
+  tokens.tokens.forEach(token => {
+    if ('warnings' in token && token.warnings) {
+      warnings.push(...token.warnings);
+    }
+    if ('errors' in token && token.errors) {
+      errors.push(...token.errors);
+    }
+  });
 
   // Filter for style tokens only
   const styleTokens = tokens.tokens.filter((token): token is StyleToken => 
@@ -40,5 +52,9 @@ export function transformToCss(tokens: TokenCollection): string {
     }
   });
 
-  return output;
+  return {
+    result: output,
+    warnings: warnings,
+    errors: errors
+  };
 } 

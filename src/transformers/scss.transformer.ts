@@ -1,8 +1,20 @@
-import { TokenCollection, StyleToken } from '../types';
+import { TokenCollection, StyleToken, TransformerResult } from '../types';
 import { sanitizeName, groupBy } from '../utils/index';
 
-export function transformToScss(tokens: TokenCollection): string {
+export function transformToScss(tokens: TokenCollection): TransformerResult {
   let output = "";
+  const warnings: string[] = [];
+  const errors: string[] = [];
+
+  // Collect warnings and errors from tokens
+  tokens.tokens.forEach(token => {
+    if ('warnings' in token && token.warnings) {
+      warnings.push(...token.warnings);
+    }
+    if ('errors' in token && token.errors) {
+      errors.push(...token.errors);
+    }
+  });
 
   // First, collect and output color variables
   const colorVariables = new Map<string, string>();
@@ -26,7 +38,7 @@ export function transformToScss(tokens: TokenCollection): string {
   tokens.tokens.forEach(token => {
     if (token.type === 'style' && 
         token.property === 'fills' && 
-        (token.rawValue.includes('gradient'))) {
+        (token.rawValue?.includes('gradient'))) {
       const name = `gradient-${sanitizeName(token.name)}`;
       gradientVariables.set(name, token);
     }
@@ -39,11 +51,13 @@ export function transformToScss(tokens: TokenCollection): string {
   // Output gradient variables
   gradientVariables.forEach((token, name) => {
     // Replace color values with variable references if they exist
-    let gradientValue = token.rawValue;
+    let gradientValue = token.rawValue ?? '';
     colorVariables.forEach((value, colorName) => {
       gradientValue = gradientValue.replace(value, `$${colorName}`);
     });
-    output += `$${name}: ${gradientValue}\n`;
+    if (gradientValue) {
+      output += `$${name}: ${gradientValue}\n`;
+    }
   });
 
   // Generate mixins section
@@ -65,7 +79,7 @@ export function transformToScss(tokens: TokenCollection): string {
     if (uniqueTokens.length > 0) {
       output += `@mixin ${variantPath}\n`;
       uniqueTokens.forEach(token => {
-        if (token.property === 'fills' && token.rawValue.includes('gradient')) {
+        if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
           // Only use CSS variables if the token has associated variables
           if (token.variables && token.variables.length > 0) {
             const gradientName = `gradient-${sanitizeName(token.name)}`;
@@ -82,7 +96,11 @@ export function transformToScss(tokens: TokenCollection): string {
     }
   });
 
-  return output;
+  return {
+    result: output,
+    warnings: warnings,
+    errors: errors
+  };
 } 
 
 // Helper function to sort and dedupe tokens
@@ -99,7 +117,17 @@ function sortAndDedupeTokens(tokens: StyleToken[]): StyleToken[] {
     'padding-left'
   ];
 
-  const sortedTokens = tokens.sort((a, b) => {
+  // Filter out tokens with empty or null values first
+  const validTokens = tokens.filter(token => 
+    token.value !== null && 
+    token.value !== undefined && 
+    token.value !== '' &&
+    token.rawValue !== null && 
+    token.rawValue !== undefined && 
+    token.rawValue !== ''
+  );
+
+  const sortedTokens = validTokens.sort((a, b) => {
     const aIndex = layoutProperties.indexOf(a.property);
     const bIndex = layoutProperties.indexOf(b.property);
     if (aIndex === -1 && bIndex === -1) return 0;

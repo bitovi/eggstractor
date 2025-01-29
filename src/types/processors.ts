@@ -22,4 +22,10 @@ export interface StyleProcessor {
   property: string;
   bindingKey: keyof VariableBindings | undefined;
   process: (variables: VariableToken[], node?: SceneNode) => Promise<ProcessedValue | null>;
+}
+
+export interface TransformerResult {
+  result: string;
+  warnings: string[];
+  errors: string[];
 } 
