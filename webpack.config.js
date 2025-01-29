@@ -8,7 +8,7 @@ module.exports = (env, argv) => ({
   mode: argv.mode === 'production' ? 'production' : 'development',
   devtool: argv.mode === 'production' ? false : 'inline-source-map',
   entry: {
-    ui: ['./src/ui.ts', './src/ui.css'],
+    ui: './src/ui.ts',
     code: './src/code.ts',
   },
   module: {
@@ -39,7 +39,7 @@ module.exports = (env, argv) => ({
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].css'
+      filename: 'ui.css'
     }),
     new HtmlWebpackPlugin({
       inject: true,
@@ -47,14 +47,10 @@ module.exports = (env, argv) => ({
       filename: 'ui.html',
       chunks: ['ui'],
     }),
-    new HtmlInlineCssPlugin({
-      replace: {
-        removeTarget: true
-      }
-    }),
+    new HtmlInlineCssPlugin(),
     new HtmlInlineScriptPlugin({
       htmlMatchPattern: [/ui.html/],
       scriptMatchPattern: [/.js$/],
     }),
   ],
-}); 
+});
