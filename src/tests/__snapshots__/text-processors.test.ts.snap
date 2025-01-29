@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Text Processors Text Align Processor should process text alignment correctly: text-alignment 1`] = `
+"// Generated SCSS Variables
+$text-primary: #bfc5c6
+$size-16: 16px
+
+// Generated SCSS Mixins
+@mixin paragraph-justification-justify
+ color: $text-primary
+ font-family: Inter
+ font-size: 16px
+ font-weight: 400
+ line-height: normal
+
+@mixin paragraph-justification-right
+ color: $text-primary
+ font-family: Inter
+ font-size: 16px
+ font-weight: 400
+ line-height: normal
+
+@mixin paragraph-justification-center
+ color: $text-primary
+ font-family: Inter
+ font-size: $size-16
+ font-weight: 400
+ line-height: normal
+
+@mixin paragraph-justification-left
+ color: $text-primary
+ font-family: Inter
+ font-size: $size-16
+ font-weight: 400
+ line-height: normal
+
+"
+`;

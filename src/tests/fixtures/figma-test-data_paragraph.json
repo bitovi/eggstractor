@@ -1,0 +1,394 @@
+{
+  "id": "21:84",
+  "name": "paragraph-justification",
+  "type": "PAGE",
+  "children": [
+    {
+      "id": "21:88",
+      "name": "paragraph-justification-justify",
+      "type": "TEXT",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 0.7490196228027344,
+            "g": 0.772549033164978,
+            "b": 0.7764706015586853
+          },
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:11:332"
+            }
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "layoutAlign": "INHERIT",
+      "fontSize": 16,
+      "fontName": {
+        "family": "Inter",
+        "style": "Regular"
+      },
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "boundVariables": {
+        "fills": [
+          {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:11:332"
+          }
+        ]
+      },
+      "variables": {
+        "VariableID:11:332": {
+          "id": "VariableID:11:332",
+          "name": "text-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:11:329"
+            }
+          }
+        },
+        "VariableID:11:329": {
+          "id": "VariableID:11:329",
+          "name": "gray-300",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.7490196228027344,
+              "g": 0.772549033164978,
+              "b": 0.7764706015586853,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "21:85",
+      "name": "paragraph-justification-right",
+      "type": "TEXT",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 0.7490196228027344,
+            "g": 0.772549033164978,
+            "b": 0.7764706015586853
+          },
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:11:332"
+            }
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "layoutAlign": "INHERIT",
+      "fontSize": 16,
+      "fontName": {
+        "family": "Inter",
+        "style": "Regular"
+      },
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "boundVariables": {
+        "fills": [
+          {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:11:332"
+          }
+        ]
+      },
+      "variables": {
+        "VariableID:11:332": {
+          "id": "VariableID:11:332",
+          "name": "text-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:11:329"
+            }
+          }
+        },
+        "VariableID:11:329": {
+          "id": "VariableID:11:329",
+          "name": "gray-300",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.7490196228027344,
+              "g": 0.772549033164978,
+              "b": 0.7764706015586853,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "21:86",
+      "name": "paragraph-justification-center",
+      "type": "TEXT",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 0.7490196228027344,
+            "g": 0.772549033164978,
+            "b": 0.7764706015586853
+          },
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:11:332"
+            }
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "layoutAlign": "INHERIT",
+      "fontSize": 16,
+      "fontName": {
+        "family": "Inter",
+        "style": "Regular"
+      },
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "boundVariables": {
+        "fills": [
+          {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:11:332"
+          }
+        ],
+        "fontSize": [
+          {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:9:137"
+          }
+        ]
+      },
+      "variables": {
+        "VariableID:11:332": {
+          "id": "VariableID:11:332",
+          "name": "text-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:11:329"
+            }
+          }
+        },
+        "VariableID:11:329": {
+          "id": "VariableID:11:329",
+          "name": "gray-300",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.7490196228027344,
+              "g": 0.772549033164978,
+              "b": 0.7764706015586853,
+              "a": 1
+            }
+          }
+        },
+        "VariableID:9:137": {
+          "id": "VariableID:9:137",
+          "name": "size-16",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:9:136"
+            }
+          }
+        },
+        "VariableID:9:136": {
+          "id": "VariableID:9:136",
+          "name": "spacing-5",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "5:0": 16
+          }
+        }
+      }
+    },
+    {
+      "id": "21:87",
+      "name": "paragraph-justification-left",
+      "type": "TEXT",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 0.7490196228027344,
+            "g": 0.772549033164978,
+            "b": 0.7764706015586853
+          },
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:11:332"
+            }
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "layoutAlign": "INHERIT",
+      "fontSize": 16,
+      "fontName": {
+        "family": "Inter",
+        "style": "Regular"
+      },
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "boundVariables": {
+        "fills": [
+          {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:11:332"
+          }
+        ],
+        "fontSize": [
+          {
+            "type": "VARIABLE_ALIAS",
+            "id": "VariableID:9:137"
+          }
+        ]
+      },
+      "variables": {
+        "VariableID:11:332": {
+          "id": "VariableID:11:332",
+          "name": "text-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:11:329"
+            }
+          }
+        },
+        "VariableID:11:329": {
+          "id": "VariableID:11:329",
+          "name": "gray-300",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0.7490196228027344,
+              "g": 0.772549033164978,
+              "b": 0.7764706015586853,
+              "a": 1
+            }
+          }
+        },
+        "VariableID:9:137": {
+          "id": "VariableID:9:137",
+          "name": "size-16",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:9:136"
+            }
+          }
+        },
+        "VariableID:9:136": {
+          "id": "VariableID:9:136",
+          "name": "spacing-5",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "5:0": 16
+          }
+        }
+      }
+    }
+  ],
+  "variables": {
+    "VariableID:11:332": {
+      "id": "VariableID:11:332",
+      "name": "text-primary",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "5:2": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:11:329"
+        }
+      }
+    },
+    "VariableID:11:329": {
+      "id": "VariableID:11:329",
+      "name": "gray-300",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "5:0": {
+          "r": 0.7490196228027344,
+          "g": 0.772549033164978,
+          "b": 0.7764706015586853,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:9:137": {
+      "id": "VariableID:9:137",
+      "name": "size-16",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "5:1": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:9:136"
+        }
+      }
+    },
+    "VariableID:9:136": {
+      "id": "VariableID:9:136",
+      "name": "spacing-5",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "5:0": 16
+      }
+    }
+  }
+}
