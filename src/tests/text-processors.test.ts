@@ -102,7 +102,7 @@ describe('Text Processors', () => {
       };
   
       const tokens = await collectTokens();    
-      const result = transformToScss(tokens);
+      const { result } = transformToScss(tokens);
   
       expect(result).toMatchSnapshot('text-alignment');
     });
