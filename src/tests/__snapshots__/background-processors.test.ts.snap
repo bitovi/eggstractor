@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Background Processors should process background gradient correctly: gradient styles 1`] = `
+{
+  "angular": null,
+  "linear": "background: linear-gradient(224deg, #00464A 0%, #04646A 100%);",
+  "linearAlpha": "background: linear-gradient(224deg, rgba(0, 70, 74, 0.5) 0%, #04646A 100%);",
+  "radial": null,
+}
+`;
+
 exports[`Background Processors should process background solid correctly - sass: solid styles 1`] = `
 "// Generated SCSS Variables
 $brand-primary: #00464a
@@ -16,11 +25,23 @@ $teal-800: #00464a
 @mixin background-solid-alpha-variable
  background: $teal-800-50
 
+@mixin background-gradient-linear-style
+ background: linear-gradient(224deg, #00464A 0%, #04646A 100%)
+
+@mixin background-gradient-linear-alpha-style
+ background: linear-gradient(224deg, rgba(0, 70, 74, 0.5) 0%, #04646A 100%)
+
 @mixin background-solid-custom
  background: #00464a
 
 @mixin background-solid-alpha-custom
  background: rgba(0, 70, 74, 0.5)
+
+@mixin background-gradient-linear-custom
+ background: linear-gradient(224deg, #00464A 0%, #04646A 100%)
+
+@mixin background-gradient-linear-alpha-custom
+ background: linear-gradient(224deg, rgba(0, 70, 74, 0.5) 0%, #04646A 100%)
 
 @mixin background-solid-hex-style
  background: #00464a

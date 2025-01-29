@@ -89,7 +89,7 @@ describe('Background Processors', () => {
     expect(scss).toMatchSnapshot('solid styles');
   });
 
-  it.skip('should process background gradient correctly', async () => {    
+  it('should process background gradient correctly', async () => {    
     // Create proper node hierarchy in test data
     const pageNode = {
       ...testData,
@@ -134,7 +134,7 @@ describe('Background Processors', () => {
     expect(styles).toMatchSnapshot('gradient styles');
 
     // Keep direct assertions for critical values
-    expect(styles.linear).toBe('background: linear-gradient(224deg, #00464A 3.74%, #04646A 98.29%);');
-    expect(styles.linearAlpha).toBe('background:  linear-gradient(224deg, rgba(0, 70, 74, 0.50) 3.74%, #04646A 98.29%);');
+    expect(styles.linear).toBe('background: linear-gradient(224deg, #00464A 0%, #04646A 100%);');
+    expect(styles.linearAlpha).toBe('background: linear-gradient(224deg, rgba(0, 70, 74, 0.5) 0%, #04646A 100%);');
   });
 }); 

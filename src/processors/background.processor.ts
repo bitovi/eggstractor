@@ -28,8 +28,10 @@ export const backgroundProcessor: StyleProcessor = {
 
         // TODO get gradient working
         if (fill.type.startsWith('GRADIENT_')) {
-          // const value = processGradient(fill as GradientPaint, node.width, node.height);
-          // return { value, rawValue: value };
+          const value = processGradient(fill as GradientPaint);
+          if (value) {
+            return { value, rawValue: value };
+          }
         }
 
         return null;
