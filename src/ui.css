@@ -143,6 +143,7 @@ pre {
 .hljs-strong {
   font-weight: bold;
 }
+
 #warnings {
   display: none;
   background: #fff3cd;
@@ -152,30 +153,35 @@ pre {
   margin-bottom: 16px;
 }
 
-#warnings h3 {
-  margin: 0 0 8px;
-  text-align: center;
-  font-size: large;
-  color: #856404;
-}
-
 #warnings ul {
   margin: 0;
   padding-left: 20px;
   color: #856404;
 }
 
-#warnings li {
+.warning-item {
   margin: 4px 0;
 }
 
-#warnings li a {
+.warning-item a {
   font-size: small;
   color: #856404;
   text-decoration: underline;
   cursor: pointer;
 }
 
-#warnings li a:hover {
+.warning-item a:hover {
   opacity: 0.8;
+}
+
+#warnings details summary {
+  cursor: pointer;
+  text-align: center;
+  font-size: large;
+  color: #856404;
+  margin: 0 0 8px;
+}
+
+summary:hover {
+  opacity: 0.9;
 }

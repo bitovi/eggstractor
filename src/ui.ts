@@ -113,21 +113,19 @@ window.onmessage = async (event) => {
       const highlightedCode = highlightCode(msg.styles);
 
       if (msg.warnings?.length) {
-        // Add warnings section if there are any
-        const warningsHtml = msg.warnings?.length
-          ? `<div>
-            <h3>⚠️ Warnings ⚠️</h3>
+        const warningsHtml = `
+          <details open>
+            <summary>⚠️ Warnings (${msg.warnings.length}) ⚠️</summary>
             <ul>
               ${msg.warnings.map(warning => {
-            const nodeMatch = warning.match(/\(node: ([^)]+)\)/);
-            const nodeId = nodeMatch?.[1];
-            return nodeId
-              ? `<li><a href="#" data-node-id="${nodeId}">${warning}</a></li>`
-              : `<li>${warning}</li>`;
-          }).join('')}
+                const nodeMatch = warning.match(/\(node: ([^)]+)\)/);
+                const nodeId = nodeMatch?.[1];
+                return nodeId 
+                  ? `<li class="warning-item"><a href="#" data-node-id="${nodeId}">${warning}</a></li>`
+                  : `<li class="warning-item">${warning}</li>`;
+              }).join('')}
             </ul>
-          </div>`
-          : '';
+          </details>`;
         warnings.innerHTML = warningsHtml;
         warnings.style.display = 'block';
       } else {
