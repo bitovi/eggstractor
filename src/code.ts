@@ -30,7 +30,6 @@ async function generateStyles(format: 'scss' | 'css'): Promise<TransformerResult
 
 // Listen for messages from the UI
 figma.ui.onmessage = async (msg) => {
-  console.log('msg', msg);
   if (msg.type === 'generate-styles') {
     const result = await generateStyles(msg.format || 'scss');
     generatedScss = result.result; // Store just the generated code
