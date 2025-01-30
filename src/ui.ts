@@ -18,7 +18,7 @@ window.onload = () => {
   // Check if we're in development mode
   const isDevelopment = process.env.NODE_ENV === 'development';
   if (isDevelopment) {
-    // devControls.style.display = 'block';
+    devControls.style.display = 'block';
     const exportBtn = document.getElementById('exportTestDataBtn');
     if (exportBtn) {
       exportBtn.style.display = 'inline-block';

@@ -2,8 +2,9 @@ import { collectTokens } from '../services';
 import { textAlignProcessors } from '../processors/text-align.processor';
 import { ProcessedValue } from '../types';
 import { transformToScss } from '../transformers';
-import testData from './fixtures/figma-test-data_paragraph.json';
 import { createTestVariableResolver } from '../utils/test.utils';
+import testData from './fixtures/figma-test-data_paragraph.json';
+import testDataAlignment from './fixtures/figma-test-data-alignment.json';
 
 describe('Text Processors', () => {
   describe('Text Align Processor', () => {
@@ -105,6 +106,41 @@ describe('Text Processors', () => {
       const { result } = transformToScss(tokens);
   
       expect(result).toMatchSnapshot('text-alignment');
+    });
+    
+    it('should process paragraph alignment correctly', async () => {    
+      const pageNode = {
+        ...testDataAlignment,
+        type: 'PAGE',
+        name: 'paragraph-alignment',
+        parent: null,
+        width: 100,
+        height: 100
+      };
+  
+      const children = testDataAlignment.children.map((child: BaseNode) => ({
+        ...child,
+        parent: pageNode,
+        width: 100,
+        height: 100
+      }));
+      pageNode.children = children;
+  
+      // Create variable resolver with complete test data
+      const getVariableByIdAsync = await createTestVariableResolver(testDataAlignment);
+  
+      // Mock Figma API
+      global.figma = {
+        currentPage: pageNode,
+        variables: {
+          getVariableByIdAsync
+        }
+      };
+  
+      const tokens = await collectTokens();    
+      const { result } = transformToScss(tokens);
+  
+      expect(result).toMatchSnapshot('paragraph-alignment');
     });
   });
 }); 

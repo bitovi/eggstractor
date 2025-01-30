@@ -170,5 +170,61 @@ export const fontProcessors: StyleProcessor[] = [
       }
       return null;
     }
-  }
+  },
+  {
+    property: "display",
+    bindingKey: undefined,
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (node?.type === "TEXT" && 'textAlignVertical' in node) {
+        return { value: "flex", rawValue: "flex" };
+      }
+      return null;
+    }
+  },
+  {
+    property: "flex-direction",
+    bindingKey: undefined,
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (node?.type === "TEXT" && 'textAlignVertical' in node) {
+        return { value: "column", rawValue: "column" };
+      }
+      return null;
+    }
+  },
+  {
+    property: "justify-content",
+    bindingKey: undefined,
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (node?.type === "TEXT" && 'textAlignVertical' in node) {
+        const alignMap = {
+          TOP: "flex-start",
+          CENTER: "center",
+          BOTTOM: "flex-end"
+        };
+        const value = alignMap[node.textAlignVertical];
+        return { value, rawValue: value };
+      }
+      return null;
+    }
+  },
+  {
+    property: "width",
+    bindingKey: undefined,
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (node?.type === "TEXT" && 'width' in node) {
+        return { value: `${node.width}px`, rawValue: `${node.width}px` };
+      }
+      return null;
+    }
+  },
+  {
+    property: "height",
+    bindingKey: undefined,
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (node?.type === "TEXT" && 'height' in node) {
+        return { value: `${node.height}px`, rawValue: `${node.height}px` };
+      }
+      return null;
+    }
+  },
 ]; 

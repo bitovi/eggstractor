@@ -1,5 +1,77 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Text Processors Text Align Processor should process paragraph alignment correctly: paragraph-alignment 1`] = `
+"// Generated SCSS Variables
+$text-primary: #a3adad
+$size-16: 16px
+
+// Generated SCSS Mixins
+@mixin frame--top
+ padding: 0px
+ background: #ffffff
+
+@mixin autolayout--top
+ display: flex
+ flex-direction: column
+ gap: 10px
+ padding: 0px 30px
+ background: #ffffff
+ justify-content: center
+
+@mixin paragraph-alignment-top
+ color: $text-primary
+ font-family: Inter
+ font-size: $size-16
+ font-weight: 400
+ line-height: normal
+ width: 100px
+ height: 100px
+
+@mixin frame--middle
+ padding: 0px
+ background: #ffffff
+
+@mixin autolayout--middle
+ display: flex
+ flex-direction: column
+ gap: 10px
+ padding: 0px 30px
+ background: #ffffff
+ justify-content: center
+
+@mixin paragraph-alignment-center
+ color: $text-primary
+ font-family: Inter
+ font-size: $size-16
+ font-weight: 400
+ line-height: normal
+ width: 100px
+ height: 100px
+
+@mixin frame--bottom
+ padding: 0px
+ background: #ffffff
+
+@mixin autolayout--bottom
+ display: flex
+ flex-direction: column
+ gap: 10px
+ padding: 0px 30px
+ background: #ffffff
+ justify-content: center
+
+@mixin paragraph-alignment-bottom
+ color: $text-primary
+ font-family: Inter
+ font-size: $size-16
+ font-weight: 400
+ line-height: normal
+ width: 100px
+ height: 100px
+
+"
+`;
+
 exports[`Text Processors Text Align Processor should process text alignment correctly: text-alignment 1`] = `
 "// Generated SCSS Variables
 $text-primary: #bfc5c6
@@ -12,6 +84,8 @@ $size-16: 16px
  font-size: 16px
  font-weight: 400
  line-height: normal
+ width: 100px
+ height: 100px
 
 @mixin paragraph-justification-right
  color: $text-primary
@@ -19,6 +93,8 @@ $size-16: 16px
  font-size: 16px
  font-weight: 400
  line-height: normal
+ width: 100px
+ height: 100px
 
 @mixin paragraph-justification-center
  color: $text-primary
@@ -26,6 +102,8 @@ $size-16: 16px
  font-size: $size-16
  font-weight: 400
  line-height: normal
+ width: 100px
+ height: 100px
 
 @mixin paragraph-justification-left
  color: $text-primary
@@ -33,6 +111,8 @@ $size-16: 16px
  font-size: $size-16
  font-weight: 400
  line-height: normal
+ width: 100px
+ height: 100px
 
 "
 `;

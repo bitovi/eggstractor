@@ -1,14 +1,15 @@
-import { StyleProcessor, ProcessedValue, VariableToken } from '../types';
+import { StyleProcessor, ProcessedValue } from '../types';
 
 export const layoutProcessors: StyleProcessor[] = [
   {
     property: "display",
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && 'layoutMode' in node && node.layoutMode !== "NONE") {
-        const value = node.layoutAlign !== "STRETCH" ? "inline-flex" : "flex";
+      if (node && ('layoutMode' in node) && node.layoutMode !== "NONE") {
+        const value = "flex";
         return { value, rawValue: value };
       }
+
       return null;
     }
   },
