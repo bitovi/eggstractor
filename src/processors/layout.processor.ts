@@ -1,14 +1,15 @@
-import { StyleProcessor, ProcessedValue, VariableToken } from '../types';
+import { StyleProcessor, ProcessedValue } from '../types';
 
 export const layoutProcessors: StyleProcessor[] = [
   {
     property: "display",
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && 'layoutMode' in node && node.layoutMode !== "NONE") {
-        const value = node.layoutAlign !== "STRETCH" ? "inline-flex" : "flex";
+      if (node && ('layoutMode' in node) && node.layoutMode !== "NONE") {
+        const value = "flex";
         return { value, rawValue: value };
       }
+
       return null;
     }
   },
@@ -24,7 +25,7 @@ export const layoutProcessors: StyleProcessor[] = [
     }
   },
   {
-    property: "align-items",
+    property: "justify-content",
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
       if (node && 'layoutMode' in node && node.layoutMode !== "NONE" && 
@@ -35,6 +36,24 @@ export const layoutProcessors: StyleProcessor[] = [
           SPACE_BETWEEN: "space-between"
         };
         const value = alignMap[node.primaryAxisAlignItems] || "flex-start";
+        return { value, rawValue: value };
+      }
+      return null;
+    }
+  },
+  {
+    property: "align-items",
+    bindingKey: undefined,
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (node && 'layoutMode' in node && node.layoutMode !== "NONE" && 
+          'counterAxisAlignItems' in node) {
+        const alignMap = {
+          MIN: "flex-start",
+          CENTER: "center",
+          MAX: "flex-end",
+          BASELINE: "baseline"
+        };
+        const value = alignMap[node.counterAxisAlignItems];
         return { value, rawValue: value };
       }
       return null;
