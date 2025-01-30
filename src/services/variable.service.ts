@@ -1,7 +1,7 @@
 import { VariableToken } from '../types';
 import { rgbaToString } from '../utils/color.utils';
 
-export async function getVariableFallback(variable: Variable | null, propertyName: string = ''): Promise<string> {
+async function getVariableFallback(variable: Variable | null, propertyName: string = ''): Promise<string> {
   if (!variable) return '';
 
   const modeId = Object.keys(variable.valuesByMode)[0];

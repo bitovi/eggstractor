@@ -43,7 +43,7 @@ window.onload = () => {
   }
 
   generateBtn.onclick = () => {
-    const format = formatSelect.value;
+    const format = isDevelopment ? formatSelect.value : 'scss';
     parent.postMessage({
       pluginMessage: {
         type: 'generate-styles',
@@ -118,7 +118,7 @@ window.onload = () => {
           <details open>
             <summary>⚠️ Warnings (${msg.warnings.length}) ⚠️</summary>
             <ul>
-              ${msg.warnings.map(warning => {
+              ${msg.warnings.map((warning: string)  => {
             const nodeMatch = warning.match(/\(node: ([^)]+)\)/);
             const nodeId = nodeMatch?.[1];
             return nodeId
