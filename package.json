@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development --watch",
+    "start:server": "lite-server --baseDir=./visualizer",
     "lint": "eslint --ext .ts,.tsx --ignore-pattern node_modules .",
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
     "watch": "npm run build -- --watch",
@@ -33,7 +34,8 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.2",
     "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "lite-server": "^2.6.1"
   },
   "eslintConfig": {
     "extends": [

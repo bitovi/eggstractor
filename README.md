@@ -29,3 +29,9 @@ You will need to use Figma Desktop for this
 2. In Figma, go to Plugins → Development → Import plugin from manifest…
 3. Select the manifest.json file.
 4. The plugin will now be available under Plugins → Development.
+
+### Local visualizer
+This is to view the generated CSS in a browser.
+
+1. Run `npm run start:server` to start the local server
+2. Open `http://localhost:3000` in your browser
