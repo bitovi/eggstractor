@@ -6,6 +6,7 @@ export interface VariableBindings {
   strokeWeight?: VariableAlias | VariableAlias[];
   fontSize?: VariableAlias | VariableAlias[];
   fontWeight?: VariableAlias | VariableAlias[];
+  fontStyle?: VariableAlias | VariableAlias[];
   lineHeight?: VariableAlias | VariableAlias[];
   letterSpacing?: VariableAlias | VariableAlias[];
   fontFamily?: VariableAlias | VariableAlias[];

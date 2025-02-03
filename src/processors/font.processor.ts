@@ -123,6 +123,25 @@ export const fontProcessors: StyleProcessor[] = [
     }
   },
   {
+    property: "font-style",
+    bindingKey: "fontStyle",
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const styleVariable = variables.find(v => v.property === 'fontStyle');
+      if (styleVariable) {
+        return {
+          value: styleVariable.value,
+          rawValue: styleVariable.rawValue
+        };
+      }
+      if (node?.type === "TEXT" && node.fontName && typeof node.fontName === 'object') {
+        const value = node.fontName.style;
+        return { value, rawValue: value };
+      }
+
+      return null;
+    }
+  },
+  {
     property: "line-height",
     bindingKey: "lineHeight",
     process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {

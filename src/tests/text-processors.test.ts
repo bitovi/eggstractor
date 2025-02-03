@@ -5,6 +5,7 @@ import { transformToScss } from '../transformers';
 import { createTestVariableResolver } from '../utils/test.utils';
 import testData from './fixtures/figma-test-data_paragraph.json';
 import testDataAlignment from './fixtures/figma-test-data-alignment.json';
+import testDataFontStyle from './fixtures/figma-test-data_font-style.json';
 
 describe('Text Processors', () => {
   describe('Text Align Processor', () => {
@@ -141,6 +142,41 @@ describe('Text Processors', () => {
       const { result } = transformToScss(tokens);
   
       expect(result).toMatchSnapshot('paragraph-alignment');
+    });
+
+    it('should process font style correctly', async () => {    
+      const pageNode = {
+        ...testDataFontStyle,
+        type: 'PAGE',
+        name: 'font-style',
+        parent: null,
+        width: 100,
+        height: 100
+      };
+
+      const children = testDataFontStyle.children.map((child: BaseNode) => ({
+        ...child,
+        parent: pageNode,
+        width: 100,
+        height: 100
+      }));
+      pageNode.children = children;
+  
+      // Create variable resolver with complete test data
+      const getVariableByIdAsync = await createTestVariableResolver(testDataFontStyle);
+  
+      // Mock Figma API
+      global.figma = {
+        currentPage: pageNode,
+        variables: {
+          getVariableByIdAsync
+        }
+      };
+  
+      const tokens = await collectTokens();    
+      const { result } = transformToScss(tokens);
+  
+      expect(result).toMatchSnapshot('font-style');
     });
   });
 }); 
