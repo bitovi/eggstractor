@@ -3,6 +3,8 @@ import { StyleProcessor, VariableToken, ProcessedValue } from '../types';
 interface NodeWithLayout {
   minWidth?: number;
   maxWidth?: number;
+  minHeight?: number;
+  maxHeight?: number;
   layoutAlign?: string;
   layoutMode?: "HORIZONTAL" | "VERTICAL" | "NONE";
   primaryAxisSizingMode?: "FIXED" | "AUTO";
@@ -136,6 +138,52 @@ export const layoutProcessors: StyleProcessor[] = [
         return {
           value: `${node.maxWidth}px`,
           rawValue: `${node.maxWidth}px`,
+          valueType: 'px'
+        };
+      }
+      return null;
+    }
+  },
+  {
+    property: "min-height",
+    bindingKey: undefined,
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const minHeightVariable = variables.find(v => v.property === 'minHeight');
+      if (minHeightVariable) {
+        return {
+          value: `${minHeightVariable.value}`,
+          rawValue: `${minHeightVariable.rawValue}`,
+          valueType: 'px'
+        };
+      }
+
+      if (node && hasLayout(node) && node.minHeight) {
+        return {
+          value: `${node.minHeight}px`,
+          rawValue: `${node.minHeight}px`,
+          valueType: 'px'
+        };
+      }
+      return null;
+    }
+  },
+  {
+    property: "max-height",
+    bindingKey: undefined,
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const maxHeightVariable = variables.find(v => v.property === 'maxHeight');
+      if (maxHeightVariable) {
+        return {
+          value: `${maxHeightVariable.value}`,
+          rawValue: `${maxHeightVariable.rawValue}`,
+          valueType: 'px'
+        };
+      }
+
+      if (node && hasLayout(node) && node.maxHeight) {
+        return {
+          value: `${node.maxHeight}px`,
+          rawValue: `${node.maxHeight}px`,
           valueType: 'px'
         };
       }
