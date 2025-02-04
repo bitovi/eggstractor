@@ -65,15 +65,17 @@ export const layoutProcessors: StyleProcessor[] = [
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
       const gapVariable = variables.find(v => v.property === 'gap');
       if (gapVariable) {
+
         return {
           value: gapVariable.value,
-          rawValue: gapVariable.rawValue
+          rawValue: gapVariable.rawValue,
+          valueType: gapVariable.valueType
         };
       }
 
       if (node && 'itemSpacing' in node && node.itemSpacing > 0) {
         const value = `${node.itemSpacing}px`;
-        return { value, rawValue: value };
+        return { value, rawValue: value, valueType: 'px' };
       }
       return null;
     }

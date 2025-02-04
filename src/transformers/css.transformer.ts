@@ -1,7 +1,7 @@
 import { StyleToken, TokenCollection, TransformerResult } from '../types';
 import { groupBy } from '../utils/index';
 import { deduplicateMessages } from '../utils/error.utils';
-
+import { rem } from '../utils/units.utils';
 export function transformToCss(tokens: TokenCollection): TransformerResult {
   let output = "/* Generated CSS */";
   
@@ -44,7 +44,8 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
     if (uniqueTokens.length > 0) {
       output += `\n.${variantPath} {\n`;
       uniqueTokens.forEach(token => {
-        output += `  ${token.property}: ${token.rawValue};\n`;
+        const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+        output += `  ${token.property}: ${value};\n`;
       });
       output += "}\n";
     }

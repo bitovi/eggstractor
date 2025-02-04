@@ -38,6 +38,8 @@ async function getVariableFallback(variable: Variable | null, propertyName: stri
 export async function collectBoundVariable(varId: string, property: string, path: string[], node: SceneNode): Promise<VariableToken | null> {
   const variable = await figma.variables.getVariableByIdAsync(varId);
   if (!variable) return null;
+  const rawValue = await getVariableFallback(variable, property);
+  const valueType = rawValue.includes('px') ? 'px' : null;
 
   return {
     type: 'variable',
@@ -45,7 +47,8 @@ export async function collectBoundVariable(varId: string, property: string, path
     property,
     name: variable.name,
     value: `$${variable.name}`,
-    rawValue: await getVariableFallback(variable, property),
+    rawValue: rawValue.toLowerCase(),
+    valueType: valueType,
     metadata: {
       figmaId: node.id,
       variableId: variable.id,

@@ -1,19 +1,9 @@
-export interface DesignToken {
-  name: string;
-  value: any;
-  originalValue?: any;
-  metadata?: {
-    figmaId?: string;
-    variableId?: string;
-    variableName?: string;
-  };
-}
-
 export interface BaseToken {
   type: 'variable' | 'style';
   name: string;
   property: string;
   path: string[];
+  valueType?: string | null;
   metadata?: {
     figmaId?: string;
     variableId?: string;
@@ -43,6 +33,7 @@ export interface TokenCollection {
 export interface ProcessedValue {
   value: string | null;   // Value with variable references
   rawValue: string | null; // Value with actual values
+  valueType?: string | null;
   warnings?: string[];
   errors?: string[];
 }
