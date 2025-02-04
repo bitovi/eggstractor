@@ -12,6 +12,7 @@ interface NodeWithLayout {
   absoluteBoundingBox?: { width: number; height: number };
   textAutoResize?: "NONE" | "WIDTH" | "HEIGHT" | "WIDTH_AND_HEIGHT";
   type?: string;
+  layoutWrap?: "WRAP" | "NO_WRAP";
 }
 
 function hasLayout(node: SceneNode): node is SceneNode & NodeWithLayout {
@@ -253,6 +254,17 @@ export const layoutProcessors: StyleProcessor[] = [
         }
       }
 
+      return null;
+    }
+  },
+  {
+    property: "flex-wrap",
+    bindingKey: undefined,
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+      if (node && 'layoutMode' in node && node.layoutMode !== "NONE" && 'layoutWrap' in node) {
+        const value = node.layoutWrap === "WRAP" ? "wrap" : "";
+        return { value, rawValue: value };
+      }
       return null;
     }
   }
