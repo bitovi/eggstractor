@@ -1,7 +1,7 @@
 import { TokenCollection, StyleToken, TransformerResult } from '../types';
 import { sanitizeName, groupBy } from '../utils/index';
 import { deduplicateMessages } from '../utils/error.utils';
-
+import { rem } from '../utils/units.utils';
 export function transformToScss(tokens: TokenCollection): TransformerResult {
   let output = "";
   
@@ -14,7 +14,8 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   const colorVariables = new Map<string, string>();
   tokens.tokens.forEach(token => {
     if (token.type === 'variable') {
-      colorVariables.set(sanitizeName(token.name), token.rawValue);
+      const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+      colorVariables.set(sanitizeName(token.name), value);
     }
   });
 
@@ -80,10 +81,13 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
             output += ` ${token.property}: var(--${gradientName}, #{$${gradientName}})\n`;
           } else {
             // Use the raw value directly if no variables are involved
-            output += ` ${token.property}: ${token.rawValue}\n`;
+            const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+            output += ` ${token.property}: ${value}\n`;
           }
         } else {
-          output += ` ${token.property}: ${token.value}\n`;
+          const isVariable = token.value !== token.rawValue;
+          const value = isVariable ? token.value : token.valueType === 'px' ? rem(token.rawValue!) : token.value;
+          output += ` ${token.property}: ${value}\n`;
         }
       });
       output += "\n";

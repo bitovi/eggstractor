@@ -8,9 +8,16 @@ interface NodeWithFont {
   lineHeight?: LineHeight | number;
   letterSpacing?: LetterSpacing | number;
 }
+interface NodeWithTextAlign {
+  textAlignHorizontal: string;
+}
 
 function hasFont(node: SceneNode): node is SceneNode & NodeWithFont {
   return 'fontSize' in node || 'fontName' in node || 'fontWeight' in node;
+}
+
+function hasTextAlign(node: SceneNode): node is SceneNode & NodeWithTextAlign {
+  return 'textAlignHorizontal' in node;
 }
 
 export const fontProcessors: StyleProcessor[] = [
@@ -65,13 +72,14 @@ export const fontProcessors: StyleProcessor[] = [
       if (sizeVariable) {
         return {
           value: sizeVariable.value,
-          rawValue: sizeVariable.rawValue
+          rawValue: sizeVariable.rawValue,
+          valueType: sizeVariable.valueType
         };
       }
 
       if (node?.type === "TEXT") {
         const value = `${String(node.fontSize)}px`;
-        return { value, rawValue: value };
+        return { value, rawValue: value, valueType: 'px' };
       }
       return null;
     }
@@ -123,6 +131,25 @@ export const fontProcessors: StyleProcessor[] = [
     }
   },
   {
+    property: "font-style",
+    bindingKey: "fontStyle",
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      const styleVariable = variables.find(v => v.property === 'fontStyle');
+      if (styleVariable) {
+        return {
+          value: styleVariable.value.toLowerCase(),
+          rawValue: styleVariable.rawValue.toLowerCase(),
+        };
+      }
+      if (node?.type === "TEXT" && node.fontName && typeof node.fontName === 'object') {
+        const value = node.fontName.style.toLowerCase() === 'italic' ? 'italic' : 'normal';
+        return { value, rawValue: value };
+      }
+
+      return null;
+    }
+  },
+  {
     property: "line-height",
     bindingKey: "lineHeight",
     process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
@@ -157,15 +184,17 @@ export const fontProcessors: StyleProcessor[] = [
       if (spacingVariable) {
         return {
           value: spacingVariable.value,
-          rawValue: spacingVariable.rawValue
+          rawValue: spacingVariable.rawValue,
+          valueType: spacingVariable.valueType
         };
       }
 
       if (node?.type === "TEXT" && 'letterSpacing' in node) {
         const letterSpacing = node.letterSpacing;
         if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
-          const value = `${letterSpacing.value}${letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px'}`;
-          return { value, rawValue: value };
+          const type = letterSpacing.unit.toLowerCase() === "percent" ? '%' : 'px';
+          const value = `${letterSpacing.value}${type}`;
+          return { value, rawValue: value, valueType: type };
         }
       }
       return null;
@@ -175,7 +204,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: "display",
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node?.type === "TEXT" && 'textAlignVertical' in node) {
+      // Only apply flex if text has explicit sizing/alignment
+      if (node?.type === "TEXT" &&
+        (node.textAutoResize !== "WIDTH_AND_HEIGHT" ||
+          node.textAlignVertical !== "TOP")) {
         return { value: "flex", rawValue: "flex" };
       }
       return null;
@@ -185,7 +217,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: "flex-direction",
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node?.type === "TEXT" && 'textAlignVertical' in node) {
+      // Only apply if we're using flex display
+      if (node?.type === "TEXT" &&
+        (node.textAutoResize !== "WIDTH_AND_HEIGHT" ||
+          node.textAlignVertical !== "TOP")) {
         return { value: "column", rawValue: "column" };
       }
       return null;
@@ -195,7 +230,8 @@ export const fontProcessors: StyleProcessor[] = [
     property: "justify-content",
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node?.type === "TEXT" && 'textAlignVertical' in node) {
+      // Only apply if we're using flex display and have vertical alignment
+      if (node?.type === "TEXT" && node.textAlignVertical !== "TOP") {
         const alignMap = {
           TOP: "flex-start",
           CENTER: "center",
@@ -208,11 +244,38 @@ export const fontProcessors: StyleProcessor[] = [
     }
   },
   {
-    property: "width",
+    property: "text-align",
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node?.type === "TEXT" && 'width' in node) {
-        return { value: `${node.width}px`, rawValue: `${node.width}px` };
+      if (!node || !hasTextAlign(node)) return null;
+
+      if (node?.type === "TEXT" && node.textAlignHorizontal !== "LEFT") {
+        const alignmentMap: Record<string, string> = {
+          LEFT: 'left',
+          CENTER: 'center',
+          RIGHT: 'right',
+          JUSTIFIED: 'justify'
+        };
+
+        const alignment = alignmentMap[node.textAlignHorizontal.toUpperCase()];
+        if (!alignment) return null;
+
+        return {
+          value: alignment,
+          rawValue: alignment
+        };
+      }
+      return null;
+    }
+  },
+  {
+    property: "width",
+    bindingKey: undefined,
+    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+      // Only apply width if text doesn't auto-resize width
+      if (node?.type === "TEXT" &&
+        !["WIDTH_AND_HEIGHT", "WIDTH"].includes(node.textAutoResize)) {
+        return { value: `${node.width}px`, rawValue: `${node.width}px`, valueType: 'px' };
       }
       return null;
     }
@@ -221,8 +284,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: "height",
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node?.type === "TEXT" && 'height' in node) {
-        return { value: `${node.height}px`, rawValue: `${node.height}px` };
+      // Only apply height if text doesn't auto-resize height
+      if (node?.type === "TEXT" &&
+        !["WIDTH_AND_HEIGHT", "HEIGHT"].includes(node.textAutoResize)) {
+        return { value: `${node.height}px`, rawValue: `${node.height}px`, valueType: 'px' };
       }
       return null;
     }

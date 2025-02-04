@@ -49,7 +49,8 @@ export const spacingProcessors: StyleProcessor[] = [
         // All sides equal - use single value
         return {
           value: getValue('top'),
-          rawValue: pixelValues.top
+          rawValue: pixelValues.top,
+          valueType: 'px'
         };
       }
 
@@ -57,14 +58,16 @@ export const spacingProcessors: StyleProcessor[] = [
         // Vertical/horizontal pairs equal - use two values
         return {
           value: `${getValue('top')} ${getValue('left')}`,
-          rawValue: `${pixelValues.top} ${pixelValues.left}`
+          rawValue: `${pixelValues.top} ${pixelValues.left}`,
+          valueType: 'px'
         };
       }
 
       // All sides different - use four values
       return {
         value: `${getValue('top')} ${getValue('right')} ${getValue('bottom')} ${getValue('left')}`,
-        rawValue: `${pixelValues.top} ${pixelValues.right} ${pixelValues.bottom} ${pixelValues.left}`
+        rawValue: `${pixelValues.top} ${pixelValues.right} ${pixelValues.bottom} ${pixelValues.left}`,
+        valueType: 'px'
       };
     }
   }

@@ -1,14 +1,15 @@
 import { collectTokens } from '../services';
-import { textAlignProcessors } from '../processors/text-align.processor';
 import { ProcessedValue } from '../types';
 import { transformToScss } from '../transformers';
+import { fontProcessors } from '../processors/font.processor';
 import { createTestVariableResolver } from '../utils/test.utils';
 import testData from './fixtures/figma-test-data_paragraph.json';
 import testDataAlignment from './fixtures/figma-test-data-alignment.json';
+import testDataFontStyle from './fixtures/figma-test-data_font-style.json';
 
 describe('Text Processors', () => {
   describe('Text Align Processor', () => {
-    const processor = textAlignProcessors[0];
+    const processor = fontProcessors.filter(p => p.property === 'text-align')[0];
 
     it('returns null for non-text nodes', async () => {
       const node = {
@@ -21,17 +22,6 @@ describe('Text Processors', () => {
 
     it('processes text alignment correctly', async () => {
       const testCases = [
-        {
-          name: 'left alignment',
-          input: {
-            type: 'TEXT',
-            textAlignHorizontal: 'LEFT',
-          } as SceneNode,
-          expected: {
-            value: 'left',
-            rawValue: 'left'
-          }
-        },
         {
           name: 'center alignment',
           input: {
@@ -141,6 +131,41 @@ describe('Text Processors', () => {
       const { result } = transformToScss(tokens);
   
       expect(result).toMatchSnapshot('paragraph-alignment');
+    });
+
+    it('should process font style correctly', async () => {    
+      const pageNode = {
+        ...testDataFontStyle,
+        type: 'PAGE',
+        name: 'font-style',
+        parent: null,
+        width: 100,
+        height: 100
+      };
+
+      const children = testDataFontStyle.children.map((child: BaseNode) => ({
+        ...child,
+        parent: pageNode,
+        width: 100,
+        height: 100
+      }));
+      pageNode.children = children;
+  
+      // Create variable resolver with complete test data
+      const getVariableByIdAsync = await createTestVariableResolver(testDataFontStyle);
+  
+      // Mock Figma API
+      global.figma = {
+        currentPage: pageNode,
+        variables: {
+          getVariableByIdAsync
+        }
+      };
+  
+      const tokens = await collectTokens();    
+      const { result } = transformToScss(tokens);
+  
+      expect(result).toMatchSnapshot('font-style');
     });
   });
 }); 
