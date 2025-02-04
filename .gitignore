@@ -32,4 +32,6 @@ logs/
 # Temporary files
 *.tmp
 *.temp
-.cache/ 
+.cache/
+
+visualizer/styles.css

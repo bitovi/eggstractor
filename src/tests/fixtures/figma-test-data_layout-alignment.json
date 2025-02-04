@@ -1,0 +1,2645 @@
+{
+  "id": "213:214",
+  "name": "alignment",
+  "type": "PAGE",
+  "children": [
+    {
+      "id": "213:247",
+      "name": "alignment-bottom-left",
+      "type": "FRAME",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "cornerRadius": 0,
+      "layoutMode": "HORIZONTAL",
+      "layoutAlign": "INHERIT",
+      "primaryAxisAlignItems": "MIN",
+      "itemSpacing": 20,
+      "paddingTop": 0,
+      "paddingRight": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "213:248",
+          "name": "object-1",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:249",
+          "name": "object-2",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:250",
+          "name": "object-3",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "variables": {
+        "VariableID:5:20": {
+          "id": "VariableID:5:20",
+          "name": "brand-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "213:251",
+      "name": "alignment-bottom-center",
+      "type": "FRAME",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "cornerRadius": 0,
+      "layoutMode": "HORIZONTAL",
+      "layoutAlign": "INHERIT",
+      "primaryAxisAlignItems": "CENTER",
+      "itemSpacing": 20,
+      "paddingTop": 0,
+      "paddingRight": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "213:252",
+          "name": "object-1",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:253",
+          "name": "object-2",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:254",
+          "name": "object-3",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "variables": {
+        "VariableID:5:20": {
+          "id": "VariableID:5:20",
+          "name": "brand-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "213:255",
+      "name": "alignment-bottom-right",
+      "type": "FRAME",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "cornerRadius": 0,
+      "layoutMode": "HORIZONTAL",
+      "layoutAlign": "INHERIT",
+      "primaryAxisAlignItems": "MAX",
+      "itemSpacing": 20,
+      "paddingTop": 0,
+      "paddingRight": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "213:256",
+          "name": "object-1",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:257",
+          "name": "object-2",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:258",
+          "name": "object-3",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "variables": {
+        "VariableID:5:20": {
+          "id": "VariableID:5:20",
+          "name": "brand-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "213:235",
+      "name": "alignment-center-left",
+      "type": "FRAME",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "cornerRadius": 0,
+      "layoutMode": "HORIZONTAL",
+      "layoutAlign": "INHERIT",
+      "primaryAxisAlignItems": "MIN",
+      "itemSpacing": 20,
+      "paddingTop": 0,
+      "paddingRight": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "213:236",
+          "name": "object-1",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:237",
+          "name": "object-2",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:238",
+          "name": "object-3",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "variables": {
+        "VariableID:5:20": {
+          "id": "VariableID:5:20",
+          "name": "brand-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "213:239",
+      "name": "alignment-center-center",
+      "type": "FRAME",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "cornerRadius": 0,
+      "layoutMode": "HORIZONTAL",
+      "layoutAlign": "INHERIT",
+      "primaryAxisAlignItems": "CENTER",
+      "itemSpacing": 20,
+      "paddingTop": 0,
+      "paddingRight": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "213:240",
+          "name": "object-1",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:241",
+          "name": "object-2",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:242",
+          "name": "object-3",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "variables": {
+        "VariableID:5:20": {
+          "id": "VariableID:5:20",
+          "name": "brand-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "213:243",
+      "name": "alignment-center-right",
+      "type": "FRAME",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "cornerRadius": 0,
+      "layoutMode": "HORIZONTAL",
+      "layoutAlign": "INHERIT",
+      "primaryAxisAlignItems": "MAX",
+      "itemSpacing": 20,
+      "paddingTop": 0,
+      "paddingRight": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "213:244",
+          "name": "object-1",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:245",
+          "name": "object-2",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:246",
+          "name": "object-3",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "variables": {
+        "VariableID:5:20": {
+          "id": "VariableID:5:20",
+          "name": "brand-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "213:223",
+      "name": "alignment-top-left",
+      "type": "FRAME",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "cornerRadius": 0,
+      "layoutMode": "HORIZONTAL",
+      "layoutAlign": "INHERIT",
+      "primaryAxisAlignItems": "MIN",
+      "itemSpacing": 20,
+      "paddingTop": 0,
+      "paddingRight": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "213:224",
+          "name": "object-1",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:225",
+          "name": "object-2",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:226",
+          "name": "object-3",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "variables": {
+        "VariableID:5:20": {
+          "id": "VariableID:5:20",
+          "name": "brand-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "213:227",
+      "name": "alignment-top-center",
+      "type": "FRAME",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "cornerRadius": 0,
+      "layoutMode": "HORIZONTAL",
+      "layoutAlign": "INHERIT",
+      "primaryAxisAlignItems": "CENTER",
+      "itemSpacing": 20,
+      "paddingTop": 0,
+      "paddingRight": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "213:228",
+          "name": "object-1",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:229",
+          "name": "object-2",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:230",
+          "name": "object-3",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "variables": {
+        "VariableID:5:20": {
+          "id": "VariableID:5:20",
+          "name": "brand-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "213:231",
+      "name": "alignment-top-right",
+      "type": "FRAME",
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "cornerRadius": 0,
+      "layoutMode": "HORIZONTAL",
+      "layoutAlign": "INHERIT",
+      "primaryAxisAlignItems": "MAX",
+      "itemSpacing": 20,
+      "paddingTop": 0,
+      "paddingRight": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "213:232",
+          "name": "object-1",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:233",
+          "name": "object-2",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "213:234",
+          "name": "object-3",
+          "type": "RECTANGLE",
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0,
+                "g": 0.27450981736183167,
+                "b": 0.29019609093666077
+              },
+              "boundVariables": {
+                "color": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:20"
+                }
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1,
+          "cornerRadius": 0,
+          "layoutAlign": "INHERIT",
+          "boundVariables": {
+            "fills": [
+              {
+                "type": "VARIABLE_ALIAS",
+                "id": "VariableID:5:20"
+              }
+            ]
+          },
+          "variables": {
+            "VariableID:5:20": {
+              "id": "VariableID:5:20",
+              "name": "brand-primary",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:17"
+                }
+              }
+            },
+            "VariableID:5:17": {
+              "id": "VariableID:5:17",
+              "name": "teal-dark",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:14"
+                }
+              }
+            },
+            "VariableID:5:14": {
+              "id": "VariableID:5:14",
+              "name": "teal-800",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "5:0": {
+                  "r": 0,
+                  "g": 0.27450981736183167,
+                  "b": 0.29019609093666077,
+                  "a": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "variables": {
+        "VariableID:5:20": {
+          "id": "VariableID:5:20",
+          "name": "brand-primary",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:17"
+            }
+          }
+        },
+        "VariableID:5:17": {
+          "id": "VariableID:5:17",
+          "name": "teal-dark",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5:14"
+            }
+          }
+        },
+        "VariableID:5:14": {
+          "id": "VariableID:5:14",
+          "name": "teal-800",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "5:0": {
+              "r": 0,
+              "g": 0.27450981736183167,
+              "b": 0.29019609093666077,
+              "a": 1
+            }
+          }
+        }
+      }
+    }
+  ],
+  "variables": {
+    "VariableID:5:20": {
+      "id": "VariableID:5:20",
+      "name": "brand-primary",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "5:2": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:5:17"
+        }
+      }
+    },
+    "VariableID:5:17": {
+      "id": "VariableID:5:17",
+      "name": "teal-dark",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "5:1": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:5:14"
+        }
+      }
+    },
+    "VariableID:5:14": {
+      "id": "VariableID:5:14",
+      "name": "teal-800",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "5:0": {
+          "r": 0,
+          "g": 0.27450981736183167,
+          "b": 0.29019609093666077,
+          "a": 1
+        }
+      }
+    }
+  }
+}
