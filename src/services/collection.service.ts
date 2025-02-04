@@ -23,7 +23,6 @@ export async function collectTokens(): Promise<TokenCollection> {
       }
     }
   }
-
   await processNode(figma.currentPage);
   return collection;
 }

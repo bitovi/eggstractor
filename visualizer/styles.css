@@ -1,114 +1,25 @@
 /* Generated CSS */
-.min-width-variable {
+.nested {
   background: #ffffff;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.nested_auto-layout {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
-  gap: 1.25rem;
-  min-width: 3rem;
-  width: 7.5rem;
-  height: 7.5rem;
+  gap: 0.5rem;
 }
 
-.min-width-variable_object-1 {
-  background: #00464a;
-  min-width: 1rem;
-}
-
-.max-width-variable {
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.25rem;
-  max-width: 3rem;
-  width: 3rem;
-  height: 7.5rem;
-}
-
-.max-width-variable_object-1 {
-  background: #00464a;
-  max-width: 1rem;
-}
-
-.width-hug {
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.25rem;
-  min-width: 5rem;
-  max-width: 25rem;
-  height: 7.5rem;
-}
-
-.width-hug_object-1 {
+.nested_auto-layout_padding-1 {
   background: #00464a;
 }
 
-.width-fill-container {
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.25rem;
-  width: 7.5rem;
-  height: 7.5rem;
-}
-
-.width-fill-container_object-1 {
+.nested_auto-layout_padding-2 {
   background: #00464a;
 }
 
-.width-fixed-width {
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.25rem;
-  width: 7.5rem;
-  height: 7.5rem;
-}
-
-.width-fixed-width_object-1 {
+.nested_auto-layout_padding-3 {
   background: #00464a;
-}
-
-.min-width-custom {
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.25rem;
-  min-width: 6.25rem;
-  width: 7.5rem;
-  height: 7.5rem;
-}
-
-.min-width-custom_object-1 {
-  background: #00464a;
-  min-width: 5.625rem;
-}
-
-.max-width-custom {
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.25rem;
-  max-width: 8.75rem;
-  width: 7.5rem;
-  height: 7.5rem;
-}
-
-.max-width-custom_object-1 {
-  background: #00464a;
-  max-width: 6.875rem;
 }

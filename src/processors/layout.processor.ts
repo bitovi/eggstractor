@@ -84,7 +84,6 @@ export const layoutProcessors: StyleProcessor[] = [
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
       const gapVariable = variables.find(v => v.property === 'gap');
       if (gapVariable) {
-
         return {
           value: gapVariable.value,
           rawValue: gapVariable.rawValue,
@@ -101,7 +100,7 @@ export const layoutProcessors: StyleProcessor[] = [
   },
   {
     property: "min-width",
-    bindingKey: undefined,
+    bindingKey: "minWidth",
     process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
       const minWidthVariable = variables.find(v => v.property === 'minWidth');
       if (minWidthVariable) {
@@ -124,7 +123,7 @@ export const layoutProcessors: StyleProcessor[] = [
   },
   {
     property: "max-width",
-    bindingKey: undefined,
+    bindingKey: "maxWidth",
     process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
       const maxWidthVariable = variables.find(v => v.property === 'maxWidth');
       if (maxWidthVariable) {
@@ -147,7 +146,7 @@ export const layoutProcessors: StyleProcessor[] = [
   },
   {
     property: "min-height",
-    bindingKey: undefined,
+    bindingKey: "minHeight",
     process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
       const minHeightVariable = variables.find(v => v.property === 'minHeight');
       if (minHeightVariable) {
@@ -170,7 +169,7 @@ export const layoutProcessors: StyleProcessor[] = [
   },
   {
     property: "max-height",
-    bindingKey: undefined,
+    bindingKey: "maxHeight",
     process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
       const maxHeightVariable = variables.find(v => v.property === 'maxHeight');
       if (maxHeightVariable) {

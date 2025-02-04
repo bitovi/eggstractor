@@ -17,6 +17,10 @@ export interface VariableBindings {
   paddingRight?: VariableAlias | VariableAlias[];
   paddingBottom?: VariableAlias | VariableAlias[];
   paddingLeft?: VariableAlias | VariableAlias[];
+  minWidth?: VariableAlias | VariableAlias[];
+  maxWidth?: VariableAlias | VariableAlias[];
+  minHeight?: VariableAlias | VariableAlias[];
+  maxHeight?: VariableAlias | VariableAlias[];
 }
 
 export interface StyleProcessor {
