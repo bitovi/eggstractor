@@ -1,12 +1,44 @@
 /* Generated CSS */
-.position-inside-custom {
-  box-shadow: inset 0 0.25rem 0 0 #687879, inset -0.25rem 0 0 0 #687879, inset 0 -0.25rem 0 0 #687879, inset 0.25rem 0 0 0 #687879;
+.border-center-solid-custom-topleft {
+  border-top: 0.125rem solid #869597;
+  border-left: 0.125rem solid #869597;
 }
 
-.position-center-custom {
+.border-center-solid-custom-top {
+  border: 0.125rem solid #869597;
+}
+
+.border-center-solid-variable-topleft {
+  border-top: 0.25rem solid #687879;
+  border-left: 0.25rem solid #687879;
+}
+
+.border-center-solid-variable-top {
   border: 0.25rem solid #687879;
 }
 
-.position-outside-custom {
-  outline: 0.25rem solid #687879;
+.border-center-solid-custom-left {
+  border-right: 0.5rem solid #869597;
+  border-left: 0.125rem solid #869597;
+}
+
+.border-center-solid-variable-left {
+  border-right: 1rem solid #687879;
+  border-left: 0.25rem solid #687879;
+}
+
+.border-center-solid-custom-right {
+  border-right: 0.125rem solid #869597;
+}
+
+.border-center-solid-variable-right {
+  border-right: 0.25rem solid #687879;
+}
+
+.border-center-solid-custom-bottom {
+  border-bottom: 0.125rem solid #869597;
+}
+
+.border-center-solid-variable-bottom {
+  border-bottom: 0.25rem solid #687879;
 }

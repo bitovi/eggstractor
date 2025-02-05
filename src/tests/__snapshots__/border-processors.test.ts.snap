@@ -18,6 +18,27 @@ $border-primary: #687879
 "
 `;
 
+exports[`Border Processors should process border shape correctly: border-shape 1`] = `
+"// Generated SCSS Variables
+$border-size-primary: 0.25rem
+$border-primary: #687879
+
+// Generated SCSS Mixins
+@mixin shape-rectangle
+ box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset -$border-size-primary 0 0 0 $border-primary, inset 0 -$border-size-primary 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary
+
+@mixin shape-rounded-rectangle
+ box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset -$border-size-primary 0 0 0 $border-primary, inset 0 -$border-size-primary 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary
+ border-radius: 1.25rem
+
+@mixin shape-ellipse
+ border: $border-size-primary solid $border-primary
+ box-shadow: inset 0 0.25rem 0 0 $border-primary, inset -0.25rem 0 0 0 $border-primary, inset 0 -0.25rem 0 0 $border-primary, inset 0.25rem 0 0 0 $border-primary
+ border-radius: 50%
+
+"
+`;
+
 exports[`Border Processors should process border sides correctly: border-sides 1`] = `
 "// Generated SCSS Variables
 $border-size-primary: 0.25rem

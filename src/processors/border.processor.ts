@@ -30,25 +30,33 @@ export const borderProcessors: StyleProcessor[] = [
     property: "border",
     bindingKey: "strokes",
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && ('strokeAlign' in node && node.strokeAlign !== 'CENTER' || !('strokeAlign' in node))) {
+      if (!node) return null;
+
+      // For non-rectangular shapes, we don't care about strokeAlign
+      const isRectangular = node.type === 'RECTANGLE' || node.type === 'COMPONENT' || node.type === 'INSTANCE';
+      if (isRectangular && ('strokeAlign' in node && node.strokeAlign !== 'CENTER' || !('strokeAlign' in node))) {
         return null;
       }
 
       const weights = getBorderWeights(node);
-      if (!shouldUseShorthand(weights)) {
+      if (!shouldUseShorthand(node, weights)) {
         return null;
       }
 
       const color = getBorderColor(node, variables);
       if (!color) return null;
 
-      const width = getBorderWidth('strokeTopWeight', weights.top, variables);
+      // For lines, vectors, and ellipses, use strokeWeight
+      const width = node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE'
+        ? getBorderWidth('strokeWeight', 'strokeWeight' in node ? Number(node.strokeWeight) : 0, variables)
+        : getBorderWidth('strokeTopWeight', weights.top, variables);
+
       const type = node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
 
       const value = `${width.value} ${type} ${color.value}`;
       const rawValue = `${width.rawValue} ${type} ${color.rawValue}`;
-      
-      return { 
+
+      return {
         value,
         rawValue,
         valueType: "px",
@@ -58,7 +66,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: "border-top",
     bindingKey: "strokes",
-    process: async (variables, node?: SceneNode, processedProperties?: Set<string>) => 
+    process: async (variables, node?: SceneNode, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'top', propertyKey: 'strokeTopWeight' },
         variables,
@@ -69,7 +77,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: "border-right",
     bindingKey: "strokes",
-    process: async (variables, node?: SceneNode, processedProperties?: Set<string>) => 
+    process: async (variables, node?: SceneNode, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'right', propertyKey: 'strokeRightWeight' },
         variables,
@@ -80,7 +88,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: "border-bottom",
     bindingKey: "strokes",
-    process: async (variables, node?: SceneNode, processedProperties?: Set<string>) => 
+    process: async (variables, node?: SceneNode, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'bottom', propertyKey: 'strokeBottomWeight' },
         variables,
@@ -91,7 +99,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: "border-left",
     bindingKey: "strokes",
-    process: async (variables, node?: SceneNode, processedProperties?: Set<string>) => 
+    process: async (variables, node?: SceneNode, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'left', propertyKey: 'strokeLeftWeight' },
         variables,
@@ -115,13 +123,13 @@ export const borderProcessors: StyleProcessor[] = [
       const color = getBorderColor(node, variables);
       if (!color) return null;
 
-      const width = getBorderWidth('strokeLeftWeight', Object.values(weights).find(w => w > 0), variables);
+      const width = getBorderWidth('strokeLeftWeight', Object.values(weights).find(w => w > 0) || 0, variables);
       const type = node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
 
       const value = `${width.value} ${type} ${color.value}`;
       const rawValue = `${width.rawValue} ${type} ${color.rawValue}`;
-      
-      return { 
+
+      return {
         value,
         rawValue,
         valueType: "px",
@@ -172,8 +180,8 @@ export const borderProcessors: StyleProcessor[] = [
 
       const value = shadows.join(', ');
       const rawValue = rawShadows.join(', ');
-      
-      return { 
+
+      return {
         value,
         rawValue,
         valueType: "px",
@@ -192,6 +200,24 @@ export const borderProcessors: StyleProcessor[] = [
         };
       }
 
+      // Handle ELLIPSE nodes
+      if (node?.type === 'ELLIPSE') {
+        const EPSILON = 0.00001;
+        if (
+          !('arcData' in node) ||
+          (
+            Math.abs(node.arcData.startingAngle - 0) < EPSILON &&
+            Math.abs(node.arcData.endingAngle - (2 * Math.PI)) < EPSILON &&
+            node.arcData.innerRadius === 0
+          )
+        ) {
+          return { value: '50%', rawValue: '50%' };
+        }
+        // For partial circles or donuts, don't apply border-radius
+        return null;
+      }
+
+      // Handle other nodes with cornerRadius
       if (node && 'cornerRadius' in node && node.cornerRadius) {
         const value = `${String(node.cornerRadius)}px`;
         return { value, rawValue: value };
@@ -199,20 +225,36 @@ export const borderProcessors: StyleProcessor[] = [
       return null;
     }
   },
-]; 
+];
 
 // Utility functions for border processing
-const getBorderWeights = (node?: SceneNode): BorderWeights => ({
-  top: node && 'strokeTopWeight' in node ? node.strokeTopWeight : 0,
-  right: node && 'strokeRightWeight' in node ? node.strokeRightWeight : 0,
-  bottom: node && 'strokeBottomWeight' in node ? node.strokeBottomWeight : 0,
-  left: node && 'strokeLeftWeight' in node ? node.strokeLeftWeight : 0
-});
+const getBorderWeights = (node?: SceneNode): BorderWeights => {
+  if (!node) return { top: 0, right: 0, bottom: 0, left: 0 };
 
-const hasAnyBorder = (weights: BorderWeights): boolean => 
+  // For lines, vectors, and ellipses, they use a single strokeWeight
+  if (node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE') {
+    const weight: number = 'strokeWeight' in node ? Number(node.strokeWeight) : 0;
+    return {
+      top: weight,
+      right: weight,
+      bottom: weight,
+      left: weight
+    };
+  }
+
+  // For rectangles and other shapes that support individual side weights
+  return {
+    top: 'strokeTopWeight' in node ? node.strokeTopWeight : 0,
+    right: 'strokeRightWeight' in node ? node.strokeRightWeight : 0,
+    bottom: 'strokeBottomWeight' in node ? node.strokeBottomWeight : 0,
+    left: 'strokeLeftWeight' in node ? node.strokeLeftWeight : 0
+  };
+};
+
+const hasAnyBorder = (weights: BorderWeights): boolean =>
   weights.top > 0 || weights.right > 0 || weights.bottom > 0 || weights.left > 0;
 
-const hasFullBorder = (weights: BorderWeights): boolean => 
+const hasFullBorder = (weights: BorderWeights): boolean =>
   weights.top > 0 && weights.right > 0 && weights.bottom > 0 && weights.left > 0;
 
 const areAllBordersEqual = (weights: BorderWeights): boolean => {
@@ -220,8 +262,17 @@ const areAllBordersEqual = (weights: BorderWeights): boolean => {
   return nonZeroWeights.length > 0 && nonZeroWeights.every(w => w === nonZeroWeights[0]);
 };
 
-const shouldUseShorthand = (weights: BorderWeights): boolean => 
-  hasFullBorder(weights) && areAllBordersEqual(weights);
+const shouldUseShorthand = (node?: SceneNode, weights?: BorderWeights): boolean => {
+  if (!node || !weights) return false;
+
+  // For lines, vectors, and ellipses, always use shorthand
+  if (node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE') {
+    return hasAnyBorder(weights);
+  }
+
+  // For rectangles and other shapes, use original logic
+  return hasFullBorder(weights) && areAllBordersEqual(weights);
+};
 
 const getBorderColor = (node?: SceneNode, variables?: any[]): BorderColor | null => {
   const borderVariable = variables?.find(v => v.property === 'strokes');
@@ -270,12 +321,16 @@ const processBorderSide = async (
   node?: SceneNode,
   processedProperties?: Set<string>
 ): Promise<ProcessedValue | null> => {
+  // For lines, vectors, and ellipses, don't process individual sides
+  if (node && (node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE')) {
+    return null;
+  }
+
   const weights = getBorderWeights(node);
-  
-  // Skip if using shorthand or no border on this side
-  if (processedProperties?.has('border') || 
-      weights[config.weightKey] === 0 || 
-      shouldUseShorthand(weights)) {
+
+  if (processedProperties?.has('border') ||
+    weights[config.weightKey] === 0 ||
+    shouldUseShorthand(node, weights)) {
     return null;
   }
 
@@ -284,11 +339,11 @@ const processBorderSide = async (
 
   const width = getBorderWidth(config.propertyKey, weights[config.weightKey], variables);
   const type = node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
-  
+
   const value = `${width.value} ${type} ${color.value}`;
   const rawValue = `${width.rawValue} ${type} ${color.rawValue}`;
-  
-  return { 
+
+  return {
     value,
     rawValue,
     valueType: "px",

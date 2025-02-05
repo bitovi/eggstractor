@@ -14,6 +14,7 @@ export function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
     case "FRAME":
     case "RECTANGLE":
     case "INSTANCE":
+    case "ELLIPSE":
       return [
         backgroundProcessor,
         ...layoutProcessors,
