@@ -35,3 +35,11 @@ This is to view the generated CSS in a browser.
 
 1. Run `npm run start:server` to start the local server
 2. Open `http://localhost:3000` in your browser
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
+
+## Documentation
+
+For detailed documentation about how to use Eggstractor, please see our [Documentation](docs/DOCS.md).

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development --watch",
-    "start:server": "lite-server --baseDir=./visualizer",
+    "visualizer": "lite-server --baseDir=./visualizer",
     "lint": "eslint --ext .ts,.tsx --ignore-pattern node_modules .",
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
     "watch": "npm run build -- --watch",
