@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Border Processors should process border correctly: border 1`] = `
+"// Generated SCSS Variables
+$border-size-primary: 0.25rem
+$border-primary: #687879
+
+// Generated SCSS Mixins
+@mixin position-inside-custom
+ box-shadow: inset 0 0 0 0.25rem #687879
+
+@mixin position-center-custom
+ border: $border-size-primary solid $border-primary
+
+@mixin position-outside-custom
+ outline: 0.25rem solid #687879
+
+"
+`;
