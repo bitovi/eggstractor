@@ -1,52 +1,33 @@
 export async function serializeFigmaData(node: BaseNode): Promise<any> {
-  const baseData: any = {
-    id: node.id,
-    name: node.name,
-    type: node.type,
-  };
+  // Properties to exclude from serialization
+  const excludedProps = new Set([
+    'inferredVariables',
+    'availableInferredVariables',
+    // Add other properties to exclude here
+  ]);
 
-  // Add specific node properties based on type
-  if ('fills' in node) baseData.fills = node.fills;
-  if ('strokes' in node) baseData.strokes = node.strokes;
-  if ('strokeWeight' in node) baseData.strokeWeight = node.strokeWeight;
-  if ('cornerRadius' in node) baseData.cornerRadius = node.cornerRadius;
+  // Create base data with all enumerable properties
+  const baseData: any = {};
   
-  // Add layout properties
-  if ('layoutMode' in node) baseData.layoutMode = node.layoutMode;
-  if ('layoutAlign' in node) baseData.layoutAlign = node.layoutAlign;
-  if ('primaryAxisAlignItems' in node) baseData.primaryAxisAlignItems = node.primaryAxisAlignItems;
-  if ('counterAxisAlignItems' in node) baseData.counterAxisAlignItems = node.counterAxisAlignItems;
-  if ('primaryAxisSizingMode' in node) baseData.primaryAxisSizingMode = node.primaryAxisSizingMode;
-  if ('counterAxisSizingMode' in node) baseData.counterAxisSizingMode = node.counterAxisSizingMode;
-  if ('itemSpacing' in node) baseData.itemSpacing = node.itemSpacing;
-  
-  // Add size properties
-  if ('width' in node) baseData.width = node.width;
-  if ('height' in node) baseData.height = node.height;
-  if ('minWidth' in node) baseData.minWidth = node.minWidth;
-  if ('maxWidth' in node) baseData.maxWidth = node.maxWidth;
-  if ('minHeight' in node) baseData.minHeight = node.minHeight;
-  if ('maxHeight' in node) baseData.maxHeight = node.maxHeight;
-  
-  // Add padding properties
-  if ('paddingTop' in node) {
-    baseData.paddingTop = node.paddingTop;
-    baseData.paddingRight = node.paddingRight;
-    baseData.paddingBottom = node.paddingBottom;
-    baseData.paddingLeft = node.paddingLeft;
+  // Get all properties from the node
+  for (const key in node) {
+    try {
+      // Skip excluded properties
+      if (excludedProps.has(key)) {
+        continue;
+      }
+
+      const value = (node as any)[key];
+      // Skip functions and undefined values
+      if (typeof value === 'function' || value === undefined) {
+        continue;
+      }
+      baseData[key] = value;
+    } catch (error) {
+      // Some properties might throw when accessed, skip those
+      continue;
+    }
   }
-
-  // Add text properties
-  if ('fontSize' in node) baseData.fontSize = node.fontSize;
-  if ('fontName' in node) baseData.fontName = node.fontName;
-  if ('lineHeight' in node) baseData.lineHeight = node.lineHeight;
-  if ('letterSpacing' in node) baseData.letterSpacing = node.letterSpacing;
-  
-  // Add variables and constraints
-  if ('boundVariables' in node) baseData.boundVariables = node.boundVariables;
-  if ('constraints' in node) baseData.constraints = node.constraints;
-  if ('layoutGrow' in node) baseData.layoutGrow = node.layoutGrow;
-  if ('layoutPositioning' in node) baseData.layoutPositioning = node.layoutPositioning;
 
   // Recursively process children
   if ('children' in node) {

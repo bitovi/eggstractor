@@ -1,25 +1,44 @@
 /* Generated CSS */
-.nested {
-  background: #ffffff;
-  gap: 0.5rem;
-  padding: 1rem;
+.border-center-solid-custom-topleft {
+  border-top: 0.125rem solid #869597;
+  border-left: 0.125rem solid #869597;
 }
 
-.nested_auto-layout {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
+.border-center-solid-custom-top {
+  border: 0.125rem solid #869597;
 }
 
-.nested_auto-layout_padding-1 {
-  background: #00464a;
+.border-center-solid-variable-topleft {
+  border-top: 0.25rem solid #687879;
+  border-left: 0.25rem solid #687879;
 }
 
-.nested_auto-layout_padding-2 {
-  background: #00464a;
+.border-center-solid-variable-top {
+  border: 0.25rem solid #687879;
 }
 
-.nested_auto-layout_padding-3 {
-  background: #00464a;
+.border-center-solid-custom-left {
+  border-right: 0.5rem solid #869597;
+  border-left: 0.125rem solid #869597;
+}
+
+.border-center-solid-variable-left {
+  border-right: 1rem solid #687879;
+  border-left: 0.25rem solid #687879;
+}
+
+.border-center-solid-custom-right {
+  border-right: 0.125rem solid #869597;
+}
+
+.border-center-solid-variable-right {
+  border-right: 0.25rem solid #687879;
+}
+
+.border-center-solid-custom-bottom {
+  border-bottom: 0.125rem solid #869597;
+}
+
+.border-center-solid-variable-bottom {
+  border-bottom: 0.25rem solid #687879;
 }
