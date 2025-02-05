@@ -21,9 +21,12 @@ Thank you for your interest in contributing to Eggstractor! This document provid
 ## Development Process
 
 1. Make your changes in your feature branch
-2. Write or update tests as needed
-3. Run tests: `npm test`
-4. Run the visualizer to check your changes: `npm run visualizer`
+2. Run the plugin in Figma to test your changes
+  - Run `npm run dev` to start the plugin in watch mode
+  - Load the plugin in Figma and test your changes
+3. Write or update tests as needed
+4. Run tests: `npm test`
+5. Run the visualizer to check your changes: `npm run visualizer`
 
 ## Project Structure
 ```
