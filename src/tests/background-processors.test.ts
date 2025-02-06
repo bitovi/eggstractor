@@ -1,7 +1,8 @@
 import { collectTokens } from '../services';
 import { transformToCss, transformToScss } from '../transformers';
 import testData from './fixtures/figma-test-data_background.json';
-import { createTestVariableResolver } from '../utils/test.utils';
+import testDataOpacity from './fixtures/figma-test-data_opacity.json';
+import { createTestData } from '../utils/test.utils';
 
 // Add this helper function at the top of the test file
 function parseCssClass(css: string, className: string): string | null {
@@ -13,35 +14,12 @@ function parseCssClass(css: string, className: string): string | null {
 
 describe('Background Processors', () => {
   it('should process background solid correctly', async () => {    
-    const pageNode = {
-      ...testData,
-      type: 'PAGE',
-      name: 'background',
-      parent: null,
-      width: 100,
-      height: 100
-    };
+    const { setupTest } = createTestData(testData);
+    const testSetup = await setupTest();
+    
+    global.figma = testSetup.figma;
 
-    const children = testData.children.map((child: BaseNode) => ({
-      ...child,
-      parent: pageNode,
-      width: 100,
-      height: 100
-    }));
-    pageNode.children = children;
-
-    // Create variable resolver with complete test data
-    const getVariableByIdAsync = await createTestVariableResolver(testData);
-
-    // Mock Figma API
-    global.figma = {
-      currentPage: pageNode,
-      variables: {
-        getVariableByIdAsync
-      }
-    };
-
-    const tokens = await collectTokens();    
+    const tokens = await collectTokens();
     const { result: css } = transformToCss(tokens);
 
     const styles = {
@@ -55,71 +33,36 @@ describe('Background Processors', () => {
   });
 
   it('should process background solid correctly - sass', async () => {    
-    const pageNode = {
-      ...testData,
-      type: 'PAGE',
-      name: 'background',
-      parent: null,
-      width: 100,
-      height: 100
-    };
+    const { setupTest } = createTestData(testData);
+    const testSetup = await setupTest();
+    
+    global.figma = testSetup.figma;
 
-    const children = testData.children.map((child: BaseNode) => ({
-      ...child,
-      parent: pageNode,
-      width: 100,
-      height: 100
-    }));
-    pageNode.children = children;
+    const tokens = await collectTokens();     
+    const { result} = transformToScss(tokens);
 
-    // Create variable resolver with complete test data
-    const getVariableByIdAsync = await createTestVariableResolver(testData);
+    expect(result).toMatchSnapshot('solid styles');
+  });
 
-    // Mock Figma API
-    global.figma = {
-      currentPage: pageNode,
-      variables: {
-        getVariableByIdAsync
-      }
-    };
+  it('should process opacity correctly', async () => {    
+    const { setupTest } = createTestData(testDataOpacity);
+    const testSetup = await setupTest();
+    
+    global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();    
-    const { result: scss } = transformToScss(tokens);
+    const tokens = await collectTokens();     
+    const { result} = transformToScss(tokens);
 
-    expect(scss).toMatchSnapshot('solid styles');
+    expect(result).toMatchSnapshot('opacity styles');
   });
 
   it('should process background gradient correctly', async () => {    
-    // Create proper node hierarchy in test data
-    const pageNode = {
-      ...testData,
-      type: 'PAGE',
-      name: 'background',
-      parent: null,
-      width: 100,  // Add default dimensions
-      height: 100
-    };
+    const { setupTest } = createTestData(testData);
+    const testSetup = await setupTest();
+    
+    global.figma = testSetup.figma;
 
-    // Update children to have proper parent references
-    const children = testData.children.map((child: BaseNode) => ({
-      ...child,
-      parent: pageNode,
-      width: 100,  // Add dimensions to children
-      height: 100
-    }));
-    pageNode.children = children;
-
-    const getVariableByIdAsync = await createTestVariableResolver(testData);
-
-    // Mock Figma API
-    global.figma = {
-      currentPage: pageNode,
-      variables: {
-        getVariableByIdAsync
-      }
-    };
-
-    const tokens = await collectTokens();    
+    const tokens = await collectTokens(); 
     const { result: css, warnings } = transformToCss(tokens);
 
     // Test specific styles with snapshots

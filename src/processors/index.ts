@@ -1,5 +1,5 @@
 import { StyleProcessor } from '../types/processors';
-import { backgroundProcessor } from './background.processor';
+import { backgroundProcessors } from './background.processor';
 import { fontProcessors } from './font.processor';
 import { layoutProcessors } from './layout.processor';
 import { borderProcessors } from './border.processor';
@@ -16,7 +16,7 @@ export function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
     case "INSTANCE":
     case "ELLIPSE":
       return [
-        backgroundProcessor,
+        ...backgroundProcessors,
         ...layoutProcessors,
         ...borderProcessors,
         ...spacingProcessors,
