@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (rule.selectorText && rule.selectorText.startsWith('.')) {
       const className = rule.selectorText.substring(1);
       const parts = className.split('_');
-      
+
       // Get or create parent entry
       const parentName = parts[0];
       if (!classMap.has(parentName)) {
@@ -38,11 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Build nested structure
         let currentMap = classMap.get(parentName).children;
         let currentPath = parentName;
-        
+
         for (let i = 1; i < parts.length; i++) {
           const part = parts[i];
           currentPath = `${currentPath}_${part}`;
-          
+
           if (!currentMap.has(part)) {
             currentMap.set(part, {
               rule: currentPath === className ? rule : null,
@@ -59,21 +59,20 @@ document.addEventListener('DOMContentLoaded', () => {
   function createElements(data, className) {
     const element = document.createElement('div');
     element.className = className;
-    element.textContent = `.${className}`;
     element.style.boxSizing = 'border-box';
-    
+
     if (data.children.size > 0) {
       const totalChildren = data.children.size;
       element.style.display = 'flex';
-      
+
       for (let [childName, childData] of data.children) {
         const childElement = createElements(childData, childData.className);
         childElement.style.flexBasis = `${100 / totalChildren}%`;
-        childElement.style.minHeight = '150px'; 
+        childElement.style.minHeight = '150px';
         element.appendChild(childElement);
       }
     }
-    
+
     return element;
   }
 
@@ -93,12 +92,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const element = document.createElement('div');
     element.className = className;
     element.style.minHeight = '150px';
-    
+
+    // Add CSS text checking logic for parent elements
+    if (data.rule) {
+      const cssText = data.rule.style.cssText.toLowerCase();
+      if (cssText.includes('font') || cssText.includes('text')) {
+        element.textContent = 'The quick brown fox jumps over the lazy dog';
+        if (!cssText.includes('background')) {
+          element.style.backgroundColor = 'purple';
+        }
+      }
+    }
+
     if (data.children.size > 0) {
+      element.style.display = 'flex';
       for (let [childName, childData] of data.children) {
         const childElement = createElements(childData, childData.className);
         childElement.style.flexBasis = `${100 / data.children.size}%`;
-        // childElement.style.minHeight = '150px';
         element.appendChild(childElement);
       }
     }

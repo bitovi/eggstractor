@@ -1,44 +1,55 @@
 /* Generated CSS */
-.border-center-solid-custom-topleft {
-  border-top: 0.125rem solid #869597;
-  border-left: 0.125rem solid #869597;
+.paragraph-justification-justify {
+  color: #a3adad;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+  width: 13.812rem;
+  height: 5.875rem;
 }
 
-.border-center-solid-custom-top {
-  border: 0.125rem solid #869597;
+.paragraph-justification-right {
+  color: #a3adad;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  width: 13.812rem;
+  height: 5.875rem;
 }
 
-.border-center-solid-variable-topleft {
-  border-top: 0.25rem solid #687879;
-  border-left: 0.25rem solid #687879;
+.paragraph-justification-center {
+  color: #a3adad;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 13.812rem;
+  height: 5.875rem;
 }
 
-.border-center-solid-variable-top {
-  border: 0.25rem solid #687879;
-}
-
-.border-center-solid-custom-left {
-  border-right: 0.5rem solid #869597;
-  border-left: 0.125rem solid #869597;
-}
-
-.border-center-solid-variable-left {
-  border-right: 1rem solid #687879;
-  border-left: 0.25rem solid #687879;
-}
-
-.border-center-solid-custom-right {
-  border-right: 0.125rem solid #869597;
-}
-
-.border-center-solid-variable-right {
-  border-right: 0.25rem solid #687879;
-}
-
-.border-center-solid-custom-bottom {
-  border-bottom: 0.125rem solid #869597;
-}
-
-.border-center-solid-variable-bottom {
-  border-bottom: 0.25rem solid #687879;
+.paragraph-justification-left {
+  color: #a3adad;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  width: 13.812rem;
+  height: 5.875rem;
 }
