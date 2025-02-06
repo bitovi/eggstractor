@@ -4,6 +4,7 @@ import { createTestData } from '../utils/test.utils';
 import testData from './fixtures/figma-test-data_border-position.json';
 import testDataSides from './fixtures/figma-test-data_border-sides.json';
 import testDataShape from './fixtures/figma-test-data_border-shape.json';
+import testDataRadius from './fixtures/figma-test-data_border-radius.json';
 
 describe('Border Processors', () => {
   it('should process border correctly', async () => {    
@@ -40,5 +41,17 @@ describe('Border Processors', () => {
     const { result} = transformToScss(tokens);
 
     expect(result).toMatchSnapshot('border-shape');
+  });
+
+  it('should process border radius correctly', async () => {    
+    const { setupTest } = createTestData(testDataRadius);
+    const testSetup = await setupTest();
+    
+    global.figma = testSetup.figma;
+
+    const tokens = await collectTokens();     
+    const { result} = transformToScss(tokens);
+
+    expect(result).toMatchSnapshot('border-radius');
   });
 }); 

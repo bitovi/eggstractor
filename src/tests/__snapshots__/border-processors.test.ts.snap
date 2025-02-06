@@ -18,6 +18,56 @@ $border-primary: #687879
 "
 `;
 
+exports[`Border Processors should process border radius correctly: border-radius 1`] = `
+"// Generated SCSS Variables
+$colors-primary--brand--teal-teal-800: #00464a
+$corner-radius-primary: 1rem
+$size-null: 0rem
+
+// Generated SCSS Mixins
+@mixin border-radius-variable
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: $corner-radius-primary
+
+@mixin border-radius-topright-variable
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: $size-null $corner-radius-primary $size-null $size-null
+
+@mixin border-radius-bottomright-variable
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: $size-null $size-null $corner-radius-primary
+
+@mixin border-radius-topleft-variable
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: $corner-radius-primary $size-null $size-null
+
+@mixin border-radius-bottomleft-variable
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: $size-null $size-null $size-null $corner-radius-primary
+
+@mixin border-radius-custom
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: 1rem
+
+@mixin border-radius-topright-custom
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: 0 1rem 0 0
+
+@mixin border-radius-bottomright-custom
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: 0 0 1rem
+
+@mixin border-radius-topleft-custom
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: 1rem 0 0
+
+@mixin border-radius-bottomleft-custom
+ background: $colors-primary--brand--teal-teal-800
+ border-radius: 0 0 0 1rem
+
+"
+`;
+
 exports[`Border Processors should process border shape correctly: border-shape 1`] = `
 "// Generated SCSS Variables
 $border-size-primary: 0.25rem

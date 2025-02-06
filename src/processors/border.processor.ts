@@ -190,16 +190,8 @@ export const borderProcessors: StyleProcessor[] = [
   },
   {
     property: "border-radius",
-    bindingKey: "cornerRadius",
+    bindingKey: undefined,
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const radiusVariable = variables.find(v => v.property === 'border-radius');
-      if (radiusVariable) {
-        return {
-          value: radiusVariable.value,
-          rawValue: radiusVariable.rawValue
-        };
-      }
-
       // Handle ELLIPSE nodes
       if (node?.type === 'ELLIPSE') {
         const EPSILON = 0.00001;
@@ -211,18 +203,21 @@ export const borderProcessors: StyleProcessor[] = [
             node.arcData.innerRadius === 0
           )
         ) {
-          return { value: '50%', rawValue: '50%' };
+          return { value: '50%', rawValue: '50%', valueType: '%' };
         }
-        // For partial circles or donuts, don't apply border-radius
         return null;
       }
 
-      // Handle other nodes with cornerRadius
-      if (node && 'cornerRadius' in node && node.cornerRadius) {
-        const value = `${String(node.cornerRadius)}px`;
-        return { value, rawValue: value };
-      }
-      return null;
+      // Handle nodes with cornerRadius
+      if (!node) return null;
+      const radii = getCornerRadii(node, variables);
+      if (!radii) return null;
+
+      return {
+        value: radii.values.join(' '),
+        rawValue: radii.rawValues.join(' '),
+        valueType: radii.valueType
+      };
     }
   },
 ];
@@ -347,5 +342,83 @@ const processBorderSide = async (
     value,
     rawValue,
     valueType: "px",
+  };
+};
+
+// Add this utility function near the other utility functions
+const getCornerRadii = (node: SceneNode, variables?: any[]) => {
+  if (!('topRightRadius' in node) && !('bottomRightRadius' in node) && 
+      !('bottomLeftRadius' in node) && !('topLeftRadius' in node)) {
+    return null;
+  }
+
+  // Handle variables first
+  const cornerVars = [
+    variables?.find(v => v.property === 'topLeftRadius'),
+    variables?.find(v => v.property === 'topRightRadius'),
+    variables?.find(v => v.property === 'bottomRightRadius'),
+    variables?.find(v => v.property === 'bottomLeftRadius')
+  ];
+
+  if (cornerVars.some(v => v)) {
+    const cssValues = cornerVars.map(v => v?.value || '0');
+    const rawValues = cornerVars.map(v => v?.rawValue || '0');
+    if (cssValues.every(v => v === '0')) return null;
+    
+    const valueType = rawValues.find(v => v !== '0')?.includes('%') ? '%' : 'px';
+    return optimizeRadiusValues(cssValues, rawValues, valueType);
+  }
+
+  // Handle node values
+  const corners = [
+    'topLeftRadius' in node ? node.topLeftRadius as number : 0,
+    'topRightRadius' in node ? node.topRightRadius as number : 0,
+    'bottomRightRadius' in node ? node.bottomRightRadius as number : 0,
+    'bottomLeftRadius' in node ? node.bottomLeftRadius as number : 0
+  ];
+
+  if (corners.every(r => !r)) return null;
+
+  const cssValues = corners.map(radius => 
+    radius ? `${Math.round(radius)}px` : '0'
+  );
+
+  const valueType = cssValues.find(v => v !== '0')?.includes('%') ? '%' : 'px';
+  return optimizeRadiusValues(cssValues, cssValues, valueType);
+};
+
+const optimizeRadiusValues = (values: string[], rawValues: string[], valueType: 'px' | '%') => {
+  // If all values are the same, return single value
+  if (rawValues.every(v => v === rawValues[0])) {
+    return {
+      values: [values[0]],
+      rawValues: [rawValues[0]],
+      valueType
+    };
+  }
+
+  // Check for top-left-and-bottom-right | top-right-and-bottom-left pattern
+  if (rawValues[0] === rawValues[2] && rawValues[1] === rawValues[3]) {
+    return {
+      values: [values[0], values[1]],
+      rawValues: [rawValues[0], rawValues[1]],
+      valueType
+    };
+  }
+
+  // Check for top-left | top-right-and-bottom-left | bottom-right pattern
+  if (rawValues[1] === rawValues[3]) {
+    return {
+      values: [values[0], values[1], values[2]],
+      rawValues: [rawValues[0], rawValues[1], rawValues[2]],
+      valueType
+    };
+  }
+
+  // Return all four values if no pattern matches
+  return {
+    values,
+    rawValues,
+    valueType
   };
 };

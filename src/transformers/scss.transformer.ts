@@ -85,7 +85,7 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
             output += ` ${token.property}: ${value}\n`;
           }
         } else {
-          output += ` ${token.property}: ${rem(token.value!)}\n`;
+          output += ` ${token.property}: ${token.valueType === 'px' ? rem(token.value!) : token.value}\n`;
         }
       });
       output += "\n";

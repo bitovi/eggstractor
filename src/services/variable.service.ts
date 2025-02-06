@@ -1,5 +1,7 @@
 import { VariableToken } from '../types';
 import { rgbaToString } from '../utils/color.utils';
+import { sanitizeName } from '../utils/string.utils';
+import { normalizeValue } from '../utils/value.utils';
 
 async function getVariableFallback(variable: Variable | null, propertyName: string = ''): Promise<string> {
   if (!variable) return '';
@@ -18,7 +20,10 @@ async function getVariableFallback(variable: Variable | null, propertyName: stri
   switch (variable.resolvedType) {
     case "FLOAT": {
       const numValue = value as number;
-      return shouldHaveUnits(propertyName, numValue) ? `${numValue}px` : String(numValue);
+      return normalizeValue({ 
+        propertyName, 
+        value: numValue 
+      });
     }
     case "COLOR": {
       if (typeof value === 'object' && 'r' in value) {
@@ -45,8 +50,8 @@ export async function collectBoundVariable(varId: string, property: string, path
     type: 'variable',
     path,
     property,
-    name: variable.name,
-    value: `$${variable.name}`,
+    name: sanitizeName(variable.name),
+    value: `$${sanitizeName(variable.name)}`,
     rawValue: rawValue.toLowerCase(),
     valueType: valueType,
     metadata: {
@@ -55,18 +60,4 @@ export async function collectBoundVariable(varId: string, property: string, path
       variableName: variable.name,
     }
   };
-}
-
-function shouldHaveUnits(propertyName: string, value: number): boolean {
-  const unitlessProperties = ['font-weight', 'opacity'];
-  const propertyLower = propertyName.toLowerCase();
-  
-  if (unitlessProperties.some(prop => propertyLower.includes(prop))) {
-    return false;
-  }
-  if (propertyLower.includes('line-height')) {
-    return value > 4;
-  }
-  
-  return true;
 }
