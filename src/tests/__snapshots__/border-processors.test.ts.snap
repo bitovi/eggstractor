@@ -35,11 +35,11 @@ $size-null: 0rem
 
 @mixin border-radius-bottomright-variable
  background: $colors-primary--brand--teal-teal-800
- border-radius: $size-null $size-null $corner-radius-primary $size-null
+ border-radius: $size-null $size-null $corner-radius-primary
 
 @mixin border-radius-topleft-variable
  background: $colors-primary--brand--teal-teal-800
- border-radius: $corner-radius-primary $size-null $size-null $size-null
+ border-radius: $corner-radius-primary $size-null $size-null
 
 @mixin border-radius-bottomleft-variable
  background: $colors-primary--brand--teal-teal-800
@@ -55,11 +55,11 @@ $size-null: 0rem
 
 @mixin border-radius-bottomright-custom
  background: $colors-primary--brand--teal-teal-800
- border-radius: 0 0 1rem 0
+ border-radius: 0 0 1rem
 
 @mixin border-radius-topleft-custom
  background: $colors-primary--brand--teal-teal-800
- border-radius: 1rem 0 0 0
+ border-radius: 1rem 0 0
 
 @mixin border-radius-bottomleft-custom
  background: $colors-primary--brand--teal-teal-800

@@ -213,15 +213,6 @@ export const borderProcessors: StyleProcessor[] = [
       const radii = getCornerRadii(node, variables);
       if (!radii) return null;
 
-      // If all corners are the same, return a single value
-      if (radii.values.every(v => v === radii.values[0])) {
-        return {
-          value: radii.values[0],
-          rawValue: radii.rawValues[0],
-          valueType: radii.valueType
-        };
-      }
-
       return {
         value: radii.values.join(' '),
         rawValue: radii.rawValues.join(' '),
@@ -356,14 +347,12 @@ const processBorderSide = async (
 
 // Add this utility function near the other utility functions
 const getCornerRadii = (node: SceneNode, variables?: any[]) => {
-  if (!('topRightRadius' in node) && !('bottomRightRadius' in node) && !('bottomLeftRadius' in node) && !('topLeftRadius' in node)) {
+  if (!('topRightRadius' in node) && !('bottomRightRadius' in node) && 
+      !('bottomLeftRadius' in node) && !('topLeftRadius' in node)) {
     return null;
   }
 
-  let corners: (number | null)[] = [];
-  let valueType: 'px' | '%' = 'px';
-
-  // Check variables first
+  // Handle variables first
   const cornerVars = [
     variables?.find(v => v.property === 'topLeftRadius'),
     variables?.find(v => v.property === 'topRightRadius'),
@@ -374,33 +363,62 @@ const getCornerRadii = (node: SceneNode, variables?: any[]) => {
   if (cornerVars.some(v => v)) {
     const cssValues = cornerVars.map(v => v?.value || '0');
     const rawValues = cornerVars.map(v => v?.rawValue || '0');
-
-    // Return null if all corners are 0
     if (cssValues.every(v => v === '0')) return null;
-
-    valueType = rawValues.find(v => v !== '0')?.includes('%') ? '%' : 'px';
-    return { values: cssValues, rawValues, valueType };
+    
+    const valueType = rawValues.find(v => v !== '0')?.includes('%') ? '%' : 'px';
+    return optimizeRadiusValues(cssValues, rawValues, valueType);
   }
 
-  // Handle node values if no variables
-  corners = [
-    'topLeftRadius' in node ? node.topLeftRadius as number : null,
-    'topRightRadius' in node ? node.topRightRadius as number : null,
-    'bottomRightRadius' in node ? node.bottomRightRadius as number : null,
-    'bottomLeftRadius' in node ? node.bottomLeftRadius as number : null
+  // Handle node values
+  const corners = [
+    'topLeftRadius' in node ? node.topLeftRadius as number : 0,
+    'topRightRadius' in node ? node.topRightRadius as number : 0,
+    'bottomRightRadius' in node ? node.bottomRightRadius as number : 0,
+    'bottomLeftRadius' in node ? node.bottomLeftRadius as number : 0
   ];
 
-  // Return null if all corners are 0
   if (corners.every(r => !r)) return null;
 
-  const cssValues = corners.map(radius => {
-    if (radius === null || radius === undefined || radius === 0) return '0';
-    return String(radius).includes('%') ? radius : `${Math.round(radius)}px`;
-  });
+  const cssValues = corners.map(radius => 
+    radius ? `${Math.round(radius)}px` : '0'
+  );
 
+  const valueType = cssValues.find(v => v !== '0')?.includes('%') ? '%' : 'px';
+  return optimizeRadiusValues(cssValues, cssValues, valueType);
+};
+
+const optimizeRadiusValues = (values: string[], rawValues: string[], valueType: 'px' | '%') => {
+  // If all values are the same, return single value
+  if (rawValues.every(v => v === rawValues[0])) {
+    return {
+      values: [values[0]],
+      rawValues: [rawValues[0]],
+      valueType
+    };
+  }
+
+  // Check for top-left-and-bottom-right | top-right-and-bottom-left pattern
+  if (rawValues[0] === rawValues[2] && rawValues[1] === rawValues[3]) {
+    return {
+      values: [values[0], values[1]],
+      rawValues: [rawValues[0], rawValues[1]],
+      valueType
+    };
+  }
+
+  // Check for top-left | top-right-and-bottom-left | bottom-right pattern
+  if (rawValues[1] === rawValues[3]) {
+    return {
+      values: [values[0], values[1], values[2]],
+      rawValues: [rawValues[0], rawValues[1], rawValues[2]],
+      valueType
+    };
+  }
+
+  // Return all four values if no pattern matches
   return {
-    values: cssValues,
-    rawValues: cssValues,
-    valueType: cssValues[0].toString().includes('%') ? '%' : 'px'
+    values,
+    rawValues,
+    valueType
   };
 };
