@@ -61,10 +61,19 @@ document.addEventListener('DOMContentLoaded', () => {
     element.className = className;
     element.style.boxSizing = 'border-box';
 
+    // Add CSS text checking logic for parent elements
+    if (data.rule) {
+      const cssText = data.rule.style.cssText.toLowerCase();
+      if (cssText.includes('font') || cssText.includes('text')) {
+        element.textContent = 'The quick brown fox jumps over the lazy dog';
+        if (!cssText.includes('background')) {
+          element.style.backgroundColor = 'purple';
+        }
+      }
+    }
+
     if (data.children.size > 0) {
       const totalChildren = data.children.size;
-      element.style.display = 'flex';
-
       for (let [childName, childData] of data.children) {
         const childElement = createElements(childData, childData.className);
         childElement.style.flexBasis = `${100 / totalChildren}%`;
@@ -99,13 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (cssText.includes('font') || cssText.includes('text')) {
         element.textContent = 'The quick brown fox jumps over the lazy dog';
         if (!cssText.includes('background')) {
-          element.style.backgroundColor = 'purple';
+          element.style.backgroundColor = 'lightpink';
         }
       }
     }
 
     if (data.children.size > 0) {
-      element.style.display = 'flex';
       for (let [childName, childData] of data.children) {
         const childElement = createElements(childData, childData.className);
         childElement.style.flexBasis = `${100 / data.children.size}%`;

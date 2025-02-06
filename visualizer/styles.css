@@ -1,20 +1,9 @@
 /* Generated CSS */
-.paragraph-justification-justify {
-  color: #a3adad;
-  font-family: Inter;
-  font-size: 1rem;
-  font-weight: 400;
-  font-style: normal;
-  line-height: normal;
-  display: flex;
-  flex-direction: column;
-  text-align: justify;
-  width: 13.812rem;
-  height: 5.875rem;
+.frame--top {
+  background: #FFFFFF;
 }
-
-.paragraph-justification-right {
-  color: #a3adad;
+.frame--top_paragraph-alignment-top {
+  color: #A3ADAD;
   font-family: Inter;
   font-size: 1rem;
   font-weight: 400;
@@ -22,27 +11,22 @@
   line-height: normal;
   display: flex;
   flex-direction: column;
-  text-align: right;
-  width: 13.812rem;
-  height: 5.875rem;
+  width: 13.75rem;
+  height: 17.5rem;
 }
-
-.paragraph-justification-center {
-  color: #a3adad;
-  font-family: Inter;
-  font-size: 1rem;
-  font-weight: 400;
-  font-style: normal;
-  line-height: normal;
+.autolayout--top {
+  background: #FFFFFF;
   display: flex;
   flex-direction: column;
-  text-align: center;
-  width: 13.812rem;
-  height: 5.875rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  width: 17.5rem;
+  height: 19.25rem;
+  padding: 0rem 1.875rem;
 }
-
-.paragraph-justification-left {
-  color: #a3adad;
+.autolayout--top_paragraph-alignment-top {
+  color: #A3ADAD;
   font-family: Inter;
   font-size: 1rem;
   font-weight: 400;
@@ -50,6 +34,124 @@
   line-height: normal;
   display: flex;
   flex-direction: column;
-  width: 13.812rem;
-  height: 5.875rem;
+  width: 13.75rem;
+  height: 19.25rem;
+}
+.paragraph-alignment-top {
+  color: #A3ADAD;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  width: 13.75rem;
+  height: 17.5rem;
+}
+.frame--middle {
+  background: #FFFFFF;
+}
+.frame--middle_paragraph-alignment-center {
+  color: #A3ADAD;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 13.75rem;
+  height: 17.5rem;
+}
+.autolayout--middle {
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  width: 17.5rem;
+  height: 19.25rem;
+  padding: 0rem 1.875rem;
+}
+.autolayout--middle_paragraph-alignment-center {
+  color: #A3ADAD;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 13.75rem;
+  height: 19.25rem;
+}
+.paragraph-alignment-center {
+  color: #A3ADAD;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 13.75rem;
+  height: 17.5rem;
+}
+.frame--bottom {
+  background: #FFFFFF;
+}
+.frame--bottom_paragraph-alignment-bottom {
+  color: #A3ADAD;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 13.75rem;
+  height: 17.5rem;
+}
+.autolayout--bottom {
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  width: 17.5rem;
+  height: 19.25rem;
+  padding: 0rem 1.875rem;
+}
+.autolayout--bottom_paragraph-alignment-bottom {
+  color: #A3ADAD;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 13.75rem;
+  height: 19.25rem;
+}
+.paragraph-alignment-bottom {
+  color: #A3ADAD;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 13.75rem;
+  height: 17.5rem;
 }
