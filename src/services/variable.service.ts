@@ -1,5 +1,6 @@
 import { VariableToken } from '../types';
 import { rgbaToString } from '../utils/color.utils';
+import { sanitizeName } from '../utils/string.utils';
 import { normalizeValue } from '../utils/value.utils';
 
 async function getVariableFallback(variable: Variable | null, propertyName: string = ''): Promise<string> {
@@ -49,8 +50,8 @@ export async function collectBoundVariable(varId: string, property: string, path
     type: 'variable',
     path,
     property,
-    name: variable.name,
-    value: `$${variable.name}`,
+    name: sanitizeName(variable.name),
+    value: `$${sanitizeName(variable.name)}`,
     rawValue: rawValue.toLowerCase(),
     valueType: valueType,
     metadata: {

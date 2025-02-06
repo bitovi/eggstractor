@@ -190,16 +190,8 @@ export const borderProcessors: StyleProcessor[] = [
   },
   {
     property: "border-radius",
-    bindingKey: "cornerRadius",
+    bindingKey: undefined,
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const radiusVariable = variables.find(v => v.property === 'border-radius');
-      if (radiusVariable) {
-        return {
-          value: radiusVariable.value,
-          rawValue: radiusVariable.rawValue
-        };
-      }
-
       // Handle ELLIPSE nodes
       if (node?.type === 'ELLIPSE') {
         const EPSILON = 0.00001;
@@ -211,18 +203,30 @@ export const borderProcessors: StyleProcessor[] = [
             node.arcData.innerRadius === 0
           )
         ) {
-          return { value: '50%', rawValue: '50%' };
+          return { value: '50%', rawValue: '50%', valueType: '%' };
         }
-        // For partial circles or donuts, don't apply border-radius
         return null;
       }
 
-      // Handle other nodes with cornerRadius
-      if (node && 'cornerRadius' in node && node.cornerRadius) {
-        const value = `${String(node.cornerRadius)}px`;
-        return { value, rawValue: value };
+      // Handle nodes with cornerRadius
+      if (!node) return null;
+      const radii = getCornerRadii(node, variables);
+      if (!radii) return null;
+
+      // If all corners are the same, return a single value
+      if (radii.values.every(v => v === radii.values[0])) {
+        return {
+          value: radii.values[0],
+          rawValue: radii.rawValues[0],
+          valueType: radii.valueType
+        };
       }
-      return null;
+
+      return {
+        value: radii.values.join(' '),
+        rawValue: radii.rawValues.join(' '),
+        valueType: radii.valueType
+      };
     }
   },
 ];
@@ -347,5 +351,56 @@ const processBorderSide = async (
     value,
     rawValue,
     valueType: "px",
+  };
+};
+
+// Add this utility function near the other utility functions
+const getCornerRadii = (node: SceneNode, variables?: any[]) => {
+  if (!('topRightRadius' in node) && !('bottomRightRadius' in node) && !('bottomLeftRadius' in node) && !('topLeftRadius' in node)) {
+    return null;
+  }
+
+  let corners: (number | null)[] = [];
+  let valueType: 'px' | '%' = 'px';
+
+  // Check variables first
+  const cornerVars = [
+    variables?.find(v => v.property === 'topLeftRadius'),
+    variables?.find(v => v.property === 'topRightRadius'),
+    variables?.find(v => v.property === 'bottomRightRadius'),
+    variables?.find(v => v.property === 'bottomLeftRadius')
+  ];
+
+  if (cornerVars.some(v => v)) {
+    const cssValues = cornerVars.map(v => v?.value || '0');
+    const rawValues = cornerVars.map(v => v?.rawValue || '0');
+
+    // Return null if all corners are 0
+    if (cssValues.every(v => v === '0')) return null;
+
+    valueType = rawValues.find(v => v !== '0')?.includes('%') ? '%' : 'px';
+    return { values: cssValues, rawValues, valueType };
+  }
+
+  // Handle node values if no variables
+  corners = [
+    'topLeftRadius' in node ? node.topLeftRadius as number : null,
+    'topRightRadius' in node ? node.topRightRadius as number : null,
+    'bottomRightRadius' in node ? node.bottomRightRadius as number : null,
+    'bottomLeftRadius' in node ? node.bottomLeftRadius as number : null
+  ];
+
+  // Return null if all corners are 0
+  if (corners.every(r => !r)) return null;
+
+  const cssValues = corners.map(radius => {
+    if (radius === null || radius === undefined || radius === 0) return '0';
+    return String(radius).includes('%') ? radius : `${Math.round(radius)}px`;
+  });
+
+  return {
+    values: cssValues,
+    rawValues: cssValues,
+    valueType: cssValues[0].toString().includes('%') ? '%' : 'px'
   };
 };
