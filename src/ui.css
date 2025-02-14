@@ -48,7 +48,7 @@ button { padding: 8px 16px; font-size: 14px; margin-bottom: 10px; }
   height: 16px;
 }
 .form-group { margin-bottom: 15px; }
-label { display: block; margin-bottom: 5px; color: white; }
+label { display: block; margin-bottom: 5px; color: #999999; }
 input { width: 100%; padding: 8px; box-sizing: border-box; }
 pre { 
   margin: 0;
