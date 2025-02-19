@@ -22,8 +22,11 @@ This plugin generates SCSS variables and mixins from Figma, it also enables you 
 
 Use `npm run dev` to run the webpack compiler in watch mode. 
 
+### Figma plugin
+The [Eggstractor Figma plugin](https://www.figma.com/community/plugin/1464625803208186094/eggstractor) is available for free download in the Figma community, and includes a [demo file](https://www.figma.com/community/file/1472329589982734868) that syncs with a [demo GitHub repo](https://github.com/bitovi/eggstractor-demo).
+
 ### Local plugin
-You will need to use Figma Desktop for this
+Alternately, you can build your own, local plugin for private use. You will need to use Figma Desktop for this.
 
 1. Run `npm run dev` or `npm run build` to build the plugin
 2. In Figma, go to Plugins → Development → Import plugin from manifest…
@@ -43,5 +46,21 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ## Documentation
 
 For detailed documentation about how to use Eggstractor, please see our [Documentation](docs/DOCS.md).
+
 For general-purpose information on getting started with using Eggstractor, including a step-by-step guide to a working demo, see our [Getting Started Guide](https://bitovi.atlassian.net/wiki/spaces/Eggstractor/overview).
+
+
+
+## About
+
+<img align="right" src="img/bitovi.png" height="60px" style="margin-right: 20px;">
+
+Eggstractor is an open source project by Bitovi.
+
+Need some help?  
+[Chat with us on Discord](https://discord.com/channels/1007137664606150746/1044404122004242433 "https://discord.com/channels/1007137664606150746/1044404122004242433") | [Send feature requests](https://github.com/bitovi/eggstractor/issues/new "https://github.com/bitovi/eggstractor/issues/new") | [Email us](mailto:support@bitovi.com "mailto:support@bitovi.com")
+
+Need pros to help design & build your design system or app? [That’s us](https://www.bitovi.com/services/product-design-consulting "https://www.bitovi.com/services/product-design-consulting")!
+
+<br>
 
