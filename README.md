@@ -43,3 +43,5 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ## Documentation
 
 For detailed documentation about how to use Eggstractor, please see our [Documentation](docs/DOCS.md).
+For general-purpose information on getting started with using Eggstractor, including a step-by-step guide to a working demo, see our [Getting Started Guide](https://bitovi.atlassian.net/wiki/spaces/Eggstractor/overview).
+
