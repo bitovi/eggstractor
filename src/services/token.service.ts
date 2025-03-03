@@ -66,7 +66,7 @@ export async function extractNodeToken(
       rawValue: processedValue.rawValue,
       valueType: processedValue.valueType,
       property: processor.property,
-      path: path.length > 1 ? path.slice(1) : path,
+      path, //: path.length > 1 ? path.slice(1) : path,
       variables: variableTokensMap.size > 0 ? [...variableTokensMap.values()] : undefined,
       metadata: {
         figmaId: node.id,
