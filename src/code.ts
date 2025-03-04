@@ -10,7 +10,7 @@ let generatedScss: string = '';
 // Show the UI with resizable window
 figma.showUI(__html__, {
   width: 600,
-  height: 1200,
+  height: process.env.NODE_ENV === 'development' ? 1200 : 400,
   themeColors: true,
   title: "Eggstractor"
 });

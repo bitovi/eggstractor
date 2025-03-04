@@ -23,6 +23,11 @@ window.onload = () => {
     if (exportBtn) {
       exportBtn.style.display = 'inline-block';
     }
+    generateBtn.style.display = 'initial';
+    const output = document.querySelector('.output') as HTMLElement;
+    if (output) {
+      output.style.display = 'initial';
+    }
   }
 
   // Save config when inputs change
