@@ -155,14 +155,12 @@ export async function createTestVariableResolver(testData: any) {
 }
 
 export function createTestData(jsonData: any) {
-  const processNode = (node: BaseNode, parentNode: BaseNode | null, parentPath = '') => {
-    const nodePath = parentPath ? `${parentPath}_${node.name}` : node.name;
-
+  const processNode = (node: BaseNode, parentNode: BaseNode | null) => {
     if (node.type === 'TEXT') {
       return {
         ...node,
         parent: parentNode,
-        name: nodePath,
+        name: node.name,
         width: (node as any).width || 100,
         height: (node as any).height || 20,
         textAutoResize: (node as any).textAutoResize || "NONE"
@@ -173,13 +171,13 @@ export function createTestData(jsonData: any) {
       ...node,
       type: node.type || 'FRAME',
       parent: parentNode,
-      name: nodePath,
+      name: node.name,
       children: []
     } as unknown as FrameNode;
 
     if ('children' in node) {
       (frameNode as any).children = (node.children as BaseNode[])
-        .map(child => processNode(child, frameNode, nodePath));
+        .map(child => processNode(child, frameNode));
     }
 
     return frameNode;
@@ -190,7 +188,7 @@ export function createTestData(jsonData: any) {
     type: 'PAGE',
     parent: null,
     children: jsonData.children.map((child: BaseNode) => 
-      processNode(child, null, '')
+      processNode(child, null)
     )
   } as PageNode;
 

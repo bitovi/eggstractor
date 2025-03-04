@@ -1,0 +1,4562 @@
+{
+  "id": "0:1",
+  "parent": {
+    "id": "0:0"
+  },
+  "name": "Components",
+  "removed": false,
+  "isAsset": false,
+  "detachedInfo": null,
+  "children": [
+    {
+      "id": "25:117",
+      "parent": {
+        "id": "0:1"
+      },
+      "name": "input",
+      "removed": false,
+      "isAsset": false,
+      "detachedInfo": null,
+      "visible": true,
+      "locked": false,
+      "stuckNodes": [],
+      "attachedConnectors": [],
+      "componentPropertyReferences": null,
+      "variableConsumptionMap": {},
+      "boundVariables": {},
+      "resolvedVariableModes": {
+        "VariableCollectionId:2:38": "2:1",
+        "VariableCollectionId:2:72": "2:2",
+        "VariableCollectionId:2:22": "2:0"
+      },
+      "explicitVariableModes": {},
+      "opacity": 1,
+      "blendMode": "PASS_THROUGH",
+      "isMask": false,
+      "maskType": "ALPHA",
+      "effects": [],
+      "effectStyleId": "",
+      "relativeTransform": [
+        [
+          1,
+          0,
+          598
+        ],
+        [
+          0,
+          1,
+          -31
+        ]
+      ],
+      "absoluteTransform": [
+        [
+          1,
+          0,
+          598
+        ],
+        [
+          0,
+          1,
+          -31
+        ]
+      ],
+      "x": 598,
+      "y": -31,
+      "width": 275,
+      "height": 264,
+      "absoluteBoundingBox": {
+        "x": 598,
+        "y": -31,
+        "width": 275,
+        "height": 264
+      },
+      "targetAspectRatio": null,
+      "absoluteRenderBounds": {
+        "x": 598,
+        "y": -31,
+        "width": 275,
+        "height": 264
+      },
+      "rotation": 0,
+      "layoutAlign": "INHERIT",
+      "constrainProportions": false,
+      "layoutGrow": 0,
+      "layoutPositioning": "AUTO",
+      "minWidth": null,
+      "minHeight": null,
+      "maxWidth": null,
+      "maxHeight": null,
+      "layoutSizingHorizontal": "FIXED",
+      "layoutSizingVertical": "HUG",
+      "children": [
+        {
+          "id": "25:116",
+          "parent": {
+            "id": "25:117"
+          },
+          "name": "state=resting",
+          "removed": false,
+          "isAsset": false,
+          "detachedInfo": null,
+          "visible": true,
+          "locked": false,
+          "stuckNodes": [],
+          "attachedConnectors": [],
+          "componentPropertyReferences": {},
+          "variableConsumptionMap": {
+            "STACK_SPACING": {
+              "type": 3,
+              "resolvedType": 1,
+              "value": "VariableID:4:11"
+            }
+          },
+          "boundVariables": {
+            "itemSpacing": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:4:11"
+            }
+          },
+          "resolvedVariableModes": {
+            "VariableCollectionId:2:38": "2:1",
+            "VariableCollectionId:2:72": "2:2",
+            "VariableCollectionId:2:22": "2:0"
+          },
+          "explicitVariableModes": {},
+          "opacity": 1,
+          "blendMode": "PASS_THROUGH",
+          "isMask": false,
+          "maskType": "ALPHA",
+          "effects": [],
+          "effectStyleId": "",
+          "relativeTransform": [
+            [
+              1,
+              0,
+              10
+            ],
+            [
+              0,
+              1,
+              10
+            ]
+          ],
+          "absoluteTransform": [
+            [
+              1,
+              0,
+              608
+            ],
+            [
+              0,
+              1,
+              -21
+            ]
+          ],
+          "x": 10,
+          "y": 10,
+          "width": 255,
+          "height": 68,
+          "absoluteBoundingBox": {
+            "x": 608,
+            "y": -21,
+            "width": 255,
+            "height": 68
+          },
+          "targetAspectRatio": null,
+          "absoluteRenderBounds": {
+            "x": 608,
+            "y": -21,
+            "width": 255,
+            "height": 68
+          },
+          "rotation": 0,
+          "layoutAlign": "STRETCH",
+          "constrainProportions": false,
+          "layoutGrow": 0,
+          "layoutPositioning": "AUTO",
+          "minWidth": null,
+          "minHeight": null,
+          "maxWidth": null,
+          "maxHeight": null,
+          "layoutSizingHorizontal": "FILL",
+          "layoutSizingVertical": "HUG",
+          "children": [
+            {
+              "id": "1:47",
+              "parent": {
+                "id": "25:116"
+              },
+              "name": "Label",
+              "removed": false,
+              "isAsset": false,
+              "detachedInfo": null,
+              "visible": true,
+              "locked": false,
+              "stuckNodes": [],
+              "attachedConnectors": [],
+              "componentPropertyReferences": {},
+              "variableConsumptionMap": {},
+              "boundVariables": {
+                "fills": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:23"
+                  }
+                ],
+                "fontSize": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:65"
+                  }
+                ],
+                "fontFamily": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:76"
+                  }
+                ],
+                "lineHeight": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:68"
+                  }
+                ],
+                "fontWeight": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:61"
+                  }
+                ]
+              },
+              "resolvedVariableModes": {
+                "VariableCollectionId:2:38": "2:1",
+                "VariableCollectionId:2:72": "2:2",
+                "VariableCollectionId:2:22": "2:0"
+              },
+              "explicitVariableModes": {},
+              "opacity": 1,
+              "blendMode": "PASS_THROUGH",
+              "isMask": false,
+              "maskType": "ALPHA",
+              "effects": [],
+              "effectStyleId": "",
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.15691731870174408,
+                    "g": 0.15691731870174408,
+                    "b": 0.15691731870174408
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:23"
+                    }
+                  }
+                }
+              ],
+              "fillStyleId": "",
+              "strokes": [],
+              "strokeStyleId": "",
+              "strokeWeight": 1,
+              "strokeAlign": "OUTSIDE",
+              "strokeJoin": "MITER",
+              "dashPattern": [],
+              "strokeCap": "NONE",
+              "strokeMiterLimit": 4,
+              "fillGeometry": [
+                {
+                  "windingRule": "NONZERO",
+                  "data": "M1.59801 19 L1.59801 4.45455 L3.79261 4.45455 L3.79261 17.1108 L10.3835 17.1108 L10.3835 19 L1.59801 19 Z M15.8913 19.2415 C15.2 19.2415 14.575 19.1136 14.0163 18.858 C13.4576 18.5975 13.0149 18.2211 12.6882 17.7287 C12.3662 17.2363 12.2053 16.6326 12.2053 15.9176 C12.2053 15.3021 12.3236 14.7955 12.5604 14.3977 C12.7971 14 13.1167 13.6851 13.5192 13.4531 C13.9216 13.2211 14.3714 13.0459 14.8686 12.9276 C15.3658 12.8092 15.8724 12.7192 16.3885 12.6577 C17.0419 12.5819 17.5722 12.5204 17.9794 12.473 C18.3866 12.4209 18.6825 12.3381 18.8672 12.2244 C19.0518 12.1108 19.1442 11.9261 19.1442 11.6705 L19.1442 11.6207 C19.1442 11.0005 18.969 10.5199 18.6186 10.179 C18.273 9.83807 17.7569 9.66761 17.0703 9.66761 C16.3554 9.66761 15.7919 9.82623 15.38 10.1435 C14.9728 10.456 14.6911 10.804 14.5348 11.1875 L12.5391 10.733 C12.7758 10.0701 13.1214 9.53504 13.576 9.12784 C14.0353 8.71591 14.5632 8.41761 15.1598 8.23295 C15.7564 8.04356 16.3838 7.94886 17.0419 7.94886 C17.4775 7.94886 17.9392 8.00095 18.4268 8.10511 C18.9193 8.20455 19.3786 8.3892 19.8047 8.65909 C20.2356 8.92898 20.5883 9.31487 20.8629 9.81676 C21.1375 10.3139 21.2749 10.9602 21.2749 11.7557 L21.2749 19 L19.201 19 L19.201 17.5085 L19.1158 17.5085 C18.9785 17.7831 18.7725 18.053 18.4979 18.3182 C18.2232 18.5833 17.8705 18.8035 17.4396 18.9787 C17.0088 19.1539 16.4927 19.2415 15.8913 19.2415 Z M16.353 17.5369 C16.9401 17.5369 17.442 17.4209 17.8587 17.1889 C18.2801 16.9569 18.5997 16.6539 18.8175 16.2798 C19.04 15.901 19.1513 15.4962 19.1513 15.0653 L19.1513 13.6591 C19.0755 13.7348 18.9287 13.8059 18.7109 13.8722 C18.4979 13.9337 18.254 13.9882 17.9794 14.0355 C17.7048 14.0781 17.4373 14.1184 17.1768 14.1562 C16.9164 14.1894 16.6986 14.2178 16.5234 14.2415 C16.1115 14.2936 15.7351 14.3812 15.3942 14.5043 C15.058 14.6274 14.7881 14.8049 14.5845 15.0369 C14.3857 15.2642 14.2862 15.5672 14.2862 15.946 C14.2862 16.4716 14.4804 16.8693 14.8686 17.1392 C15.2569 17.4044 15.7517 17.5369 16.353 17.5369 Z M24.2738 19 L24.2738 4.45455 L26.3974 4.45455 L26.3974 9.85938 L26.5252 9.85938 C26.6483 9.6321 26.8259 9.36932 27.0579 9.07102 C27.2899 8.77273 27.6119 8.51231 28.0238 8.28977 C28.4357 8.0625 28.9802 7.94886 29.6573 7.94886 C30.538 7.94886 31.324 8.1714 32.0153 8.61648 C32.7066 9.06155 33.2487 9.70312 33.6417 10.5412 C34.0394 11.3793 34.2383 12.3878 34.2383 13.5668 C34.2383 14.7457 34.0418 15.7566 33.6488 16.5994 C33.2558 17.4375 32.716 18.0838 32.0295 18.5384 C31.3429 18.9882 30.5593 19.2131 29.6786 19.2131 C29.0157 19.2131 28.4736 19.1018 28.0522 18.8793 C27.6355 18.6567 27.3088 18.3963 27.0721 18.098 C26.8353 17.7997 26.6531 17.5346 26.5252 17.3026 L26.3477 17.3026 L26.3477 19 L24.2738 19 Z M26.3548 13.5455 C26.3548 14.3125 26.466 14.9848 26.6886 15.5625 C26.9111 16.1402 27.2331 16.5923 27.6545 16.919 C28.0759 17.241 28.592 17.402 29.2028 17.402 C29.8372 17.402 30.3675 17.2339 30.7937 16.8977 C31.2198 16.5568 31.5418 16.0952 31.7596 15.5128 C31.9821 14.9304 32.0934 14.2746 32.0934 13.5455 C32.0934 12.8258 31.9845 12.1795 31.7667 11.6065 C31.5536 11.0336 31.2317 10.5814 30.8008 10.25 C30.3746 9.91856 29.842 9.75284 29.2028 9.75284 C28.5872 9.75284 28.0664 9.91146 27.6403 10.2287 C27.2189 10.5459 26.8993 10.9886 26.6815 11.5568 C26.4637 12.125 26.3548 12.7879 26.3548 13.5455 Z M41.3246 19.2202 C40.2498 19.2202 39.3241 18.9905 38.5476 18.5312 C37.7758 18.0672 37.1792 17.4162 36.7578 16.5781 C36.3411 15.7353 36.1328 14.7481 36.1328 13.6165 C36.1328 12.4991 36.3411 11.5142 36.7578 10.6619 C37.1792 9.80966 37.7663 9.14441 38.5192 8.66619 C39.2768 8.18797 40.1622 7.94886 41.1754 7.94886 C41.791 7.94886 42.3875 8.05066 42.9652 8.25426 C43.5429 8.45786 44.0613 8.77746 44.5206 9.21307 C44.9799 9.64867 45.3421 10.2145 45.6072 10.9105 C45.8724 11.6018 46.005 12.4422 46.005 13.4318 L46.005 14.1847 L37.3331 14.1847 L37.3331 12.5938 L43.924 12.5938 C43.924 12.035 43.8104 11.5402 43.5831 11.1094 C43.3558 10.6738 43.0362 10.3305 42.6243 10.0795 C42.2171 9.8286 41.7389 9.70312 41.1896 9.70312 C40.593 9.70312 40.0722 9.84991 39.6271 10.1435 C39.1868 10.4323 38.8459 10.8111 38.6044 11.2798 C38.3677 11.7438 38.2493 12.2481 38.2493 12.7926 L38.2493 14.0355 C38.2493 14.7647 38.3771 15.3849 38.6328 15.8963 C38.8932 16.4077 39.2554 16.7983 39.7195 17.0682 C40.1835 17.3333 40.7256 17.4659 41.3459 17.4659 C41.7483 17.4659 42.1153 17.4091 42.4467 17.2955 C42.7782 17.1771 43.0646 17.0019 43.3061 16.7699 C43.5476 16.5379 43.7322 16.2514 43.8601 15.9105 L45.87 16.2727 C45.709 16.8646 45.4202 17.383 45.0036 17.8281 C44.5916 18.2685 44.0732 18.6117 43.4482 18.858 C42.8279 19.0994 42.12 19.2202 41.3246 19.2202 Z M50.4847 4.45455 L50.4847 19 L48.3611 19 L48.3611 4.45455 L50.4847 4.45455 Z"
+                }
+              ],
+              "strokeGeometry": [],
+              "relativeTransform": [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0
+                ]
+              ],
+              "absoluteTransform": [
+                [
+                  1,
+                  0,
+                  608
+                ],
+                [
+                  0,
+                  1,
+                  -21
+                ]
+              ],
+              "x": 0,
+              "y": 0,
+              "width": 255,
+              "height": 24,
+              "absoluteBoundingBox": {
+                "x": 608,
+                "y": -21,
+                "width": 255,
+                "height": 24
+              },
+              "targetAspectRatio": null,
+              "absoluteRenderBounds": {
+                "x": 609.5980224609375,
+                "y": -16.545455932617188,
+                "width": 48.88671875,
+                "height": 14.786933898925781
+              },
+              "rotation": 0,
+              "layoutAlign": "STRETCH",
+              "constrainProportions": false,
+              "layoutGrow": 0,
+              "layoutPositioning": "AUTO",
+              "minWidth": null,
+              "minHeight": null,
+              "maxWidth": null,
+              "maxHeight": null,
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "exportSettings": [],
+              "constraints": {
+                "horizontal": "MIN",
+                "vertical": "MIN"
+              },
+              "characters": "Label",
+              "hasMissingFont": false,
+              "fontSize": 20,
+              "hangingPunctuation": false,
+              "hangingList": false,
+              "paragraphIndent": 0,
+              "paragraphSpacing": 0,
+              "listSpacing": 0,
+              "textCase": "ORIGINAL",
+              "textDecoration": "NONE",
+              "textDecorationStyle": null,
+              "textDecorationSkipInk": null,
+              "textDecorationOffset": null,
+              "textDecorationThickness": null,
+              "textDecorationColor": null,
+              "letterSpacing": {
+                "unit": "PERCENT",
+                "value": 0
+              },
+              "lineHeight": {
+                "unit": "PIXELS",
+                "value": 24
+              },
+              "leadingTrim": "NONE",
+              "fontName": {
+                "family": "Inter",
+                "style": "Medium"
+              },
+              "fontWeight": 500,
+              "openTypeFeatures": {},
+              "hyperlink": null,
+              "canUpgradeToNativeBidiSupport": false,
+              "autoRename": true,
+              "textAlignHorizontal": "LEFT",
+              "textAlignVertical": "TOP",
+              "textAutoResize": "HEIGHT",
+              "textStyleId": "S:dce7b9b5c72205b4d78087712e7168b280767819,",
+              "textTruncation": "DISABLED",
+              "maxLines": null,
+              "reactions": [],
+              "playbackSettings": {
+                "autoplay": true,
+                "loop": true,
+                "muted": false
+              },
+              "annotations": [],
+              "type": "TEXT",
+              "variables": {
+                "VariableID:2:23": {
+                  "id": "VariableID:2:23",
+                  "name": "base/colour/grey/400",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 0.15691731870174408,
+                      "g": 0.15691731870174408,
+                      "b": 0.15691731870174408,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:2:65": {
+                  "id": "VariableID:2:65",
+                  "name": "base/font/size/xl",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 20
+                  }
+                },
+                "VariableID:2:76": {
+                  "id": "VariableID:2:76",
+                  "name": "global/font/uiDefaultFont",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:75"
+                    }
+                  }
+                },
+                "VariableID:2:75": {
+                  "id": "VariableID:2:75",
+                  "name": "brand/font/body",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:1": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:54"
+                    }
+                  }
+                },
+                "VariableID:2:54": {
+                  "id": "VariableID:2:54",
+                  "name": "base/font/family/Inter",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:0": "Inter"
+                  }
+                },
+                "VariableID:2:68": {
+                  "id": "VariableID:2:68",
+                  "name": "base/font/linespacing/lg",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 24
+                  }
+                },
+                "VariableID:2:61": {
+                  "id": "VariableID:2:61",
+                  "name": "base/font/weight/semibold",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 500
+                  }
+                }
+              }
+            },
+            {
+              "id": "1:48",
+              "parent": {
+                "id": "25:116"
+              },
+              "name": "Input box",
+              "removed": false,
+              "isAsset": false,
+              "detachedInfo": null,
+              "visible": true,
+              "locked": false,
+              "stuckNodes": [],
+              "attachedConnectors": [],
+              "componentPropertyReferences": {},
+              "variableConsumptionMap": {
+                "STACK_SPACING": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:14"
+                },
+                "STACK_PADDING_LEFT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:14"
+                },
+                "STACK_PADDING_RIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:14"
+                },
+                "RECTANGLE_TOP_LEFT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "RECTANGLE_TOP_RIGHT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "RECTANGLE_BOTTOM_LEFT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "RECTANGLE_BOTTOM_RIGHT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "BORDER_TOP_WEIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:5:10"
+                },
+                "BORDER_BOTTOM_WEIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:5:10"
+                },
+                "BORDER_LEFT_WEIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:5:10"
+                },
+                "BORDER_RIGHT_WEIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:5:10"
+                }
+              },
+              "boundVariables": {
+                "itemSpacing": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:14"
+                },
+                "paddingLeft": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:14"
+                },
+                "paddingRight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:14"
+                },
+                "topLeftRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "topRightRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "bottomLeftRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "bottomRightRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "strokeTopWeight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:10"
+                },
+                "strokeBottomWeight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:10"
+                },
+                "strokeLeftWeight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:10"
+                },
+                "strokeRightWeight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:10"
+                },
+                "fills": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:36"
+                  }
+                ],
+                "strokes": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:26"
+                  }
+                ]
+              },
+              "resolvedVariableModes": {
+                "VariableCollectionId:2:38": "2:1",
+                "VariableCollectionId:2:72": "2:2",
+                "VariableCollectionId:2:22": "2:0"
+              },
+              "explicitVariableModes": {},
+              "opacity": 1,
+              "blendMode": "PASS_THROUGH",
+              "isMask": false,
+              "maskType": "ALPHA",
+              "effects": [],
+              "effectStyleId": "",
+              "relativeTransform": [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  26
+                ]
+              ],
+              "absoluteTransform": [
+                [
+                  1,
+                  0,
+                  608
+                ],
+                [
+                  0,
+                  1,
+                  5
+                ]
+              ],
+              "x": 0,
+              "y": 26,
+              "width": 255,
+              "height": 42,
+              "absoluteBoundingBox": {
+                "x": 608,
+                "y": 5,
+                "width": 255,
+                "height": 42
+              },
+              "targetAspectRatio": null,
+              "absoluteRenderBounds": {
+                "x": 608,
+                "y": 5,
+                "width": 255,
+                "height": 42
+              },
+              "rotation": 0,
+              "layoutAlign": "STRETCH",
+              "constrainProportions": false,
+              "layoutGrow": 0,
+              "layoutPositioning": "AUTO",
+              "minWidth": null,
+              "minHeight": null,
+              "maxWidth": null,
+              "maxHeight": null,
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "children": [
+                {
+                  "id": "1:49",
+                  "parent": {
+                    "id": "1:48"
+                  },
+                  "name": "Input text",
+                  "removed": false,
+                  "isAsset": false,
+                  "detachedInfo": null,
+                  "visible": true,
+                  "locked": false,
+                  "stuckNodes": [],
+                  "attachedConnectors": [],
+                  "componentPropertyReferences": {},
+                  "variableConsumptionMap": {},
+                  "boundVariables": {
+                    "fills": [
+                      {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:25:106"
+                      }
+                    ],
+                    "fontFamily": [
+                      {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:2:76"
+                      }
+                    ],
+                    "fontWeight": [
+                      {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:2:60"
+                      }
+                    ]
+                  },
+                  "resolvedVariableModes": {
+                    "VariableCollectionId:2:38": "2:1",
+                    "VariableCollectionId:2:22": "2:0",
+                    "VariableCollectionId:2:72": "2:2"
+                  },
+                  "explicitVariableModes": {},
+                  "opacity": 1,
+                  "blendMode": "PASS_THROUGH",
+                  "isMask": false,
+                  "maskType": "ALPHA",
+                  "effects": [],
+                  "effectStyleId": "",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "visible": true,
+                      "opacity": 1,
+                      "blendMode": "NORMAL",
+                      "color": {
+                        "r": 0.15691731870174408,
+                        "g": 0.15691731870174408,
+                        "b": 0.15691731870174408
+                      },
+                      "boundVariables": {
+                        "color": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:25:106"
+                        }
+                      }
+                    }
+                  ],
+                  "fillStyleId": "",
+                  "strokes": [],
+                  "strokeStyleId": "",
+                  "strokeWeight": 1,
+                  "strokeAlign": "OUTSIDE",
+                  "strokeJoin": "MITER",
+                  "dashPattern": [],
+                  "strokeCap": "NONE",
+                  "strokeMiterLimit": 4,
+                  "fillGeometry": [
+                    {
+                      "windingRule": "NONZERO",
+                      "data": "M2.81818 4.36364 L2.81818 16 L1.40909 16 L1.40909 4.36364 L2.81818 4.36364 Z M6.80256 10.75 L6.80256 16 L5.46165 16 L5.46165 7.27273 L6.7571 7.27273 L6.7571 8.63636 L6.87074 8.63636 C7.07528 8.19318 7.38589 7.83712 7.80256 7.56818 C8.21922 7.29545 8.7571 7.15909 9.41619 7.15909 C10.0071 7.15909 10.5241 7.2803 10.9673 7.52273 C11.4105 7.76136 11.7552 8.125 12.0014 8.61364 C12.2476 9.09848 12.3707 9.71212 12.3707 10.4545 L12.3707 16 L11.0298 16 L11.0298 10.5455 C11.0298 9.85985 10.8518 9.32576 10.4957 8.94318 C10.1397 8.55682 9.65104 8.36364 9.02983 8.36364 C8.6018 8.36364 8.21922 8.45644 7.8821 8.64205 C7.54877 8.82765 7.28551 9.09848 7.09233 9.45455 C6.89915 9.81061 6.80256 10.2424 6.80256 10.75 Z M14.821 19.2727 L14.821 7.27273 L16.1165 7.27273 L16.1165 8.65909 L16.2756 8.65909 C16.3741 8.50758 16.5104 8.31439 16.6847 8.07955 C16.8627 7.84091 17.1165 7.62879 17.446 7.44318 C17.7794 7.25379 18.2301 7.15909 18.7983 7.15909 C19.5331 7.15909 20.1809 7.3428 20.7415 7.71023 C21.3021 8.07765 21.7396 8.59848 22.054 9.27273 C22.3684 9.94697 22.5256 10.7424 22.5256 11.6591 C22.5256 12.5833 22.3684 13.3845 22.054 14.0625 C21.7396 14.7367 21.304 15.2595 20.7472 15.6307 C20.1903 15.9981 19.5483 16.1818 18.821 16.1818 C18.2604 16.1818 17.8116 16.089 17.4744 15.9034 C17.1373 15.714 16.8778 15.5 16.696 15.2614 C16.5142 15.0189 16.3741 14.8182 16.2756 14.6591 L16.1619 14.6591 L16.1619 19.2727 L14.821 19.2727 Z M16.1392 11.6364 C16.1392 12.2955 16.2358 12.8769 16.429 13.3807 C16.6222 13.8807 16.9044 14.2727 17.2756 14.5568 C17.6468 14.8371 18.1013 14.9773 18.6392 14.9773 C19.1998 14.9773 19.6676 14.8295 20.0426 14.5341 C20.4214 14.2348 20.7055 13.8333 20.8949 13.3295 C21.0881 12.822 21.1847 12.2576 21.1847 11.6364 C21.1847 11.0227 21.09 10.4697 20.9006 9.97727 C20.715 9.48106 20.4328 9.08902 20.054 8.80114 C19.679 8.50947 19.2074 8.36364 18.6392 8.36364 C18.0938 8.36364 17.6354 8.50189 17.2642 8.77841 C16.893 9.05114 16.6127 9.43371 16.4233 9.92614 C16.2339 10.4148 16.1392 10.9848 16.1392 11.6364 Z M30.071 12.4318 L30.071 7.27273 L31.4119 7.27273 L31.4119 16 L30.071 16 L30.071 14.5227 L29.9801 14.5227 C29.7756 14.9659 29.4574 15.3428 29.0256 15.6534 C28.5938 15.9602 28.0483 16.1136 27.3892 16.1136 C26.8438 16.1136 26.3589 15.9943 25.9347 15.7557 C25.5104 15.5133 25.1771 15.1496 24.9347 14.6648 C24.6922 14.1761 24.571 13.5606 24.571 12.8182 L24.571 7.27273 L25.9119 7.27273 L25.9119 12.7273 C25.9119 13.3636 26.09 13.8712 26.446 14.25 C26.8059 14.6288 27.2642 14.8182 27.821 14.8182 C28.1544 14.8182 28.4934 14.733 28.8381 14.5625 C29.1866 14.392 29.4782 14.1307 29.7131 13.7784 C29.9517 13.4261 30.071 12.9773 30.071 12.4318 Z M37.6634 7.27273 L37.6634 8.40909 L33.1406 8.40909 L33.1406 7.27273 L37.6634 7.27273 Z M34.4588 5.18182 L35.7997 5.18182 L35.7997 13.5 C35.7997 13.8788 35.8546 14.1629 35.9645 14.3523 C36.0781 14.5379 36.2221 14.6629 36.3963 14.7273 C36.5743 14.7879 36.7618 14.8182 36.9588 14.8182 C37.1065 14.8182 37.2277 14.8106 37.3224 14.7955 C37.4171 14.7765 37.4929 14.7614 37.5497 14.75 L37.8224 15.9545 C37.7315 15.9886 37.6046 16.0227 37.4418 16.0568 C37.2789 16.0947 37.0724 16.1136 36.8224 16.1136 C36.4437 16.1136 36.0724 16.0322 35.7088 15.8693 C35.349 15.7064 35.0497 15.4583 34.8111 15.125 C34.5762 14.7917 34.4588 14.3712 34.4588 13.8636 L34.4588 5.18182 Z M47.9759 7.27273 L47.9759 8.40909 L43.4531 8.40909 L43.4531 7.27273 L47.9759 7.27273 Z M44.7713 5.18182 L46.1122 5.18182 L46.1122 13.5 C46.1122 13.8788 46.1671 14.1629 46.277 14.3523 C46.3906 14.5379 46.5346 14.6629 46.7088 14.7273 C46.8868 14.7879 47.0743 14.8182 47.2713 14.8182 C47.419 14.8182 47.5402 14.8106 47.6349 14.7955 C47.7296 14.7765 47.8054 14.7614 47.8622 14.75 L48.1349 15.9545 C48.044 15.9886 47.9171 16.0227 47.7543 16.0568 C47.5914 16.0947 47.3849 16.1136 47.1349 16.1136 C46.7562 16.1136 46.3849 16.0322 46.0213 15.8693 C45.6615 15.7064 45.3622 15.4583 45.1236 15.125 C44.8887 14.7917 44.7713 14.3712 44.7713 13.8636 L44.7713 5.18182 Z M53.5582 16.1818 C52.7173 16.1818 51.992 15.9962 51.3821 15.625 C50.776 15.25 50.3082 14.7273 49.9787 14.0568 C49.6529 13.3826 49.4901 12.5985 49.4901 11.7045 C49.4901 10.8106 49.6529 10.0227 49.9787 9.34091 C50.3082 8.6553 50.7666 8.12121 51.3537 7.73864 C51.9446 7.35227 52.634 7.15909 53.4219 7.15909 C53.8764 7.15909 54.3253 7.23485 54.7685 7.38636 C55.2116 7.53788 55.6151 7.78409 55.9787 8.125 C56.3423 8.46212 56.6321 8.90909 56.848 9.46591 C57.0639 10.0227 57.1719 10.7083 57.1719 11.5227 L57.1719 12.0909 L50.4446 12.0909 L50.4446 10.9318 L55.8082 10.9318 C55.8082 10.4394 55.7098 10 55.5128 9.61364 C55.3196 9.22727 55.0431 8.92235 54.6832 8.69886 C54.3272 8.47538 53.9067 8.36364 53.4219 8.36364 C52.8878 8.36364 52.4257 8.49621 52.0355 8.76136 C51.6491 9.02273 51.3518 9.36364 51.1435 9.78409 C50.9351 10.2045 50.831 10.6553 50.831 11.1364 L50.831 11.9091 C50.831 12.5682 50.9446 13.1269 51.1719 13.5852 C51.4029 14.0398 51.723 14.3864 52.1321 14.625 C52.5412 14.8598 53.0166 14.9773 53.5582 14.9773 C53.9105 14.9773 54.2287 14.928 54.5128 14.8295 C54.8007 14.7273 55.0488 14.5758 55.2571 14.375 C55.4654 14.1705 55.6264 13.9167 55.7401 13.6136 L57.0355 13.9773 C56.8991 14.4167 56.67 14.803 56.348 15.1364 C56.026 15.4659 55.6283 15.7235 55.1548 15.9091 C54.6813 16.0909 54.1491 16.1818 53.5582 16.1818 Z M59.9773 7.27273 L62.0682 10.8409 L64.1591 7.27273 L65.7045 7.27273 L62.8864 11.6364 L65.7045 16 L64.1591 16 L62.0682 12.6136 L59.9773 16 L58.4318 16 L61.2045 11.6364 L58.4318 7.27273 L59.9773 7.27273 Z M71.4134 7.27273 L71.4134 8.40909 L66.8906 8.40909 L66.8906 7.27273 L71.4134 7.27273 Z M68.2088 5.18182 L69.5497 5.18182 L69.5497 13.5 C69.5497 13.8788 69.6046 14.1629 69.7145 14.3523 C69.8281 14.5379 69.9721 14.6629 70.1463 14.7273 C70.3243 14.7879 70.5118 14.8182 70.7088 14.8182 C70.8565 14.8182 70.9777 14.8106 71.0724 14.7955 C71.1671 14.7765 71.2429 14.7614 71.2997 14.75 L71.5724 15.9545 C71.4815 15.9886 71.3546 16.0227 71.1918 16.0568 C71.0289 16.0947 70.8224 16.1136 70.5724 16.1136 C70.1937 16.1136 69.8224 16.0322 69.4588 15.8693 C69.099 15.7064 68.7997 15.4583 68.5611 15.125 C68.3262 14.7917 68.2088 14.3712 68.2088 13.8636 L68.2088 5.18182 Z"
+                    }
+                  ],
+                  "strokeGeometry": [],
+                  "relativeTransform": [
+                    [
+                      1,
+                      0,
+                      12
+                    ],
+                    [
+                      0,
+                      1,
+                      11
+                    ]
+                  ],
+                  "absoluteTransform": [
+                    [
+                      1,
+                      0,
+                      620
+                    ],
+                    [
+                      0,
+                      1,
+                      16
+                    ]
+                  ],
+                  "x": 12,
+                  "y": 11,
+                  "width": 231,
+                  "height": 20,
+                  "absoluteBoundingBox": {
+                    "x": 620,
+                    "y": 16,
+                    "width": 231,
+                    "height": 20
+                  },
+                  "targetAspectRatio": null,
+                  "absoluteRenderBounds": {
+                    "x": 621.4091186523438,
+                    "y": 20.363636016845703,
+                    "width": 70.163330078125,
+                    "height": 14.90909194946289
+                  },
+                  "rotation": 0,
+                  "layoutAlign": "INHERIT",
+                  "constrainProportions": false,
+                  "layoutGrow": 1,
+                  "layoutPositioning": "AUTO",
+                  "minWidth": null,
+                  "minHeight": null,
+                  "maxWidth": null,
+                  "maxHeight": null,
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "exportSettings": [],
+                  "constraints": {
+                    "horizontal": "MIN",
+                    "vertical": "MIN"
+                  },
+                  "characters": "Input text",
+                  "hasMissingFont": false,
+                  "fontSize": 16,
+                  "hangingPunctuation": false,
+                  "hangingList": false,
+                  "paragraphIndent": 0,
+                  "paragraphSpacing": 0,
+                  "listSpacing": 0,
+                  "textCase": "ORIGINAL",
+                  "textDecoration": "NONE",
+                  "textDecorationStyle": null,
+                  "textDecorationSkipInk": null,
+                  "textDecorationOffset": null,
+                  "textDecorationThickness": null,
+                  "textDecorationColor": null,
+                  "letterSpacing": {
+                    "unit": "PERCENT",
+                    "value": 0
+                  },
+                  "lineHeight": {
+                    "unit": "PIXELS",
+                    "value": 20
+                  },
+                  "leadingTrim": "NONE",
+                  "fontName": {
+                    "family": "Inter",
+                    "style": "Regular"
+                  },
+                  "fontWeight": 400,
+                  "openTypeFeatures": {},
+                  "hyperlink": null,
+                  "canUpgradeToNativeBidiSupport": false,
+                  "autoRename": true,
+                  "textAlignHorizontal": "LEFT",
+                  "textAlignVertical": "TOP",
+                  "textAutoResize": "HEIGHT",
+                  "textStyleId": "S:ae5e92191e0ae603c3cb95fed07e8ff73e5e1855,",
+                  "textTruncation": "DISABLED",
+                  "maxLines": null,
+                  "reactions": [],
+                  "playbackSettings": {
+                    "autoplay": true,
+                    "loop": true,
+                    "muted": false
+                  },
+                  "annotations": [],
+                  "type": "TEXT",
+                  "variables": {
+                    "VariableID:25:106": {
+                      "id": "VariableID:25:106",
+                      "name": "global/colour/textOnLight",
+                      "resolvedType": "COLOR",
+                      "valuesByMode": {
+                        "2:2": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:2:23"
+                        }
+                      }
+                    },
+                    "VariableID:2:23": {
+                      "id": "VariableID:2:23",
+                      "name": "base/colour/grey/400",
+                      "resolvedType": "COLOR",
+                      "valuesByMode": {
+                        "2:0": {
+                          "r": 0.15691731870174408,
+                          "g": 0.15691731870174408,
+                          "b": 0.15691731870174408,
+                          "a": 1
+                        }
+                      }
+                    },
+                    "VariableID:2:76": {
+                      "id": "VariableID:2:76",
+                      "name": "global/font/uiDefaultFont",
+                      "resolvedType": "STRING",
+                      "valuesByMode": {
+                        "2:2": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:2:75"
+                        }
+                      }
+                    },
+                    "VariableID:2:75": {
+                      "id": "VariableID:2:75",
+                      "name": "brand/font/body",
+                      "resolvedType": "STRING",
+                      "valuesByMode": {
+                        "2:1": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:2:54"
+                        }
+                      }
+                    },
+                    "VariableID:2:54": {
+                      "id": "VariableID:2:54",
+                      "name": "base/font/family/Inter",
+                      "resolvedType": "STRING",
+                      "valuesByMode": {
+                        "2:0": "Inter"
+                      }
+                    },
+                    "VariableID:2:60": {
+                      "id": "VariableID:2:60",
+                      "name": "base/font/weight/regular",
+                      "resolvedType": "FLOAT",
+                      "valuesByMode": {
+                        "2:0": 400
+                      }
+                    }
+                  }
+                }
+              ],
+              "exportSettings": [],
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:36"
+                    }
+                  }
+                }
+              ],
+              "fillStyleId": "",
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.8509804010391235,
+                    "g": 0.8509804010391235,
+                    "b": 0.8509804010391235
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:26"
+                    }
+                  }
+                }
+              ],
+              "strokeStyleId": "",
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "strokeJoin": "MITER",
+              "dashPattern": [],
+              "strokeCap": "NONE",
+              "strokeMiterLimit": 4,
+              "fillGeometry": [
+                {
+                  "windingRule": "NONZERO",
+                  "data": "M0 4 C0 1.79086 1.79086 0 4 0 L251 0 C253.209 0 255 1.79086 255 4 L255 38 C255 40.2091 253.209 42 251 42 L4 42 C1.79086 42 0 40.2091 0 38 L0 4 Z"
+                }
+              ],
+              "strokeGeometry": [
+                {
+                  "windingRule": "NONZERO",
+                  "data": "M4 1 L251 1 L251 -1 L4 -1 L4 1 Z M254 4 L254 38 L256 38 L256 4 L254 4 Z M251 41 L4 41 L4 43 L251 43 L251 41 Z M1 38 L1 4 L-1 4 L-1 38 L1 38 Z M4 41 C2.34315 41 1 39.6569 1 38 L-1 38 C-1 40.7614 1.23858 43 4 43 L4 41 Z M254 38 C254 39.6569 252.657 41 251 41 L251 43 C253.761 43 256 40.7614 256 38 L254 38 Z M251 1 C252.657 1 254 2.34315 254 4 L256 4 C256 1.23858 253.761 -1 251 -1 L251 1 Z M4 -1 C1.23858 -1 -1 1.23858 -1 4 L1 4 C1 2.34315 2.34315 1 4 1 L4 -1 Z"
+                }
+              ],
+              "cornerRadius": 4,
+              "cornerSmoothing": 0,
+              "topLeftRadius": 4,
+              "topRightRadius": 4,
+              "bottomLeftRadius": 4,
+              "bottomRightRadius": 4,
+              "paddingLeft": 12,
+              "paddingRight": 12,
+              "paddingTop": 11,
+              "paddingBottom": 11,
+              "primaryAxisAlignItems": "MIN",
+              "counterAxisAlignItems": "CENTER",
+              "primaryAxisSizingMode": "FIXED",
+              "layoutWrap": "NO_WRAP",
+              "counterAxisSpacing": 0,
+              "counterAxisAlignContent": "AUTO",
+              "strokeTopWeight": 1,
+              "strokeBottomWeight": 1,
+              "strokeLeftWeight": 1,
+              "strokeRightWeight": 1,
+              "inferredAutoLayout": {
+                "layoutMode": "HORIZONTAL",
+                "paddingLeft": 12,
+                "paddingRight": 12,
+                "paddingTop": 11,
+                "paddingBottom": 11,
+                "counterAxisSizingMode": "AUTO",
+                "primaryAxisSizingMode": "FIXED",
+                "primaryAxisAlignItems": "MIN",
+                "counterAxisAlignItems": "CENTER",
+                "layoutAlign": "STRETCH",
+                "layoutGrow": 0,
+                "itemSpacing": 12,
+                "layoutPositioning": "AUTO"
+              },
+              "annotations": [],
+              "layoutGrids": [],
+              "gridStyleId": "",
+              "backgrounds": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:36"
+                    }
+                  }
+                }
+              ],
+              "backgroundStyleId": "",
+              "clipsContent": true,
+              "guides": [],
+              "expanded": false,
+              "constraints": {
+                "horizontal": "MIN",
+                "vertical": "MIN"
+              },
+              "layoutMode": "HORIZONTAL",
+              "counterAxisSizingMode": "AUTO",
+              "horizontalPadding": 12,
+              "verticalPadding": 11,
+              "itemSpacing": 12,
+              "overflowDirection": "NONE",
+              "numberOfFixedChildren": 0,
+              "overlayPositionType": "CENTER",
+              "overlayBackground": {
+                "type": "NONE"
+              },
+              "overlayBackgroundInteraction": "NONE",
+              "itemReverseZIndex": false,
+              "strokesIncludedInLayout": false,
+              "devStatus": null,
+              "reactions": [],
+              "playbackSettings": {
+                "autoplay": true,
+                "loop": true,
+                "muted": false
+              },
+              "type": "FRAME",
+              "variables": {
+                "VariableID:4:14": {
+                  "id": "VariableID:4:14",
+                  "name": "base/size/lg",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 12
+                  }
+                },
+                "VariableID:4:6": {
+                  "id": "VariableID:4:6",
+                  "name": "base/radius/sm",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 4
+                  }
+                },
+                "VariableID:5:10": {
+                  "id": "VariableID:5:10",
+                  "name": "global/size/border/width",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:4:10"
+                    }
+                  }
+                },
+                "VariableID:4:10": {
+                  "id": "VariableID:4:10",
+                  "name": "base/size/2xs",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 1
+                  }
+                },
+                "VariableID:2:36": {
+                  "id": "VariableID:2:36",
+                  "name": "base/colour/static/white",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 1,
+                      "g": 1,
+                      "b": 1,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:2:26": {
+                  "id": "VariableID:2:26",
+                  "name": "base/colour/grey/100",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 0.8509804010391235,
+                      "g": 0.8509804010391235,
+                      "b": 0.8509804010391235,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:25:106": {
+                  "id": "VariableID:25:106",
+                  "name": "global/colour/textOnLight",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:23"
+                    }
+                  }
+                },
+                "VariableID:2:23": {
+                  "id": "VariableID:2:23",
+                  "name": "base/colour/grey/400",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 0.15691731870174408,
+                      "g": 0.15691731870174408,
+                      "b": 0.15691731870174408,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:2:76": {
+                  "id": "VariableID:2:76",
+                  "name": "global/font/uiDefaultFont",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:75"
+                    }
+                  }
+                },
+                "VariableID:2:75": {
+                  "id": "VariableID:2:75",
+                  "name": "brand/font/body",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:1": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:54"
+                    }
+                  }
+                },
+                "VariableID:2:54": {
+                  "id": "VariableID:2:54",
+                  "name": "base/font/family/Inter",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:0": "Inter"
+                  }
+                },
+                "VariableID:2:60": {
+                  "id": "VariableID:2:60",
+                  "name": "base/font/weight/regular",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 400
+                  }
+                }
+              }
+            }
+          ],
+          "exportSettings": [],
+          "fills": [],
+          "fillStyleId": "",
+          "strokes": [],
+          "strokeStyleId": "",
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "strokeJoin": "MITER",
+          "dashPattern": [],
+          "strokeCap": "NONE",
+          "strokeMiterLimit": 4,
+          "fillGeometry": [
+            {
+              "windingRule": "NONZERO",
+              "data": "M0 0 L255 0 L255 68 L0 68 L0 0 Z"
+            }
+          ],
+          "strokeGeometry": [],
+          "cornerRadius": 0,
+          "cornerSmoothing": 0,
+          "topLeftRadius": 0,
+          "topRightRadius": 0,
+          "bottomLeftRadius": 0,
+          "bottomRightRadius": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+          "paddingBottom": 0,
+          "primaryAxisAlignItems": "MIN",
+          "counterAxisAlignItems": "MIN",
+          "primaryAxisSizingMode": "AUTO",
+          "layoutWrap": "NO_WRAP",
+          "counterAxisSpacing": 0,
+          "counterAxisAlignContent": "AUTO",
+          "strokeTopWeight": 1,
+          "strokeBottomWeight": 1,
+          "strokeLeftWeight": 1,
+          "strokeRightWeight": 1,
+          "inferredAutoLayout": {
+            "layoutMode": "VERTICAL",
+            "paddingLeft": 0,
+            "paddingRight": 0,
+            "paddingTop": 0,
+            "paddingBottom": 0,
+            "counterAxisSizingMode": "FIXED",
+            "primaryAxisSizingMode": "AUTO",
+            "primaryAxisAlignItems": "MIN",
+            "counterAxisAlignItems": "MIN",
+            "layoutAlign": "STRETCH",
+            "layoutGrow": 0,
+            "itemSpacing": 2,
+            "layoutPositioning": "AUTO"
+          },
+          "annotations": [],
+          "layoutGrids": [],
+          "gridStyleId": "",
+          "backgrounds": [],
+          "backgroundStyleId": "",
+          "clipsContent": false,
+          "guides": [],
+          "expanded": false,
+          "constraints": {
+            "horizontal": "MIN",
+            "vertical": "MIN"
+          },
+          "layoutMode": "VERTICAL",
+          "counterAxisSizingMode": "FIXED",
+          "horizontalPadding": 0,
+          "verticalPadding": 0,
+          "itemSpacing": 2,
+          "overflowDirection": "NONE",
+          "numberOfFixedChildren": 0,
+          "overlayPositionType": "CENTER",
+          "overlayBackground": {
+            "type": "NONE"
+          },
+          "overlayBackgroundInteraction": "NONE",
+          "itemReverseZIndex": false,
+          "strokesIncludedInLayout": false,
+          "devStatus": null,
+          "description": "",
+          "descriptionMarkdown": "",
+          "documentationLinks": [],
+          "remote": false,
+          "key": "c91fe1d0ca1613b23e670707edda9efc5fb729b4",
+          "reactions": [],
+          "playbackSettings": {
+            "autoplay": true,
+            "loop": true,
+            "muted": false
+          },
+          "variantProperties": {
+            "state": "resting"
+          },
+          "type": "COMPONENT",
+          "variables": {
+            "VariableID:4:11": {
+              "id": "VariableID:4:11",
+              "name": "base/size/xs",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 2
+              }
+            },
+            "VariableID:2:23": {
+              "id": "VariableID:2:23",
+              "name": "base/colour/grey/400",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:0": {
+                  "r": 0.15691731870174408,
+                  "g": 0.15691731870174408,
+                  "b": 0.15691731870174408,
+                  "a": 1
+                }
+              }
+            },
+            "VariableID:4:14": {
+              "id": "VariableID:4:14",
+              "name": "base/size/lg",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 12
+              }
+            },
+            "VariableID:2:65": {
+              "id": "VariableID:2:65",
+              "name": "base/font/size/xl",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 20
+              }
+            },
+            "VariableID:2:76": {
+              "id": "VariableID:2:76",
+              "name": "global/font/uiDefaultFont",
+              "resolvedType": "STRING",
+              "valuesByMode": {
+                "2:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:2:75"
+                }
+              }
+            },
+            "VariableID:2:75": {
+              "id": "VariableID:2:75",
+              "name": "brand/font/body",
+              "resolvedType": "STRING",
+              "valuesByMode": {
+                "2:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:2:54"
+                }
+              }
+            },
+            "VariableID:4:6": {
+              "id": "VariableID:4:6",
+              "name": "base/radius/sm",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 4
+              }
+            },
+            "VariableID:2:54": {
+              "id": "VariableID:2:54",
+              "name": "base/font/family/Inter",
+              "resolvedType": "STRING",
+              "valuesByMode": {
+                "2:0": "Inter"
+              }
+            },
+            "VariableID:2:68": {
+              "id": "VariableID:2:68",
+              "name": "base/font/linespacing/lg",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 24
+              }
+            },
+            "VariableID:2:61": {
+              "id": "VariableID:2:61",
+              "name": "base/font/weight/semibold",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 500
+              }
+            },
+            "VariableID:5:10": {
+              "id": "VariableID:5:10",
+              "name": "global/size/border/width",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:10"
+                }
+              }
+            },
+            "VariableID:4:10": {
+              "id": "VariableID:4:10",
+              "name": "base/size/2xs",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 1
+              }
+            },
+            "VariableID:2:36": {
+              "id": "VariableID:2:36",
+              "name": "base/colour/static/white",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:0": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                }
+              }
+            },
+            "VariableID:2:26": {
+              "id": "VariableID:2:26",
+              "name": "base/colour/grey/100",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:0": {
+                  "r": 0.8509804010391235,
+                  "g": 0.8509804010391235,
+                  "b": 0.8509804010391235,
+                  "a": 1
+                }
+              }
+            },
+            "VariableID:25:106": {
+              "id": "VariableID:25:106",
+              "name": "global/colour/textOnLight",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:2:23"
+                }
+              }
+            },
+            "VariableID:2:60": {
+              "id": "VariableID:2:60",
+              "name": "base/font/weight/regular",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 400
+              }
+            }
+          }
+        },
+        {
+          "id": "6002:44",
+          "parent": {
+            "id": "25:117"
+          },
+          "name": "state=hover",
+          "removed": false,
+          "isAsset": false,
+          "detachedInfo": null,
+          "visible": true,
+          "locked": false,
+          "stuckNodes": [],
+          "attachedConnectors": [],
+          "componentPropertyReferences": {},
+          "variableConsumptionMap": {
+            "STACK_SPACING": {
+              "type": 3,
+              "resolvedType": 1,
+              "value": "VariableID:4:11"
+            }
+          },
+          "boundVariables": {
+            "itemSpacing": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:4:11"
+            }
+          },
+          "resolvedVariableModes": {
+            "VariableCollectionId:2:38": "2:1",
+            "VariableCollectionId:2:72": "2:2",
+            "VariableCollectionId:2:22": "2:0"
+          },
+          "explicitVariableModes": {},
+          "opacity": 1,
+          "blendMode": "PASS_THROUGH",
+          "isMask": false,
+          "maskType": "ALPHA",
+          "effects": [],
+          "effectStyleId": "",
+          "relativeTransform": [
+            [
+              1,
+              0,
+              10
+            ],
+            [
+              0,
+              1,
+              98
+            ]
+          ],
+          "absoluteTransform": [
+            [
+              1,
+              0,
+              608
+            ],
+            [
+              0,
+              1,
+              67
+            ]
+          ],
+          "x": 10,
+          "y": 98,
+          "width": 255,
+          "height": 68,
+          "absoluteBoundingBox": {
+            "x": 608,
+            "y": 67,
+            "width": 255,
+            "height": 68
+          },
+          "targetAspectRatio": null,
+          "absoluteRenderBounds": {
+            "x": 608,
+            "y": 67,
+            "width": 255,
+            "height": 68
+          },
+          "rotation": 0,
+          "layoutAlign": "STRETCH",
+          "constrainProportions": false,
+          "layoutGrow": 0,
+          "layoutPositioning": "AUTO",
+          "minWidth": null,
+          "minHeight": null,
+          "maxWidth": null,
+          "maxHeight": null,
+          "layoutSizingHorizontal": "FILL",
+          "layoutSizingVertical": "HUG",
+          "children": [
+            {
+              "id": "6002:45",
+              "parent": {
+                "id": "6002:44"
+              },
+              "name": "Label",
+              "removed": false,
+              "isAsset": false,
+              "detachedInfo": null,
+              "visible": true,
+              "locked": false,
+              "stuckNodes": [],
+              "attachedConnectors": [],
+              "componentPropertyReferences": {
+                "visible": "showLabel#25:13"
+              },
+              "variableConsumptionMap": {},
+              "boundVariables": {
+                "fills": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:23"
+                  }
+                ],
+                "fontSize": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:65"
+                  }
+                ],
+                "fontFamily": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:76"
+                  }
+                ],
+                "lineHeight": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:68"
+                  }
+                ],
+                "fontWeight": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:61"
+                  }
+                ]
+              },
+              "resolvedVariableModes": {
+                "VariableCollectionId:2:38": "2:1",
+                "VariableCollectionId:2:72": "2:2",
+                "VariableCollectionId:2:22": "2:0"
+              },
+              "explicitVariableModes": {},
+              "opacity": 1,
+              "blendMode": "PASS_THROUGH",
+              "isMask": false,
+              "maskType": "ALPHA",
+              "effects": [],
+              "effectStyleId": "",
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.15691731870174408,
+                    "g": 0.15691731870174408,
+                    "b": 0.15691731870174408
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:23"
+                    }
+                  }
+                }
+              ],
+              "fillStyleId": "",
+              "strokes": [],
+              "strokeStyleId": "",
+              "strokeWeight": 1,
+              "strokeAlign": "OUTSIDE",
+              "strokeJoin": "MITER",
+              "dashPattern": [],
+              "strokeCap": "NONE",
+              "strokeMiterLimit": 4,
+              "fillGeometry": [
+                {
+                  "windingRule": "NONZERO",
+                  "data": "M1.59801 19 L1.59801 4.45455 L3.79261 4.45455 L3.79261 17.1108 L10.3835 17.1108 L10.3835 19 L1.59801 19 Z M15.8913 19.2415 C15.2 19.2415 14.575 19.1136 14.0163 18.858 C13.4576 18.5975 13.0149 18.2211 12.6882 17.7287 C12.3662 17.2363 12.2053 16.6326 12.2053 15.9176 C12.2053 15.3021 12.3236 14.7955 12.5604 14.3977 C12.7971 14 13.1167 13.6851 13.5192 13.4531 C13.9216 13.2211 14.3714 13.0459 14.8686 12.9276 C15.3658 12.8092 15.8724 12.7192 16.3885 12.6577 C17.0419 12.5819 17.5722 12.5204 17.9794 12.473 C18.3866 12.4209 18.6825 12.3381 18.8672 12.2244 C19.0518 12.1108 19.1442 11.9261 19.1442 11.6705 L19.1442 11.6207 C19.1442 11.0005 18.969 10.5199 18.6186 10.179 C18.273 9.83807 17.7569 9.66761 17.0703 9.66761 C16.3554 9.66761 15.7919 9.82623 15.38 10.1435 C14.9728 10.456 14.6911 10.804 14.5348 11.1875 L12.5391 10.733 C12.7758 10.0701 13.1214 9.53504 13.576 9.12784 C14.0353 8.71591 14.5632 8.41761 15.1598 8.23295 C15.7564 8.04356 16.3838 7.94886 17.0419 7.94886 C17.4775 7.94886 17.9392 8.00095 18.4268 8.10511 C18.9193 8.20455 19.3786 8.3892 19.8047 8.65909 C20.2356 8.92898 20.5883 9.31487 20.8629 9.81676 C21.1375 10.3139 21.2749 10.9602 21.2749 11.7557 L21.2749 19 L19.201 19 L19.201 17.5085 L19.1158 17.5085 C18.9785 17.7831 18.7725 18.053 18.4979 18.3182 C18.2232 18.5833 17.8705 18.8035 17.4396 18.9787 C17.0088 19.1539 16.4927 19.2415 15.8913 19.2415 Z M16.353 17.5369 C16.9401 17.5369 17.442 17.4209 17.8587 17.1889 C18.2801 16.9569 18.5997 16.6539 18.8175 16.2798 C19.04 15.901 19.1513 15.4962 19.1513 15.0653 L19.1513 13.6591 C19.0755 13.7348 18.9287 13.8059 18.7109 13.8722 C18.4979 13.9337 18.254 13.9882 17.9794 14.0355 C17.7048 14.0781 17.4373 14.1184 17.1768 14.1562 C16.9164 14.1894 16.6986 14.2178 16.5234 14.2415 C16.1115 14.2936 15.7351 14.3812 15.3942 14.5043 C15.058 14.6274 14.7881 14.8049 14.5845 15.0369 C14.3857 15.2642 14.2862 15.5672 14.2862 15.946 C14.2862 16.4716 14.4804 16.8693 14.8686 17.1392 C15.2569 17.4044 15.7517 17.5369 16.353 17.5369 Z M24.2738 19 L24.2738 4.45455 L26.3974 4.45455 L26.3974 9.85938 L26.5252 9.85938 C26.6483 9.6321 26.8259 9.36932 27.0579 9.07102 C27.2899 8.77273 27.6119 8.51231 28.0238 8.28977 C28.4357 8.0625 28.9802 7.94886 29.6573 7.94886 C30.538 7.94886 31.324 8.1714 32.0153 8.61648 C32.7066 9.06155 33.2487 9.70312 33.6417 10.5412 C34.0394 11.3793 34.2383 12.3878 34.2383 13.5668 C34.2383 14.7457 34.0418 15.7566 33.6488 16.5994 C33.2558 17.4375 32.716 18.0838 32.0295 18.5384 C31.3429 18.9882 30.5593 19.2131 29.6786 19.2131 C29.0157 19.2131 28.4736 19.1018 28.0522 18.8793 C27.6355 18.6567 27.3088 18.3963 27.0721 18.098 C26.8353 17.7997 26.6531 17.5346 26.5252 17.3026 L26.3477 17.3026 L26.3477 19 L24.2738 19 Z M26.3548 13.5455 C26.3548 14.3125 26.466 14.9848 26.6886 15.5625 C26.9111 16.1402 27.2331 16.5923 27.6545 16.919 C28.0759 17.241 28.592 17.402 29.2028 17.402 C29.8372 17.402 30.3675 17.2339 30.7937 16.8977 C31.2198 16.5568 31.5418 16.0952 31.7596 15.5128 C31.9821 14.9304 32.0934 14.2746 32.0934 13.5455 C32.0934 12.8258 31.9845 12.1795 31.7667 11.6065 C31.5536 11.0336 31.2317 10.5814 30.8008 10.25 C30.3746 9.91856 29.842 9.75284 29.2028 9.75284 C28.5872 9.75284 28.0664 9.91146 27.6403 10.2287 C27.2189 10.5459 26.8993 10.9886 26.6815 11.5568 C26.4637 12.125 26.3548 12.7879 26.3548 13.5455 Z M41.3246 19.2202 C40.2498 19.2202 39.3241 18.9905 38.5476 18.5312 C37.7758 18.0672 37.1792 17.4162 36.7578 16.5781 C36.3411 15.7353 36.1328 14.7481 36.1328 13.6165 C36.1328 12.4991 36.3411 11.5142 36.7578 10.6619 C37.1792 9.80966 37.7663 9.14441 38.5192 8.66619 C39.2768 8.18797 40.1622 7.94886 41.1754 7.94886 C41.791 7.94886 42.3875 8.05066 42.9652 8.25426 C43.5429 8.45786 44.0613 8.77746 44.5206 9.21307 C44.9799 9.64867 45.3421 10.2145 45.6072 10.9105 C45.8724 11.6018 46.005 12.4422 46.005 13.4318 L46.005 14.1847 L37.3331 14.1847 L37.3331 12.5938 L43.924 12.5938 C43.924 12.035 43.8104 11.5402 43.5831 11.1094 C43.3558 10.6738 43.0362 10.3305 42.6243 10.0795 C42.2171 9.8286 41.7389 9.70312 41.1896 9.70312 C40.593 9.70312 40.0722 9.84991 39.6271 10.1435 C39.1868 10.4323 38.8459 10.8111 38.6044 11.2798 C38.3677 11.7438 38.2493 12.2481 38.2493 12.7926 L38.2493 14.0355 C38.2493 14.7647 38.3771 15.3849 38.6328 15.8963 C38.8932 16.4077 39.2554 16.7983 39.7195 17.0682 C40.1835 17.3333 40.7256 17.4659 41.3459 17.4659 C41.7483 17.4659 42.1153 17.4091 42.4467 17.2955 C42.7782 17.1771 43.0646 17.0019 43.3061 16.7699 C43.5476 16.5379 43.7322 16.2514 43.8601 15.9105 L45.87 16.2727 C45.709 16.8646 45.4202 17.383 45.0036 17.8281 C44.5916 18.2685 44.0732 18.6117 43.4482 18.858 C42.8279 19.0994 42.12 19.2202 41.3246 19.2202 Z M50.4847 4.45455 L50.4847 19 L48.3611 19 L48.3611 4.45455 L50.4847 4.45455 Z"
+                }
+              ],
+              "strokeGeometry": [],
+              "relativeTransform": [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0
+                ]
+              ],
+              "absoluteTransform": [
+                [
+                  1,
+                  0,
+                  608
+                ],
+                [
+                  0,
+                  1,
+                  67
+                ]
+              ],
+              "x": 0,
+              "y": 0,
+              "width": 255,
+              "height": 24,
+              "absoluteBoundingBox": {
+                "x": 608,
+                "y": 67,
+                "width": 255,
+                "height": 24
+              },
+              "targetAspectRatio": null,
+              "absoluteRenderBounds": {
+                "x": 609.5980224609375,
+                "y": 71.45454406738281,
+                "width": 48.88671875,
+                "height": 14.786933898925781
+              },
+              "rotation": 0,
+              "layoutAlign": "STRETCH",
+              "constrainProportions": false,
+              "layoutGrow": 0,
+              "layoutPositioning": "AUTO",
+              "minWidth": null,
+              "minHeight": null,
+              "maxWidth": null,
+              "maxHeight": null,
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "exportSettings": [],
+              "constraints": {
+                "horizontal": "MIN",
+                "vertical": "MIN"
+              },
+              "characters": "Label",
+              "hasMissingFont": false,
+              "fontSize": 20,
+              "hangingPunctuation": false,
+              "hangingList": false,
+              "paragraphIndent": 0,
+              "paragraphSpacing": 0,
+              "listSpacing": 0,
+              "textCase": "ORIGINAL",
+              "textDecoration": "NONE",
+              "textDecorationStyle": null,
+              "textDecorationSkipInk": null,
+              "textDecorationOffset": null,
+              "textDecorationThickness": null,
+              "textDecorationColor": null,
+              "letterSpacing": {
+                "unit": "PERCENT",
+                "value": 0
+              },
+              "lineHeight": {
+                "unit": "PIXELS",
+                "value": 24
+              },
+              "leadingTrim": "NONE",
+              "fontName": {
+                "family": "Inter",
+                "style": "Medium"
+              },
+              "fontWeight": 500,
+              "openTypeFeatures": {},
+              "hyperlink": null,
+              "canUpgradeToNativeBidiSupport": false,
+              "autoRename": true,
+              "textAlignHorizontal": "LEFT",
+              "textAlignVertical": "TOP",
+              "textAutoResize": "HEIGHT",
+              "textStyleId": "S:dce7b9b5c72205b4d78087712e7168b280767819,",
+              "textTruncation": "DISABLED",
+              "maxLines": null,
+              "reactions": [],
+              "playbackSettings": {
+                "autoplay": true,
+                "loop": true,
+                "muted": false
+              },
+              "annotations": [],
+              "type": "TEXT",
+              "variables": {
+                "VariableID:2:23": {
+                  "id": "VariableID:2:23",
+                  "name": "base/colour/grey/400",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 0.15691731870174408,
+                      "g": 0.15691731870174408,
+                      "b": 0.15691731870174408,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:2:65": {
+                  "id": "VariableID:2:65",
+                  "name": "base/font/size/xl",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 20
+                  }
+                },
+                "VariableID:2:76": {
+                  "id": "VariableID:2:76",
+                  "name": "global/font/uiDefaultFont",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:75"
+                    }
+                  }
+                },
+                "VariableID:2:75": {
+                  "id": "VariableID:2:75",
+                  "name": "brand/font/body",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:1": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:54"
+                    }
+                  }
+                },
+                "VariableID:2:54": {
+                  "id": "VariableID:2:54",
+                  "name": "base/font/family/Inter",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:0": "Inter"
+                  }
+                },
+                "VariableID:2:68": {
+                  "id": "VariableID:2:68",
+                  "name": "base/font/linespacing/lg",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 24
+                  }
+                },
+                "VariableID:2:61": {
+                  "id": "VariableID:2:61",
+                  "name": "base/font/weight/semibold",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 500
+                  }
+                }
+              }
+            },
+            {
+              "id": "6002:46",
+              "parent": {
+                "id": "6002:44"
+              },
+              "name": "Input box",
+              "removed": false,
+              "isAsset": false,
+              "detachedInfo": null,
+              "visible": true,
+              "locked": false,
+              "stuckNodes": [],
+              "attachedConnectors": [],
+              "componentPropertyReferences": {},
+              "variableConsumptionMap": {
+                "STACK_SPACING": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:14"
+                },
+                "STACK_PADDING_LEFT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:14"
+                },
+                "STACK_PADDING_RIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:14"
+                },
+                "RECTANGLE_TOP_LEFT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "RECTANGLE_TOP_RIGHT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "RECTANGLE_BOTTOM_LEFT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "RECTANGLE_BOTTOM_RIGHT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "BORDER_TOP_WEIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:5:10"
+                },
+                "BORDER_BOTTOM_WEIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:5:10"
+                },
+                "BORDER_LEFT_WEIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:5:10"
+                },
+                "BORDER_RIGHT_WEIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:5:10"
+                }
+              },
+              "boundVariables": {
+                "itemSpacing": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:14"
+                },
+                "paddingLeft": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:14"
+                },
+                "paddingRight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:14"
+                },
+                "topLeftRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "topRightRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "bottomLeftRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "bottomRightRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "strokeTopWeight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:10"
+                },
+                "strokeBottomWeight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:10"
+                },
+                "strokeLeftWeight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:10"
+                },
+                "strokeRightWeight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:5:10"
+                },
+                "fills": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:36"
+                  }
+                ],
+                "strokes": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:24"
+                  }
+                ]
+              },
+              "resolvedVariableModes": {
+                "VariableCollectionId:2:38": "2:1",
+                "VariableCollectionId:2:72": "2:2",
+                "VariableCollectionId:2:22": "2:0"
+              },
+              "explicitVariableModes": {},
+              "opacity": 1,
+              "blendMode": "PASS_THROUGH",
+              "isMask": false,
+              "maskType": "ALPHA",
+              "effects": [],
+              "effectStyleId": "",
+              "relativeTransform": [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  26
+                ]
+              ],
+              "absoluteTransform": [
+                [
+                  1,
+                  0,
+                  608
+                ],
+                [
+                  0,
+                  1,
+                  93
+                ]
+              ],
+              "x": 0,
+              "y": 26,
+              "width": 255,
+              "height": 42,
+              "absoluteBoundingBox": {
+                "x": 608,
+                "y": 93,
+                "width": 255,
+                "height": 42
+              },
+              "targetAspectRatio": null,
+              "absoluteRenderBounds": {
+                "x": 608,
+                "y": 93,
+                "width": 255,
+                "height": 42
+              },
+              "rotation": 0,
+              "layoutAlign": "STRETCH",
+              "constrainProportions": false,
+              "layoutGrow": 0,
+              "layoutPositioning": "AUTO",
+              "minWidth": null,
+              "minHeight": null,
+              "maxWidth": null,
+              "maxHeight": null,
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "children": [
+                {
+                  "id": "6002:47",
+                  "parent": {
+                    "id": "6002:46"
+                  },
+                  "name": "Input text",
+                  "removed": false,
+                  "isAsset": false,
+                  "detachedInfo": null,
+                  "visible": true,
+                  "locked": false,
+                  "stuckNodes": [],
+                  "attachedConnectors": [],
+                  "componentPropertyReferences": {},
+                  "variableConsumptionMap": {},
+                  "boundVariables": {
+                    "fills": [
+                      {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:25:106"
+                      }
+                    ],
+                    "fontFamily": [
+                      {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:2:76"
+                      }
+                    ],
+                    "fontWeight": [
+                      {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:2:60"
+                      }
+                    ]
+                  },
+                  "resolvedVariableModes": {
+                    "VariableCollectionId:2:38": "2:1",
+                    "VariableCollectionId:2:22": "2:0",
+                    "VariableCollectionId:2:72": "2:2"
+                  },
+                  "explicitVariableModes": {},
+                  "opacity": 1,
+                  "blendMode": "PASS_THROUGH",
+                  "isMask": false,
+                  "maskType": "ALPHA",
+                  "effects": [],
+                  "effectStyleId": "",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "visible": true,
+                      "opacity": 1,
+                      "blendMode": "NORMAL",
+                      "color": {
+                        "r": 0.15691731870174408,
+                        "g": 0.15691731870174408,
+                        "b": 0.15691731870174408
+                      },
+                      "boundVariables": {
+                        "color": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:25:106"
+                        }
+                      }
+                    }
+                  ],
+                  "fillStyleId": "",
+                  "strokes": [],
+                  "strokeStyleId": "",
+                  "strokeWeight": 1,
+                  "strokeAlign": "OUTSIDE",
+                  "strokeJoin": "MITER",
+                  "dashPattern": [],
+                  "strokeCap": "NONE",
+                  "strokeMiterLimit": 4,
+                  "fillGeometry": [
+                    {
+                      "windingRule": "NONZERO",
+                      "data": "M2.81818 4.36364 L2.81818 16 L1.40909 16 L1.40909 4.36364 L2.81818 4.36364 Z M6.80256 10.75 L6.80256 16 L5.46165 16 L5.46165 7.27273 L6.7571 7.27273 L6.7571 8.63636 L6.87074 8.63636 C7.07528 8.19318 7.38589 7.83712 7.80256 7.56818 C8.21922 7.29545 8.7571 7.15909 9.41619 7.15909 C10.0071 7.15909 10.5241 7.2803 10.9673 7.52273 C11.4105 7.76136 11.7552 8.125 12.0014 8.61364 C12.2476 9.09848 12.3707 9.71212 12.3707 10.4545 L12.3707 16 L11.0298 16 L11.0298 10.5455 C11.0298 9.85985 10.8518 9.32576 10.4957 8.94318 C10.1397 8.55682 9.65104 8.36364 9.02983 8.36364 C8.6018 8.36364 8.21922 8.45644 7.8821 8.64205 C7.54877 8.82765 7.28551 9.09848 7.09233 9.45455 C6.89915 9.81061 6.80256 10.2424 6.80256 10.75 Z M14.821 19.2727 L14.821 7.27273 L16.1165 7.27273 L16.1165 8.65909 L16.2756 8.65909 C16.3741 8.50758 16.5104 8.31439 16.6847 8.07955 C16.8627 7.84091 17.1165 7.62879 17.446 7.44318 C17.7794 7.25379 18.2301 7.15909 18.7983 7.15909 C19.5331 7.15909 20.1809 7.3428 20.7415 7.71023 C21.3021 8.07765 21.7396 8.59848 22.054 9.27273 C22.3684 9.94697 22.5256 10.7424 22.5256 11.6591 C22.5256 12.5833 22.3684 13.3845 22.054 14.0625 C21.7396 14.7367 21.304 15.2595 20.7472 15.6307 C20.1903 15.9981 19.5483 16.1818 18.821 16.1818 C18.2604 16.1818 17.8116 16.089 17.4744 15.9034 C17.1373 15.714 16.8778 15.5 16.696 15.2614 C16.5142 15.0189 16.3741 14.8182 16.2756 14.6591 L16.1619 14.6591 L16.1619 19.2727 L14.821 19.2727 Z M16.1392 11.6364 C16.1392 12.2955 16.2358 12.8769 16.429 13.3807 C16.6222 13.8807 16.9044 14.2727 17.2756 14.5568 C17.6468 14.8371 18.1013 14.9773 18.6392 14.9773 C19.1998 14.9773 19.6676 14.8295 20.0426 14.5341 C20.4214 14.2348 20.7055 13.8333 20.8949 13.3295 C21.0881 12.822 21.1847 12.2576 21.1847 11.6364 C21.1847 11.0227 21.09 10.4697 20.9006 9.97727 C20.715 9.48106 20.4328 9.08902 20.054 8.80114 C19.679 8.50947 19.2074 8.36364 18.6392 8.36364 C18.0938 8.36364 17.6354 8.50189 17.2642 8.77841 C16.893 9.05114 16.6127 9.43371 16.4233 9.92614 C16.2339 10.4148 16.1392 10.9848 16.1392 11.6364 Z M30.071 12.4318 L30.071 7.27273 L31.4119 7.27273 L31.4119 16 L30.071 16 L30.071 14.5227 L29.9801 14.5227 C29.7756 14.9659 29.4574 15.3428 29.0256 15.6534 C28.5938 15.9602 28.0483 16.1136 27.3892 16.1136 C26.8438 16.1136 26.3589 15.9943 25.9347 15.7557 C25.5104 15.5133 25.1771 15.1496 24.9347 14.6648 C24.6922 14.1761 24.571 13.5606 24.571 12.8182 L24.571 7.27273 L25.9119 7.27273 L25.9119 12.7273 C25.9119 13.3636 26.09 13.8712 26.446 14.25 C26.8059 14.6288 27.2642 14.8182 27.821 14.8182 C28.1544 14.8182 28.4934 14.733 28.8381 14.5625 C29.1866 14.392 29.4782 14.1307 29.7131 13.7784 C29.9517 13.4261 30.071 12.9773 30.071 12.4318 Z M37.6634 7.27273 L37.6634 8.40909 L33.1406 8.40909 L33.1406 7.27273 L37.6634 7.27273 Z M34.4588 5.18182 L35.7997 5.18182 L35.7997 13.5 C35.7997 13.8788 35.8546 14.1629 35.9645 14.3523 C36.0781 14.5379 36.2221 14.6629 36.3963 14.7273 C36.5743 14.7879 36.7618 14.8182 36.9588 14.8182 C37.1065 14.8182 37.2277 14.8106 37.3224 14.7955 C37.4171 14.7765 37.4929 14.7614 37.5497 14.75 L37.8224 15.9545 C37.7315 15.9886 37.6046 16.0227 37.4418 16.0568 C37.2789 16.0947 37.0724 16.1136 36.8224 16.1136 C36.4437 16.1136 36.0724 16.0322 35.7088 15.8693 C35.349 15.7064 35.0497 15.4583 34.8111 15.125 C34.5762 14.7917 34.4588 14.3712 34.4588 13.8636 L34.4588 5.18182 Z M47.9759 7.27273 L47.9759 8.40909 L43.4531 8.40909 L43.4531 7.27273 L47.9759 7.27273 Z M44.7713 5.18182 L46.1122 5.18182 L46.1122 13.5 C46.1122 13.8788 46.1671 14.1629 46.277 14.3523 C46.3906 14.5379 46.5346 14.6629 46.7088 14.7273 C46.8868 14.7879 47.0743 14.8182 47.2713 14.8182 C47.419 14.8182 47.5402 14.8106 47.6349 14.7955 C47.7296 14.7765 47.8054 14.7614 47.8622 14.75 L48.1349 15.9545 C48.044 15.9886 47.9171 16.0227 47.7543 16.0568 C47.5914 16.0947 47.3849 16.1136 47.1349 16.1136 C46.7562 16.1136 46.3849 16.0322 46.0213 15.8693 C45.6615 15.7064 45.3622 15.4583 45.1236 15.125 C44.8887 14.7917 44.7713 14.3712 44.7713 13.8636 L44.7713 5.18182 Z M53.5582 16.1818 C52.7173 16.1818 51.992 15.9962 51.3821 15.625 C50.776 15.25 50.3082 14.7273 49.9787 14.0568 C49.6529 13.3826 49.4901 12.5985 49.4901 11.7045 C49.4901 10.8106 49.6529 10.0227 49.9787 9.34091 C50.3082 8.6553 50.7666 8.12121 51.3537 7.73864 C51.9446 7.35227 52.634 7.15909 53.4219 7.15909 C53.8764 7.15909 54.3253 7.23485 54.7685 7.38636 C55.2116 7.53788 55.6151 7.78409 55.9787 8.125 C56.3423 8.46212 56.6321 8.90909 56.848 9.46591 C57.0639 10.0227 57.1719 10.7083 57.1719 11.5227 L57.1719 12.0909 L50.4446 12.0909 L50.4446 10.9318 L55.8082 10.9318 C55.8082 10.4394 55.7098 10 55.5128 9.61364 C55.3196 9.22727 55.0431 8.92235 54.6832 8.69886 C54.3272 8.47538 53.9067 8.36364 53.4219 8.36364 C52.8878 8.36364 52.4257 8.49621 52.0355 8.76136 C51.6491 9.02273 51.3518 9.36364 51.1435 9.78409 C50.9351 10.2045 50.831 10.6553 50.831 11.1364 L50.831 11.9091 C50.831 12.5682 50.9446 13.1269 51.1719 13.5852 C51.4029 14.0398 51.723 14.3864 52.1321 14.625 C52.5412 14.8598 53.0166 14.9773 53.5582 14.9773 C53.9105 14.9773 54.2287 14.928 54.5128 14.8295 C54.8007 14.7273 55.0488 14.5758 55.2571 14.375 C55.4654 14.1705 55.6264 13.9167 55.7401 13.6136 L57.0355 13.9773 C56.8991 14.4167 56.67 14.803 56.348 15.1364 C56.026 15.4659 55.6283 15.7235 55.1548 15.9091 C54.6813 16.0909 54.1491 16.1818 53.5582 16.1818 Z M59.9773 7.27273 L62.0682 10.8409 L64.1591 7.27273 L65.7045 7.27273 L62.8864 11.6364 L65.7045 16 L64.1591 16 L62.0682 12.6136 L59.9773 16 L58.4318 16 L61.2045 11.6364 L58.4318 7.27273 L59.9773 7.27273 Z M71.4134 7.27273 L71.4134 8.40909 L66.8906 8.40909 L66.8906 7.27273 L71.4134 7.27273 Z M68.2088 5.18182 L69.5497 5.18182 L69.5497 13.5 C69.5497 13.8788 69.6046 14.1629 69.7145 14.3523 C69.8281 14.5379 69.9721 14.6629 70.1463 14.7273 C70.3243 14.7879 70.5118 14.8182 70.7088 14.8182 C70.8565 14.8182 70.9777 14.8106 71.0724 14.7955 C71.1671 14.7765 71.2429 14.7614 71.2997 14.75 L71.5724 15.9545 C71.4815 15.9886 71.3546 16.0227 71.1918 16.0568 C71.0289 16.0947 70.8224 16.1136 70.5724 16.1136 C70.1937 16.1136 69.8224 16.0322 69.4588 15.8693 C69.099 15.7064 68.7997 15.4583 68.5611 15.125 C68.3262 14.7917 68.2088 14.3712 68.2088 13.8636 L68.2088 5.18182 Z"
+                    }
+                  ],
+                  "strokeGeometry": [],
+                  "relativeTransform": [
+                    [
+                      1,
+                      0,
+                      12
+                    ],
+                    [
+                      0,
+                      1,
+                      11
+                    ]
+                  ],
+                  "absoluteTransform": [
+                    [
+                      1,
+                      0,
+                      620
+                    ],
+                    [
+                      0,
+                      1,
+                      104
+                    ]
+                  ],
+                  "x": 12,
+                  "y": 11,
+                  "width": 231,
+                  "height": 20,
+                  "absoluteBoundingBox": {
+                    "x": 620,
+                    "y": 104,
+                    "width": 231,
+                    "height": 20
+                  },
+                  "targetAspectRatio": null,
+                  "absoluteRenderBounds": {
+                    "x": 621.4091186523438,
+                    "y": 108.36363220214844,
+                    "width": 70.163330078125,
+                    "height": 14.909095764160156
+                  },
+                  "rotation": 0,
+                  "layoutAlign": "INHERIT",
+                  "constrainProportions": false,
+                  "layoutGrow": 1,
+                  "layoutPositioning": "AUTO",
+                  "minWidth": null,
+                  "minHeight": null,
+                  "maxWidth": null,
+                  "maxHeight": null,
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "exportSettings": [],
+                  "constraints": {
+                    "horizontal": "MIN",
+                    "vertical": "MIN"
+                  },
+                  "characters": "Input text",
+                  "hasMissingFont": false,
+                  "fontSize": 16,
+                  "hangingPunctuation": false,
+                  "hangingList": false,
+                  "paragraphIndent": 0,
+                  "paragraphSpacing": 0,
+                  "listSpacing": 0,
+                  "textCase": "ORIGINAL",
+                  "textDecoration": "NONE",
+                  "textDecorationStyle": null,
+                  "textDecorationSkipInk": null,
+                  "textDecorationOffset": null,
+                  "textDecorationThickness": null,
+                  "textDecorationColor": null,
+                  "letterSpacing": {
+                    "unit": "PERCENT",
+                    "value": 0
+                  },
+                  "lineHeight": {
+                    "unit": "PIXELS",
+                    "value": 20
+                  },
+                  "leadingTrim": "NONE",
+                  "fontName": {
+                    "family": "Inter",
+                    "style": "Regular"
+                  },
+                  "fontWeight": 400,
+                  "openTypeFeatures": {},
+                  "hyperlink": null,
+                  "canUpgradeToNativeBidiSupport": false,
+                  "autoRename": true,
+                  "textAlignHorizontal": "LEFT",
+                  "textAlignVertical": "TOP",
+                  "textAutoResize": "HEIGHT",
+                  "textStyleId": "S:ae5e92191e0ae603c3cb95fed07e8ff73e5e1855,",
+                  "textTruncation": "DISABLED",
+                  "maxLines": null,
+                  "reactions": [],
+                  "playbackSettings": {
+                    "autoplay": true,
+                    "loop": true,
+                    "muted": false
+                  },
+                  "annotations": [],
+                  "type": "TEXT",
+                  "variables": {
+                    "VariableID:25:106": {
+                      "id": "VariableID:25:106",
+                      "name": "global/colour/textOnLight",
+                      "resolvedType": "COLOR",
+                      "valuesByMode": {
+                        "2:2": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:2:23"
+                        }
+                      }
+                    },
+                    "VariableID:2:23": {
+                      "id": "VariableID:2:23",
+                      "name": "base/colour/grey/400",
+                      "resolvedType": "COLOR",
+                      "valuesByMode": {
+                        "2:0": {
+                          "r": 0.15691731870174408,
+                          "g": 0.15691731870174408,
+                          "b": 0.15691731870174408,
+                          "a": 1
+                        }
+                      }
+                    },
+                    "VariableID:2:76": {
+                      "id": "VariableID:2:76",
+                      "name": "global/font/uiDefaultFont",
+                      "resolvedType": "STRING",
+                      "valuesByMode": {
+                        "2:2": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:2:75"
+                        }
+                      }
+                    },
+                    "VariableID:2:75": {
+                      "id": "VariableID:2:75",
+                      "name": "brand/font/body",
+                      "resolvedType": "STRING",
+                      "valuesByMode": {
+                        "2:1": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:2:54"
+                        }
+                      }
+                    },
+                    "VariableID:2:54": {
+                      "id": "VariableID:2:54",
+                      "name": "base/font/family/Inter",
+                      "resolvedType": "STRING",
+                      "valuesByMode": {
+                        "2:0": "Inter"
+                      }
+                    },
+                    "VariableID:2:60": {
+                      "id": "VariableID:2:60",
+                      "name": "base/font/weight/regular",
+                      "resolvedType": "FLOAT",
+                      "valuesByMode": {
+                        "2:0": 400
+                      }
+                    }
+                  }
+                }
+              ],
+              "exportSettings": [],
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:36"
+                    }
+                  }
+                }
+              ],
+              "fillStyleId": "",
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.4556640684604645,
+                    "g": 0.4556640684604645,
+                    "b": 0.4556640684604645
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:24"
+                    }
+                  }
+                }
+              ],
+              "strokeStyleId": "",
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "strokeJoin": "MITER",
+              "dashPattern": [],
+              "strokeCap": "NONE",
+              "strokeMiterLimit": 4,
+              "fillGeometry": [
+                {
+                  "windingRule": "NONZERO",
+                  "data": "M0 4 C0 1.79086 1.79086 0 4 0 L251 0 C253.209 0 255 1.79086 255 4 L255 38 C255 40.2091 253.209 42 251 42 L4 42 C1.79086 42 0 40.2091 0 38 L0 4 Z"
+                }
+              ],
+              "strokeGeometry": [
+                {
+                  "windingRule": "NONZERO",
+                  "data": "M4 1 L251 1 L251 -1 L4 -1 L4 1 Z M254 4 L254 38 L256 38 L256 4 L254 4 Z M251 41 L4 41 L4 43 L251 43 L251 41 Z M1 38 L1 4 L-1 4 L-1 38 L1 38 Z M4 41 C2.34315 41 1 39.6569 1 38 L-1 38 C-1 40.7614 1.23858 43 4 43 L4 41 Z M254 38 C254 39.6569 252.657 41 251 41 L251 43 C253.761 43 256 40.7614 256 38 L254 38 Z M251 1 C252.657 1 254 2.34315 254 4 L256 4 C256 1.23858 253.761 -1 251 -1 L251 1 Z M4 -1 C1.23858 -1 -1 1.23858 -1 4 L1 4 C1 2.34315 2.34315 1 4 1 L4 -1 Z"
+                }
+              ],
+              "cornerRadius": 4,
+              "cornerSmoothing": 0,
+              "topLeftRadius": 4,
+              "topRightRadius": 4,
+              "bottomLeftRadius": 4,
+              "bottomRightRadius": 4,
+              "paddingLeft": 12,
+              "paddingRight": 12,
+              "paddingTop": 11,
+              "paddingBottom": 11,
+              "primaryAxisAlignItems": "MIN",
+              "counterAxisAlignItems": "CENTER",
+              "primaryAxisSizingMode": "FIXED",
+              "layoutWrap": "NO_WRAP",
+              "counterAxisSpacing": 0,
+              "counterAxisAlignContent": "AUTO",
+              "strokeTopWeight": 1,
+              "strokeBottomWeight": 1,
+              "strokeLeftWeight": 1,
+              "strokeRightWeight": 1,
+              "inferredAutoLayout": {
+                "layoutMode": "HORIZONTAL",
+                "paddingLeft": 12,
+                "paddingRight": 12,
+                "paddingTop": 11,
+                "paddingBottom": 11,
+                "counterAxisSizingMode": "AUTO",
+                "primaryAxisSizingMode": "FIXED",
+                "primaryAxisAlignItems": "MIN",
+                "counterAxisAlignItems": "CENTER",
+                "layoutAlign": "STRETCH",
+                "layoutGrow": 0,
+                "itemSpacing": 12,
+                "layoutPositioning": "AUTO"
+              },
+              "annotations": [],
+              "layoutGrids": [],
+              "gridStyleId": "",
+              "backgrounds": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:36"
+                    }
+                  }
+                }
+              ],
+              "backgroundStyleId": "",
+              "clipsContent": true,
+              "guides": [],
+              "expanded": false,
+              "constraints": {
+                "horizontal": "MIN",
+                "vertical": "MIN"
+              },
+              "layoutMode": "HORIZONTAL",
+              "counterAxisSizingMode": "AUTO",
+              "horizontalPadding": 12,
+              "verticalPadding": 11,
+              "itemSpacing": 12,
+              "overflowDirection": "NONE",
+              "numberOfFixedChildren": 0,
+              "overlayPositionType": "CENTER",
+              "overlayBackground": {
+                "type": "NONE"
+              },
+              "overlayBackgroundInteraction": "NONE",
+              "itemReverseZIndex": false,
+              "strokesIncludedInLayout": false,
+              "devStatus": null,
+              "reactions": [],
+              "playbackSettings": {
+                "autoplay": true,
+                "loop": true,
+                "muted": false
+              },
+              "type": "FRAME",
+              "variables": {
+                "VariableID:4:14": {
+                  "id": "VariableID:4:14",
+                  "name": "base/size/lg",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 12
+                  }
+                },
+                "VariableID:4:6": {
+                  "id": "VariableID:4:6",
+                  "name": "base/radius/sm",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 4
+                  }
+                },
+                "VariableID:5:10": {
+                  "id": "VariableID:5:10",
+                  "name": "global/size/border/width",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:4:10"
+                    }
+                  }
+                },
+                "VariableID:4:10": {
+                  "id": "VariableID:4:10",
+                  "name": "base/size/2xs",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 1
+                  }
+                },
+                "VariableID:2:36": {
+                  "id": "VariableID:2:36",
+                  "name": "base/colour/static/white",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 1,
+                      "g": 1,
+                      "b": 1,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:2:24": {
+                  "id": "VariableID:2:24",
+                  "name": "base/colour/grey/300",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 0.4556640684604645,
+                      "g": 0.4556640684604645,
+                      "b": 0.4556640684604645,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:25:106": {
+                  "id": "VariableID:25:106",
+                  "name": "global/colour/textOnLight",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:23"
+                    }
+                  }
+                },
+                "VariableID:2:23": {
+                  "id": "VariableID:2:23",
+                  "name": "base/colour/grey/400",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 0.15691731870174408,
+                      "g": 0.15691731870174408,
+                      "b": 0.15691731870174408,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:2:76": {
+                  "id": "VariableID:2:76",
+                  "name": "global/font/uiDefaultFont",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:75"
+                    }
+                  }
+                },
+                "VariableID:2:75": {
+                  "id": "VariableID:2:75",
+                  "name": "brand/font/body",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:1": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:54"
+                    }
+                  }
+                },
+                "VariableID:2:54": {
+                  "id": "VariableID:2:54",
+                  "name": "base/font/family/Inter",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:0": "Inter"
+                  }
+                },
+                "VariableID:2:60": {
+                  "id": "VariableID:2:60",
+                  "name": "base/font/weight/regular",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 400
+                  }
+                }
+              }
+            }
+          ],
+          "exportSettings": [],
+          "fills": [],
+          "fillStyleId": "",
+          "strokes": [],
+          "strokeStyleId": "",
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "strokeJoin": "MITER",
+          "dashPattern": [],
+          "strokeCap": "NONE",
+          "strokeMiterLimit": 4,
+          "fillGeometry": [
+            {
+              "windingRule": "NONZERO",
+              "data": "M0 0 L255 0 L255 68 L0 68 L0 0 Z"
+            }
+          ],
+          "strokeGeometry": [],
+          "cornerRadius": 0,
+          "cornerSmoothing": 0,
+          "topLeftRadius": 0,
+          "topRightRadius": 0,
+          "bottomLeftRadius": 0,
+          "bottomRightRadius": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+          "paddingBottom": 0,
+          "primaryAxisAlignItems": "MIN",
+          "counterAxisAlignItems": "MIN",
+          "primaryAxisSizingMode": "AUTO",
+          "layoutWrap": "NO_WRAP",
+          "counterAxisSpacing": 0,
+          "counterAxisAlignContent": "AUTO",
+          "strokeTopWeight": 1,
+          "strokeBottomWeight": 1,
+          "strokeLeftWeight": 1,
+          "strokeRightWeight": 1,
+          "inferredAutoLayout": {
+            "layoutMode": "VERTICAL",
+            "paddingLeft": 0,
+            "paddingRight": 0,
+            "paddingTop": 0,
+            "paddingBottom": 0,
+            "counterAxisSizingMode": "FIXED",
+            "primaryAxisSizingMode": "AUTO",
+            "primaryAxisAlignItems": "MIN",
+            "counterAxisAlignItems": "MIN",
+            "layoutAlign": "STRETCH",
+            "layoutGrow": 0,
+            "itemSpacing": 2,
+            "layoutPositioning": "AUTO"
+          },
+          "annotations": [],
+          "layoutGrids": [],
+          "gridStyleId": "",
+          "backgrounds": [],
+          "backgroundStyleId": "",
+          "clipsContent": false,
+          "guides": [],
+          "expanded": false,
+          "constraints": {
+            "horizontal": "MIN",
+            "vertical": "MIN"
+          },
+          "layoutMode": "VERTICAL",
+          "counterAxisSizingMode": "FIXED",
+          "horizontalPadding": 0,
+          "verticalPadding": 0,
+          "itemSpacing": 2,
+          "overflowDirection": "NONE",
+          "numberOfFixedChildren": 0,
+          "overlayPositionType": "CENTER",
+          "overlayBackground": {
+            "type": "NONE"
+          },
+          "overlayBackgroundInteraction": "NONE",
+          "itemReverseZIndex": false,
+          "strokesIncludedInLayout": false,
+          "devStatus": null,
+          "description": "",
+          "descriptionMarkdown": "",
+          "documentationLinks": [],
+          "remote": false,
+          "key": "249446103d730ed1153e557c621fd7789f5be93c",
+          "reactions": [],
+          "playbackSettings": {
+            "autoplay": true,
+            "loop": true,
+            "muted": false
+          },
+          "variantProperties": {
+            "state": "hover"
+          },
+          "type": "COMPONENT",
+          "variables": {
+            "VariableID:4:11": {
+              "id": "VariableID:4:11",
+              "name": "base/size/xs",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 2
+              }
+            },
+            "VariableID:2:23": {
+              "id": "VariableID:2:23",
+              "name": "base/colour/grey/400",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:0": {
+                  "r": 0.15691731870174408,
+                  "g": 0.15691731870174408,
+                  "b": 0.15691731870174408,
+                  "a": 1
+                }
+              }
+            },
+            "VariableID:4:14": {
+              "id": "VariableID:4:14",
+              "name": "base/size/lg",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 12
+              }
+            },
+            "VariableID:2:65": {
+              "id": "VariableID:2:65",
+              "name": "base/font/size/xl",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 20
+              }
+            },
+            "VariableID:2:76": {
+              "id": "VariableID:2:76",
+              "name": "global/font/uiDefaultFont",
+              "resolvedType": "STRING",
+              "valuesByMode": {
+                "2:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:2:75"
+                }
+              }
+            },
+            "VariableID:2:75": {
+              "id": "VariableID:2:75",
+              "name": "brand/font/body",
+              "resolvedType": "STRING",
+              "valuesByMode": {
+                "2:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:2:54"
+                }
+              }
+            },
+            "VariableID:4:6": {
+              "id": "VariableID:4:6",
+              "name": "base/radius/sm",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 4
+              }
+            },
+            "VariableID:2:54": {
+              "id": "VariableID:2:54",
+              "name": "base/font/family/Inter",
+              "resolvedType": "STRING",
+              "valuesByMode": {
+                "2:0": "Inter"
+              }
+            },
+            "VariableID:2:68": {
+              "id": "VariableID:2:68",
+              "name": "base/font/linespacing/lg",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 24
+              }
+            },
+            "VariableID:2:61": {
+              "id": "VariableID:2:61",
+              "name": "base/font/weight/semibold",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 500
+              }
+            },
+            "VariableID:5:10": {
+              "id": "VariableID:5:10",
+              "name": "global/size/border/width",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:10"
+                }
+              }
+            },
+            "VariableID:4:10": {
+              "id": "VariableID:4:10",
+              "name": "base/size/2xs",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 1
+              }
+            },
+            "VariableID:2:36": {
+              "id": "VariableID:2:36",
+              "name": "base/colour/static/white",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:0": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                }
+              }
+            },
+            "VariableID:2:24": {
+              "id": "VariableID:2:24",
+              "name": "base/colour/grey/300",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:0": {
+                  "r": 0.4556640684604645,
+                  "g": 0.4556640684604645,
+                  "b": 0.4556640684604645,
+                  "a": 1
+                }
+              }
+            },
+            "VariableID:25:106": {
+              "id": "VariableID:25:106",
+              "name": "global/colour/textOnLight",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:2:23"
+                }
+              }
+            },
+            "VariableID:2:60": {
+              "id": "VariableID:2:60",
+              "name": "base/font/weight/regular",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 400
+              }
+            }
+          }
+        },
+        {
+          "id": "6002:48",
+          "parent": {
+            "id": "25:117"
+          },
+          "name": "state=active",
+          "removed": false,
+          "isAsset": false,
+          "detachedInfo": null,
+          "visible": true,
+          "locked": false,
+          "stuckNodes": [],
+          "attachedConnectors": [],
+          "componentPropertyReferences": {},
+          "variableConsumptionMap": {
+            "STACK_SPACING": {
+              "type": 3,
+              "resolvedType": 1,
+              "value": "VariableID:4:11"
+            }
+          },
+          "boundVariables": {
+            "itemSpacing": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:4:11"
+            }
+          },
+          "resolvedVariableModes": {
+            "VariableCollectionId:2:38": "2:1",
+            "VariableCollectionId:2:72": "2:2",
+            "VariableCollectionId:2:22": "2:0"
+          },
+          "explicitVariableModes": {},
+          "opacity": 1,
+          "blendMode": "PASS_THROUGH",
+          "isMask": false,
+          "maskType": "ALPHA",
+          "effects": [],
+          "effectStyleId": "",
+          "relativeTransform": [
+            [
+              1,
+              0,
+              10
+            ],
+            [
+              0,
+              1,
+              186
+            ]
+          ],
+          "absoluteTransform": [
+            [
+              1,
+              0,
+              608
+            ],
+            [
+              0,
+              1,
+              155
+            ]
+          ],
+          "x": 10,
+          "y": 186,
+          "width": 255,
+          "height": 68,
+          "absoluteBoundingBox": {
+            "x": 608,
+            "y": 155,
+            "width": 255,
+            "height": 68
+          },
+          "targetAspectRatio": null,
+          "absoluteRenderBounds": {
+            "x": 608,
+            "y": 155,
+            "width": 255,
+            "height": 68
+          },
+          "rotation": 0,
+          "layoutAlign": "STRETCH",
+          "constrainProportions": false,
+          "layoutGrow": 0,
+          "layoutPositioning": "AUTO",
+          "minWidth": null,
+          "minHeight": null,
+          "maxWidth": null,
+          "maxHeight": null,
+          "layoutSizingHorizontal": "FILL",
+          "layoutSizingVertical": "HUG",
+          "children": [
+            {
+              "id": "6002:49",
+              "parent": {
+                "id": "6002:48"
+              },
+              "name": "Label",
+              "removed": false,
+              "isAsset": false,
+              "detachedInfo": null,
+              "visible": true,
+              "locked": false,
+              "stuckNodes": [],
+              "attachedConnectors": [],
+              "componentPropertyReferences": {
+                "visible": "showLabel#25:13"
+              },
+              "variableConsumptionMap": {},
+              "boundVariables": {
+                "fills": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:28"
+                  }
+                ],
+                "fontSize": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:65"
+                  }
+                ],
+                "fontFamily": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:76"
+                  }
+                ],
+                "lineHeight": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:68"
+                  }
+                ],
+                "fontWeight": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:61"
+                  }
+                ]
+              },
+              "resolvedVariableModes": {
+                "VariableCollectionId:2:38": "2:1",
+                "VariableCollectionId:2:72": "2:2",
+                "VariableCollectionId:2:22": "2:0"
+              },
+              "explicitVariableModes": {},
+              "opacity": 1,
+              "blendMode": "PASS_THROUGH",
+              "isMask": false,
+              "maskType": "ALPHA",
+              "effects": [],
+              "effectStyleId": "",
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.005839413031935692,
+                    "g": 0.4660342037677765,
+                    "b": 0.8007737398147583
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:28"
+                    }
+                  }
+                }
+              ],
+              "fillStyleId": "",
+              "strokes": [],
+              "strokeStyleId": "",
+              "strokeWeight": 1,
+              "strokeAlign": "OUTSIDE",
+              "strokeJoin": "MITER",
+              "dashPattern": [],
+              "strokeCap": "NONE",
+              "strokeMiterLimit": 4,
+              "fillGeometry": [
+                {
+                  "windingRule": "NONZERO",
+                  "data": "M1.59801 19 L1.59801 4.45455 L3.79261 4.45455 L3.79261 17.1108 L10.3835 17.1108 L10.3835 19 L1.59801 19 Z M15.8913 19.2415 C15.2 19.2415 14.575 19.1136 14.0163 18.858 C13.4576 18.5975 13.0149 18.2211 12.6882 17.7287 C12.3662 17.2363 12.2053 16.6326 12.2053 15.9176 C12.2053 15.3021 12.3236 14.7955 12.5604 14.3977 C12.7971 14 13.1167 13.6851 13.5192 13.4531 C13.9216 13.2211 14.3714 13.0459 14.8686 12.9276 C15.3658 12.8092 15.8724 12.7192 16.3885 12.6577 C17.0419 12.5819 17.5722 12.5204 17.9794 12.473 C18.3866 12.4209 18.6825 12.3381 18.8672 12.2244 C19.0518 12.1108 19.1442 11.9261 19.1442 11.6705 L19.1442 11.6207 C19.1442 11.0005 18.969 10.5199 18.6186 10.179 C18.273 9.83807 17.7569 9.66761 17.0703 9.66761 C16.3554 9.66761 15.7919 9.82623 15.38 10.1435 C14.9728 10.456 14.6911 10.804 14.5348 11.1875 L12.5391 10.733 C12.7758 10.0701 13.1214 9.53504 13.576 9.12784 C14.0353 8.71591 14.5632 8.41761 15.1598 8.23295 C15.7564 8.04356 16.3838 7.94886 17.0419 7.94886 C17.4775 7.94886 17.9392 8.00095 18.4268 8.10511 C18.9193 8.20455 19.3786 8.3892 19.8047 8.65909 C20.2356 8.92898 20.5883 9.31487 20.8629 9.81676 C21.1375 10.3139 21.2749 10.9602 21.2749 11.7557 L21.2749 19 L19.201 19 L19.201 17.5085 L19.1158 17.5085 C18.9785 17.7831 18.7725 18.053 18.4979 18.3182 C18.2232 18.5833 17.8705 18.8035 17.4396 18.9787 C17.0088 19.1539 16.4927 19.2415 15.8913 19.2415 Z M16.353 17.5369 C16.9401 17.5369 17.442 17.4209 17.8587 17.1889 C18.2801 16.9569 18.5997 16.6539 18.8175 16.2798 C19.04 15.901 19.1513 15.4962 19.1513 15.0653 L19.1513 13.6591 C19.0755 13.7348 18.9287 13.8059 18.7109 13.8722 C18.4979 13.9337 18.254 13.9882 17.9794 14.0355 C17.7048 14.0781 17.4373 14.1184 17.1768 14.1562 C16.9164 14.1894 16.6986 14.2178 16.5234 14.2415 C16.1115 14.2936 15.7351 14.3812 15.3942 14.5043 C15.058 14.6274 14.7881 14.8049 14.5845 15.0369 C14.3857 15.2642 14.2862 15.5672 14.2862 15.946 C14.2862 16.4716 14.4804 16.8693 14.8686 17.1392 C15.2569 17.4044 15.7517 17.5369 16.353 17.5369 Z M24.2738 19 L24.2738 4.45455 L26.3974 4.45455 L26.3974 9.85938 L26.5252 9.85938 C26.6483 9.6321 26.8259 9.36932 27.0579 9.07102 C27.2899 8.77273 27.6119 8.51231 28.0238 8.28977 C28.4357 8.0625 28.9802 7.94886 29.6573 7.94886 C30.538 7.94886 31.324 8.1714 32.0153 8.61648 C32.7066 9.06155 33.2487 9.70312 33.6417 10.5412 C34.0394 11.3793 34.2383 12.3878 34.2383 13.5668 C34.2383 14.7457 34.0418 15.7566 33.6488 16.5994 C33.2558 17.4375 32.716 18.0838 32.0295 18.5384 C31.3429 18.9882 30.5593 19.2131 29.6786 19.2131 C29.0157 19.2131 28.4736 19.1018 28.0522 18.8793 C27.6355 18.6567 27.3088 18.3963 27.0721 18.098 C26.8353 17.7997 26.6531 17.5346 26.5252 17.3026 L26.3477 17.3026 L26.3477 19 L24.2738 19 Z M26.3548 13.5455 C26.3548 14.3125 26.466 14.9848 26.6886 15.5625 C26.9111 16.1402 27.2331 16.5923 27.6545 16.919 C28.0759 17.241 28.592 17.402 29.2028 17.402 C29.8372 17.402 30.3675 17.2339 30.7937 16.8977 C31.2198 16.5568 31.5418 16.0952 31.7596 15.5128 C31.9821 14.9304 32.0934 14.2746 32.0934 13.5455 C32.0934 12.8258 31.9845 12.1795 31.7667 11.6065 C31.5536 11.0336 31.2317 10.5814 30.8008 10.25 C30.3746 9.91856 29.842 9.75284 29.2028 9.75284 C28.5872 9.75284 28.0664 9.91146 27.6403 10.2287 C27.2189 10.5459 26.8993 10.9886 26.6815 11.5568 C26.4637 12.125 26.3548 12.7879 26.3548 13.5455 Z M41.3246 19.2202 C40.2498 19.2202 39.3241 18.9905 38.5476 18.5312 C37.7758 18.0672 37.1792 17.4162 36.7578 16.5781 C36.3411 15.7353 36.1328 14.7481 36.1328 13.6165 C36.1328 12.4991 36.3411 11.5142 36.7578 10.6619 C37.1792 9.80966 37.7663 9.14441 38.5192 8.66619 C39.2768 8.18797 40.1622 7.94886 41.1754 7.94886 C41.791 7.94886 42.3875 8.05066 42.9652 8.25426 C43.5429 8.45786 44.0613 8.77746 44.5206 9.21307 C44.9799 9.64867 45.3421 10.2145 45.6072 10.9105 C45.8724 11.6018 46.005 12.4422 46.005 13.4318 L46.005 14.1847 L37.3331 14.1847 L37.3331 12.5938 L43.924 12.5938 C43.924 12.035 43.8104 11.5402 43.5831 11.1094 C43.3558 10.6738 43.0362 10.3305 42.6243 10.0795 C42.2171 9.8286 41.7389 9.70312 41.1896 9.70312 C40.593 9.70312 40.0722 9.84991 39.6271 10.1435 C39.1868 10.4323 38.8459 10.8111 38.6044 11.2798 C38.3677 11.7438 38.2493 12.2481 38.2493 12.7926 L38.2493 14.0355 C38.2493 14.7647 38.3771 15.3849 38.6328 15.8963 C38.8932 16.4077 39.2554 16.7983 39.7195 17.0682 C40.1835 17.3333 40.7256 17.4659 41.3459 17.4659 C41.7483 17.4659 42.1153 17.4091 42.4467 17.2955 C42.7782 17.1771 43.0646 17.0019 43.3061 16.7699 C43.5476 16.5379 43.7322 16.2514 43.8601 15.9105 L45.87 16.2727 C45.709 16.8646 45.4202 17.383 45.0036 17.8281 C44.5916 18.2685 44.0732 18.6117 43.4482 18.858 C42.8279 19.0994 42.12 19.2202 41.3246 19.2202 Z M50.4847 4.45455 L50.4847 19 L48.3611 19 L48.3611 4.45455 L50.4847 4.45455 Z"
+                }
+              ],
+              "strokeGeometry": [],
+              "relativeTransform": [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0
+                ]
+              ],
+              "absoluteTransform": [
+                [
+                  1,
+                  0,
+                  608
+                ],
+                [
+                  0,
+                  1,
+                  155
+                ]
+              ],
+              "x": 0,
+              "y": 0,
+              "width": 255,
+              "height": 24,
+              "absoluteBoundingBox": {
+                "x": 608,
+                "y": 155,
+                "width": 255,
+                "height": 24
+              },
+              "targetAspectRatio": null,
+              "absoluteRenderBounds": {
+                "x": 609.5980224609375,
+                "y": 159.4545440673828,
+                "width": 48.88671875,
+                "height": 14.786941528320312
+              },
+              "rotation": 0,
+              "layoutAlign": "STRETCH",
+              "constrainProportions": false,
+              "layoutGrow": 0,
+              "layoutPositioning": "AUTO",
+              "minWidth": null,
+              "minHeight": null,
+              "maxWidth": null,
+              "maxHeight": null,
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "exportSettings": [],
+              "constraints": {
+                "horizontal": "MIN",
+                "vertical": "MIN"
+              },
+              "characters": "Label",
+              "hasMissingFont": false,
+              "fontSize": 20,
+              "hangingPunctuation": false,
+              "hangingList": false,
+              "paragraphIndent": 0,
+              "paragraphSpacing": 0,
+              "listSpacing": 0,
+              "textCase": "ORIGINAL",
+              "textDecoration": "NONE",
+              "textDecorationStyle": null,
+              "textDecorationSkipInk": null,
+              "textDecorationOffset": null,
+              "textDecorationThickness": null,
+              "textDecorationColor": null,
+              "letterSpacing": {
+                "unit": "PERCENT",
+                "value": 0
+              },
+              "lineHeight": {
+                "unit": "PIXELS",
+                "value": 24
+              },
+              "leadingTrim": "NONE",
+              "fontName": {
+                "family": "Inter",
+                "style": "Medium"
+              },
+              "fontWeight": 500,
+              "openTypeFeatures": {},
+              "hyperlink": null,
+              "canUpgradeToNativeBidiSupport": false,
+              "autoRename": true,
+              "textAlignHorizontal": "LEFT",
+              "textAlignVertical": "TOP",
+              "textAutoResize": "HEIGHT",
+              "textStyleId": "S:dce7b9b5c72205b4d78087712e7168b280767819,",
+              "textTruncation": "DISABLED",
+              "maxLines": null,
+              "reactions": [],
+              "playbackSettings": {
+                "autoplay": true,
+                "loop": true,
+                "muted": false
+              },
+              "annotations": [],
+              "type": "TEXT",
+              "variables": {
+                "VariableID:2:28": {
+                  "id": "VariableID:2:28",
+                  "name": "base/colour/blue/300",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 0.005839413031935692,
+                      "g": 0.4660342037677765,
+                      "b": 0.8007737398147583,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:2:65": {
+                  "id": "VariableID:2:65",
+                  "name": "base/font/size/xl",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 20
+                  }
+                },
+                "VariableID:2:76": {
+                  "id": "VariableID:2:76",
+                  "name": "global/font/uiDefaultFont",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:75"
+                    }
+                  }
+                },
+                "VariableID:2:75": {
+                  "id": "VariableID:2:75",
+                  "name": "brand/font/body",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:1": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:54"
+                    }
+                  }
+                },
+                "VariableID:2:54": {
+                  "id": "VariableID:2:54",
+                  "name": "base/font/family/Inter",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:0": "Inter"
+                  }
+                },
+                "VariableID:2:68": {
+                  "id": "VariableID:2:68",
+                  "name": "base/font/linespacing/lg",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 24
+                  }
+                },
+                "VariableID:2:61": {
+                  "id": "VariableID:2:61",
+                  "name": "base/font/weight/semibold",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 500
+                  }
+                }
+              }
+            },
+            {
+              "id": "6002:50",
+              "parent": {
+                "id": "6002:48"
+              },
+              "name": "Input box",
+              "removed": false,
+              "isAsset": false,
+              "detachedInfo": null,
+              "visible": true,
+              "locked": false,
+              "stuckNodes": [],
+              "attachedConnectors": [],
+              "componentPropertyReferences": {},
+              "variableConsumptionMap": {
+                "STACK_SPACING": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:14"
+                },
+                "STACK_PADDING_LEFT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:14"
+                },
+                "STACK_PADDING_RIGHT": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:14"
+                },
+                "RECTANGLE_TOP_LEFT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "RECTANGLE_TOP_RIGHT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "RECTANGLE_BOTTOM_LEFT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                },
+                "RECTANGLE_BOTTOM_RIGHT_CORNER_RADIUS": {
+                  "type": 3,
+                  "resolvedType": 1,
+                  "value": "VariableID:4:6"
+                }
+              },
+              "boundVariables": {
+                "itemSpacing": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:14"
+                },
+                "paddingLeft": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:14"
+                },
+                "paddingRight": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:14"
+                },
+                "topLeftRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "topRightRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "bottomLeftRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "bottomRightRadius": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:4:6"
+                },
+                "fills": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:36"
+                  }
+                ],
+                "strokes": [
+                  {
+                    "type": "VARIABLE_ALIAS",
+                    "id": "VariableID:2:28"
+                  }
+                ]
+              },
+              "resolvedVariableModes": {
+                "VariableCollectionId:2:38": "2:1",
+                "VariableCollectionId:2:72": "2:2",
+                "VariableCollectionId:2:22": "2:0"
+              },
+              "explicitVariableModes": {},
+              "opacity": 1,
+              "blendMode": "PASS_THROUGH",
+              "isMask": false,
+              "maskType": "ALPHA",
+              "effects": [],
+              "effectStyleId": "",
+              "relativeTransform": [
+                [
+                  1,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  26
+                ]
+              ],
+              "absoluteTransform": [
+                [
+                  1,
+                  0,
+                  608
+                ],
+                [
+                  0,
+                  1,
+                  181
+                ]
+              ],
+              "x": 0,
+              "y": 26,
+              "width": 255,
+              "height": 42,
+              "absoluteBoundingBox": {
+                "x": 608,
+                "y": 181,
+                "width": 255,
+                "height": 42
+              },
+              "targetAspectRatio": null,
+              "absoluteRenderBounds": {
+                "x": 608,
+                "y": 181,
+                "width": 255,
+                "height": 42
+              },
+              "rotation": 0,
+              "layoutAlign": "STRETCH",
+              "constrainProportions": false,
+              "layoutGrow": 0,
+              "layoutPositioning": "AUTO",
+              "minWidth": null,
+              "minHeight": null,
+              "maxWidth": null,
+              "maxHeight": null,
+              "layoutSizingHorizontal": "FILL",
+              "layoutSizingVertical": "HUG",
+              "children": [
+                {
+                  "id": "6002:51",
+                  "parent": {
+                    "id": "6002:50"
+                  },
+                  "name": "Input text",
+                  "removed": false,
+                  "isAsset": false,
+                  "detachedInfo": null,
+                  "visible": true,
+                  "locked": false,
+                  "stuckNodes": [],
+                  "attachedConnectors": [],
+                  "componentPropertyReferences": {},
+                  "variableConsumptionMap": {},
+                  "boundVariables": {
+                    "fills": [
+                      {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:25:106"
+                      }
+                    ],
+                    "fontFamily": [
+                      {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:2:76"
+                      }
+                    ],
+                    "fontWeight": [
+                      {
+                        "type": "VARIABLE_ALIAS",
+                        "id": "VariableID:2:60"
+                      }
+                    ]
+                  },
+                  "resolvedVariableModes": {
+                    "VariableCollectionId:2:38": "2:1",
+                    "VariableCollectionId:2:22": "2:0",
+                    "VariableCollectionId:2:72": "2:2"
+                  },
+                  "explicitVariableModes": {},
+                  "opacity": 1,
+                  "blendMode": "PASS_THROUGH",
+                  "isMask": false,
+                  "maskType": "ALPHA",
+                  "effects": [],
+                  "effectStyleId": "",
+                  "fills": [
+                    {
+                      "type": "SOLID",
+                      "visible": true,
+                      "opacity": 1,
+                      "blendMode": "NORMAL",
+                      "color": {
+                        "r": 0.15691731870174408,
+                        "g": 0.15691731870174408,
+                        "b": 0.15691731870174408
+                      },
+                      "boundVariables": {
+                        "color": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:25:106"
+                        }
+                      }
+                    }
+                  ],
+                  "fillStyleId": "",
+                  "strokes": [],
+                  "strokeStyleId": "",
+                  "strokeWeight": 1,
+                  "strokeAlign": "OUTSIDE",
+                  "strokeJoin": "MITER",
+                  "dashPattern": [],
+                  "strokeCap": "NONE",
+                  "strokeMiterLimit": 4,
+                  "fillGeometry": [
+                    {
+                      "windingRule": "NONZERO",
+                      "data": "M2.81818 4.36364 L2.81818 16 L1.40909 16 L1.40909 4.36364 L2.81818 4.36364 Z M6.80256 10.75 L6.80256 16 L5.46165 16 L5.46165 7.27273 L6.7571 7.27273 L6.7571 8.63636 L6.87074 8.63636 C7.07528 8.19318 7.38589 7.83712 7.80256 7.56818 C8.21922 7.29545 8.7571 7.15909 9.41619 7.15909 C10.0071 7.15909 10.5241 7.2803 10.9673 7.52273 C11.4105 7.76136 11.7552 8.125 12.0014 8.61364 C12.2476 9.09848 12.3707 9.71212 12.3707 10.4545 L12.3707 16 L11.0298 16 L11.0298 10.5455 C11.0298 9.85985 10.8518 9.32576 10.4957 8.94318 C10.1397 8.55682 9.65104 8.36364 9.02983 8.36364 C8.6018 8.36364 8.21922 8.45644 7.8821 8.64205 C7.54877 8.82765 7.28551 9.09848 7.09233 9.45455 C6.89915 9.81061 6.80256 10.2424 6.80256 10.75 Z M14.821 19.2727 L14.821 7.27273 L16.1165 7.27273 L16.1165 8.65909 L16.2756 8.65909 C16.3741 8.50758 16.5104 8.31439 16.6847 8.07955 C16.8627 7.84091 17.1165 7.62879 17.446 7.44318 C17.7794 7.25379 18.2301 7.15909 18.7983 7.15909 C19.5331 7.15909 20.1809 7.3428 20.7415 7.71023 C21.3021 8.07765 21.7396 8.59848 22.054 9.27273 C22.3684 9.94697 22.5256 10.7424 22.5256 11.6591 C22.5256 12.5833 22.3684 13.3845 22.054 14.0625 C21.7396 14.7367 21.304 15.2595 20.7472 15.6307 C20.1903 15.9981 19.5483 16.1818 18.821 16.1818 C18.2604 16.1818 17.8116 16.089 17.4744 15.9034 C17.1373 15.714 16.8778 15.5 16.696 15.2614 C16.5142 15.0189 16.3741 14.8182 16.2756 14.6591 L16.1619 14.6591 L16.1619 19.2727 L14.821 19.2727 Z M16.1392 11.6364 C16.1392 12.2955 16.2358 12.8769 16.429 13.3807 C16.6222 13.8807 16.9044 14.2727 17.2756 14.5568 C17.6468 14.8371 18.1013 14.9773 18.6392 14.9773 C19.1998 14.9773 19.6676 14.8295 20.0426 14.5341 C20.4214 14.2348 20.7055 13.8333 20.8949 13.3295 C21.0881 12.822 21.1847 12.2576 21.1847 11.6364 C21.1847 11.0227 21.09 10.4697 20.9006 9.97727 C20.715 9.48106 20.4328 9.08902 20.054 8.80114 C19.679 8.50947 19.2074 8.36364 18.6392 8.36364 C18.0938 8.36364 17.6354 8.50189 17.2642 8.77841 C16.893 9.05114 16.6127 9.43371 16.4233 9.92614 C16.2339 10.4148 16.1392 10.9848 16.1392 11.6364 Z M30.071 12.4318 L30.071 7.27273 L31.4119 7.27273 L31.4119 16 L30.071 16 L30.071 14.5227 L29.9801 14.5227 C29.7756 14.9659 29.4574 15.3428 29.0256 15.6534 C28.5938 15.9602 28.0483 16.1136 27.3892 16.1136 C26.8438 16.1136 26.3589 15.9943 25.9347 15.7557 C25.5104 15.5133 25.1771 15.1496 24.9347 14.6648 C24.6922 14.1761 24.571 13.5606 24.571 12.8182 L24.571 7.27273 L25.9119 7.27273 L25.9119 12.7273 C25.9119 13.3636 26.09 13.8712 26.446 14.25 C26.8059 14.6288 27.2642 14.8182 27.821 14.8182 C28.1544 14.8182 28.4934 14.733 28.8381 14.5625 C29.1866 14.392 29.4782 14.1307 29.7131 13.7784 C29.9517 13.4261 30.071 12.9773 30.071 12.4318 Z M37.6634 7.27273 L37.6634 8.40909 L33.1406 8.40909 L33.1406 7.27273 L37.6634 7.27273 Z M34.4588 5.18182 L35.7997 5.18182 L35.7997 13.5 C35.7997 13.8788 35.8546 14.1629 35.9645 14.3523 C36.0781 14.5379 36.2221 14.6629 36.3963 14.7273 C36.5743 14.7879 36.7618 14.8182 36.9588 14.8182 C37.1065 14.8182 37.2277 14.8106 37.3224 14.7955 C37.4171 14.7765 37.4929 14.7614 37.5497 14.75 L37.8224 15.9545 C37.7315 15.9886 37.6046 16.0227 37.4418 16.0568 C37.2789 16.0947 37.0724 16.1136 36.8224 16.1136 C36.4437 16.1136 36.0724 16.0322 35.7088 15.8693 C35.349 15.7064 35.0497 15.4583 34.8111 15.125 C34.5762 14.7917 34.4588 14.3712 34.4588 13.8636 L34.4588 5.18182 Z M47.9759 7.27273 L47.9759 8.40909 L43.4531 8.40909 L43.4531 7.27273 L47.9759 7.27273 Z M44.7713 5.18182 L46.1122 5.18182 L46.1122 13.5 C46.1122 13.8788 46.1671 14.1629 46.277 14.3523 C46.3906 14.5379 46.5346 14.6629 46.7088 14.7273 C46.8868 14.7879 47.0743 14.8182 47.2713 14.8182 C47.419 14.8182 47.5402 14.8106 47.6349 14.7955 C47.7296 14.7765 47.8054 14.7614 47.8622 14.75 L48.1349 15.9545 C48.044 15.9886 47.9171 16.0227 47.7543 16.0568 C47.5914 16.0947 47.3849 16.1136 47.1349 16.1136 C46.7562 16.1136 46.3849 16.0322 46.0213 15.8693 C45.6615 15.7064 45.3622 15.4583 45.1236 15.125 C44.8887 14.7917 44.7713 14.3712 44.7713 13.8636 L44.7713 5.18182 Z M53.5582 16.1818 C52.7173 16.1818 51.992 15.9962 51.3821 15.625 C50.776 15.25 50.3082 14.7273 49.9787 14.0568 C49.6529 13.3826 49.4901 12.5985 49.4901 11.7045 C49.4901 10.8106 49.6529 10.0227 49.9787 9.34091 C50.3082 8.6553 50.7666 8.12121 51.3537 7.73864 C51.9446 7.35227 52.634 7.15909 53.4219 7.15909 C53.8764 7.15909 54.3253 7.23485 54.7685 7.38636 C55.2116 7.53788 55.6151 7.78409 55.9787 8.125 C56.3423 8.46212 56.6321 8.90909 56.848 9.46591 C57.0639 10.0227 57.1719 10.7083 57.1719 11.5227 L57.1719 12.0909 L50.4446 12.0909 L50.4446 10.9318 L55.8082 10.9318 C55.8082 10.4394 55.7098 10 55.5128 9.61364 C55.3196 9.22727 55.0431 8.92235 54.6832 8.69886 C54.3272 8.47538 53.9067 8.36364 53.4219 8.36364 C52.8878 8.36364 52.4257 8.49621 52.0355 8.76136 C51.6491 9.02273 51.3518 9.36364 51.1435 9.78409 C50.9351 10.2045 50.831 10.6553 50.831 11.1364 L50.831 11.9091 C50.831 12.5682 50.9446 13.1269 51.1719 13.5852 C51.4029 14.0398 51.723 14.3864 52.1321 14.625 C52.5412 14.8598 53.0166 14.9773 53.5582 14.9773 C53.9105 14.9773 54.2287 14.928 54.5128 14.8295 C54.8007 14.7273 55.0488 14.5758 55.2571 14.375 C55.4654 14.1705 55.6264 13.9167 55.7401 13.6136 L57.0355 13.9773 C56.8991 14.4167 56.67 14.803 56.348 15.1364 C56.026 15.4659 55.6283 15.7235 55.1548 15.9091 C54.6813 16.0909 54.1491 16.1818 53.5582 16.1818 Z M59.9773 7.27273 L62.0682 10.8409 L64.1591 7.27273 L65.7045 7.27273 L62.8864 11.6364 L65.7045 16 L64.1591 16 L62.0682 12.6136 L59.9773 16 L58.4318 16 L61.2045 11.6364 L58.4318 7.27273 L59.9773 7.27273 Z M71.4134 7.27273 L71.4134 8.40909 L66.8906 8.40909 L66.8906 7.27273 L71.4134 7.27273 Z M68.2088 5.18182 L69.5497 5.18182 L69.5497 13.5 C69.5497 13.8788 69.6046 14.1629 69.7145 14.3523 C69.8281 14.5379 69.9721 14.6629 70.1463 14.7273 C70.3243 14.7879 70.5118 14.8182 70.7088 14.8182 C70.8565 14.8182 70.9777 14.8106 71.0724 14.7955 C71.1671 14.7765 71.2429 14.7614 71.2997 14.75 L71.5724 15.9545 C71.4815 15.9886 71.3546 16.0227 71.1918 16.0568 C71.0289 16.0947 70.8224 16.1136 70.5724 16.1136 C70.1937 16.1136 69.8224 16.0322 69.4588 15.8693 C69.099 15.7064 68.7997 15.4583 68.5611 15.125 C68.3262 14.7917 68.2088 14.3712 68.2088 13.8636 L68.2088 5.18182 Z"
+                    }
+                  ],
+                  "strokeGeometry": [],
+                  "relativeTransform": [
+                    [
+                      1,
+                      0,
+                      12
+                    ],
+                    [
+                      0,
+                      1,
+                      11
+                    ]
+                  ],
+                  "absoluteTransform": [
+                    [
+                      1,
+                      0,
+                      620
+                    ],
+                    [
+                      0,
+                      1,
+                      192
+                    ]
+                  ],
+                  "x": 12,
+                  "y": 11,
+                  "width": 231,
+                  "height": 20,
+                  "absoluteBoundingBox": {
+                    "x": 620,
+                    "y": 192,
+                    "width": 231,
+                    "height": 20
+                  },
+                  "targetAspectRatio": null,
+                  "absoluteRenderBounds": {
+                    "x": 621.4091186523438,
+                    "y": 196.36363220214844,
+                    "width": 70.163330078125,
+                    "height": 14.909103393554688
+                  },
+                  "rotation": 0,
+                  "layoutAlign": "INHERIT",
+                  "constrainProportions": false,
+                  "layoutGrow": 1,
+                  "layoutPositioning": "AUTO",
+                  "minWidth": null,
+                  "minHeight": null,
+                  "maxWidth": null,
+                  "maxHeight": null,
+                  "layoutSizingHorizontal": "FILL",
+                  "layoutSizingVertical": "HUG",
+                  "exportSettings": [],
+                  "constraints": {
+                    "horizontal": "MIN",
+                    "vertical": "MIN"
+                  },
+                  "characters": "Input text",
+                  "hasMissingFont": false,
+                  "fontSize": 16,
+                  "hangingPunctuation": false,
+                  "hangingList": false,
+                  "paragraphIndent": 0,
+                  "paragraphSpacing": 0,
+                  "listSpacing": 0,
+                  "textCase": "ORIGINAL",
+                  "textDecoration": "NONE",
+                  "textDecorationStyle": null,
+                  "textDecorationSkipInk": null,
+                  "textDecorationOffset": null,
+                  "textDecorationThickness": null,
+                  "textDecorationColor": null,
+                  "letterSpacing": {
+                    "unit": "PERCENT",
+                    "value": 0
+                  },
+                  "lineHeight": {
+                    "unit": "PIXELS",
+                    "value": 20
+                  },
+                  "leadingTrim": "NONE",
+                  "fontName": {
+                    "family": "Inter",
+                    "style": "Regular"
+                  },
+                  "fontWeight": 400,
+                  "openTypeFeatures": {},
+                  "hyperlink": null,
+                  "canUpgradeToNativeBidiSupport": false,
+                  "autoRename": true,
+                  "textAlignHorizontal": "LEFT",
+                  "textAlignVertical": "TOP",
+                  "textAutoResize": "HEIGHT",
+                  "textStyleId": "S:ae5e92191e0ae603c3cb95fed07e8ff73e5e1855,",
+                  "textTruncation": "DISABLED",
+                  "maxLines": null,
+                  "reactions": [],
+                  "playbackSettings": {
+                    "autoplay": true,
+                    "loop": true,
+                    "muted": false
+                  },
+                  "annotations": [],
+                  "type": "TEXT",
+                  "variables": {
+                    "VariableID:25:106": {
+                      "id": "VariableID:25:106",
+                      "name": "global/colour/textOnLight",
+                      "resolvedType": "COLOR",
+                      "valuesByMode": {
+                        "2:2": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:2:23"
+                        }
+                      }
+                    },
+                    "VariableID:2:23": {
+                      "id": "VariableID:2:23",
+                      "name": "base/colour/grey/400",
+                      "resolvedType": "COLOR",
+                      "valuesByMode": {
+                        "2:0": {
+                          "r": 0.15691731870174408,
+                          "g": 0.15691731870174408,
+                          "b": 0.15691731870174408,
+                          "a": 1
+                        }
+                      }
+                    },
+                    "VariableID:2:76": {
+                      "id": "VariableID:2:76",
+                      "name": "global/font/uiDefaultFont",
+                      "resolvedType": "STRING",
+                      "valuesByMode": {
+                        "2:2": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:2:75"
+                        }
+                      }
+                    },
+                    "VariableID:2:75": {
+                      "id": "VariableID:2:75",
+                      "name": "brand/font/body",
+                      "resolvedType": "STRING",
+                      "valuesByMode": {
+                        "2:1": {
+                          "type": "VARIABLE_ALIAS",
+                          "id": "VariableID:2:54"
+                        }
+                      }
+                    },
+                    "VariableID:2:54": {
+                      "id": "VariableID:2:54",
+                      "name": "base/font/family/Inter",
+                      "resolvedType": "STRING",
+                      "valuesByMode": {
+                        "2:0": "Inter"
+                      }
+                    },
+                    "VariableID:2:60": {
+                      "id": "VariableID:2:60",
+                      "name": "base/font/weight/regular",
+                      "resolvedType": "FLOAT",
+                      "valuesByMode": {
+                        "2:0": 400
+                      }
+                    }
+                  }
+                }
+              ],
+              "exportSettings": [],
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:36"
+                    }
+                  }
+                }
+              ],
+              "fillStyleId": "",
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 0.005839413031935692,
+                    "g": 0.4660342037677765,
+                    "b": 0.8007737398147583
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:28"
+                    }
+                  }
+                }
+              ],
+              "strokeStyleId": "",
+              "strokeWeight": 2,
+              "strokeAlign": "INSIDE",
+              "strokeJoin": "MITER",
+              "dashPattern": [],
+              "strokeCap": "NONE",
+              "strokeMiterLimit": 4,
+              "fillGeometry": [
+                {
+                  "windingRule": "NONZERO",
+                  "data": "M0 4 C0 1.79086 1.79086 0 4 0 L251 0 C253.209 0 255 1.79086 255 4 L255 38 C255 40.2091 253.209 42 251 42 L4 42 C1.79086 42 0 40.2091 0 38 L0 4 Z"
+                }
+              ],
+              "strokeGeometry": [
+                {
+                  "windingRule": "NONZERO",
+                  "data": "M4 2 L251 2 L251 -2 L4 -2 L4 2 Z M253 4 L253 38 L257 38 L257 4 L253 4 Z M251 40 L4 40 L4 44 L251 44 L251 40 Z M2 38 L2 4 L-2 4 L-2 38 L2 38 Z M4 40 C2.89543 40 2 39.1046 2 38 L-2 38 C-2 41.3137 0.686291 44 4 44 L4 40 Z M253 38 C253 39.1046 252.105 40 251 40 L251 44 C254.314 44 257 41.3137 257 38 L253 38 Z M251 2 C252.105 2 253 2.89543 253 4 L257 4 C257 0.686292 254.314 -2 251 -2 L251 2 Z M4 -2 C0.686292 -2 -2 0.686291 -2 4 L2 4 C2 2.89543 2.89543 2 4 2 L4 -2 Z"
+                }
+              ],
+              "cornerRadius": 4,
+              "cornerSmoothing": 0,
+              "topLeftRadius": 4,
+              "topRightRadius": 4,
+              "bottomLeftRadius": 4,
+              "bottomRightRadius": 4,
+              "paddingLeft": 12,
+              "paddingRight": 12,
+              "paddingTop": 11,
+              "paddingBottom": 11,
+              "primaryAxisAlignItems": "MIN",
+              "counterAxisAlignItems": "CENTER",
+              "primaryAxisSizingMode": "FIXED",
+              "layoutWrap": "NO_WRAP",
+              "counterAxisSpacing": 0,
+              "counterAxisAlignContent": "AUTO",
+              "strokeTopWeight": 2,
+              "strokeBottomWeight": 2,
+              "strokeLeftWeight": 2,
+              "strokeRightWeight": 2,
+              "inferredAutoLayout": {
+                "layoutMode": "HORIZONTAL",
+                "paddingLeft": 12,
+                "paddingRight": 12,
+                "paddingTop": 11,
+                "paddingBottom": 11,
+                "counterAxisSizingMode": "AUTO",
+                "primaryAxisSizingMode": "FIXED",
+                "primaryAxisAlignItems": "MIN",
+                "counterAxisAlignItems": "CENTER",
+                "layoutAlign": "STRETCH",
+                "layoutGrow": 0,
+                "itemSpacing": 12,
+                "layoutPositioning": "AUTO"
+              },
+              "annotations": [],
+              "layoutGrids": [],
+              "gridStyleId": "",
+              "backgrounds": [
+                {
+                  "type": "SOLID",
+                  "visible": true,
+                  "opacity": 1,
+                  "blendMode": "NORMAL",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:36"
+                    }
+                  }
+                }
+              ],
+              "backgroundStyleId": "",
+              "clipsContent": true,
+              "guides": [],
+              "expanded": false,
+              "constraints": {
+                "horizontal": "MIN",
+                "vertical": "MIN"
+              },
+              "layoutMode": "HORIZONTAL",
+              "counterAxisSizingMode": "AUTO",
+              "horizontalPadding": 12,
+              "verticalPadding": 11,
+              "itemSpacing": 12,
+              "overflowDirection": "NONE",
+              "numberOfFixedChildren": 0,
+              "overlayPositionType": "CENTER",
+              "overlayBackground": {
+                "type": "NONE"
+              },
+              "overlayBackgroundInteraction": "NONE",
+              "itemReverseZIndex": false,
+              "strokesIncludedInLayout": false,
+              "devStatus": null,
+              "reactions": [],
+              "playbackSettings": {
+                "autoplay": true,
+                "loop": true,
+                "muted": false
+              },
+              "type": "FRAME",
+              "variables": {
+                "VariableID:4:14": {
+                  "id": "VariableID:4:14",
+                  "name": "base/size/lg",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 12
+                  }
+                },
+                "VariableID:4:6": {
+                  "id": "VariableID:4:6",
+                  "name": "base/radius/sm",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 4
+                  }
+                },
+                "VariableID:2:36": {
+                  "id": "VariableID:2:36",
+                  "name": "base/colour/static/white",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 1,
+                      "g": 1,
+                      "b": 1,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:2:28": {
+                  "id": "VariableID:2:28",
+                  "name": "base/colour/blue/300",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 0.005839413031935692,
+                      "g": 0.4660342037677765,
+                      "b": 0.8007737398147583,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:25:106": {
+                  "id": "VariableID:25:106",
+                  "name": "global/colour/textOnLight",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:23"
+                    }
+                  }
+                },
+                "VariableID:2:23": {
+                  "id": "VariableID:2:23",
+                  "name": "base/colour/grey/400",
+                  "resolvedType": "COLOR",
+                  "valuesByMode": {
+                    "2:0": {
+                      "r": 0.15691731870174408,
+                      "g": 0.15691731870174408,
+                      "b": 0.15691731870174408,
+                      "a": 1
+                    }
+                  }
+                },
+                "VariableID:2:76": {
+                  "id": "VariableID:2:76",
+                  "name": "global/font/uiDefaultFont",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:2": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:75"
+                    }
+                  }
+                },
+                "VariableID:2:75": {
+                  "id": "VariableID:2:75",
+                  "name": "brand/font/body",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:1": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:2:54"
+                    }
+                  }
+                },
+                "VariableID:2:54": {
+                  "id": "VariableID:2:54",
+                  "name": "base/font/family/Inter",
+                  "resolvedType": "STRING",
+                  "valuesByMode": {
+                    "2:0": "Inter"
+                  }
+                },
+                "VariableID:2:60": {
+                  "id": "VariableID:2:60",
+                  "name": "base/font/weight/regular",
+                  "resolvedType": "FLOAT",
+                  "valuesByMode": {
+                    "2:0": 400
+                  }
+                }
+              }
+            }
+          ],
+          "exportSettings": [],
+          "fills": [],
+          "fillStyleId": "",
+          "strokes": [],
+          "strokeStyleId": "",
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "strokeJoin": "MITER",
+          "dashPattern": [],
+          "strokeCap": "NONE",
+          "strokeMiterLimit": 4,
+          "fillGeometry": [
+            {
+              "windingRule": "NONZERO",
+              "data": "M0 0 L255 0 L255 68 L0 68 L0 0 Z"
+            }
+          ],
+          "strokeGeometry": [],
+          "cornerRadius": 0,
+          "cornerSmoothing": 0,
+          "topLeftRadius": 0,
+          "topRightRadius": 0,
+          "bottomLeftRadius": 0,
+          "bottomRightRadius": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 0,
+          "paddingBottom": 0,
+          "primaryAxisAlignItems": "MIN",
+          "counterAxisAlignItems": "MIN",
+          "primaryAxisSizingMode": "AUTO",
+          "layoutWrap": "NO_WRAP",
+          "counterAxisSpacing": 0,
+          "counterAxisAlignContent": "AUTO",
+          "strokeTopWeight": 1,
+          "strokeBottomWeight": 1,
+          "strokeLeftWeight": 1,
+          "strokeRightWeight": 1,
+          "inferredAutoLayout": {
+            "layoutMode": "VERTICAL",
+            "paddingLeft": 0,
+            "paddingRight": 0,
+            "paddingTop": 0,
+            "paddingBottom": 0,
+            "counterAxisSizingMode": "FIXED",
+            "primaryAxisSizingMode": "AUTO",
+            "primaryAxisAlignItems": "MIN",
+            "counterAxisAlignItems": "MIN",
+            "layoutAlign": "STRETCH",
+            "layoutGrow": 0,
+            "itemSpacing": 2,
+            "layoutPositioning": "AUTO"
+          },
+          "annotations": [],
+          "layoutGrids": [],
+          "gridStyleId": "",
+          "backgrounds": [],
+          "backgroundStyleId": "",
+          "clipsContent": false,
+          "guides": [],
+          "expanded": false,
+          "constraints": {
+            "horizontal": "MIN",
+            "vertical": "MIN"
+          },
+          "layoutMode": "VERTICAL",
+          "counterAxisSizingMode": "FIXED",
+          "horizontalPadding": 0,
+          "verticalPadding": 0,
+          "itemSpacing": 2,
+          "overflowDirection": "NONE",
+          "numberOfFixedChildren": 0,
+          "overlayPositionType": "CENTER",
+          "overlayBackground": {
+            "type": "NONE"
+          },
+          "overlayBackgroundInteraction": "NONE",
+          "itemReverseZIndex": false,
+          "strokesIncludedInLayout": false,
+          "devStatus": null,
+          "description": "",
+          "descriptionMarkdown": "",
+          "documentationLinks": [],
+          "remote": false,
+          "key": "bbea89df9f710144c49ae7465c812a2d269faac2",
+          "reactions": [],
+          "playbackSettings": {
+            "autoplay": true,
+            "loop": true,
+            "muted": false
+          },
+          "variantProperties": {
+            "state": "active"
+          },
+          "type": "COMPONENT",
+          "variables": {
+            "VariableID:4:11": {
+              "id": "VariableID:4:11",
+              "name": "base/size/xs",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 2
+              }
+            },
+            "VariableID:2:28": {
+              "id": "VariableID:2:28",
+              "name": "base/colour/blue/300",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:0": {
+                  "r": 0.005839413031935692,
+                  "g": 0.4660342037677765,
+                  "b": 0.8007737398147583,
+                  "a": 1
+                }
+              }
+            },
+            "VariableID:4:14": {
+              "id": "VariableID:4:14",
+              "name": "base/size/lg",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 12
+              }
+            },
+            "VariableID:2:65": {
+              "id": "VariableID:2:65",
+              "name": "base/font/size/xl",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 20
+              }
+            },
+            "VariableID:2:76": {
+              "id": "VariableID:2:76",
+              "name": "global/font/uiDefaultFont",
+              "resolvedType": "STRING",
+              "valuesByMode": {
+                "2:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:2:75"
+                }
+              }
+            },
+            "VariableID:2:75": {
+              "id": "VariableID:2:75",
+              "name": "brand/font/body",
+              "resolvedType": "STRING",
+              "valuesByMode": {
+                "2:1": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:2:54"
+                }
+              }
+            },
+            "VariableID:4:6": {
+              "id": "VariableID:4:6",
+              "name": "base/radius/sm",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 4
+              }
+            },
+            "VariableID:2:54": {
+              "id": "VariableID:2:54",
+              "name": "base/font/family/Inter",
+              "resolvedType": "STRING",
+              "valuesByMode": {
+                "2:0": "Inter"
+              }
+            },
+            "VariableID:2:68": {
+              "id": "VariableID:2:68",
+              "name": "base/font/linespacing/lg",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 24
+              }
+            },
+            "VariableID:2:61": {
+              "id": "VariableID:2:61",
+              "name": "base/font/weight/semibold",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 500
+              }
+            },
+            "VariableID:2:36": {
+              "id": "VariableID:2:36",
+              "name": "base/colour/static/white",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:0": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                }
+              }
+            },
+            "VariableID:25:106": {
+              "id": "VariableID:25:106",
+              "name": "global/colour/textOnLight",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:2": {
+                  "type": "VARIABLE_ALIAS",
+                  "id": "VariableID:2:23"
+                }
+              }
+            },
+            "VariableID:2:23": {
+              "id": "VariableID:2:23",
+              "name": "base/colour/grey/400",
+              "resolvedType": "COLOR",
+              "valuesByMode": {
+                "2:0": {
+                  "r": 0.15691731870174408,
+                  "g": 0.15691731870174408,
+                  "b": 0.15691731870174408,
+                  "a": 1
+                }
+              }
+            },
+            "VariableID:2:60": {
+              "id": "VariableID:2:60",
+              "name": "base/font/weight/regular",
+              "resolvedType": "FLOAT",
+              "valuesByMode": {
+                "2:0": 400
+              }
+            }
+          }
+        }
+      ],
+      "exportSettings": [],
+      "fills": [],
+      "fillStyleId": "",
+      "strokes": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 0.5921568870544434,
+            "g": 0.27843138575553894,
+            "b": 1
+          },
+          "boundVariables": {}
+        }
+      ],
+      "strokeStyleId": "",
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "strokeJoin": "MITER",
+      "dashPattern": [
+        10,
+        5
+      ],
+      "strokeCap": "NONE",
+      "strokeMiterLimit": 4,
+      "fillGeometry": [
+        {
+          "windingRule": "NONZERO",
+          "data": "M0 5 C0 2.23857 2.23858 0 5 0 L270 0 C272.761 0 275 2.23858 275 5 L275 259 C275 261.761 272.761 264 270 264 L5 264 C2.23857 264 0 261.761 0 259 L0 5 Z"
+        }
+      ],
+      "strokeGeometry": [
+        {
+          "windingRule": "NONZERO",
+          "data": "M5 263.5 C2.51471 263.5 0.5 261.485 0.5 259 L-0.5 259 C-0.5 262.038 1.96243 264.5 5 264.5 L5 263.5 Z M0.5 259 L0.5 254.02 L-0.5 254.02 L-0.5 259 L0.5 259 Z M0.5 249.039 L0.5 239.078 L-0.5 239.078 L-0.5 249.039 L0.5 249.039 Z M0.5 234.098 L0.5 224.137 L-0.5 224.137 L-0.5 234.098 L0.5 234.098 Z M0.5 219.157 L0.5 209.196 L-0.5 209.196 L-0.5 219.157 L0.5 219.157 Z M0.5 204.216 L0.5 194.255 L-0.5 194.255 L-0.5 204.216 L0.5 204.216 Z M0.5 189.275 L0.5 179.314 L-0.5 179.314 L-0.5 189.275 L0.5 189.275 Z M0.5 174.333 L0.5 164.373 L-0.5 164.373 L-0.5 174.333 L0.5 174.333 Z M0.5 159.392 L0.5 149.431 L-0.5 149.431 L-0.5 159.392 L0.5 159.392 Z M0.5 144.451 L0.5 134.49 L-0.5 134.49 L-0.5 144.451 L0.5 144.451 Z M0.5 129.51 L0.5 119.549 L-0.5 119.549 L-0.5 129.51 L0.5 129.51 Z M0.5 114.569 L0.5 104.608 L-0.5 104.608 L-0.5 114.569 L0.5 114.569 Z M0.5 99.6275 L0.5 89.6667 L-0.5 89.6667 L-0.5 99.6275 L0.5 99.6275 Z M0.5 84.6863 L0.5 74.7255 L-0.5 74.7255 L-0.5 84.6863 L0.5 84.6863 Z M0.5 69.7451 L0.5 59.7843 L-0.5 59.7843 L-0.5 69.7451 L0.5 69.7451 Z M0.5 54.8039 L0.5 44.8431 L-0.5 44.8431 L-0.5 54.8039 L0.5 54.8039 Z M0.5 39.8627 L0.5 29.902 L-0.5 29.902 L-0.5 39.8627 L0.5 39.8627 Z M0.5 24.9216 L0.5 14.9608 L-0.5 14.9608 L-0.5 24.9216 L0.5 24.9216 Z M0.5 9.98039 L0.5 5 L-0.5 5 L-0.5 9.98039 L0.5 9.98039 Z M0.5 5 C0.5 2.51471 2.51472 0.5 5 0.5 L5 -0.5 C1.96243 -0.5 -0.5 1.96243 -0.5 5 L0.5 5 Z M5 0.5 L9.90741 0.5 L9.90741 -0.5 L5 -0.5 L5 0.5 Z M14.8148 0.5 L24.6296 0.5 L24.6296 -0.5 L14.8148 -0.5 L14.8148 0.5 Z M29.537 0.5 L39.3519 0.5 L39.3519 -0.5 L29.537 -0.5 L29.537 0.5 Z M44.2593 0.5 L54.0741 0.5 L54.0741 -0.5 L44.2593 -0.5 L44.2593 0.5 Z M58.9815 0.5 L68.7963 0.5 L68.7963 -0.5 L58.9815 -0.5 L58.9815 0.5 Z M73.7037 0.5 L83.5185 0.5 L83.5185 -0.5 L73.7037 -0.5 L73.7037 0.5 Z M88.4259 0.5 L98.2407 0.5 L98.2407 -0.5 L88.4259 -0.5 L88.4259 0.5 Z M103.148 0.5 L112.963 0.5 L112.963 -0.5 L103.148 -0.5 L103.148 0.5 Z M117.87 0.5 L127.685 0.5 L127.685 -0.5 L117.87 -0.5 L117.87 0.5 Z M132.593 0.5 L142.407 0.5 L142.407 -0.5 L132.593 -0.5 L132.593 0.5 Z M147.315 0.5 L157.13 0.5 L157.13 -0.5 L147.315 -0.5 L147.315 0.5 Z M162.037 0.5 L171.852 0.5 L171.852 -0.5 L162.037 -0.5 L162.037 0.5 Z M176.759 0.5 L186.574 0.5 L186.574 -0.5 L176.759 -0.5 L176.759 0.5 Z M191.482 0.5 L201.296 0.5 L201.296 -0.5 L191.482 -0.5 L191.482 0.5 Z M206.204 0.5 L216.019 0.5 L216.019 -0.5 L206.204 -0.5 L206.204 0.5 Z M220.926 0.5 L230.741 0.5 L230.741 -0.5 L220.926 -0.5 L220.926 0.5 Z M235.648 0.5 L245.463 0.5 L245.463 -0.5 L235.648 -0.5 L235.648 0.5 Z M250.37 0.5 L260.185 0.5 L260.185 -0.5 L250.37 -0.5 L250.37 0.5 Z M265.093 0.5 L270 0.5 L270 -0.5 L265.093 -0.5 L265.093 0.5 Z M270 0.5 C272.485 0.5 274.5 2.51472 274.5 5 L275.5 5 C275.5 1.96243 273.038 -0.5 270 -0.5 L270 0.5 Z M274.5 5 L274.5 9.98039 L275.5 9.98039 L275.5 5 L274.5 5 Z M274.5 14.9608 L274.5 24.9216 L275.5 24.9216 L275.5 14.9608 L274.5 14.9608 Z M274.5 29.902 L274.5 39.8627 L275.5 39.8627 L275.5 29.902 L274.5 29.902 Z M274.5 44.8431 L274.5 54.8039 L275.5 54.8039 L275.5 44.8431 L274.5 44.8431 Z M274.5 59.7843 L274.5 69.7451 L275.5 69.7451 L275.5 59.7843 L274.5 59.7843 Z M274.5 74.7255 L274.5 84.6863 L275.5 84.6863 L275.5 74.7255 L274.5 74.7255 Z M274.5 89.6667 L274.5 99.6274 L275.5 99.6274 L275.5 89.6667 L274.5 89.6667 Z M274.5 104.608 L274.5 114.569 L275.5 114.569 L275.5 104.608 L274.5 104.608 Z M274.5 119.549 L274.5 129.51 L275.5 129.51 L275.5 119.549 L274.5 119.549 Z M274.5 134.49 L274.5 144.451 L275.5 144.451 L275.5 134.49 L274.5 134.49 Z M274.5 149.431 L274.5 159.392 L275.5 159.392 L275.5 149.431 L274.5 149.431 Z M274.5 164.373 L274.5 174.333 L275.5 174.333 L275.5 164.373 L274.5 164.373 Z M274.5 179.314 L274.5 189.275 L275.5 189.275 L275.5 179.314 L274.5 179.314 Z M274.5 194.255 L274.5 204.216 L275.5 204.216 L275.5 194.255 L274.5 194.255 Z M274.5 209.196 L274.5 219.157 L275.5 219.157 L275.5 209.196 L274.5 209.196 Z M274.5 224.137 L274.5 234.098 L275.5 234.098 L275.5 224.137 L274.5 224.137 Z M274.5 239.078 L274.5 249.039 L275.5 249.039 L275.5 239.078 L274.5 239.078 Z M274.5 254.02 L274.5 259 L275.5 259 L275.5 254.02 L274.5 254.02 Z M274.5 259 C274.5 261.485 272.485 263.5 270 263.5 L270 264.5 C273.038 264.5 275.5 262.038 275.5 259 L274.5 259 Z M270 263.5 L265.093 263.5 L265.093 264.5 L270 264.5 L270 263.5 Z M260.185 263.5 L250.37 263.5 L250.37 264.5 L260.185 264.5 L260.185 263.5 Z M245.463 263.5 L235.648 263.5 L235.648 264.5 L245.463 264.5 L245.463 263.5 Z M230.741 263.5 L220.926 263.5 L220.926 264.5 L230.741 264.5 L230.741 263.5 Z M216.019 263.5 L206.204 263.5 L206.204 264.5 L216.019 264.5 L216.019 263.5 Z M201.296 263.5 L191.481 263.5 L191.481 264.5 L201.296 264.5 L201.296 263.5 Z M186.574 263.5 L176.759 263.5 L176.759 264.5 L186.574 264.5 L186.574 263.5 Z M171.852 263.5 L162.037 263.5 L162.037 264.5 L171.852 264.5 L171.852 263.5 Z M157.13 263.5 L147.315 263.5 L147.315 264.5 L157.13 264.5 L157.13 263.5 Z M142.407 263.5 L132.593 263.5 L132.593 264.5 L142.407 264.5 L142.407 263.5 Z M127.685 263.5 L117.87 263.5 L117.87 264.5 L127.685 264.5 L127.685 263.5 Z M112.963 263.5 L103.148 263.5 L103.148 264.5 L112.963 264.5 L112.963 263.5 Z M98.2407 263.5 L88.4259 263.5 L88.4259 264.5 L98.2407 264.5 L98.2407 263.5 Z M83.5185 263.5 L73.7037 263.5 L73.7037 264.5 L83.5185 264.5 L83.5185 263.5 Z M68.7963 263.5 L58.9814 263.5 L58.9814 264.5 L68.7963 264.5 L68.7963 263.5 Z M54.074 263.5 L44.2592 263.5 L44.2592 264.5 L54.074 264.5 L54.074 263.5 Z M39.3518 263.5 L29.537 263.5 L29.537 264.5 L39.3518 264.5 L39.3518 263.5 Z M24.6296 263.5 L14.8148 263.5 L14.8148 264.5 L24.6296 264.5 L24.6296 263.5 Z M9.90734 263.5 L5 263.5 L5 264.5 L9.90734 264.5 L9.90734 263.5 Z M5 263 C2.79086 263 1 261.209 1 259 L-1 259 C-1 262.314 1.68629 265 5 265 L5 263 Z M1 259 L1 254.02 L-1 254.02 L-1 259 L1 259 Z M1 249.039 L1 239.078 L-1 239.078 L-1 249.039 L1 249.039 Z M1 234.098 L1 224.137 L-1 224.137 L-1 234.098 L1 234.098 Z M1 219.157 L1 209.196 L-1 209.196 L-1 219.157 L1 219.157 Z M1 204.216 L1 194.255 L-1 194.255 L-1 204.216 L1 204.216 Z M1 189.275 L1 179.314 L-1 179.314 L-1 189.275 L1 189.275 Z M1 174.333 L1 164.373 L-1 164.373 L-1 174.333 L1 174.333 Z M1 159.392 L1 149.431 L-1 149.431 L-1 159.392 L1 159.392 Z M1 144.451 L1 134.49 L-1 134.49 L-1 144.451 L1 144.451 Z M1 129.51 L1 119.549 L-1 119.549 L-1 129.51 L1 129.51 Z M1 114.569 L1 104.608 L-1 104.608 L-1 114.569 L1 114.569 Z M1 99.6275 L1 89.6667 L-1 89.6667 L-1 99.6275 L1 99.6275 Z M1 84.6863 L1 74.7255 L-1 74.7255 L-1 84.6863 L1 84.6863 Z M1 69.7451 L1 59.7843 L-1 59.7843 L-1 69.7451 L1 69.7451 Z M1 54.8039 L1 44.8431 L-1 44.8431 L-1 54.8039 L1 54.8039 Z M1 39.8627 L1 29.902 L-1 29.902 L-1 39.8627 L1 39.8627 Z M1 24.9216 L1 14.9608 L-1 14.9608 L-1 24.9216 L1 24.9216 Z M1 9.98039 L1 5 L-1 5 L-1 9.98039 L1 9.98039 Z M1 5 C1 2.79086 2.79086 1 5 1 L5 -1 C1.68629 -1 -1 1.68629 -1 5 L1 5 Z M5 1 L9.90741 1 L9.90741 -1 L5 -1 L5 1 Z M14.8148 1 L24.6296 1 L24.6296 -1 L14.8148 -1 L14.8148 1 Z M29.537 1 L39.3519 1 L39.3519 -1 L29.537 -1 L29.537 1 Z M44.2593 1 L54.0741 1 L54.0741 -1 L44.2593 -1 L44.2593 1 Z M58.9815 1 L68.7963 1 L68.7963 -1 L58.9815 -1 L58.9815 1 Z M73.7037 1 L83.5185 1 L83.5185 -1 L73.7037 -1 L73.7037 1 Z M88.4259 1 L98.2407 1 L98.2407 -1 L88.4259 -1 L88.4259 1 Z M103.148 1 L112.963 1 L112.963 -1 L103.148 -1 L103.148 1 Z M117.87 1 L127.685 1 L127.685 -1 L117.87 -1 L117.87 1 Z M132.593 1 L142.407 1 L142.407 -1 L132.593 -1 L132.593 1 Z M147.315 1 L157.13 1 L157.13 -1 L147.315 -1 L147.315 1 Z M162.037 1 L171.852 1 L171.852 -1 L162.037 -1 L162.037 1 Z M176.759 1 L186.574 1 L186.574 -1 L176.759 -1 L176.759 1 Z M191.482 1 L201.296 1 L201.296 -1 L191.482 -1 L191.482 1 Z M206.204 1 L216.019 1 L216.019 -1 L206.204 -1 L206.204 1 Z M220.926 1 L230.741 1 L230.741 -1 L220.926 -1 L220.926 1 Z M235.648 1 L245.463 1 L245.463 -1 L235.648 -1 L235.648 1 Z M250.37 1 L260.185 1 L260.185 -1 L250.37 -1 L250.37 1 Z M265.093 1 L270 1 L270 -1 L265.093 -1 L265.093 1 Z M270 1 C272.209 1 274 2.79086 274 5 L276 5 C276 1.68629 273.314 -1 270 -1 L270 1 Z M274 5 L274 9.98039 L276 9.98039 L276 5 L274 5 Z M274 14.9608 L274 24.9216 L276 24.9216 L276 14.9608 L274 14.9608 Z M274 29.902 L274 39.8627 L276 39.8627 L276 29.902 L274 29.902 Z M274 44.8431 L274 54.8039 L276 54.8039 L276 44.8431 L274 44.8431 Z M274 59.7843 L274 69.7451 L276 69.7451 L276 59.7843 L274 59.7843 Z M274 74.7255 L274 84.6863 L276 84.6863 L276 74.7255 L274 74.7255 Z M274 89.6667 L274 99.6274 L276 99.6274 L276 89.6667 L274 89.6667 Z M274 104.608 L274 114.569 L276 114.569 L276 104.608 L274 104.608 Z M274 119.549 L274 129.51 L276 129.51 L276 119.549 L274 119.549 Z M274 134.49 L274 144.451 L276 144.451 L276 134.49 L274 134.49 Z M274 149.431 L274 159.392 L276 159.392 L276 149.431 L274 149.431 Z M274 164.373 L274 174.333 L276 174.333 L276 164.373 L274 164.373 Z M274 179.314 L274 189.275 L276 189.275 L276 179.314 L274 179.314 Z M274 194.255 L274 204.216 L276 204.216 L276 194.255 L274 194.255 Z M274 209.196 L274 219.157 L276 219.157 L276 209.196 L274 209.196 Z M274 224.137 L274 234.098 L276 234.098 L276 224.137 L274 224.137 Z M274 239.078 L274 249.039 L276 249.039 L276 239.078 L274 239.078 Z M274 254.02 L274 259 L276 259 L276 254.02 L274 254.02 Z M274 259 C274 261.209 272.209 263 270 263 L270 265 C273.314 265 276 262.314 276 259 L274 259 Z M270 263 L265.093 263 L265.093 265 L270 265 L270 263 Z M260.185 263 L250.37 263 L250.37 265 L260.185 265 L260.185 263 Z M245.463 263 L235.648 263 L235.648 265 L245.463 265 L245.463 263 Z M230.741 263 L220.926 263 L220.926 265 L230.741 265 L230.741 263 Z M216.019 263 L206.204 263 L206.204 265 L216.019 265 L216.019 263 Z M201.296 263 L191.481 263 L191.481 265 L201.296 265 L201.296 263 Z M186.574 263 L176.759 263 L176.759 265 L186.574 265 L186.574 263 Z M171.852 263 L162.037 263 L162.037 265 L171.852 265 L171.852 263 Z M157.13 263 L147.315 263 L147.315 265 L157.13 265 L157.13 263 Z M142.407 263 L132.593 263 L132.593 265 L142.407 265 L142.407 263 Z M127.685 263 L117.87 263 L117.87 265 L127.685 265 L127.685 263 Z M112.963 263 L103.148 263 L103.148 265 L112.963 265 L112.963 263 Z M98.2407 263 L88.4259 263 L88.4259 265 L98.2407 265 L98.2407 263 Z M83.5185 263 L73.7037 263 L73.7037 265 L83.5185 265 L83.5185 263 Z M68.7963 263 L58.9814 263 L58.9814 265 L68.7963 265 L68.7963 263 Z M54.074 263 L44.2592 263 L44.2592 265 L54.074 265 L54.074 263 Z M39.3518 263 L29.537 263 L29.537 265 L39.3518 265 L39.3518 263 Z M24.6296 263 L14.8148 263 L14.8148 265 L24.6296 265 L24.6296 263 Z M9.90734 263 L5 263 L5 265 L9.90734 265 L9.90734 263 Z"
+        }
+      ],
+      "cornerRadius": 5,
+      "cornerSmoothing": 0,
+      "topLeftRadius": 5,
+      "topRightRadius": 5,
+      "bottomLeftRadius": 5,
+      "bottomRightRadius": 5,
+      "paddingLeft": 10,
+      "paddingRight": 10,
+      "paddingTop": 10,
+      "paddingBottom": 10,
+      "primaryAxisAlignItems": "MIN",
+      "counterAxisAlignItems": "MIN",
+      "primaryAxisSizingMode": "AUTO",
+      "layoutWrap": "NO_WRAP",
+      "counterAxisSpacing": 0,
+      "counterAxisAlignContent": "AUTO",
+      "strokeTopWeight": 1,
+      "strokeBottomWeight": 1,
+      "strokeLeftWeight": 1,
+      "strokeRightWeight": 1,
+      "inferredAutoLayout": {
+        "layoutMode": "VERTICAL",
+        "paddingLeft": 10,
+        "paddingRight": 10,
+        "paddingTop": 10,
+        "paddingBottom": 10,
+        "counterAxisSizingMode": "FIXED",
+        "primaryAxisSizingMode": "AUTO",
+        "primaryAxisAlignItems": "MIN",
+        "counterAxisAlignItems": "MIN",
+        "layoutAlign": "INHERIT",
+        "layoutGrow": 0,
+        "itemSpacing": 20,
+        "layoutPositioning": "AUTO"
+      },
+      "annotations": [],
+      "layoutGrids": [],
+      "gridStyleId": "",
+      "backgrounds": [],
+      "backgroundStyleId": "",
+      "clipsContent": false,
+      "guides": [],
+      "expanded": false,
+      "constraints": {
+        "horizontal": "MIN",
+        "vertical": "MIN"
+      },
+      "layoutMode": "VERTICAL",
+      "counterAxisSizingMode": "FIXED",
+      "horizontalPadding": 10,
+      "verticalPadding": 10,
+      "itemSpacing": 20,
+      "overflowDirection": "NONE",
+      "numberOfFixedChildren": 0,
+      "overlayPositionType": "CENTER",
+      "overlayBackground": {
+        "type": "NONE"
+      },
+      "overlayBackgroundInteraction": "NONE",
+      "itemReverseZIndex": false,
+      "strokesIncludedInLayout": false,
+      "devStatus": null,
+      "description": "",
+      "descriptionMarkdown": "",
+      "documentationLinks": [],
+      "remote": false,
+      "key": "fb5bb109f34671bbcddf99da17cfe78bbe96de0b",
+      "defaultVariant": {
+        "id": "25:116"
+      },
+      "variantGroupProperties": {
+        "state": {
+          "values": [
+            "hover",
+            "active",
+            "resting"
+          ]
+        }
+      },
+      "componentPropertyDefinitions": {
+        "showLabel#25:13": {
+          "type": "BOOLEAN",
+          "defaultValue": true
+        },
+        "state": {
+          "type": "VARIANT",
+          "defaultValue": "resting",
+          "variantOptions": [
+            "hover",
+            "active",
+            "resting"
+          ]
+        }
+      },
+      "type": "COMPONENT_SET",
+      "variables": {
+        "VariableID:4:11": {
+          "id": "VariableID:4:11",
+          "name": "base/size/xs",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "2:0": 2
+          }
+        },
+        "VariableID:2:23": {
+          "id": "VariableID:2:23",
+          "name": "base/colour/grey/400",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "2:0": {
+              "r": 0.15691731870174408,
+              "g": 0.15691731870174408,
+              "b": 0.15691731870174408,
+              "a": 1
+            }
+          }
+        },
+        "VariableID:4:14": {
+          "id": "VariableID:4:14",
+          "name": "base/size/lg",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "2:0": 12
+          }
+        },
+        "VariableID:2:28": {
+          "id": "VariableID:2:28",
+          "name": "base/colour/blue/300",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "2:0": {
+              "r": 0.005839413031935692,
+              "g": 0.4660342037677765,
+              "b": 0.8007737398147583,
+              "a": 1
+            }
+          }
+        },
+        "VariableID:2:65": {
+          "id": "VariableID:2:65",
+          "name": "base/font/size/xl",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "2:0": 20
+          }
+        },
+        "VariableID:2:76": {
+          "id": "VariableID:2:76",
+          "name": "global/font/uiDefaultFont",
+          "resolvedType": "STRING",
+          "valuesByMode": {
+            "2:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:2:75"
+            }
+          }
+        },
+        "VariableID:2:75": {
+          "id": "VariableID:2:75",
+          "name": "brand/font/body",
+          "resolvedType": "STRING",
+          "valuesByMode": {
+            "2:1": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:2:54"
+            }
+          }
+        },
+        "VariableID:4:6": {
+          "id": "VariableID:4:6",
+          "name": "base/radius/sm",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "2:0": 4
+          }
+        },
+        "VariableID:2:54": {
+          "id": "VariableID:2:54",
+          "name": "base/font/family/Inter",
+          "resolvedType": "STRING",
+          "valuesByMode": {
+            "2:0": "Inter"
+          }
+        },
+        "VariableID:2:68": {
+          "id": "VariableID:2:68",
+          "name": "base/font/linespacing/lg",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "2:0": 24
+          }
+        },
+        "VariableID:2:61": {
+          "id": "VariableID:2:61",
+          "name": "base/font/weight/semibold",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "2:0": 500
+          }
+        },
+        "VariableID:5:10": {
+          "id": "VariableID:5:10",
+          "name": "global/size/border/width",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "2:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:4:10"
+            }
+          }
+        },
+        "VariableID:2:36": {
+          "id": "VariableID:2:36",
+          "name": "base/colour/static/white",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "2:0": {
+              "r": 1,
+              "g": 1,
+              "b": 1,
+              "a": 1
+            }
+          }
+        },
+        "VariableID:4:10": {
+          "id": "VariableID:4:10",
+          "name": "base/size/2xs",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "2:0": 1
+          }
+        },
+        "VariableID:25:106": {
+          "id": "VariableID:25:106",
+          "name": "global/colour/textOnLight",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "2:2": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:2:23"
+            }
+          }
+        },
+        "VariableID:2:60": {
+          "id": "VariableID:2:60",
+          "name": "base/font/weight/regular",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "2:0": 400
+          }
+        },
+        "VariableID:2:26": {
+          "id": "VariableID:2:26",
+          "name": "base/colour/grey/100",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "2:0": {
+              "r": 0.8509804010391235,
+              "g": 0.8509804010391235,
+              "b": 0.8509804010391235,
+              "a": 1
+            }
+          }
+        },
+        "VariableID:2:24": {
+          "id": "VariableID:2:24",
+          "name": "base/colour/grey/300",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "2:0": {
+              "r": 0.4556640684604645,
+              "g": 0.4556640684604645,
+              "b": 0.4556640684604645,
+              "a": 1
+            }
+          }
+        }
+      }
+    }
+  ],
+  "guides": [],
+  "selection": [
+    {
+      "id": "25:117"
+    }
+  ],
+  "selectedTextRange": null,
+  "backgrounds": [
+    {
+      "type": "SOLID",
+      "visible": true,
+      "opacity": 1,
+      "blendMode": "NORMAL",
+      "color": {
+        "r": 0.9319498538970947,
+        "g": 0.9319498538970947,
+        "b": 0.9319498538970947
+      },
+      "boundVariables": {}
+    }
+  ],
+  "exportSettings": [],
+  "prototypeStartNode": null,
+  "explicitVariableModes": {},
+  "flowStartingPoints": [],
+  "prototypeBackgrounds": [
+    {
+      "type": "SOLID",
+      "visible": true,
+      "opacity": 0,
+      "blendMode": "NORMAL",
+      "color": {
+        "r": 0,
+        "g": 0,
+        "b": 0
+      },
+      "boundVariables": {}
+    }
+  ],
+  "isPageDivider": false,
+  "type": "PAGE",
+  "variables": {
+    "VariableID:4:11": {
+      "id": "VariableID:4:11",
+      "name": "base/size/xs",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "2:0": 2
+      }
+    },
+    "VariableID:2:23": {
+      "id": "VariableID:2:23",
+      "name": "base/colour/grey/400",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "2:0": {
+          "r": 0.15691731870174408,
+          "g": 0.15691731870174408,
+          "b": 0.15691731870174408,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:4:14": {
+      "id": "VariableID:4:14",
+      "name": "base/size/lg",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "2:0": 12
+      }
+    },
+    "VariableID:2:28": {
+      "id": "VariableID:2:28",
+      "name": "base/colour/blue/300",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "2:0": {
+          "r": 0.005839413031935692,
+          "g": 0.4660342037677765,
+          "b": 0.8007737398147583,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2:65": {
+      "id": "VariableID:2:65",
+      "name": "base/font/size/xl",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "2:0": 20
+      }
+    },
+    "VariableID:2:76": {
+      "id": "VariableID:2:76",
+      "name": "global/font/uiDefaultFont",
+      "resolvedType": "STRING",
+      "valuesByMode": {
+        "2:2": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:2:75"
+        }
+      }
+    },
+    "VariableID:2:75": {
+      "id": "VariableID:2:75",
+      "name": "brand/font/body",
+      "resolvedType": "STRING",
+      "valuesByMode": {
+        "2:1": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:2:54"
+        }
+      }
+    },
+    "VariableID:4:6": {
+      "id": "VariableID:4:6",
+      "name": "base/radius/sm",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "2:0": 4
+      }
+    },
+    "VariableID:2:54": {
+      "id": "VariableID:2:54",
+      "name": "base/font/family/Inter",
+      "resolvedType": "STRING",
+      "valuesByMode": {
+        "2:0": "Inter"
+      }
+    },
+    "VariableID:2:68": {
+      "id": "VariableID:2:68",
+      "name": "base/font/linespacing/lg",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "2:0": 24
+      }
+    },
+    "VariableID:2:61": {
+      "id": "VariableID:2:61",
+      "name": "base/font/weight/semibold",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "2:0": 500
+      }
+    },
+    "VariableID:5:10": {
+      "id": "VariableID:5:10",
+      "name": "global/size/border/width",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "2:2": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:4:10"
+        }
+      }
+    },
+    "VariableID:2:36": {
+      "id": "VariableID:2:36",
+      "name": "base/colour/static/white",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "2:0": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:4:10": {
+      "id": "VariableID:4:10",
+      "name": "base/size/2xs",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "2:0": 1
+      }
+    },
+    "VariableID:25:106": {
+      "id": "VariableID:25:106",
+      "name": "global/colour/textOnLight",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "2:2": {
+          "type": "VARIABLE_ALIAS",
+          "id": "VariableID:2:23"
+        }
+      }
+    },
+    "VariableID:2:60": {
+      "id": "VariableID:2:60",
+      "name": "base/font/weight/regular",
+      "resolvedType": "FLOAT",
+      "valuesByMode": {
+        "2:0": 400
+      }
+    },
+    "VariableID:2:26": {
+      "id": "VariableID:2:26",
+      "name": "base/colour/grey/100",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "2:0": {
+          "r": 0.8509804010391235,
+          "g": 0.8509804010391235,
+          "b": 0.8509804010391235,
+          "a": 1
+        }
+      }
+    },
+    "VariableID:2:24": {
+      "id": "VariableID:2:24",
+      "name": "base/colour/grey/300",
+      "resolvedType": "COLOR",
+      "valuesByMode": {
+        "2:0": {
+          "r": 0.4556640684604645,
+          "g": 0.4556640684604645,
+          "b": 0.4556640684604645,
+          "a": 1
+        }
+      }
+    }
+  }
+}
