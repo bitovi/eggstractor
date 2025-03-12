@@ -28,7 +28,15 @@ window.onload = () => {
   // Save config when inputs change
   repoPathInput.onchange = saveConfig;
   filePathInput.onchange = saveConfig;
-  branchNameInput.onchange = saveConfig;
+  branchNameInput.onchange = () => {
+    // git branch naming guidelines:
+    //  alphanumeric and ._-/ are valid, but:
+    //  no initial dot
+    //  no final slash
+    const processedValue = branchNameInput.value.replace(/^\.|[^-\/.\w]|\/$/g, '-');
+    branchNameInput.value = processedValue;
+    saveConfig();
+  }
   githubTokenInput.onchange = saveConfig;
   function saveConfig() {
     parent.postMessage({
