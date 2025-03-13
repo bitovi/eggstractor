@@ -25,7 +25,7 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
 
   // Output color variables
   colorVariables.forEach((value, name) => {
-    output += `$${name}: ${value}\n`;
+    output += `$${name}: ${value};\n`;
   });
   
   // Then collect and output gradient variables
@@ -51,7 +51,7 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
       gradientValue = gradientValue.replace(value, `$${colorName}`);
     });
     if (gradientValue) {
-      output += `$${name}: ${gradientValue}\n`;
+      output += `$${name}: ${gradientValue};\n`;
     }
   });
 
@@ -72,23 +72,27 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
     const uniqueTokens = sortAndDedupeTokens(groupTokens as StyleToken[]);
 
     if (uniqueTokens.length > 0) {
-      output += `@mixin ${variantPath}\n`;
+      output += `@mixin ${variantPath} {\n`;
       uniqueTokens.forEach(token => {
         if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
           // Only use CSS variables if the token has associated variables
           if (token.variables && token.variables.length > 0) {
             const gradientName = `gradient-${sanitizeName(token.name)}`;
-            output += ` ${token.property}: var(--${gradientName}, #{$${gradientName}})\n`;
+            output += ` ${token.property}: var(--${gradientName}, #{$${gradientName}});\n`;
           } else {
             // Use the raw value directly if no variables are involved
             const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
-            output += ` ${token.property}: ${value}\n`;
+            output += ` ${token.property}: ${value};\n`;
           }
         } else {
-          output += ` ${token.property}: ${token.valueType === 'px' ? rem(token.value!) : token.value}\n`;
+          const baseValue = token.valueType === 'px' ? rem(token.value!) : token.value;
+          // in SCSS negated variables are a parsing warning unless parenthesized
+          const processedValue = baseValue?.replace(/-\$(\w|-)+/g, match => `(${match})`);
+
+          output += ` ${token.property}: ${processedValue};\n`;
         }
       });
-      output += "\n";
+      output += "}\n";
     }
   });
 
