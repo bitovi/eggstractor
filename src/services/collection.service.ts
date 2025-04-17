@@ -1,18 +1,22 @@
-import { TokenCollection } from '../types';
-import { getProcessorsForNode } from '../processors';
-import { extractNodeToken } from '../services';
-import { getNodePathName } from '../utils/node.utils';
+import { TokenCollection } from "../types";
+import { getProcessorsForNode } from "../processors";
+import { extractNodeToken } from "../services";
+import { getNodePathName } from "../utils/node.utils";
 
 export async function collectTokens(): Promise<TokenCollection> {
   const collection: TokenCollection = { tokens: [] };
 
   async function processNode(node: BaseNode) {
-    if ('type' in node && 'boundVariables' in node) {
-      const nodePath = getNodePathName(node as SceneNode).split('_');
+    if ("type" in node && "boundVariables" in node) {
+      const nodePath = getNodePathName(node as SceneNode).split("_");
       const processors = getProcessorsForNode(node as SceneNode);
-      
+
       for (const processor of processors) {
-        const tokens = await extractNodeToken(node as SceneNode, processor, nodePath);
+        const tokens = await extractNodeToken(
+          node as SceneNode,
+          processor,
+          nodePath
+        );
         collection.tokens.push(...tokens);
       }
     }
@@ -23,6 +27,9 @@ export async function collectTokens(): Promise<TokenCollection> {
       }
     }
   }
+
+  console.info({ figma });
+
   await processNode(figma.currentPage);
   return collection;
 }
