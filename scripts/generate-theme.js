@@ -29,7 +29,7 @@ function remToPx(rem) {
   return `${numeric * 16}px`; // Tailwind base font size is 16px
 }
 
-function flattenSpacingToPxKeys(spacingObj) {
+function flattenSpaceToPxKeys(spacingObj) {
   const result = {};
 
   for (const [key, value] of Object.entries(spacingObj)) {
@@ -69,19 +69,24 @@ function flattenColorsToHexKeys(colorObj, prefix = "") {
 // Remove unusable color entries
 const spacing = theme.spacing || {};
 const colors = theme.colors || {};
+const borderWidth = theme.borderWidth || {};
 
-const spacingToPxMap = flattenSpacingToPxKeys(spacing);
+const spacingToPxMap = flattenSpaceToPxKeys(spacing);
 const hexToTailwindClass = flattenColorsToHexKeys(colors);
+const borderWidthToPxMap = flattenSpaceToPxKeys(borderWidth);
 
 // Construct the TS output
 const tsOutput = `// Auto-generated theme tokens — do not edit manually
 
 export const themeTokens: {
   spacing: Record<string, string>,
-  colors: Record<string, string>
+  colors: Record<string, string>,
+  borderWidth: Record<string, string>,
 } = {
   spacing: ${JSON.stringify(spacingToPxMap, null, 2)},
-  colors: ${JSON.stringify(hexToTailwindClass, null, 2)}
+  colors: ${JSON.stringify(hexToTailwindClass, null, 2)},
+  borderWidth: ${JSON.stringify(borderWidthToPxMap, null, 2)}
+
 };
 `;
 

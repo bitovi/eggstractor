@@ -3,53 +3,103 @@ import { groupBy } from "../utils/index";
 import { deduplicateMessages } from "../utils/error.utils";
 import { themeTokens } from "../theme-tokens";
 
+const borderStyles = new Set([
+  "none",
+  "hidden",
+  "dotted",
+  "dashed",
+  "solid",
+  "double",
+  "groove",
+  "ridge",
+  "inset",
+  "outset",
+]);
+
+const borderPropertyToShorthand: Record<string, string> = {
+  border: "border",
+  "border-top": "border-t",
+  "border-right": "border-r",
+  "border-bottom": "border-b",
+  "border-left": "border-l",
+  "border-x": "border-x",
+  "border-y": "border-y",
+};
+
+function generateSpacingClass(spacingClass: string, value: string) {
+  return themeTokens.spacing[value]
+    ? ` ${spacingClass}-${themeTokens.spacing[value]}`
+    : ` ${spacingClass}-[${value}]`;
+}
+
+function generateBorderWidthClass(borderWidthClass: string, value: string) {
+  return themeTokens.borderWidth[value]
+    ? ` ${borderWidthClass}-${themeTokens.borderWidth[value]}`
+    : ` ${borderWidthClass}-[${value}]`;
+}
+
 function generateTailwindPaddingClass(rawTokenValue: string): string {
   //Split padding for multiple directions
   const splitTokenRawValues: string[] = rawTokenValue.split(" ");
-  let output = " @apply ";
+  let output = "";
   splitTokenRawValues.forEach((splitRawValue, index) => {
-    let paddingPredicate = "p";
+    let paddingPrefix = "p";
     if (splitTokenRawValues.length === 2) {
-      paddingPredicate = index === 0 ? "px" : "py";
+      paddingPrefix = index === 0 ? "px" : "py";
+    } else if (splitTokenRawValues.length === 4) {
+      const directionMap = ["pt", "pr", "pb", "pl"];
+      paddingPrefix = directionMap[index];
     }
-    if (splitTokenRawValues.length === 4) {
-      switch (index) {
-        case 0:
-          paddingPredicate = "pt";
-          break;
-        case 1:
-          paddingPredicate = "pr";
-          break;
-        case 2:
-          paddingPredicate = "pb";
-          break;
-        case 3:
-          paddingPredicate = "pl";
-          break;
-        default:
-          paddingPredicate = "p";
-      }
-    }
-    output += themeTokens.spacing[splitRawValue]
-      ? `${paddingPredicate}-${themeTokens.spacing[splitRawValue]}`
-      : `${paddingPredicate}-[${splitRawValue}]`;
+    output += generateSpacingClass(paddingPrefix, splitRawValue);
   });
-  return output + "\n";
-}
-
-function generateTailwindColorClass(
-  rawTokenValue: string,
-  tokenProperty: string
-): string {
-  const colorClass: string = tokenProperty === "color" ? "text" : "bg";
-  const output = themeTokens.colors[rawTokenValue]
-    ? ` @apply ${colorClass}-${themeTokens.colors[rawTokenValue]}\n`
-    : ` @apply ${colorClass}-[${rawTokenValue}]\n`;
   return output;
 }
 
+function generateTailwindColorClass(colorClass: string, value: string): string {
+  const colorClassNames: Record<string, string> = {
+    ...borderPropertyToShorthand,
+    color: "text",
+    background: "bg",
+  };
+
+  return themeTokens.colors[value]
+    ? ` ${colorClassNames[colorClass]}-${themeTokens.colors[value]}`
+    : ` ${colorClassNames[colorClass]}-[${value}]`;
+}
+
+function parseBorderShorthand(border: string) {
+  const parts = border.trim().split(/\s+/);
+  let width: string | undefined;
+  let style: string | undefined;
+  let color: string | undefined;
+
+  for (const part of parts) {
+    if (!width) {
+      width = part; // First part is the width
+    } else if (!style && borderStyles.has(part)) {
+      style = part; // Second part is the border style (from the Set)
+    } else if (!color) {
+      color = part; // Remaining part is the color
+    }
+  }
+
+  return { width, style, color };
+}
+
 function generateTailwindBorderClass(token: StyleToken): string {
-  return "";
+  const { width, style, color } = parseBorderShorthand(
+    token.rawValue as string
+  );
+  const borderStyle: string = style
+    ? ` ${borderPropertyToShorthand[token.property]}-${style}`
+    : "";
+  const borderWidth: string = width
+    ? generateBorderWidthClass(borderPropertyToShorthand[token.property], width)
+    : "";
+  const borderColor: string = color
+    ? generateTailwindColorClass(token.property, color)
+    : "";
+  return borderWidth + borderStyle + borderColor;
 }
 
 function generateTailwindBoxShadowClass(token: StyleToken): string {
@@ -102,9 +152,8 @@ export function transformToTailwindScss(
 
     // Only output class if there are non-inherited properties
     if (uniqueTokens.length > 0) {
-      classOutput += `\n@mixin ${variantPath} {\n`;
+      classOutput += `\n@mixin ${variantPath} {\n  @apply`;
       uniqueTokens.forEach((token) => {
-        console.log("uniqueToken", { token });
         if (token.property === "padding") {
           classOutput += generateTailwindPaddingClass(token.rawValue as string);
         }
@@ -113,20 +162,19 @@ export function transformToTailwindScss(
           token?.rawValue?.includes("#")
         ) {
           classOutput += generateTailwindColorClass(
-            token.rawValue as string,
-            token.property as string
+            token.property as string,
+            token.rawValue as string
           );
         }
-        if (token.property === "border") {
+        if (token.property.includes("border")) {
+          console.log({ token });
           classOutput += generateTailwindBorderClass(token);
         }
         if (token.property === "box-shadow") {
           classOutput += generateTailwindBoxShadowClass(token);
         }
       });
-      classOutput += "}\n";
-
-      // variableOutput += generatePaddingVariables(figmaVariables);
+      classOutput += "\n}\n";
     }
   });
 
