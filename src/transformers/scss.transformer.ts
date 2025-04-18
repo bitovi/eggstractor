@@ -1,20 +1,21 @@
-import { TokenCollection, StyleToken, TransformerResult } from '../types';
-import { sanitizeName, groupBy } from '../utils/index';
-import { deduplicateMessages } from '../utils/error.utils';
-import { rem } from '../utils/units.utils';
+import { TokenCollection, StyleToken, TransformerResult } from "../types";
+import { sanitizeName, groupBy } from "../utils/index";
+import { deduplicateMessages } from "../utils/error.utils";
+import { rem } from "../utils/units.utils";
 export function transformToScss(tokens: TokenCollection): TransformerResult {
   let output = "";
-  
+
   // Deduplicate warnings and errors from style tokens only
   const { warnings, errors } = deduplicateMessages(
-    tokens.tokens.filter((token): token is StyleToken => token.type === 'style')
+    tokens.tokens.filter((token): token is StyleToken => token.type === "style")
   );
 
   // First, collect and output color variables
   const colorVariables = new Map<string, string>();
-  tokens.tokens.forEach(token => {
-    if (token.type === 'variable') {
-      const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+  tokens.tokens.forEach((token) => {
+    if (token.type === "variable") {
+      const value =
+        token.valueType === "px" ? rem(token.rawValue!) : token.rawValue;
       colorVariables.set(sanitizeName(token.name), value);
     }
   });
@@ -27,13 +28,15 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   colorVariables.forEach((value, name) => {
     output += `$${name}: ${value};\n`;
   });
-  
+
   // Then collect and output gradient variables
   const gradientVariables = new Map<string, StyleToken>();
-  tokens.tokens.forEach(token => {
-    if (token.type === 'style' && 
-        token.property === 'fills' && 
-        (token.rawValue?.includes('gradient'))) {
+  tokens.tokens.forEach((token) => {
+    if (
+      token.type === "style" &&
+      token.property === "fills" &&
+      token.rawValue?.includes("gradient")
+    ) {
       const name = `gradient-${sanitizeName(token.name)}`;
       gradientVariables.set(name, token);
     }
@@ -46,7 +49,7 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   // Output gradient variables
   gradientVariables.forEach((token, name) => {
     // Replace color values with variable references if they exist
-    let gradientValue = token.rawValue ?? '';
+    let gradientValue = token.rawValue ?? "";
     colorVariables.forEach((value, colorName) => {
       gradientValue = gradientValue.replace(value, `$${colorName}`);
     });
@@ -59,11 +62,11 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   output += "\n// Generated SCSS Mixins\n";
 
   // Filter for style tokens and group by path
-  const styleTokens = tokens.tokens.filter((token): token is StyleToken => 
-    token.type === 'style'
+  const styleTokens = tokens.tokens.filter(
+    (token): token is StyleToken => token.type === "style"
   );
 
-  const variantGroups = groupBy(styleTokens, t => t.path.join('_'));
+  const variantGroups = groupBy(styleTokens, (t) => t.path.join("_"));
 
   Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
     if (!variantPath) return;
@@ -73,21 +76,29 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
 
     if (uniqueTokens.length > 0) {
       output += `@mixin ${variantPath} {\n`;
-      uniqueTokens.forEach(token => {
-        if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
+      uniqueTokens.forEach((token) => {
+        if (
+          token.property === "fills" &&
+          token?.rawValue?.includes("gradient")
+        ) {
           // Only use CSS variables if the token has associated variables
           if (token.variables && token.variables.length > 0) {
             const gradientName = `gradient-${sanitizeName(token.name)}`;
             output += ` ${token.property}: var(--${gradientName}, #{$${gradientName}});\n`;
           } else {
             // Use the raw value directly if no variables are involved
-            const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+            const value =
+              token.valueType === "px" ? rem(token.rawValue!) : token.rawValue;
             output += ` ${token.property}: ${value};\n`;
           }
         } else {
-          const baseValue = token.valueType === 'px' ? rem(token.value!) : token.value;
+          const baseValue =
+            token.valueType === "px" ? rem(token.value!) : token.value;
           // in SCSS negated variables are a parsing warning unless parenthesized
-          const processedValue = baseValue?.replace(/-\$(\w|-)+/g, match => `(${match})`);
+          const processedValue = baseValue?.replace(
+            /-\$(\w|-)+/g,
+            (match) => `(${match})`
+          );
 
           output += ` ${token.property}: ${processedValue};\n`;
         }
@@ -99,32 +110,33 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   return {
     result: output,
     warnings,
-    errors
+    errors,
   };
-} 
+}
 
 // Helper function to sort and dedupe tokens
 function sortAndDedupeTokens(tokens: StyleToken[]): StyleToken[] {
   const layoutProperties = [
-    'display',
-    'flex-direction',
-    'align-items',
-    'gap',
-    'padding',
-    'padding-top',
-    'padding-right',
-    'padding-bottom',
-    'padding-left'
+    "display",
+    "flex-direction",
+    "align-items",
+    "gap",
+    "padding",
+    "padding-top",
+    "padding-right",
+    "padding-bottom",
+    "padding-left",
   ];
 
   // Filter out tokens with empty or null values first
-  const validTokens = tokens.filter(token => 
-    token.value !== null && 
-    token.value !== undefined && 
-    token.value !== '' &&
-    token.rawValue !== null && 
-    token.rawValue !== undefined && 
-    token.rawValue !== ''
+  const validTokens = tokens.filter(
+    (token) =>
+      token.value !== null &&
+      token.value !== undefined &&
+      token.value !== "" &&
+      token.rawValue !== null &&
+      token.rawValue !== undefined &&
+      token.rawValue !== ""
   );
 
   const sortedTokens = validTokens.sort((a, b) => {
@@ -137,7 +149,7 @@ function sortAndDedupeTokens(tokens: StyleToken[]): StyleToken[] {
   });
 
   return sortedTokens.reduce((acc, token) => {
-    const existingIndex = acc.findIndex(t => t.property === token.property);
+    const existingIndex = acc.findIndex((t) => t.property === token.property);
     if (existingIndex !== -1) {
       acc[existingIndex] = token;
     } else {
