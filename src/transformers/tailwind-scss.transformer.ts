@@ -167,7 +167,6 @@ export function transformToTailwindScss(
           );
         }
         if (token.property.includes("border")) {
-          console.log({ token });
           classOutput += generateTailwindBorderClass(token);
         }
         if (token.property === "box-shadow") {
