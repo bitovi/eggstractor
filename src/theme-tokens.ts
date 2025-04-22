@@ -2,7 +2,8 @@
 
 export const themeTokens: {
   spacing: Record<string, string>,
-  colors: Record<string, string>
+  colors: Record<string, string>,
+  borderWidth: Record<string, string>,
 } = {
   spacing: {
   "0px": "0",
@@ -285,5 +286,13 @@ export const themeTokens: {
   "#9f1239": "rose-800",
   "#881337": "rose-900",
   "#4c0519": "rose-950"
+},
+  borderWidth: {
+  "0px": "0",
+  "2px": "2",
+  "4px": "4",
+  "8px": "8",
+  "1px": "DEFAULT"
 }
+
 };
