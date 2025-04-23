@@ -4,6 +4,7 @@ export const themeTokens: {
   spacing: Record<string, string>,
   colors: Record<string, string>,
   borderWidth: Record<string, string>,
+  borderRadius: Record<string, string>,
 } = {
   spacing: {
   "0px": "0",
@@ -293,6 +294,16 @@ export const themeTokens: {
   "4px": "4",
   "8px": "8",
   "1px": "DEFAULT"
+},
+  borderRadius: {
+  "0px": "none",
+  "2px": "sm",
+  "4px": "DEFAULT",
+  "6px": "md",
+  "8px": "lg",
+  "12px": "xl",
+  "16px": "2xl",
+  "24px": "3xl",
+  "9999px": "full"
 }
-
 };
