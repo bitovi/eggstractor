@@ -3,12 +3,7 @@ import { groupBy } from "../utils/index";
 import { deduplicateMessages } from "../utils/error.utils";
 import { themeTokens } from "../theme-tokens";
 
-const {
-  spacing,
-  colors,
-  borderWidth: borderWidths,
-  borderRadius,
-} = themeTokens;
+const { spacing, colors, borderWidths, borderRadius } = themeTokens;
 
 const borderStyles = new Set([
   "none",
@@ -33,16 +28,14 @@ const borderPropertyToShorthand: Record<string, string> = {
   "border-y": "border-y",
 };
 
-function generateSpacingClass(spacingClass: string, value: string) {
-  return spacing[value]
-    ? ` ${spacingClass}-${spacing[value]}`
-    : ` ${spacingClass}-[${value}]`;
-}
-
-function generateBorderWidthClass(borderWidthClass: string, value: string) {
-  return borderWidths[value]
-    ? ` ${borderWidthClass}-${borderWidths[value]}`
-    : ` ${borderWidthClass}-[${value}]`;
+function generatePropertyOutput(
+  propertyArray: Record<string, string>,
+  propertyClass: string,
+  value: string
+): string {
+  return propertyArray[value]
+    ? ` ${propertyClass}-${propertyArray[value]}`
+    : ` ${propertyClass}-[${value}]`;
 }
 
 function generateTailwindPaddingClass(rawTokenValue: string): string {
@@ -57,7 +50,7 @@ function generateTailwindPaddingClass(rawTokenValue: string): string {
       const directionMap = ["pt", "pr", "pb", "pl"];
       paddingPrefix = directionMap[index];
     }
-    output += generateSpacingClass(paddingPrefix, splitRawValue);
+    output += generatePropertyOutput(spacing, paddingPrefix, splitRawValue);
   });
   return output;
 }
@@ -69,9 +62,7 @@ function generateTailwindColorClass(colorClass: string, value: string): string {
     background: "bg",
   };
 
-  return colors[value]
-    ? ` ${colorClassNames[colorClass]}-${colors[value]}`
-    : ` ${colorClassNames[colorClass]}-[${value}]`;
+  return generatePropertyOutput(colors, colorClassNames[colorClass], value);
 }
 
 function parseBorderShorthand(border: string) {
@@ -98,49 +89,38 @@ function generateTailwindBorderClass(token: StyleToken): string {
     const splitTokenRawValues: string[] = (
       token.rawValue?.split(" ") || []
     ).map((v) => (v === "0" ? "0px" : v));
-    let output = "";
 
-    if (splitTokenRawValues.length === 1) {
-      output += borderRadius[splitTokenRawValues[0]]
-        ? ` rounded-${borderRadius[splitTokenRawValues[0]]}`
-        : ` rounded-[${splitTokenRawValues[0]}]`;
-    } else if (splitTokenRawValues.length === 2) {
-      // top-left + bottom-right, top-right + bottom-left
-      output += borderRadius[splitTokenRawValues[0]]
-        ? ` rounded-tl-${borderRadius[splitTokenRawValues[0]]}`
-        : ` rounded-tl-[${splitTokenRawValues[0]}]`;
-      output += borderRadius[splitTokenRawValues[0]]
-        ? ` rounded-br-${borderRadius[splitTokenRawValues[0]]}`
-        : ` rounded-br-[${splitTokenRawValues[0]}]`;
-      output += borderRadius[splitTokenRawValues[1]]
-        ? ` rounded-tr-${borderRadius[splitTokenRawValues[1]]}`
-        : ` rounded-tr-[${splitTokenRawValues[1]}]`;
-      output += borderRadius[splitTokenRawValues[1]]
-        ? ` rounded-bl-${borderRadius[splitTokenRawValues[1]]}`
-        : ` rounded-bl-[${splitTokenRawValues[1]}]`;
-    } else if (splitTokenRawValues.length === 3) {
-      // top-left, top-right + bottom-left, bottom-right
-      output += borderRadius[splitTokenRawValues[0]]
-        ? ` rounded-tl-${borderRadius[splitTokenRawValues[0]]}`
-        : ` rounded-tl-[${splitTokenRawValues[0]}]`;
-      output += borderRadius[splitTokenRawValues[1]]
-        ? ` rounded-br-${borderRadius[splitTokenRawValues[1]]}`
-        : ` rounded-br-[${splitTokenRawValues[1]}]`;
-      output += borderRadius[splitTokenRawValues[1]]
-        ? ` rounded-tr-${borderRadius[splitTokenRawValues[1]]}`
-        : ` rounded-tr-[${splitTokenRawValues[1]}]`;
-      output += borderRadius[splitTokenRawValues[2]]
-        ? ` rounded-bl-${borderRadius[splitTokenRawValues[2]]}`
-        : ` rounded-bl-[${splitTokenRawValues[2]}]`;
-    } else if (splitTokenRawValues.length === 4) {
+    if (splitTokenRawValues.length > 1) {
+      const normalized = [
+        splitTokenRawValues[0],
+        splitTokenRawValues[1] ?? splitTokenRawValues[0],
+        splitTokenRawValues[2] ?? splitTokenRawValues[0],
+        splitTokenRawValues[3] ??
+          splitTokenRawValues[1] ??
+          splitTokenRawValues[0],
+      ];
+
       const directions = ["tl", "tr", "br", "bl"];
-      splitTokenRawValues.forEach((value, index) => {
-        output += borderRadius[value]
-          ? ` rounded-${directions[index]}-${borderRadius[value]}`
-          : ` rounded-${directions[index]}-[${value}]`;
-      });
+
+      return (
+        " " +
+        normalized
+          .map((value, directionIndex) => {
+            const direction = directions[directionIndex];
+
+            return borderRadius[value]
+              ? `rounded-${direction}-${borderRadius[value]}`
+              : `rounded-${direction}-[${value}]`;
+          })
+          .join(" ")
+      );
+    } else {
+      return generatePropertyOutput(
+        borderRadius,
+        "rounded",
+        splitTokenRawValues[0]
+      );
     }
-    return output;
   }
 
   const { width, style, color } = parseBorderShorthand(
@@ -151,17 +131,17 @@ function generateTailwindBorderClass(token: StyleToken): string {
     ? ` ${borderPropertyToShorthand[token.property]}-${style}`
     : "";
   const borderWidth: string = width
-    ? generateBorderWidthClass(borderPropertyToShorthand[token.property], width)
+    ? generatePropertyOutput(
+        borderWidths,
+        borderPropertyToShorthand[token.property],
+        width
+      )
     : "";
   const borderColor: string = color
     ? generateTailwindColorClass(token.property, color)
     : "";
 
   return borderWidth + borderStyle + borderColor;
-}
-
-function generateTailwindBoxShadowClass(token: StyleToken): string {
-  return "";
 }
 
 export function transformToTailwindScss(
@@ -226,9 +206,6 @@ export function transformToTailwindScss(
         }
         if (token.property.includes("border")) {
           classOutput += generateTailwindBorderClass(token);
-        }
-        if (token.property === "box-shadow") {
-          classOutput += generateTailwindBoxShadowClass(token);
         }
       });
       classOutput += "\n}\n";
