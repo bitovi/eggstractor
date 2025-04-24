@@ -82,12 +82,12 @@ const tsOutput = `// Auto-generated theme tokens — do not edit manually
 export const themeTokens: {
   spacing: Record<string, string>,
   colors: Record<string, string>,
-  borderWidth: Record<string, string>,
+  borderWidths: Record<string, string>,
   borderRadius: Record<string, string>,
 } = {
   spacing: ${JSON.stringify(spacingToPxMap, null, 2)},
   colors: ${JSON.stringify(hexToTailwindClass, null, 2)},
-  borderWidth: ${JSON.stringify(borderWidthToPxMap, null, 2)},
+  borderWidths: ${JSON.stringify(borderWidthToPxMap, null, 2)},
   borderRadius: ${JSON.stringify(borderRadiusToPxMap, null, 2)}
 };
 `;
