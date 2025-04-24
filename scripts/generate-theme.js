@@ -15,7 +15,6 @@ const defaultThemeWithColors = {
 
 // Handle extend properly from custom config
 const fullConfig = merge(
-  {},
   { theme: defaultThemeWithColors },
   customConfig.theme?.extend
     ? { theme: { ...customConfig.theme.extend } }
@@ -70,10 +69,12 @@ function flattenColorsToHexKeys(colorObj, prefix = "") {
 const spacing = theme.spacing || {};
 const colors = theme.colors || {};
 const borderWidth = theme.borderWidth || {};
+const borderRadius = theme.borderRadius || {};
 
 const spacingToPxMap = flattenSpaceToPxKeys(spacing);
 const hexToTailwindClass = flattenColorsToHexKeys(colors);
 const borderWidthToPxMap = flattenSpaceToPxKeys(borderWidth);
+const borderRadiusToPxMap = flattenSpaceToPxKeys(borderRadius);
 
 // Construct the TS output
 const tsOutput = `// Auto-generated theme tokens — do not edit manually
@@ -81,12 +82,13 @@ const tsOutput = `// Auto-generated theme tokens — do not edit manually
 export const themeTokens: {
   spacing: Record<string, string>,
   colors: Record<string, string>,
-  borderWidth: Record<string, string>,
+  borderWidths: Record<string, string>,
+  borderRadius: Record<string, string>,
 } = {
   spacing: ${JSON.stringify(spacingToPxMap, null, 2)},
   colors: ${JSON.stringify(hexToTailwindClass, null, 2)},
-  borderWidth: ${JSON.stringify(borderWidthToPxMap, null, 2)}
-
+  borderWidths: ${JSON.stringify(borderWidthToPxMap, null, 2)},
+  borderRadius: ${JSON.stringify(borderRadiusToPxMap, null, 2)}
 };
 `;
 

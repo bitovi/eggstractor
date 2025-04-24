@@ -28,8 +28,6 @@ export async function collectTokens(): Promise<TokenCollection> {
     }
   }
 
-  console.info({ figma });
-
   await processNode(figma.currentPage);
   return collection;
 }

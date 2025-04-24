@@ -3,6 +3,8 @@ import { groupBy } from "../utils/index";
 import { deduplicateMessages } from "../utils/error.utils";
 import { themeTokens } from "../theme-tokens";
 
+const { spacing, colors, borderWidths, borderRadius } = themeTokens;
+
 const borderStyles = new Set([
   "none",
   "hidden",
@@ -26,16 +28,14 @@ const borderPropertyToShorthand: Record<string, string> = {
   "border-y": "border-y",
 };
 
-function generateSpacingClass(spacingClass: string, value: string) {
-  return themeTokens.spacing[value]
-    ? ` ${spacingClass}-${themeTokens.spacing[value]}`
-    : ` ${spacingClass}-[${value}]`;
-}
-
-function generateBorderWidthClass(borderWidthClass: string, value: string) {
-  return themeTokens.borderWidth[value]
-    ? ` ${borderWidthClass}-${themeTokens.borderWidth[value]}`
-    : ` ${borderWidthClass}-[${value}]`;
+function generatePropertyOutput(
+  propertyArray: Record<string, string>,
+  propertyClass: string,
+  value: string
+): string {
+  return propertyArray[value]
+    ? ` ${propertyClass}-${propertyArray[value]}`
+    : ` ${propertyClass}-[${value}]`;
 }
 
 function generateTailwindPaddingClass(rawTokenValue: string): string {
@@ -50,7 +50,7 @@ function generateTailwindPaddingClass(rawTokenValue: string): string {
       const directionMap = ["pt", "pr", "pb", "pl"];
       paddingPrefix = directionMap[index];
     }
-    output += generateSpacingClass(paddingPrefix, splitRawValue);
+    output += generatePropertyOutput(spacing, paddingPrefix, splitRawValue);
   });
   return output;
 }
@@ -62,9 +62,7 @@ function generateTailwindColorClass(colorClass: string, value: string): string {
     background: "bg",
   };
 
-  return themeTokens.colors[value]
-    ? ` ${colorClassNames[colorClass]}-${themeTokens.colors[value]}`
-    : ` ${colorClassNames[colorClass]}-[${value}]`;
+  return generatePropertyOutput(colors, colorClassNames[colorClass], value);
 }
 
 function parseBorderShorthand(border: string) {
@@ -87,23 +85,63 @@ function parseBorderShorthand(border: string) {
 }
 
 function generateTailwindBorderClass(token: StyleToken): string {
+  if (token.property === "border-radius") {
+    const splitTokenRawValues: string[] = (
+      token.rawValue?.split(" ") || []
+    ).map((v) => (v === "0" ? "0px" : v));
+
+    if (splitTokenRawValues.length > 1) {
+      const normalized = [
+        splitTokenRawValues[0],
+        splitTokenRawValues[1] ?? splitTokenRawValues[0],
+        splitTokenRawValues[2] ?? splitTokenRawValues[0],
+        splitTokenRawValues[3] ??
+          splitTokenRawValues[1] ??
+          splitTokenRawValues[0],
+      ];
+
+      const directions = ["tl", "tr", "br", "bl"];
+
+      return (
+        " " +
+        normalized
+          .map((value, directionIndex) => {
+            const direction = directions[directionIndex];
+
+            return borderRadius[value]
+              ? `rounded-${direction}-${borderRadius[value]}`
+              : `rounded-${direction}-[${value}]`;
+          })
+          .join(" ")
+      );
+    } else {
+      return generatePropertyOutput(
+        borderRadius,
+        "rounded",
+        splitTokenRawValues[0]
+      );
+    }
+  }
+
   const { width, style, color } = parseBorderShorthand(
     token.rawValue as string
   );
+
   const borderStyle: string = style
     ? ` ${borderPropertyToShorthand[token.property]}-${style}`
     : "";
   const borderWidth: string = width
-    ? generateBorderWidthClass(borderPropertyToShorthand[token.property], width)
+    ? generatePropertyOutput(
+        borderWidths,
+        borderPropertyToShorthand[token.property],
+        width
+      )
     : "";
   const borderColor: string = color
     ? generateTailwindColorClass(token.property, color)
     : "";
-  return borderWidth + borderStyle + borderColor;
-}
 
-function generateTailwindBoxShadowClass(token: StyleToken): string {
-  return "";
+  return borderWidth + borderStyle + borderColor;
 }
 
 export function transformToTailwindScss(
@@ -168,9 +206,6 @@ export function transformToTailwindScss(
         }
         if (token.property.includes("border")) {
           classOutput += generateTailwindBorderClass(token);
-        }
-        if (token.property === "box-shadow") {
-          classOutput += generateTailwindBoxShadowClass(token);
         }
       });
       classOutput += "\n}\n";
