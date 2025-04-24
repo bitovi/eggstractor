@@ -5,6 +5,7 @@ export const themeTokens: {
   colors: Record<string, string>,
   borderWidths: Record<string, string>,
   borderRadius: Record<string, string>,
+  fontWeight: Record<string, string>,
 } = {
   spacing: {
   "0px": "0",
@@ -306,4 +307,17 @@ export const themeTokens: {
   "24px": "3xl",
   "9999px": "full"
 }
+  fontWeight: {
+  "100": "thin",
+  "200": "extralight",
+  "300": "light",
+  "400": "normal",
+  "500": "medium",
+  "600": "semibold",
+  "700": "bold",
+  "800": "extrabold",
+  "900": "black"
+}
+
+
 };

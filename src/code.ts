@@ -1,12 +1,10 @@
 import { collectTokens } from "./services";
-import {
-  transformToScss,
-  transformToCss,
-  transformToTailwindScss,
-} from "./transformers";
+import { transformToScss, transformToCss } from "./transformers";
+
 import Github from "./github";
 import { serializeFigmaData } from "./utils/test.utils";
 import { TransformerResult } from "./types/processors";
+import { transformToTailwindClass } from "./transformers/tailwind-scss/index";
 
 // Store the generated SCSS
 let generatedScss: string = "";
@@ -30,7 +28,7 @@ async function generateStyles(
     case "css":
       return transformToCss(tokens);
     case "tailwind-scss":
-      return transformToTailwindScss(tokens);
+      return transformToTailwindClass(tokens);
     default:
       throw new Error(`Unsupported format: ${format}`);
   }

@@ -1,7 +1,5 @@
-import { StyleToken, TokenCollection, TransformerResult } from "../types";
-import { groupBy } from "../utils/index";
-import { deduplicateMessages } from "../utils/error.utils";
-import { themeTokens } from "../theme-tokens";
+import { themeTokens } from "../../theme-tokens";
+import { NonNullableStyleToken } from "./filters";
 
 const { spacing, colors, borderWidths, borderRadius, fontWeight } = themeTokens;
 
@@ -34,8 +32,8 @@ function generatePropertyOutput(
   value: string
 ): string {
   return propertyArray[value]
-    ? ` ${propertyClass}-${propertyArray[value]}`
-    : ` ${propertyClass}-[${value}]`;
+    ? `${propertyClass}-${propertyArray[value]}`
+    : `${propertyClass}-[${value}]`;
 }
 
 function generateTailwindPaddingClass(rawTokenValue: string): string {
@@ -84,7 +82,7 @@ function parseBorderShorthand(border: string) {
   return { width, style, color };
 }
 
-function generateTailwindBorderClass(token: StyleToken): string {
+function generateTailwindBorderClass(token: NonNullableStyleToken): string {
   if (token.property === "border-radius") {
     const splitTokenRawValues: string[] = (
       token.rawValue?.split(" ") || []
@@ -123,9 +121,7 @@ function generateTailwindBorderClass(token: StyleToken): string {
     }
   }
 
-  const { width, style, color } = parseBorderShorthand(
-    token.rawValue as string
-  );
+  const { width, style, color } = parseBorderShorthand(token.rawValue);
 
   const borderStyle: string = style
     ? ` ${borderPropertyToShorthand[token.property]}-${style}`
@@ -144,84 +140,32 @@ function generateTailwindBorderClass(token: StyleToken): string {
   return borderWidth + borderStyle + borderColor;
 }
 
-export function transformToTailwindScss(
-  tokens: TokenCollection
-): TransformerResult {
-  let classOutput = "/* Generated Tailwind-SCSS */\n";
+export function createTailwindClasses(
+  tokens: NonNullableStyleToken[]
+): string[] {
+  let classOutput: string[] = [];
 
-  // Deduplicate warnings and errors
-  const { warnings, errors } = deduplicateMessages(
-    tokens.tokens.filter((token): token is StyleToken => token.type === "style")
-  );
-
-  // Filter for style tokens only and ensure they have valid values
-  // TODO: Stronger typing for rawValue
-  const styleTokens = tokens.tokens.filter(
-    (token): token is StyleToken =>
-      token.type === "style" &&
-      token.value != null &&
-      token.value !== "" &&
-      token.rawValue != null &&
-      token.rawValue !== ""
-  );
-
-  const variantGroups = groupBy(styleTokens, (t) => t.path.join("_"));
-  Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
-    if (!variantPath) return;
-    // Remove properties with zero values and unnecessary defaults
-    const uniqueTokens = groupTokens.reduce((acc, token) => {
-      const existing = acc.find((t) => t.property === token.property);
-      if (!existing && token.value !== "inherit") {
-        // Skip zero values for certain properties
-        if (
-          ["gap", "padding"].includes(token.property) &&
-          (token.value === "0" || token.value === "0px")
-        ) {
-          return acc;
-        }
-        // Skip default values
-        if (token.property === "border-width" && token.value === "1px") {
-          return acc;
-        }
-        acc.push(token);
-      }
-      return acc;
-    }, [] as StyleToken[]);
-
-    // Only output class if there are non-inherited properties
-    if (uniqueTokens.length > 0) {
-      classOutput += `\n@mixin ${variantPath} {\n  @apply`;
-      uniqueTokens.forEach((token) => {
-        if (token.property.includes("font-weight")) {
-          classOutput += generatePropertyOutput(
-            fontWeight,
-            "font",
-            token.rawValue as string
-          );
-        }
-        if (token.property === "padding") {
-          classOutput += generateTailwindPaddingClass(token.rawValue as string);
-        }
-        if (
-          (token.property === "color" || token.property === "background") &&
-          token?.rawValue?.includes("#")
-        ) {
-          classOutput += generateTailwindColorClass(
-            token.property as string,
-            token.rawValue as string
-          );
-        }
-        if (token.property.includes("border")) {
-          classOutput += generateTailwindBorderClass(token);
-        }
-      });
-      classOutput += "\n}\n";
+  for (const token of tokens) {
+    if (token.property.includes("font-weight")) {
+      classOutput.push(
+        generatePropertyOutput(fontWeight, "font", token.rawValue)
+      );
     }
-  });
+    if (token.property === "padding") {
+      classOutput.push(generateTailwindPaddingClass(token.rawValue));
+    }
+    if (
+      (token.property === "color" || token.property === "background") &&
+      token?.rawValue?.includes("#")
+    ) {
+      classOutput.push(
+        generateTailwindColorClass(token.property, token.rawValue)
+      );
+    }
+    if (token.property.includes("border")) {
+      classOutput.push(generateTailwindBorderClass(token));
+    }
+  }
 
-  return {
-    result: variableOutput + classOutput,
-    warnings,
-    errors,
-  };
+  return classOutput;
 }

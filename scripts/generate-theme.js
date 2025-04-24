@@ -43,6 +43,16 @@ function flattenSpaceToPxKeys(spacingObj) {
   return result;
 }
 
+function flattenValueToKeys(spacingObj) {
+  const result = {};
+
+  for (const [key, value] of Object.entries(spacingObj)) {
+    result[value] = `${key}`;
+  }
+
+  return result;
+}
+
 function flattenColorsToHexKeys(colorObj, prefix = "") {
   const result = {};
 
@@ -71,10 +81,16 @@ const colors = theme.colors || {};
 const borderWidth = theme.borderWidth || {};
 const borderRadius = theme.borderRadius || {};
 
+const fontFamily = theme.fontFamily || {};
+const fontSize = theme.fontSize || {};
+const fontWeight = theme.fontWeight || {};
+const fontStyle = theme.fontStyle || {};
+
 const spacingToPxMap = flattenSpaceToPxKeys(spacing);
 const hexToTailwindClass = flattenColorsToHexKeys(colors);
 const borderWidthToPxMap = flattenSpaceToPxKeys(borderWidth);
 const borderRadiusToPxMap = flattenSpaceToPxKeys(borderRadius);
+const fontWeightKeystoValues = flattenValueToKeys(fontWeight);
 
 // Construct the TS output
 const tsOutput = `// Auto-generated theme tokens — do not edit manually
@@ -84,11 +100,15 @@ export const themeTokens: {
   colors: Record<string, string>,
   borderWidths: Record<string, string>,
   borderRadius: Record<string, string>,
+  fontWeight: Record<string, string>,
 } = {
   spacing: ${JSON.stringify(spacingToPxMap, null, 2)},
   colors: ${JSON.stringify(hexToTailwindClass, null, 2)},
   borderWidths: ${JSON.stringify(borderWidthToPxMap, null, 2)},
   borderRadius: ${JSON.stringify(borderRadiusToPxMap, null, 2)}
+  fontWeight: ${JSON.stringify(fontWeightKeystoValues, null, 2)}
+
+
 };
 `;
 
