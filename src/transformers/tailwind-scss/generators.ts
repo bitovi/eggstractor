@@ -1,5 +1,5 @@
 import { themeTokens } from "../../theme-tokens";
-import { NonNullableStyleToken } from "./filters";
+import { NonNullableStyleToken } from "../../types";
 
 const { spacing, colors, borderWidths, borderRadius, fontWeight } = themeTokens;
 
@@ -36,9 +36,9 @@ function generatePropertyOutput(
     : `${propertyClass}-[${value}]`;
 }
 
-function generateTailwindPaddingClass(rawTokenValue: string): string {
+const generateTailwindPaddingClass: Generator = ({ rawValue }) => {
   //Split padding for multiple directions
-  const splitTokenRawValues: string[] = rawTokenValue.split(" ");
+  const splitTokenRawValues: string[] = rawValue.split(" ");
   let output = "";
   splitTokenRawValues.forEach((splitRawValue, index) => {
     let paddingPrefix = "p";
@@ -51,17 +51,7 @@ function generateTailwindPaddingClass(rawTokenValue: string): string {
     output += generatePropertyOutput(spacing, paddingPrefix, splitRawValue);
   });
   return output;
-}
-
-function generateTailwindColorClass(colorClass: string, value: string): string {
-  const colorClassNames: Record<string, string> = {
-    ...borderPropertyToShorthand,
-    color: "text",
-    background: "bg",
-  };
-
-  return generatePropertyOutput(colors, colorClassNames[colorClass], value);
-}
+};
 
 function parseBorderShorthand(border: string) {
   const parts = border.trim().split(/\s+/);
@@ -82,49 +72,49 @@ function parseBorderShorthand(border: string) {
   return { width, style, color };
 }
 
-function generateTailwindBorderClass(token: NonNullableStyleToken): string {
-  if (token.property === "border-radius") {
-    const splitTokenRawValues: string[] = (
-      token.rawValue?.split(" ") || []
-    ).map((v) => (v === "0" ? "0px" : v));
+const generateTailwindBorderRadiusClass: Generator = ({ rawValue }) => {
+  const splitTokenRawValues: string[] = (rawValue?.split(" ") || []).map((v) =>
+    v === "0" ? "0px" : v
+  );
 
-    if (splitTokenRawValues.length > 1) {
-      const normalized = [
+  if (splitTokenRawValues.length > 1) {
+    const normalized = [
+      splitTokenRawValues[0],
+      splitTokenRawValues[1] ?? splitTokenRawValues[0],
+      splitTokenRawValues[2] ?? splitTokenRawValues[0],
+      splitTokenRawValues[3] ??
+        splitTokenRawValues[1] ??
         splitTokenRawValues[0],
-        splitTokenRawValues[1] ?? splitTokenRawValues[0],
-        splitTokenRawValues[2] ?? splitTokenRawValues[0],
-        splitTokenRawValues[3] ??
-          splitTokenRawValues[1] ??
-          splitTokenRawValues[0],
-      ];
+    ];
 
-      const directions = ["tl", "tr", "br", "bl"];
+    const directions = ["tl", "tr", "br", "bl"];
 
-      return (
-        " " +
-        normalized
-          .map((value, directionIndex) => {
-            const direction = directions[directionIndex];
+    return (
+      " " +
+      normalized
+        .map((value, directionIndex) => {
+          const direction = directions[directionIndex];
 
-            return borderRadius[value]
-              ? `rounded-${direction}-${borderRadius[value]}`
-              : `rounded-${direction}-[${value}]`;
-          })
-          .join(" ")
-      );
-    } else {
-      return generatePropertyOutput(
-        borderRadius,
-        "rounded",
-        splitTokenRawValues[0]
-      );
-    }
+          return borderRadius[value]
+            ? `rounded-${direction}-${borderRadius[value]}`
+            : `rounded-${direction}-[${value}]`;
+        })
+        .join(" ")
+    );
+  } else {
+    return generatePropertyOutput(
+      borderRadius,
+      "rounded",
+      splitTokenRawValues[0]
+    );
   }
+};
 
+const generateTailwindBorderClass: Generator = (token) => {
   const { width, style, color } = parseBorderShorthand(token.rawValue);
 
   const borderStyle: string = style
-    ? ` ${borderPropertyToShorthand[token.property]}-${style}`
+    ? `${borderPropertyToShorthand[token.property]}-${style}`
     : "";
   const borderWidth: string = width
     ? generatePropertyOutput(
@@ -134,11 +124,28 @@ function generateTailwindBorderClass(token: NonNullableStyleToken): string {
       )
     : "";
   const borderColor: string = color
-    ? generateTailwindColorClass(token.property, color)
+    ? generatePropertyOutput(
+        colors,
+        borderPropertyToShorthand[token.property],
+        color
+      )
     : "";
 
-  return borderWidth + borderStyle + borderColor;
-}
+  return [borderWidth, borderStyle, borderColor].join(" ");
+};
+
+type Generator = (token: NonNullableStyleToken) => string;
+
+const tailwindClassGenerators: Record<string, Generator> = {
+  padding: generateTailwindPaddingClass,
+  "border-radius": generateTailwindBorderRadiusClass,
+  border: generateTailwindBorderClass,
+  "font-weight": (token) =>
+    generatePropertyOutput(fontWeight, "font", token.rawValue),
+  color: (token) => generatePropertyOutput(colors, "text", token.rawValue),
+  background: (token) =>
+    generatePropertyOutput(colors, "background", token.rawValue),
+};
 
 export function createTailwindClasses(
   tokens: NonNullableStyleToken[]
@@ -146,26 +153,10 @@ export function createTailwindClasses(
   let classOutput: string[] = [];
 
   for (const token of tokens) {
-    if (token.property.includes("font-weight")) {
-      classOutput.push(
-        generatePropertyOutput(fontWeight, "font", token.rawValue)
-      );
-    }
-    if (token.property === "padding") {
-      classOutput.push(generateTailwindPaddingClass(token.rawValue));
-    }
-    if (
-      (token.property === "color" || token.property === "background") &&
-      token?.rawValue?.includes("#")
-    ) {
-      classOutput.push(
-        generateTailwindColorClass(token.property, token.rawValue)
-      );
-    }
-    if (token.property.includes("border")) {
-      classOutput.push(generateTailwindBorderClass(token));
+    const generator = tailwindClassGenerators[token.property];
+    if (generator) {
+      classOutput.push(generator(token));
     }
   }
-
   return classOutput;
 }

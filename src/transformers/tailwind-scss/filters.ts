@@ -1,8 +1,4 @@
-import { StyleToken, TokenCollection } from "../../types";
-
-type NonNullableStyleToken = {
-  [K in keyof StyleToken]: NonNullable<StyleToken[K]>;
-};
+import { TokenCollection, NonNullableStyleToken } from "../../types";
 
 export function filterStyleTokens({
   tokens,

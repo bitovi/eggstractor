@@ -4,7 +4,7 @@ import { transformToScss, transformToCss } from "./transformers";
 import Github from "./github";
 import { serializeFigmaData } from "./utils/test.utils";
 import { TransformerResult } from "./types/processors";
-import { transformToTailwindClass } from "./transformers/tailwind-scss/index";
+import transformToTailwindClass from "./transformers/tailwind-scss";
 
 // Store the generated SCSS
 let generatedScss: string = "";

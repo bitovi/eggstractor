@@ -4,7 +4,7 @@ import { deduplicateMessages } from "../../utils/error.utils";
 import { filterStyleTokens } from "./filters";
 import { createTailwindClasses } from "./generators";
 
-export function transformToTailwindClass(collection: TokenCollection) {
+export default function transformToTailwindClass(collection: TokenCollection) {
   const styleTokens = filterStyleTokens(collection);
   const { warnings, errors } = deduplicateMessages(styleTokens);
   const groupedTokens = groupBy(styleTokens, (token) => token.path.join("_"));
