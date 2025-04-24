@@ -1,10 +1,11 @@
 export function toBase64(str: string): string {
-  const base64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-  const utf8str = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-    (_, p1) => String.fromCharCode(parseInt(p1, 16))
+  const base64chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  const utf8str = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+    String.fromCharCode(parseInt(p1, 16))
   );
   let i = 0;
-  let result = '';
+  let result = "";
   while (i < utf8str.length) {
     const char1 = utf8str.charCodeAt(i++);
     const char2 = i < utf8str.length ? utf8str.charCodeAt(i++) : NaN;
@@ -13,17 +14,23 @@ export function toBase64(str: string): string {
     const enc2 = ((char1 & 3) << 4) | (char2 >> 4);
     const enc3 = ((char2 & 15) << 2) | (char3 >> 6);
     const enc4 = char3 & 63;
-    result += base64chars[enc1] + base64chars[enc2] +
-      (isNaN(char2) ? '=' : base64chars[enc3]) +
-      (isNaN(char3) ? '=' : base64chars[enc4]);
+    result +=
+      base64chars[enc1] +
+      base64chars[enc2] +
+      (isNaN(char2) ? "=" : base64chars[enc3]) +
+      (isNaN(char3) ? "=" : base64chars[enc4]);
   }
   return result;
 }
 
 export function sanitizeName(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+  return name.toLowerCase().replace(/[^a-z0-9]/g, "-");
 }
 
 export function sanitizeSegment(segment: string): string {
-  return segment.toLowerCase().replace(/[^a-z0-9]/g, '-');
-} 
+  return segment.replace(/[^a-zA-Z0-9]/g, "-");
+}
+
+export function toKebabCase(str: string): string {
+  return str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s_]+/g, "-");
+}
