@@ -105,11 +105,11 @@ $spacing-9: 0.48;
  background: #ffffff;
  opacity: 0.5;
 }
-@mixin opacity-custom-group_opacity-custom {
+@mixin opacity-custom-group-opacity-custom {
  background: #00464a;
  opacity: 0.5;
 }
-@mixin opacity-custom-group_lorem-ipsum {
+@mixin opacity-custom-group-Lorem-ipsum {
  display: flex;
  flex-direction: column;
  color: #ffffff;
@@ -126,11 +126,11 @@ $spacing-9: 0.48;
  background: $text-primary;
  opacity: $size-48;
 }
-@mixin opacity-variable-group_opacity-custom {
+@mixin opacity-variable-group-opacity-custom {
  background: $brand-primary;
  opacity: $size-48;
 }
-@mixin opacity-variable-group_lorem-ipsum {
+@mixin opacity-variable-group-Lorem-ipsum {
  display: flex;
  flex-direction: column;
  color: $text-primary;
