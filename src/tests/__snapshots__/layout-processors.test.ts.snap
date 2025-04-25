@@ -12,13 +12,13 @@ $brand-primary: #00464a;
  padding: 0rem;
  background: #ffffff;
 }
-@mixin alignment-bottom-left-object-1 {
+@mixin alignment-bottom-left_object-1 {
  background: $brand-primary;
 }
-@mixin alignment-bottom-left-object-2 {
+@mixin alignment-bottom-left_object-2 {
  background: $brand-primary;
 }
-@mixin alignment-bottom-left-object-3 {
+@mixin alignment-bottom-left_object-3 {
  background: $brand-primary;
 }
 @mixin alignment-bottom-center {
@@ -29,13 +29,13 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin alignment-bottom-center-object-1 {
+@mixin alignment-bottom-center_object-1 {
  background: $brand-primary;
 }
-@mixin alignment-bottom-center-object-2 {
+@mixin alignment-bottom-center_object-2 {
  background: $brand-primary;
 }
-@mixin alignment-bottom-center-object-3 {
+@mixin alignment-bottom-center_object-3 {
  background: $brand-primary;
 }
 @mixin alignment-bottom-right {
@@ -46,13 +46,13 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: flex-end;
 }
-@mixin alignment-bottom-right-object-1 {
+@mixin alignment-bottom-right_object-1 {
  background: $brand-primary;
 }
-@mixin alignment-bottom-right-object-2 {
+@mixin alignment-bottom-right_object-2 {
  background: $brand-primary;
 }
-@mixin alignment-bottom-right-object-3 {
+@mixin alignment-bottom-right_object-3 {
  background: $brand-primary;
 }
 @mixin alignment-center-left {
@@ -62,13 +62,13 @@ $brand-primary: #00464a;
  padding: 0rem;
  background: #ffffff;
 }
-@mixin alignment-center-left-object-1 {
+@mixin alignment-center-left_object-1 {
  background: $brand-primary;
 }
-@mixin alignment-center-left-object-2 {
+@mixin alignment-center-left_object-2 {
  background: $brand-primary;
 }
-@mixin alignment-center-left-object-3 {
+@mixin alignment-center-left_object-3 {
  background: $brand-primary;
 }
 @mixin alignment-center-center {
@@ -79,13 +79,13 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin alignment-center-center-object-1 {
+@mixin alignment-center-center_object-1 {
  background: $brand-primary;
 }
-@mixin alignment-center-center-object-2 {
+@mixin alignment-center-center_object-2 {
  background: $brand-primary;
 }
-@mixin alignment-center-center-object-3 {
+@mixin alignment-center-center_object-3 {
  background: $brand-primary;
 }
 @mixin alignment-center-right {
@@ -96,13 +96,13 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: flex-end;
 }
-@mixin alignment-center-right-object-1 {
+@mixin alignment-center-right_object-1 {
  background: $brand-primary;
 }
-@mixin alignment-center-right-object-2 {
+@mixin alignment-center-right_object-2 {
  background: $brand-primary;
 }
-@mixin alignment-center-right-object-3 {
+@mixin alignment-center-right_object-3 {
  background: $brand-primary;
 }
 @mixin alignment-top-left {
@@ -112,13 +112,13 @@ $brand-primary: #00464a;
  padding: 0rem;
  background: #ffffff;
 }
-@mixin alignment-top-left-object-1 {
+@mixin alignment-top-left_object-1 {
  background: $brand-primary;
 }
-@mixin alignment-top-left-object-2 {
+@mixin alignment-top-left_object-2 {
  background: $brand-primary;
 }
-@mixin alignment-top-left-object-3 {
+@mixin alignment-top-left_object-3 {
  background: $brand-primary;
 }
 @mixin alignment-top-center {
@@ -129,13 +129,13 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin alignment-top-center-object-1 {
+@mixin alignment-top-center_object-1 {
  background: $brand-primary;
 }
-@mixin alignment-top-center-object-2 {
+@mixin alignment-top-center_object-2 {
  background: $brand-primary;
 }
-@mixin alignment-top-center-object-3 {
+@mixin alignment-top-center_object-3 {
  background: $brand-primary;
 }
 @mixin alignment-top-right {
@@ -146,13 +146,13 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: flex-end;
 }
-@mixin alignment-top-right-object-1 {
+@mixin alignment-top-right_object-1 {
  background: $brand-primary;
 }
-@mixin alignment-top-right-object-2 {
+@mixin alignment-top-right_object-2 {
  background: $brand-primary;
 }
-@mixin alignment-top-right-object-3 {
+@mixin alignment-top-right_object-3 {
  background: $brand-primary;
 }
 "
@@ -171,13 +171,13 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin vertical-layout-object-1 {
+@mixin vertical-layout_object-1 {
  background: $brand-primary;
 }
-@mixin vertical-layout-object-2 {
+@mixin vertical-layout_object-2 {
  background: $brand-primary;
 }
-@mixin vertical-layout-object-3 {
+@mixin vertical-layout_object-3 {
  background: $brand-primary;
 }
 @mixin horizontal-layout {
@@ -187,13 +187,13 @@ $brand-primary: #00464a;
  padding: 0rem;
  background: #ffffff;
 }
-@mixin horizontal-layout-object-1 {
+@mixin horizontal-layout_object-1 {
  background: $brand-primary;
 }
-@mixin horizontal-layout-object-2 {
+@mixin horizontal-layout_object-2 {
  background: $brand-primary;
 }
-@mixin horizontal-layout-object-3 {
+@mixin horizontal-layout_object-3 {
  background: $brand-primary;
 }
 @mixin wrapped-layout {
@@ -203,13 +203,13 @@ $brand-primary: #00464a;
  padding: 0rem;
  background: #ffffff;
 }
-@mixin wrapped-layout-object-1 {
+@mixin wrapped-layout_object-1 {
  background: $brand-primary;
 }
-@mixin wrapped-layout-object-2 {
+@mixin wrapped-layout_object-2 {
  background: $brand-primary;
 }
-@mixin wrapped-layout-object-3 {
+@mixin wrapped-layout_object-3 {
  background: $brand-primary;
 }
 "
@@ -228,7 +228,7 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin height-hug-object-1 {
+@mixin height-hug_object-1 {
  background: $brand-primary;
 }
 @mixin height-fill-container {
@@ -239,7 +239,7 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin height-fill-container-object-1 {
+@mixin height-fill-container_object-1 {
  background: $brand-primary;
 }
 @mixin height-fixed-height {
@@ -250,7 +250,7 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin height-fixed-height-object-1 {
+@mixin height-fixed-height_object-1 {
  background: $brand-primary;
 }
 @mixin min-height-custom {
@@ -261,7 +261,7 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin min-height-custom-object-1 {
+@mixin min-height-custom_object-1 {
  background: $brand-primary;
 }
 @mixin min-height-variable {
@@ -272,7 +272,7 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin min-height-variable-object-1 {
+@mixin min-height-variable_object-1 {
  background: $brand-primary;
 }
 @mixin max-height-custom {
@@ -283,7 +283,7 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin max-height-custom-object-1 {
+@mixin max-height-custom_object-1 {
  background: $brand-primary;
 }
 @mixin max-height-variable {
@@ -294,7 +294,7 @@ $brand-primary: #00464a;
  background: #ffffff;
  justify-content: center;
 }
-@mixin max-height-variable-object-1 {
+@mixin max-height-variable_object-1 {
  background: $brand-primary;
 }
 "
@@ -316,7 +316,7 @@ $size-16: 1rem;
  justify-content: center;
  min-width: $size-48;
 }
-@mixin min-width-variable-object-1 {
+@mixin min-width-variable_object-1 {
  background: $brand-primary;
  min-width: $size-16;
 }
@@ -329,7 +329,7 @@ $size-16: 1rem;
  justify-content: center;
  max-width: $size-48;
 }
-@mixin max-width-variable-object-1 {
+@mixin max-width-variable_object-1 {
  background: $brand-primary;
  max-width: $size-16;
 }
@@ -341,7 +341,7 @@ $size-16: 1rem;
  background: #ffffff;
  justify-content: center;
 }
-@mixin width-hug-object-1 {
+@mixin width-hug_object-1 {
  background: $brand-primary;
 }
 @mixin width-fill-container {
@@ -352,7 +352,7 @@ $size-16: 1rem;
  background: #ffffff;
  justify-content: center;
 }
-@mixin width-fill-container-object-1 {
+@mixin width-fill-container_object-1 {
  background: $brand-primary;
 }
 @mixin width-fixed-width {
@@ -363,7 +363,7 @@ $size-16: 1rem;
  background: #ffffff;
  justify-content: center;
 }
-@mixin width-fixed-width-object-1 {
+@mixin width-fixed-width_object-1 {
  background: $brand-primary;
 }
 @mixin min-width-custom {
@@ -374,7 +374,7 @@ $size-16: 1rem;
  background: #ffffff;
  justify-content: center;
 }
-@mixin min-width-custom-object-1 {
+@mixin min-width-custom_object-1 {
  background: $brand-primary;
 }
 @mixin max-width-custom {
@@ -385,7 +385,7 @@ $size-16: 1rem;
  background: #ffffff;
  justify-content: center;
 }
-@mixin max-width-custom-object-1 {
+@mixin max-width-custom_object-1 {
  background: $brand-primary;
 }
 "
