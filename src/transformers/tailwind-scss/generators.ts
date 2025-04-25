@@ -67,6 +67,26 @@ const generateTailwindPaddingClass: Generator = ({ rawValue }) => {
   return output;
 };
 
+export const generateTailwindGapClass: Generator = ({ rawValue }) => {
+  const splitTokenRawValues: string[] = rawValue.split(" ");
+  const output: string[] = [];
+  splitTokenRawValues.forEach((splitRawValue, index) => {
+    if (splitTokenRawValues.length === 1) {
+      output.push(generatePropertyOutput(spacing, "gap", splitRawValue));
+    }
+    if (splitTokenRawValues.length === 2) {
+      output.push(
+        generatePropertyOutput(
+          spacing,
+          index === 1 ? "gap-y" : "gap-x",
+          splitRawValue
+        )
+      );
+    }
+  });
+  return output.join(" ");
+};
+
 function parseBorderShorthand(border: string) {
   const parts = border.trim().split(/\s+/);
   let width: string | undefined;
@@ -193,6 +213,7 @@ const tailwindClassGenerators: Record<string, Generator> = {
   color: (token) => generatePropertyOutput(colors, "text", token.rawValue),
   background: (token) =>
     generatePropertyOutput(colors, "background", token.rawValue),
+  gap: (token) => generateTailwindGapClass(token),
 };
 
 export function createTailwindClasses(
