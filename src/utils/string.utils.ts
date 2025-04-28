@@ -30,7 +30,3 @@ export function sanitizeName(name: string): string {
 export function sanitizeSegment(segment: string): string {
   return segment.replace(/[^a-zA-Z0-9]/g, "-");
 }
-
-export function toKebabCase(str: string): string {
-  return str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s_]+/g, "-");
-}
