@@ -6,6 +6,9 @@ export const themeTokens: {
   borderWidths: Record<string, string>,
   borderRadius: Record<string, string>,
   fontWeight: Record<string, string>,
+  fontFamily: Record<string, string[]>,
+  fontSize: Record<string, string>,
+  fontStyle: Record<string, string>,
 } = {
   spacing: {
   "0px": "0",
@@ -306,7 +309,7 @@ export const themeTokens: {
   "16px": "2xl",
   "24px": "3xl",
   "9999px": "full"
-}
+},
   fontWeight: {
   "100": "thin",
   "200": "extralight",
@@ -317,7 +320,52 @@ export const themeTokens: {
   "700": "bold",
   "800": "extrabold",
   "900": "black"
-}
+},
+  fontFamily: {
+  "sans": [
+    "ui-sans-serif",
+    "system-ui",
+    "sans-serif",
+    "\"Apple Color Emoji\"",
+    "\"Segoe UI Emoji\"",
+    "\"Segoe UI Symbol\"",
+    "\"Noto Color Emoji\""
+  ],
+  "serif": [
+    "ui-serif",
+    "Georgia",
+    "Cambria",
+    "\"Times New Roman\"",
+    "Times",
+    "serif"
+  ],
+  "mono": [
+    "ui-monospace",
+    "SFMono-Regular",
+    "Menlo",
+    "Monaco",
+    "Consolas",
+    "\"Liberation Mono\"",
+    "\"Courier New\"",
+    "monospace"
+  ]
+},
+  fontSize: {
+  "12px": "xs",
+  "14px": "sm",
+  "16px": "base",
+  "18px": "lg",
+  "20px": "xl",
+  "24px": "2xl",
+  "30px": "3xl",
+  "36px": "4xl",
+  "48px": "5xl",
+  "60px": "6xl",
+  "72px": "7xl",
+  "96px": "8xl",
+  "128px": "9xl"
+},
+  fontStyle: {}
 
 
 };

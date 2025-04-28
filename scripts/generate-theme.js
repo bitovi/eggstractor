@@ -21,14 +21,23 @@ const fullConfig = merge(
     : customConfig
 );
 
-const theme = fullConfig.theme;
+const {
+  spacing,
+  colors,
+  borderRadius,
+  borderWidth,
+  fontWeight,
+  fontSize,
+  fontFamily,
+  fontStyle,
+} = fullConfig.theme;
 
 function remToPx(rem) {
   const numeric = parseFloat(rem);
   return `${numeric * 16}px`; // Tailwind base font size is 16px
 }
 
-function flattenSpaceToPxKeys(spacingObj) {
+function flattenPxToKeys(spacingObj) {
   const result = {};
 
   for (const [key, value] of Object.entries(spacingObj)) {
@@ -75,22 +84,22 @@ function flattenColorsToHexKeys(colorObj, prefix = "") {
   return result;
 }
 
-// Remove unusable color entries
-const spacing = theme.spacing || {};
-const colors = theme.colors || {};
-const borderWidth = theme.borderWidth || {};
-const borderRadius = theme.borderRadius || {};
+const rawFontSizes = Object.fromEntries(
+  Object.entries(fontSize).map(([key, val]) => [
+    key,
+    Array.isArray(val) ? val[0] : val,
+  ])
+);
 
-const fontFamily = theme.fontFamily || {};
-const fontSize = theme.fontSize || {};
-const fontWeight = theme.fontWeight || {};
-const fontStyle = theme.fontStyle || {};
+const spacingToPxMap = flattenPxToKeys(spacing);
 
-const spacingToPxMap = flattenSpaceToPxKeys(spacing);
 const hexToTailwindClass = flattenColorsToHexKeys(colors);
-const borderWidthToPxMap = flattenSpaceToPxKeys(borderWidth);
-const borderRadiusToPxMap = flattenSpaceToPxKeys(borderRadius);
+
+const borderWidthToPxMap = flattenPxToKeys(borderWidth);
+const borderRadiusToPxMap = flattenPxToKeys(borderRadius);
+
 const fontWeightKeystoValues = flattenValueToKeys(fontWeight);
+const fontSizePxToKey = flattenPxToKeys(rawFontSizes);
 
 // Construct the TS output
 const tsOutput = `// Auto-generated theme tokens — do not edit manually
@@ -101,12 +110,18 @@ export const themeTokens: {
   borderWidths: Record<string, string>,
   borderRadius: Record<string, string>,
   fontWeight: Record<string, string>,
+  fontFamily: Record<string, string[]>,
+  fontSize: Record<string, string>,
+  fontStyle: Record<string, string>,
 } = {
   spacing: ${JSON.stringify(spacingToPxMap, null, 2)},
   colors: ${JSON.stringify(hexToTailwindClass, null, 2)},
   borderWidths: ${JSON.stringify(borderWidthToPxMap, null, 2)},
-  borderRadius: ${JSON.stringify(borderRadiusToPxMap, null, 2)}
-  fontWeight: ${JSON.stringify(fontWeightKeystoValues, null, 2)}
+  borderRadius: ${JSON.stringify(borderRadiusToPxMap, null, 2)},
+  fontWeight: ${JSON.stringify(fontWeightKeystoValues, null, 2)},
+  fontFamily: ${JSON.stringify(fontFamily, null, 2)},
+  fontSize: ${JSON.stringify(fontSizePxToKey, null, 2)},
+  fontStyle: ${JSON.stringify(fontStyle || {}, null, 2)}
 
 
 };

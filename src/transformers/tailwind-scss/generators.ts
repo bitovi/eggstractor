@@ -1,7 +1,31 @@
 import { themeTokens } from "../../theme-tokens";
 import { NonNullableStyleToken } from "../../types";
 
-const { spacing, colors, borderWidths, borderRadius, fontWeight } = themeTokens;
+type IterRecord = Record<string, string[]> & Iterable<[string, string[]]>;
+
+function makeIterable(rec: Record<string, string[]>): IterRecord {
+  const iterable = rec as IterRecord;
+  Object.defineProperty(iterable, Symbol.iterator, {
+    value: function* () {
+      for (const key of Object.keys(this)) {
+        yield [key, this[key]] as [string, string[]];
+      }
+    },
+  });
+  return iterable;
+}
+
+const {
+  spacing,
+  colors,
+  borderWidths,
+  borderRadius,
+  fontWeight,
+  fontFamily,
+  fontSize,
+} = themeTokens;
+
+const interableFontFamily = makeIterable(fontFamily);
 
 const borderStyles = new Set([
   "none",
@@ -134,6 +158,20 @@ const generateTailwindBorderClass: Generator = (token) => {
   return [borderWidth, borderStyle, borderColor].join(" ");
 };
 
+const generateTailwindFontFamilyOutput: Generator = (token) => {
+  for (const [category, fallbacks] of interableFontFamily) {
+    if (category === token.rawValue) {
+      return `font-${category}`;
+    }
+    for (const fallback of fallbacks) {
+      if (fallback === token.rawValue) {
+        return `font-${category}`;
+      }
+    }
+  }
+  return `font-[${token.rawValue}]`;
+};
+
 type Generator = (token: NonNullableStyleToken) => string;
 
 const tailwindClassGenerators: Record<string, Generator> = {
@@ -142,6 +180,9 @@ const tailwindClassGenerators: Record<string, Generator> = {
   border: generateTailwindBorderClass,
   "font-weight": (token) =>
     generatePropertyOutput(fontWeight, "font", token.rawValue),
+  "font-size": (token) =>
+    generatePropertyOutput(fontSize, "font-size", token.rawValue),
+  "font-family": generateTailwindFontFamilyOutput,
   color: (token) => generatePropertyOutput(colors, "text", token.rawValue),
   background: (token) =>
     generatePropertyOutput(colors, "background", token.rawValue),
