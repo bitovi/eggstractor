@@ -1,20 +1,6 @@
 import { themeTokens } from "../../theme-tokens";
 import { NonNullableStyleToken } from "../../types";
 
-type IterRecord = Record<string, string[]> & Iterable<[string, string[]]>;
-
-function makeIterable(rec: Record<string, string[]>): IterRecord {
-  const iterable = rec as IterRecord;
-  Object.defineProperty(iterable, Symbol.iterator, {
-    value: function* () {
-      for (const key of Object.keys(this)) {
-        yield [key, this[key]] as [string, string[]];
-      }
-    },
-  });
-  return iterable;
-}
-
 const {
   spacing,
   colors,
@@ -24,8 +10,6 @@ const {
   fontFamily,
   fontSize,
 } = themeTokens;
-
-const interableFontFamily = makeIterable(fontFamily);
 
 const borderStyles = new Set([
   "none",
@@ -182,7 +166,7 @@ const generateTailwindBorderClass: Generator = (token) => {
     - "Arial, 'Times New Roman', 'Courier New', 'Lucida Console', 'monospace'"
 */
 const generateTailwindFontFamilyOutput: Generator = (token) => {
-  for (const [category, fallbacks] of interableFontFamily) {
+  for (const [category, fallbacks] of Object.entries(fontFamily)) {
     if (category === token.rawValue) {
       return `font-${category}`;
     }
