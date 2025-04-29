@@ -85,10 +85,11 @@ function flattenColorsToHexKeys(colorObj, prefix = "") {
   return result;
 }
 
+const fontSizeIndex = 0;
 const rawFontSizes = Object.fromEntries(
   Object.entries(fontSize).map(([key, val]) => [
     key,
-    Array.isArray(val) ? val[0] : val,
+    Array.isArray(val) ? val[fontSizeIndex] : val,
   ])
 );
 
