@@ -55,8 +55,9 @@ function flattenPxToKeys(spacingObj) {
 function flattenValueToKeys(spacingObj) {
   const result = {};
 
-  for (const [key, value] in Object.entries(spacingObj)) {
-    result[value] = `${key}`;
+  for (const key in spacingObj) {
+    const value = spacingObj[key];
+    result[value] = key;
   }
 
   return result;
