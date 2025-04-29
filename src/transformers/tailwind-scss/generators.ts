@@ -60,6 +60,12 @@ function generatePropertyOutput(
     : `${propertyClass}-[${value}]`;
 }
 
+/*
+  Handles rawValue in these formats:
+    - "5px"                 → all sides
+    - "5px 6px"             → vertical | horizontal
+    - "5px 6px 10px 20px"   → top | right | bottom | left
+*/
 const generateTailwindPaddingClass: Generator = ({ rawValue }) => {
   //Split padding for multiple directions
   const splitTokenRawValues: string[] = rawValue.split(" ");
@@ -96,6 +102,13 @@ function parseBorderShorthand(border: string) {
   return { width, style, color };
 }
 
+/*
+  Handles rawValue in these formats for border-radius:
+    - "5px"                   → all corners
+    - "5px 10px"              → top-left + bottom-right, top-right + bottom-left
+    - "5px 10px 15px"         → top-left, top-right + bottom-left, bottom-right
+    - "5px 10px 15px 20px"    → top-left, top-right, bottom-right, bottom-left
+*/
 const generateTailwindBorderRadiusClass: Generator = ({ rawValue }) => {
   const splitTokenRawValues: string[] = (rawValue?.split(" ") || []).map((v) =>
     v === "0" ? "0px" : v
@@ -134,6 +147,12 @@ const generateTailwindBorderRadiusClass: Generator = ({ rawValue }) => {
   }
 };
 
+/*
+  Handles rawValue in these formats for border:
+    - "2px solid #0daeff"     → width | style | color
+    - "solid #0daeff"         → style | color (uses default width)
+    - "2px #0daeff"           → width | color (uses default style)
+*/
 const generateTailwindBorderClass: Generator = (token) => {
   const { width, style, color } = parseBorderShorthand(token.rawValue);
 
@@ -158,6 +177,10 @@ const generateTailwindBorderClass: Generator = (token) => {
   return [borderWidth, borderStyle, borderColor].join(" ");
 };
 
+/*
+  Handles rawValue examples for font family:
+    - "Arial, 'Times New Roman', 'Courier New', 'Lucida Console', 'monospace'"
+*/
 const generateTailwindFontFamilyOutput: Generator = (token) => {
   for (const [category, fallbacks] of interableFontFamily) {
     if (category === token.rawValue) {

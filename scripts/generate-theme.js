@@ -55,7 +55,7 @@ function flattenPxToKeys(spacingObj) {
 function flattenValueToKeys(spacingObj) {
   const result = {};
 
-  for (const [key, value] of Object.entries(spacingObj)) {
+  for (const [key, value] in Object.entries(spacingObj)) {
     result[value] = `${key}`;
   }
 
@@ -101,6 +101,21 @@ const borderRadiusToPxMap = flattenPxToKeys(borderRadius);
 const fontWeightKeystoValues = flattenValueToKeys(fontWeight);
 const fontSizePxToKey = flattenPxToKeys(rawFontSizes);
 
+const stringifiedOutput = JSON.stringify(
+  {
+    spacing: spacingToPxMap,
+    colors: hexToTailwindClass,
+    borderWidths: borderWidthToPxMap,
+    borderRadius: borderRadiusToPxMap,
+    fontWeight: fontWeightKeystoValues,
+    fontFamily,
+    fontSize: fontSizePxToKey,
+    fontStyle: fontStyle || {},
+  },
+  null,
+  2
+);
+
 // Construct the TS output
 const tsOutput = `// Auto-generated theme tokens — do not edit manually
 
@@ -113,18 +128,7 @@ export const themeTokens: {
   fontFamily: Record<string, string[]>,
   fontSize: Record<string, string>,
   fontStyle: Record<string, string>,
-} = {
-  spacing: ${JSON.stringify(spacingToPxMap, null, 2)},
-  colors: ${JSON.stringify(hexToTailwindClass, null, 2)},
-  borderWidths: ${JSON.stringify(borderWidthToPxMap, null, 2)},
-  borderRadius: ${JSON.stringify(borderRadiusToPxMap, null, 2)},
-  fontWeight: ${JSON.stringify(fontWeightKeystoValues, null, 2)},
-  fontFamily: ${JSON.stringify(fontFamily, null, 2)},
-  fontSize: ${JSON.stringify(fontSizePxToKey, null, 2)},
-  fontStyle: ${JSON.stringify(fontStyle || {}, null, 2)}
-
-
-};
+} = ${stringifiedOutput};
 `;
 
 fs.writeFileSync(path.resolve(__dirname, "../src/theme-tokens.ts"), tsOutput);
