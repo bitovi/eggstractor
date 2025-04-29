@@ -1,16 +1,16 @@
 // Auto-generated theme tokens — do not edit manually
 
 export const themeTokens: {
-  spacing: Record<string, string>;
-  colors: Record<string, string>;
-  borderWidths: Record<string, string>;
-  borderRadius: Record<string, string>;
-  fontWeight: Record<string, string>;
-  fontFamily: Record<string, string[]>;
-  fontSize: Record<string, string>;
-  fontStyle: Record<string, string>;
+  spacing: Record<string, string>,
+  colors: Record<string, string>,
+  borderWidths: Record<string, string>,
+  borderRadius: Record<string, string>,
+  fontWeight: Record<string, string>,
+  fontFamily: Record<string, string[]>,
+  fontSize: Record<string, string>,
+  fontStyle: Record<string, string>,
 } = {
-  spacing: {
+  "spacing": {
     "0px": "0",
     "4px": "1",
     "8px": "2",
@@ -45,9 +45,9 @@ export const themeTokens: {
     "2px": "0.5",
     "6px": "1.5",
     "10px": "2.5",
-    "14px": "3.5",
+    "14px": "3.5"
   },
-  colors: {
+  "colors": {
     "#000000": "black",
     "#ffffff": "white",
     "#f8fafc": "blueGray-50",
@@ -290,16 +290,16 @@ export const themeTokens: {
     "#be123c": "rose-700",
     "#9f1239": "rose-800",
     "#881337": "rose-900",
-    "#4c0519": "rose-950",
+    "#4c0519": "rose-950"
   },
-  borderWidths: {
+  "borderWidths": {
     "0px": "0",
     "2px": "2",
     "4px": "4",
     "8px": "8",
-    "1px": "DEFAULT",
+    "1px": "DEFAULT"
   },
-  borderRadius: {
+  "borderRadius": {
     "0px": "none",
     "2px": "sm",
     "4px": "DEFAULT",
@@ -308,9 +308,9 @@ export const themeTokens: {
     "12px": "xl",
     "16px": "2xl",
     "24px": "3xl",
-    "9999px": "full",
+    "9999px": "full"
   },
-  fontWeight: {
+  "fontWeight": {
     "100": "thin",
     "200": "extralight",
     "300": "light",
@@ -319,38 +319,38 @@ export const themeTokens: {
     "600": "semibold",
     "700": "bold",
     "800": "extrabold",
-    "900": "black",
+    "900": "black"
   },
-  fontFamily: {
-    sans: [
+  "fontFamily": {
+    "sans": [
       "ui-sans-serif",
       "system-ui",
       "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-      '"Noto Color Emoji"',
+      "\"Apple Color Emoji\"",
+      "\"Segoe UI Emoji\"",
+      "\"Segoe UI Symbol\"",
+      "\"Noto Color Emoji\""
     ],
-    serif: [
+    "serif": [
       "ui-serif",
       "Georgia",
       "Cambria",
-      '"Times New Roman"',
+      "\"Times New Roman\"",
       "Times",
-      "serif",
+      "serif"
     ],
-    mono: [
+    "mono": [
       "ui-monospace",
       "SFMono-Regular",
       "Menlo",
       "Monaco",
       "Consolas",
-      '"Liberation Mono"',
-      '"Courier New"',
-      "monospace",
-    ],
+      "\"Liberation Mono\"",
+      "\"Courier New\"",
+      "monospace"
+    ]
   },
-  fontSize: {
+  "fontSize": {
     "12px": "xs",
     "14px": "sm",
     "16px": "base",
@@ -363,7 +363,7 @@ export const themeTokens: {
     "60px": "6xl",
     "72px": "7xl",
     "96px": "8xl",
-    "128px": "9xl",
+    "128px": "9xl"
   },
-  fontStyle: {},
+  "fontStyle": {}
 };
