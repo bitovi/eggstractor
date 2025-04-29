@@ -67,6 +67,11 @@ const generateTailwindPaddingClass: Generator = ({ rawValue }) => {
   return output;
 };
 
+/*
+  Handles rawValue in these formats for gap:
+    - "16px"           → both row and column gaps
+    - "16px 8px"       → row | column
+*/
 export const generateTailwindGapClass: Generator = ({ rawValue }) => {
   const splitTokenRawValues: string[] = rawValue.split(" ");
   const output: string[] = [];
