@@ -73,6 +73,26 @@ const generateTailwindPaddingClass: Generator = ({ rawValue }) => {
     - "16px 8px"       → row | column
 */
 export const generateTailwindGapClass: Generator = ({ rawValue }) => {
+  const splitTokenRawValues: string[] = (rawValue?.split(" ") || []).map((v) =>
+    v === "0" ? "0px" : v
+  );
+
+  const normalized = [
+    splitTokenRawValues[0],
+    splitTokenRawValues[1] ?? splitTokenRawValues[0],
+  ];
+
+  const axi = ["x", "y"];
+
+  return (
+    " " +
+    normalized
+      .map((value, axisIndex) => {
+        const axis = axi[axisIndex];
+        return generatePropertyOutput(spacing, `gap-${axis}`, value);
+      })
+      .join(" ")
+  );
   const splitTokenRawValues: string[] = rawValue.split(" ");
   const output: string[] = [];
   splitTokenRawValues.forEach((splitRawValue, index) => {
