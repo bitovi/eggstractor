@@ -12,6 +12,7 @@
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
     "watch": "npm run build -- --watch",
     "test": "jest",
+    "test:snapshot": "jest --updateSnapshot",
     "test:watch": "jest --watch",
     "generate-theme": "node scripts/generate-theme.js"
   },
