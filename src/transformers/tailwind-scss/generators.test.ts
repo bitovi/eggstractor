@@ -16,7 +16,7 @@ describe("generateTailwindGapClass", () => {
     };
     it("should return correct tailwind shorthand for single gap value", () => {
       const result = generateTailwindGapClass(gapToken);
-      expect(result).toBe("gap-6");
+      expect(result).toBe("gap-x-6 gap-y-6");
     });
 
     it("should return correct tailwind shorthand for two gap values (x and y)", () => {
