@@ -189,11 +189,11 @@ const tailwindClassGenerators: Record<string, Generator> = {
   "font-weight": ({ rawValue }) =>
     `font-${normalizeTailwindToken(fontWeight, rawValue)}`,
   "font-size": ({ rawValue }) =>
-    `font-size-${normalizeTailwindToken(fontSize, rawValue)}`,
+    `text-${normalizeTailwindToken(fontSize, rawValue)}`,
   "font-family": generateTailwindFontFamilyOutput,
   color: ({ rawValue }) => `text-${normalizeTailwindToken(colors, rawValue)}`,
   background: ({ rawValue }) =>
-    `background-${normalizeTailwindToken(colors, rawValue)}`,
+    `bg-${normalizeTailwindToken(colors, rawValue)}`,
   gap: (token) => generateTailwindGapClass(token),
 };
 
