@@ -15,7 +15,7 @@ const basicToken: NonNullableStyleToken = {
   type: "style",
   name: "basic",
   value: "notused 1px",
-  rawValue: "1px",
+  rawValue: "10px",
   valueType: "px",
   property: "blank",
   path: ["basic", "gap"],
@@ -26,13 +26,13 @@ const basicToken: NonNullableStyleToken = {
 
 describe("normalizeTailwindToken", () => {
   const whateverRecord: Record<string, string> = {
-    "1px": "whatever-1",
-    "this should give DEFAULT": "DEFAULT",
+    "5px": "DEFAULT",
+    "10px": "whatever-2",
   };
 
   it("should return correct property for given key", () => {
     const result = normalizeTailwindToken(whateverRecord, basicToken.rawValue);
-    expect(result).toBe("whatever-1");
+    expect(result).toBe("whatever-2");
   });
 
   it("should return return responsive utility foe given key if no match found", () => {
@@ -41,10 +41,7 @@ describe("normalizeTailwindToken", () => {
   });
 
   it("should return an empty string if key is 'DEFAULT'", () => {
-    const result = normalizeTailwindToken(
-      whateverRecord,
-      "this should give DEFAULT"
-    );
+    const result = normalizeTailwindToken(whateverRecord, "5px");
     expect(result).toBe("");
   });
 });
