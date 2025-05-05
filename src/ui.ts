@@ -19,10 +19,6 @@ window.onload = () => {
   const isDevelopment = process.env.NODE_ENV === 'development';
   if (isDevelopment) {
     devControls.style.display = 'block';
-    const exportBtn = document.getElementById('exportTestDataBtn');
-    if (exportBtn) {
-      exportBtn.style.display = 'inline-block';
-    }
   }
 
   // Save config when inputs change
@@ -118,10 +114,6 @@ window.onload = () => {
     document.execCommand('copy');
     document.body.removeChild(textarea);
   }
-
-  document.getElementById('exportTestDataBtn')?.addEventListener('click', () => {
-    parent.postMessage({ pluginMessage: { type: 'export-test-data' } }, '*');
-  });
 
   // Update the message handler
   window.onmessage = async (event) => {
@@ -228,18 +220,6 @@ window.onload = () => {
       case 'error':
         createPRBtn.disabled = false;
         alert(`Error: ${event.data.pluginMessage.message}`);
-        break;
-      case 'test-data-exported':
-        // Create and trigger download
-        const blob = new Blob([msg.data], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'figma-test-data.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
         break;
     }
   };
