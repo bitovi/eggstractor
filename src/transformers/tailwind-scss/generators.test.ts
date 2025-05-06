@@ -15,7 +15,7 @@ const basicToken: NonNullableStyleToken = {
   type: "style",
   name: "basic",
   value: "notused 1px",
-  rawValue: "1px",
+  rawValue: "10px",
   valueType: "px",
   property: "blank",
   path: ["basic", "gap"],
@@ -26,17 +26,23 @@ const basicToken: NonNullableStyleToken = {
 
 describe("normalizeTailwindToken", () => {
   const whateverRecord: Record<string, string> = {
-    "1px": "whatever-1",
+    "5px": "DEFAULT",
+    "10px": "whatever-2",
   };
 
   it("should return correct property for given key", () => {
     const result = normalizeTailwindToken(whateverRecord, basicToken.rawValue);
-    expect(result).toBe("whatever-1");
+    expect(result).toBe("whatever-2");
   });
 
   it("should return return responsive utility foe given key if no match found", () => {
     const result = normalizeTailwindToken(whateverRecord, "not there");
     expect(result).toBe("[not there]");
+  });
+
+  it("should return an empty string if key is 'DEFAULT'", () => {
+    const result = normalizeTailwindToken(whateverRecord, "5px");
+    expect(result).toBe("");
   });
 });
 
@@ -76,6 +82,7 @@ describe("normalizeBorderRadius", () => {
     const result = normalizeBorderRadius("10px");
     expect(result).toEqual(["10px", "10px", "10px", "10px"]);
   });
+
   it("should return a four string array with values sorted in a diagonal layout for border radius when given a string with two values separated by space", () => {
     const result = normalizeBorderRadius("10px 20px");
     expect(result).toEqual(["10px", "20px", "10px", "20px"]);
@@ -122,6 +129,15 @@ describe("generateTailwindBorderClass", () => {
     const result = generateTailwindBorderClass(borderToken);
     expect(result).toBe("border-2 border-solid border-[#0daeff]");
   });
+
+  it("should return 'border' tailwind utility if key given default value", () => {
+    const borderDefaultToken = {
+      ...borderToken,
+      rawValue: "1px solid #0daeff", // "1px" : "DEFAULT" in borderWidths
+    };
+    const result = generateTailwindBorderClass(borderDefaultToken);
+    expect(result).toBe("border border-solid border-[#0daeff]");
+  });
   it("should return tailwind utilities for style and color properly if no width provided", () => {
     const borderTokenNoWidth = {
       ...borderToken,
@@ -152,6 +168,16 @@ describe("generateTailwindBorderRadiusClass", () => {
     expect(result).toBe(
       "rounded-tl-[20px] rounded-tr-[20px] rounded-br-[20px] rounded-bl-[20px]"
     );
+  });
+
+  it("should return tailwind utilities for border radius when given one property", () => {
+    const defaultBorderRadiusToken = {
+      ...basicToken,
+      property: "border-radius",
+      rawValue: "4px", // "1px" : "DEFAULT" in borderRadius
+    };
+    const result = generateTailwindBorderRadiusClass(defaultBorderRadiusToken);
+    expect(result).toBe("rounded-tl rounded-tr rounded-br rounded-bl");
   });
 
   it("should return tailwind utilities for border radius when given two properties", () => {
