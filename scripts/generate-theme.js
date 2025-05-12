@@ -7,10 +7,13 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const tailwindDefaultColors = require("tailwindcss/colors");
 const customConfig = require("../tailwind.config.js");
 
+const { lightBlue, warmGray, trueGray, coolGray, blueGray, ...validColors } =
+  tailwindDefaultColors;
+
 // Merge defaultTheme + tailwind colors
 const defaultThemeWithColors = {
   ...defaultTheme,
-  colors: tailwindDefaultColors,
+  colors: validColors,
 };
 
 // Handle extend properly from custom config
