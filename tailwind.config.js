@@ -17,6 +17,9 @@ module.exports = {
           300: "#76c022",
         },
       },
+      fontFamily: {
+        bliss: ["Bliss Pro", "sans-serif"],
+      },
     },
   },
 };
