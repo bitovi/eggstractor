@@ -78,7 +78,9 @@ export const normalizeTailwindToken = (
   themeMapping: Record<string, string>,
   value: string
 ) => {
-  return themeMapping[value] ?? `[${value}]`;
+  const mapping = themeMapping[value];
+  if (mapping === "DEFAULT") return "";
+  return mapping ?? `[${value}]`;
 };
 
 /*
@@ -141,12 +143,14 @@ export function parseBorderShorthand(border: string) {
 */
 export const generateTailwindBorderRadiusClass: Generator = ({ rawValue }) => {
   const radiusCorners = ["tl", "tr", "br", "bl"] as const;
-
   return normalizeBorderRadius(rawValue)
     .map((v) => (v === "0" ? "0px" : v)) //changing 0 to 0px tailwind utility picks it up
     .map((sizeValue, i) => {
-      const normalizeToken = normalizeTailwindToken(borderRadius, sizeValue);
-      return `rounded-${radiusCorners[i]}-${normalizeToken}`;
+      const normalizedToken = normalizeTailwindToken(borderRadius, sizeValue);
+
+      return normalizedToken
+        ? `rounded-${radiusCorners[i]}-${normalizedToken}`
+        : `rounded-${radiusCorners[i]}`;
     })
     .join(" ");
 };
@@ -162,11 +166,11 @@ export const generateTailwindBorderClass: Generator = (token) => {
 
   const borderResult: string[] = [];
   if (width) {
+    const normalizedToken = normalizeTailwindToken(borderWidths, width);
     borderResult.push(
-      `${borderPropertyToShorthand[token.property]}-${normalizeTailwindToken(
-        borderWidths,
-        width
-      )}`
+      normalizedToken
+        ? `${borderPropertyToShorthand[token.property]}-${normalizedToken}`
+        : `${borderPropertyToShorthand[token.property]}`
     );
   }
   if (style) {
