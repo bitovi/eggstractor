@@ -142,11 +142,11 @@ export function parseBorderShorthand(border: string) {
 */
 export const generateTailwindBorderRadiusClass: Generator = ({ rawValue }) => {
   const radiusCorners = ["tl", "tr", "br", "bl"] as const;
-
   return normalizeBorderRadius(rawValue)
     .map((v) => (v === "0" ? "0px" : v)) //changing 0 to 0px tailwind utility picks it up
     .map((sizeValue, i) => {
       const normalizedToken = normalizeTailwindToken(borderRadius, sizeValue);
+
       return normalizedToken
         ? `rounded-${radiusCorners[i]}-${normalizedToken}`
         : `rounded-${radiusCorners[i]}`;
