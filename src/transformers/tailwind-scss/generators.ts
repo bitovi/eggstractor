@@ -94,7 +94,6 @@ export const generateTailwindPaddingClass: Generator = ({ rawValue }) => {
   return normalizeFourSides(rawValue)
     .map((sizeValue, i) => {
       const normalizedToken = normalizeTailwindToken(spacing, sizeValue);
-
       return `p${directions[i]}-${normalizedToken}`;
     })
     .join(" ");
@@ -194,16 +193,19 @@ export const generateTailwindBorderClass: Generator = (token) => {
     - "Arial, 'Times New Roman', 'Courier New', 'Lucida Console', 'monospace'"
 */
 export const generateTailwindFontFamilyOutput: Generator = ({ rawValue }) => {
+  const normalizedRaw = rawValue.replace(/['"]/g, "").toLowerCase();
+
   for (const [category, fallbacks] of Object.entries(fontFamily)) {
-    if (category === rawValue) {
+    if (category === normalizedRaw) {
       return `font-${category}`;
     }
     for (const fallback of fallbacks) {
-      if (fallback === rawValue) {
+      if (fallback.replace(/['"]/g, "").toLowerCase() === normalizedRaw) {
         return `font-${category}`;
       }
     }
   }
+
   return `font-[${rawValue}]`;
 };
 

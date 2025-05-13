@@ -348,6 +348,10 @@ export const themeTokens: {
       "\"Liberation Mono\"",
       "\"Courier New\"",
       "monospace"
+    ],
+    "bliss": [
+      "Bliss Pro",
+      "sans-serif"
     ]
   },
   "fontSize": {
