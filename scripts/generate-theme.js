@@ -72,7 +72,7 @@ function flattenColorsToHexKeys(colorObj, prefix = '') {
         console.warn(`Invalid color: ${value}`, err);
       }
     } else if (typeof value === 'object') {
-      Object.assign(result, flattenColorsToHexKeys(value, fullKey));
+      result = { result, ...flattenColorsToHexKeys(value, fullKey) };
     }
   }
 
