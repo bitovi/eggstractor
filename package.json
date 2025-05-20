@@ -73,7 +73,6 @@
     }
   },
   "dependencies": {
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "culori": "^4.0.1",
     "highlight.js": "^11.8.0",
     "lodash.merge": "^4.6.2"

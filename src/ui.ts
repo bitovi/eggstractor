@@ -16,7 +16,6 @@ window.onload = () => {
 
   parent.postMessage({ pluginMessage: { type: 'load-config' } }, '*');
   // Check if we're in development mode
-  console.info(process.env.NODE_ENV);
   const isDevelopment = process.env.NODE_ENV === 'development';
   if (isDevelopment) {
     devControls.style.display = 'block';

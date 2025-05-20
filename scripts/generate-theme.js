@@ -29,10 +29,10 @@ function remToPx(rem) {
   return `${numeric * 16}px`; // Tailwind base font size is 16px
 }
 
-function flattenPxToKeys(spacingObj) {
+function flattenPxToKeys(valueKeyObject) {
   const result = {};
 
-  for (const [key, value] of Object.entries(spacingObj)) {
+  for (const [key, value] of Object.entries(valueKeyObject)) {
     if (typeof value === 'string' && value.endsWith('rem')) {
       const px = remToPx(value);
       result[px] = `${key}`;
@@ -44,11 +44,11 @@ function flattenPxToKeys(spacingObj) {
   return result;
 }
 
-function flattenValueToKeys(spacingObj) {
+function flattenValueToKeys(valueKeyObject) {
   const result = {};
 
-  for (const key in spacingObj) {
-    const value = spacingObj[key];
+  for (const key in valueKeyObject) {
+    const value = valueKeyObject[key];
     result[value] = key;
   }
 
@@ -68,7 +68,9 @@ function flattenColorsToHexKeys(colorObj, prefix = '') {
           const hex = culori.formatHex(parsed).toLowerCase();
           result[hex] = `${fullKey}`;
         }
-      } catch {}
+      } catch {
+        console.warn(`Invalid color: ${value}`, err);
+      }
     } else if (typeof value === 'object') {
       Object.assign(result, flattenColorsToHexKeys(value, fullKey));
     }

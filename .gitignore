@@ -24,6 +24,7 @@ dist/
 out/
 build/
 coverage/
+src/theme-tokens.ts
 
 # Logs
 logs/
