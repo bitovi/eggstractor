@@ -1,5 +1,5 @@
 export interface BaseToken {
-  type: "variable" | "style";
+  type: 'variable' | 'style';
   name: string;
   property: string;
   path: string[];
@@ -12,13 +12,13 @@ export interface BaseToken {
 }
 
 export interface VariableToken extends BaseToken {
-  type: "variable";
+  type: 'variable';
   value: string; // SASS variable reference e.g. $color-primary
   rawValue: string; // Actual value e.g. #FF0000
 }
 
 export interface StyleToken extends BaseToken {
-  type: "style";
+  type: 'style';
   value: string | null; // CSS with variable references e.g. background: $color-primary
   rawValue: string | null; // CSS with actual values e.g. background: #FF0000
   variables?: VariableToken[]; // Associated variable tokens

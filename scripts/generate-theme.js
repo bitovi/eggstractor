@@ -1,14 +1,13 @@
-const fs = require("fs");
-const path = require("path");
-const culori = require("culori");
-const merge = require("lodash.merge");
+const fs = require('fs');
+const path = require('path');
+const culori = require('culori');
+const merge = require('lodash.merge');
 
-const defaultTheme = require("tailwindcss/defaultTheme");
-const tailwindDefaultColors = require("tailwindcss/colors");
-const customConfig = require("../tailwind.config.js");
+const defaultTheme = require('tailwindcss/defaultTheme');
+const tailwindDefaultColors = require('tailwindcss/colors');
+const customConfig = require('../tailwind.config.js');
 
-const { lightBlue, warmGray, trueGray, coolGray, blueGray, ...validColors } =
-  tailwindDefaultColors;
+const { lightBlue, warmGray, trueGray, coolGray, blueGray, ...validColors } = tailwindDefaultColors;
 
 // Merge defaultTheme + tailwind colors
 const defaultThemeWithColors = {
@@ -19,21 +18,11 @@ const defaultThemeWithColors = {
 // Handle extend properly from custom config
 const fullConfig = merge(
   { theme: defaultThemeWithColors },
-  customConfig.theme?.extend
-    ? { theme: { ...customConfig.theme.extend } }
-    : customConfig
+  customConfig.theme?.extend ? { theme: { ...customConfig.theme.extend } } : customConfig,
 );
 
-const {
-  spacing,
-  colors,
-  borderRadius,
-  borderWidth,
-  fontWeight,
-  fontSize,
-  fontFamily,
-  fontStyle,
-} = fullConfig.theme;
+const { spacing, colors, borderRadius, borderWidth, fontWeight, fontSize, fontFamily, fontStyle } =
+  fullConfig.theme;
 
 function remToPx(rem) {
   const numeric = parseFloat(rem);
@@ -44,7 +33,7 @@ function flattenPxToKeys(spacingObj) {
   const result = {};
 
   for (const [key, value] of Object.entries(spacingObj)) {
-    if (typeof value === "string" && value.endsWith("rem")) {
+    if (typeof value === 'string' && value.endsWith('rem')) {
       const px = remToPx(value);
       result[px] = `${key}`;
     } else {
@@ -66,13 +55,13 @@ function flattenValueToKeys(spacingObj) {
   return result;
 }
 
-function flattenColorsToHexKeys(colorObj, prefix = "") {
+function flattenColorsToHexKeys(colorObj, prefix = '') {
   const result = {};
 
   for (const [key, value] of Object.entries(colorObj)) {
     const fullKey = prefix ? `${prefix}-${key}` : key;
 
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       try {
         const parsed = culori.parse(value);
         if (parsed) {
@@ -80,7 +69,7 @@ function flattenColorsToHexKeys(colorObj, prefix = "") {
           result[hex] = `${fullKey}`;
         }
       } catch {}
-    } else if (typeof value === "object") {
+    } else if (typeof value === 'object') {
       Object.assign(result, flattenColorsToHexKeys(value, fullKey));
     }
   }
@@ -93,7 +82,7 @@ const rawFontSizes = Object.fromEntries(
   Object.entries(fontSize).map(([key, val]) => [
     key,
     Array.isArray(val) ? val[fontSizeIndex] : val,
-  ])
+  ]),
 );
 
 const spacingToPxMap = flattenPxToKeys(spacing);
@@ -118,7 +107,7 @@ const stringifiedOutput = JSON.stringify(
     fontStyle: fontStyle || {},
   },
   null,
-  2
+  2,
 );
 
 // Construct the TS output
@@ -136,6 +125,6 @@ export const themeTokens: {
 } = ${stringifiedOutput};
 `;
 
-fs.writeFileSync(path.resolve(__dirname, "../src/theme-tokens.ts"), tsOutput);
+fs.writeFileSync(path.resolve(__dirname, '../src/theme-tokens.ts'), tsOutput);
 
-console.log("✅ Generated theme-tokens.ts");
+console.log('✅ Generated theme-tokens.ts');
