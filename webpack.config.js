@@ -18,15 +18,15 @@ module.exports = (env, argv) => ({
         use: {
           loader: 'ts-loader',
           options: {
-            configFile: 'ui.tsconfig.json'
-          }
+            configFile: 'ui.tsconfig.json',
+          },
         },
         exclude: /node_modules/,
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
-      }
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
     ],
   },
   resolve: { extensions: ['.tsx', '.ts', '.js', '.css'] },
@@ -39,7 +39,7 @@ module.exports = (env, argv) => ({
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'ui.css'
+      filename: 'ui.css',
     }),
     new HtmlWebpackPlugin({
       inject: true,

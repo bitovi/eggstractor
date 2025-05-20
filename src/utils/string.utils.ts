@@ -1,7 +1,7 @@
 export function toBase64(str: string): string {
   const base64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-  const utf8str = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-    (_, p1) => String.fromCharCode(parseInt(p1, 16))
+  const utf8str = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+    String.fromCharCode(parseInt(p1, 16)),
   );
   let i = 0;
   let result = '';
@@ -13,7 +13,9 @@ export function toBase64(str: string): string {
     const enc2 = ((char1 & 3) << 4) | (char2 >> 4);
     const enc3 = ((char2 & 15) << 2) | (char3 >> 6);
     const enc4 = char3 & 63;
-    result += base64chars[enc1] + base64chars[enc2] +
+    result +=
+      base64chars[enc1] +
+      base64chars[enc2] +
       (isNaN(char2) ? '=' : base64chars[enc3]) +
       (isNaN(char3) ? '=' : base64chars[enc4]);
   }
@@ -26,4 +28,4 @@ export function sanitizeName(name: string): string {
 
 export function sanitizeSegment(segment: string): string {
   return segment.toLowerCase().replace(/[^a-z0-9]/g, '-');
-} 
+}

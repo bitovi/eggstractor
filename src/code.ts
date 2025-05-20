@@ -12,7 +12,7 @@ figma.showUI(__html__, {
   width: 600,
   height: 1200,
   themeColors: true,
-  title: "Eggstractor"
+  title: 'Eggstractor',
 });
 
 // Main generation function
@@ -33,11 +33,11 @@ figma.ui.onmessage = async (msg) => {
   if (msg.type === 'generate-styles') {
     const result = await generateStyles(msg.format || 'scss');
     generatedScss = result.result; // Store just the generated code
-    figma.ui.postMessage({ 
-      type: 'output-styles', 
+    figma.ui.postMessage({
+      type: 'output-styles',
       styles: result.result,
       warnings: result.warnings,
-      errors: result.errors
+      errors: result.errors,
     });
   } else if (msg.type === 'save-config') {
     await Github.saveUserSettings(msg.githubToken, msg.branchName);
@@ -49,7 +49,7 @@ figma.ui.onmessage = async (msg) => {
   } else if (msg.type === 'load-config') {
     const [config, userSettings] = await Promise.all([
       Github.getGithubConfig(),
-      Github.getUserSettings()
+      Github.getUserSettings(),
     ]);
     if (userSettings) {
       config.githubToken = userSettings.token;
@@ -63,7 +63,7 @@ figma.ui.onmessage = async (msg) => {
         msg.repoPath,
         msg.filePath,
         msg.branchName,
-        generatedScss
+        generatedScss,
       );
       figma.ui.postMessage({
         type: 'pr-created',
@@ -75,13 +75,14 @@ figma.ui.onmessage = async (msg) => {
     }
   } else if (msg.type === 'export-test-data') {
     const testData = await serializeFigmaData(figma.currentPage);
-    figma.ui.postMessage({ 
-      type: 'test-data-exported', 
-      data: JSON.stringify(testData, null, 2)
+    figma.ui.postMessage({
+      type: 'test-data-exported',
+      data: JSON.stringify(testData, null, 2),
     });
   } else if (msg.type === 'select-node') {
     const node = await figma.getNodeByIdAsync(msg.nodeId);
-    if (node && 'type' in node) {  // This checks if it's a SceneNode
+    if (node && 'type' in node) {
+      // This checks if it's a SceneNode
       figma.currentPage.selection = [node as SceneNode];
       figma.viewport.scrollAndZoomIntoView([node]);
     }

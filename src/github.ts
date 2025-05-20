@@ -33,11 +33,17 @@ export default {
       return null;
     }
   },
-  createGithubPR: async function createGithubPR(token: string, repoPath: string, filePath: string, branchName: string, content: string): Promise<PRResult> {
+  createGithubPR: async function createGithubPR(
+    token: string,
+    repoPath: string,
+    filePath: string,
+    branchName: string,
+    content: string,
+  ): Promise<PRResult> {
     const baseUrl = 'https://api.github.com';
     const headers = {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/vnd.github.v3+json'
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github.v3+json',
     };
 
     try {
@@ -51,7 +57,10 @@ export default {
 
       // Try to create branch, but don't fail if it exists
       try {
-        const refResponse = await fetch(`${baseUrl}/repos/${repoPath}/git/ref/heads/${defaultBranch}`, { headers });
+        const refResponse = await fetch(
+          `${baseUrl}/repos/${repoPath}/git/ref/heads/${defaultBranch}`,
+          { headers },
+        );
         if (!refResponse.ok) {
           throw new Error(`Default branch "${defaultBranch}" not found`);
         }
@@ -63,8 +72,8 @@ export default {
           headers: { ...headers, 'Content-Type': 'application/json' },
           body: JSON.stringify({
             ref: `refs/heads/${branchName}`,
-            sha: sha
-          })
+            sha: sha,
+          }),
         });
       } catch (error) {
         // Ignore branch exists error
@@ -86,7 +95,7 @@ export default {
       try {
         const fileResponse = await fetch(
           `${baseUrl}/repos/${repoPath}/contents/${filePath}?ref=${branchName}`,
-          { headers }
+          { headers },
         );
         if (fileResponse.ok) {
           const fileData = await fileResponse.json();
@@ -104,8 +113,8 @@ export default {
           message: 'Update SCSS variables from Figma',
           content: toBase64(content),
           branch: branchName,
-          ...(fileSha && { sha: fileSha }) // Include SHA if file exists
-        })
+          ...(fileSha && { sha: fileSha }), // Include SHA if file exists
+        }),
       });
 
       if (!createFileResponse.ok) {
@@ -116,7 +125,7 @@ export default {
       // Check for existing PR
       const existingPRsResponse = await fetch(
         `${baseUrl}/repos/${repoPath}/pulls?head=${repoPath.split('/')[0]}:${branchName}&state=open`,
-        { headers }
+        { headers },
       );
       const existingPRs = await existingPRsResponse.json();
 
@@ -133,8 +142,8 @@ export default {
             title: 'Update SCSS variables from Figma',
             body: 'This PR was automatically created by the Figma SCSS plugin.',
             head: branchName,
-            base: defaultBranch
-          })
+            base: defaultBranch,
+          }),
         });
 
         if (!prResponse.ok) {
@@ -146,7 +155,7 @@ export default {
       }
 
       return {
-        prUrl
+        prUrl,
       };
     } catch (error) {
       if (error instanceof Error) {
@@ -154,5 +163,5 @@ export default {
       }
       throw new Error('GitHub API Error: An unknown error occurred');
     }
-  }
-}
+  },
+};

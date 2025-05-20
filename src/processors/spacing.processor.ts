@@ -8,7 +8,12 @@ interface NodeWithPadding {
 }
 
 function hasNodePadding(node: SceneNode): node is SceneNode & NodeWithPadding {
-  return 'paddingTop' in node && 'paddingRight' in node && 'paddingBottom' in node && 'paddingLeft' in node;
+  return (
+    'paddingTop' in node &&
+    'paddingRight' in node &&
+    'paddingBottom' in node &&
+    'paddingLeft' in node
+  );
 }
 
 interface PaddingValues {
@@ -20,9 +25,12 @@ interface PaddingValues {
 
 export const spacingProcessors: StyleProcessor[] = [
   {
-    property: "padding",
+    property: 'padding',
     bindingKey: undefined,
-    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (
+      variables: VariableToken[],
+      node?: SceneNode,
+    ): Promise<ProcessedValue | null> => {
       if (!node || !hasNodePadding(node)) return null;
 
       // Get pixel values
@@ -35,10 +43,10 @@ export const spacingProcessors: StyleProcessor[] = [
 
       // Find variable values from passed in variables
       const varValues: Partial<PaddingValues> = {
-        top: variables.find(v => v.property === 'paddingTop')?.value,
-        right: variables.find(v => v.property === 'paddingRight')?.value,
-        bottom: variables.find(v => v.property === 'paddingBottom')?.value,
-        left: variables.find(v => v.property === 'paddingLeft')?.value,
+        top: variables.find((v) => v.property === 'paddingTop')?.value,
+        right: variables.find((v) => v.property === 'paddingRight')?.value,
+        bottom: variables.find((v) => v.property === 'paddingBottom')?.value,
+        left: variables.find((v) => v.property === 'paddingLeft')?.value,
       };
 
       // Helper to get final value (variable or pixel)
@@ -50,7 +58,7 @@ export const spacingProcessors: StyleProcessor[] = [
         return {
           value: getValue('top'),
           rawValue: pixelValues.top,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
 
@@ -59,7 +67,7 @@ export const spacingProcessors: StyleProcessor[] = [
         return {
           value: `${getValue('top')} ${getValue('left')}`,
           rawValue: `${pixelValues.top} ${pixelValues.left}`,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
 
@@ -67,12 +75,12 @@ export const spacingProcessors: StyleProcessor[] = [
       return {
         value: `${getValue('top')} ${getValue('right')} ${getValue('bottom')} ${getValue('left')}`,
         rawValue: `${pixelValues.top} ${pixelValues.right} ${pixelValues.bottom} ${pixelValues.left}`,
-        valueType: 'px'
+        valueType: 'px',
       };
-    }
-  }
+    },
+  },
 ];
 
 function allEqual(values: string[]): boolean {
-  return values.every(v => v === values[0]);
-} 
+  return values.every((v) => v === values[0]);
+}

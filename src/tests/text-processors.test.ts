@@ -9,11 +9,11 @@ import testDataFontStyle from './fixtures/figma-test-data_font-style.json';
 
 describe('Text Processors', () => {
   describe('Text Align Processor', () => {
-    const processor = fontProcessors.filter(p => p.property === 'text-align')[0];
+    const processor = fontProcessors.filter((p) => p.property === 'text-align')[0];
 
     it('returns null for non-text nodes', async () => {
       const node = {
-        type: 'RECTANGLE'
+        type: 'RECTANGLE',
       } as SceneNode;
 
       const result = await processor.process([], node);
@@ -30,8 +30,8 @@ describe('Text Processors', () => {
           } as SceneNode,
           expected: {
             value: 'center',
-            rawValue: 'center'
-          }
+            rawValue: 'center',
+          },
         },
         {
           name: 'right alignment',
@@ -41,8 +41,8 @@ describe('Text Processors', () => {
           } as SceneNode,
           expected: {
             value: 'right',
-            rawValue: 'right'
-          }
+            rawValue: 'right',
+          },
         },
         {
           name: 'justified alignment',
@@ -52,9 +52,9 @@ describe('Text Processors', () => {
           } as SceneNode,
           expected: {
             value: 'justify',
-            rawValue: 'justify'
-          }
-        }
+            rawValue: 'justify',
+          },
+        },
       ];
 
       for (const testCase of testCases) {
@@ -63,40 +63,40 @@ describe('Text Processors', () => {
       }
     });
 
-    it('should process text alignment correctly', async () => {    
+    it('should process text alignment correctly', async () => {
       const { setupTest } = createTestData(testData);
       const testSetup = await setupTest();
-      
+
       global.figma = testSetup.figma;
 
-      const tokens = await collectTokens();   
+      const tokens = await collectTokens();
       const { result } = transformToScss(tokens);
-  
+
       expect(result).toMatchSnapshot('text-alignment');
     });
-    
+
     it('should process paragraph alignment correctly', async () => {
       const { setupTest } = createTestData(testDataAlignment);
       const testSetup = await setupTest();
-      
+
       global.figma = testSetup.figma;
 
-      const tokens = await collectTokens();   
+      const tokens = await collectTokens();
       const { result } = transformToScss(tokens);
-  
+
       expect(result).toMatchSnapshot('paragraph-alignment');
     });
 
-    it('should process font style correctly', async () => {    
+    it('should process font style correctly', async () => {
       const { setupTest } = createTestData(testDataFontStyle);
       const testSetup = await setupTest();
-      
+
       global.figma = testSetup.figma;
 
-      const tokens = await collectTokens();     
+      const tokens = await collectTokens();
       const { result } = transformToScss(tokens);
-  
+
       expect(result).toMatchSnapshot('font-style');
     });
   });
-}); 
+});

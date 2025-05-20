@@ -10,4 +10,4 @@ describe('normalizeValue', () => {
     expect(normalizeValue({ propertyName: 'line-height', value: 1.5 })).toBe('1.5');
     expect(normalizeValue({ propertyName: 'line-height', value: 24 })).toBe('24px');
   });
-}); 
+});

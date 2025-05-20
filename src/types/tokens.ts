@@ -28,10 +28,10 @@ export interface StyleToken extends BaseToken {
 
 export interface TokenCollection {
   tokens: (StyleToken | VariableToken)[];
-} 
+}
 
 export interface ProcessedValue {
-  value: string | null;   // Value with variable references
+  value: string | null; // Value with variable references
   rawValue: string | null; // Value with actual values
   valueType?: string | null;
   warnings?: string[];

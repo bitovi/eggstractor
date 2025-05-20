@@ -8,7 +8,7 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
 
   // Create base data with all enumerable properties
   const baseData: any = {};
-  
+
   // Get all properties from the node
   for (const key in node) {
     try {
@@ -31,14 +31,12 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
 
   // Recursively process children
   if ('children' in node) {
-    baseData.children = await Promise.all(
-      node.children.map(child => serializeFigmaData(child))
-    );
+    baseData.children = await Promise.all(node.children.map((child) => serializeFigmaData(child)));
   }
 
   // Add variables collection
   const variables: Record<string, any> = {};
-  
+
   // Helper to collect variables from node
   const collectVariables = async (node: SceneNode) => {
     if ('boundVariables' in node) {
@@ -55,9 +53,9 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
         }
       }
     }
-    
+
     if ('children' in node) {
-      await Promise.all(node.children.map(child => collectVariables(child as SceneNode)));
+      await Promise.all(node.children.map((child) => collectVariables(child as SceneNode)));
     }
   };
 
@@ -70,7 +68,7 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
       id: variable.id,
       name: variable.name,
       resolvedType: variable.resolvedType,
-      valuesByMode: variable.valuesByMode
+      valuesByMode: variable.valuesByMode,
     };
 
     // Check for aliases in all modes
@@ -89,11 +87,11 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
 
   return {
     ...baseData,
-    variables
+    variables,
   };
 }
 
-function isVariableAlias(value: any): value is { type: 'VARIABLE_ALIAS', id: string } {
+function isVariableAlias(value: any): value is { type: 'VARIABLE_ALIAS'; id: string } {
   return value && typeof value === 'object' && value.type === 'VARIABLE_ALIAS' && 'id' in value;
 }
 
@@ -101,15 +99,15 @@ export async function createTestVariableResolver(testData: any) {
   // Helper to collect and flatten all variables including aliases
   const collectAllVariables = (variables: Record<string, any>) => {
     const allVariables = new Map<string, any>();
-    
+
     const addVariable = (varId: string) => {
       if (allVariables.has(varId)) return;
-      
+
       const variable = variables[varId];
       if (!variable) return;
-      
+
       allVariables.set(varId, variable);
-      
+
       // Recursively collect any alias references
       Object.values(variable.valuesByMode).forEach((value: any) => {
         if (isVariableAlias(value)) {
@@ -134,7 +132,7 @@ export async function createTestVariableResolver(testData: any) {
       if (isVariableAlias(value)) {
         const aliasVar = variableMap.get(value.id);
         if (!aliasVar) return null;
-        
+
         const modeId = Object.keys(aliasVar.valuesByMode)[0];
         return resolveValue(aliasVar.valuesByMode[modeId]);
       }
@@ -148,8 +146,8 @@ export async function createTestVariableResolver(testData: any) {
       ...variable,
       resolvedType: variable.resolvedType,
       valuesByMode: {
-        [modeId]: resolvedValue
-      }
+        [modeId]: resolvedValue,
+      },
     } as Variable;
   };
 }
@@ -163,7 +161,7 @@ export function createTestData(jsonData: any) {
         name: node.name,
         width: (node as any).width || 100,
         height: (node as any).height || 20,
-        textAutoResize: (node as any).textAutoResize || "NONE"
+        textAutoResize: (node as any).textAutoResize || 'NONE',
       } as TextNode;
     }
 
@@ -172,12 +170,13 @@ export function createTestData(jsonData: any) {
       type: node.type || 'FRAME',
       parent: parentNode,
       name: node.name,
-      children: []
+      children: [],
     } as unknown as FrameNode;
 
     if ('children' in node) {
-      (frameNode as any).children = (node.children as BaseNode[])
-        .map(child => processNode(child, frameNode));
+      (frameNode as any).children = (node.children as BaseNode[]).map((child) =>
+        processNode(child, frameNode),
+      );
     }
 
     return frameNode;
@@ -187,12 +186,10 @@ export function createTestData(jsonData: any) {
     ...jsonData,
     type: 'PAGE',
     parent: null,
-    children: jsonData.children.map((child: BaseNode) => 
-      processNode(child, null)
-    )
+    children: jsonData.children.map((child: BaseNode) => processNode(child, null)),
   } as PageNode;
 
-  pageNode.children.forEach(child => (child as any).parent = pageNode);
+  pageNode.children.forEach((child) => ((child as any).parent = pageNode));
 
   return {
     pageNode,
@@ -202,10 +199,10 @@ export function createTestData(jsonData: any) {
         figma: {
           currentPage: pageNode,
           variables: {
-            getVariableByIdAsync
-          }
-        }
+            getVariableByIdAsync,
+          },
+        },
       };
-    }
+    },
   };
-} 
+}

@@ -5,7 +5,7 @@ import { collectBoundVariable } from './variable.service';
 export async function extractNodeToken(
   node: SceneNode,
   processor: StyleProcessor,
-  path: string[]
+  path: string[],
 ): Promise<(StyleToken | VariableToken)[]> {
   const tokens: (StyleToken | VariableToken)[] = [];
   const variableTokensMap = new Map<string, VariableToken>();
@@ -28,9 +28,9 @@ export async function extractNodeToken(
   // Step 1 & 2: Handle Variable Bindings
   const customBoundVariables = node.boundVariables as unknown as VariableBindings;
   const bindings = processor.bindingKey
-    ? (Array.isArray(customBoundVariables[processor.bindingKey])
-      ? customBoundVariables[processor.bindingKey] as VariableAlias[]
-      : [customBoundVariables[processor.bindingKey]] as VariableAlias[])
+    ? Array.isArray(customBoundVariables[processor.bindingKey])
+      ? (customBoundVariables[processor.bindingKey] as VariableAlias[])
+      : ([customBoundVariables[processor.bindingKey]] as VariableAlias[])
     : [];
 
   for (const binding of bindings) {
@@ -72,10 +72,10 @@ export async function extractNodeToken(
         figmaId: node.id,
       },
       warnings: processedValue.warnings,
-      errors: processedValue.errors
+      errors: processedValue.errors,
     };
     tokens.push(styleToken);
   }
 
   return tokens;
-} 
+}

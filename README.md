@@ -17,15 +17,16 @@ This plugin generates SCSS variables and mixins from Figma, it also enables you 
   <img src="https://github.com/user-attachments/assets/3b8925f5-2fd5-47b3-8a7b-7763cec1eeec" alt="Eggstractor Introduction - Figma to CSS Mixins - Design and Development working in harmony" width="300">
 </a>
 
-
 ## Development
 
-Use `npm run dev` to run the webpack compiler in watch mode. 
+Use `npm run dev` to run the webpack compiler in watch mode.
 
 ### Figma plugin
+
 The [Eggstractor Figma plugin](https://www.figma.com/community/plugin/1464625803208186094/eggstractor) is available for free download in the Figma community, and includes a [demo file](https://www.figma.com/community/file/1472329589982734868) that syncs with a [demo GitHub repo](https://github.com/bitovi/eggstractor-demo).
 
 ### Local plugin
+
 Alternately, you can build your own, local plugin for private use. You will need to use Figma Desktop for this.
 
 1. Run `npm run dev` or `npm run build` to build the plugin
@@ -34,6 +35,7 @@ Alternately, you can build your own, local plugin for private use. You will need
 4. The plugin will now be available under Plugins → Development.
 
 ### Local visualizer
+
 This is to view the generated CSS in a browser.
 
 1. Run `npm run start:server` to start the local server
@@ -49,8 +51,6 @@ For detailed documentation about how to use Eggstractor, please see our [Documen
 
 For general-purpose information on getting started with using Eggstractor, including a step-by-step guide to a working demo, see our [Getting Started Guide](https://bitovi.atlassian.net/wiki/spaces/Eggstractor/overview).
 
-
-
 ## About
 
 <img align="right" src="img/bitovi.png" height="60px" style="margin-right: 20px;">
@@ -58,9 +58,8 @@ For general-purpose information on getting started with using Eggstractor, inclu
 Eggstractor is an open source project by Bitovi.
 
 Need some help?  
-[Chat with us on Discord](https://discord.com/channels/1007137664606150746/1044404122004242433 "https://discord.com/channels/1007137664606150746/1044404122004242433") | [Send feature requests](https://github.com/bitovi/eggstractor/issues/new "https://github.com/bitovi/eggstractor/issues/new") | [Email us](mailto:support@bitovi.com "mailto:support@bitovi.com")
+[Chat with us on Discord](https://discord.com/channels/1007137664606150746/1044404122004242433 'https://discord.com/channels/1007137664606150746/1044404122004242433') | [Send feature requests](https://github.com/bitovi/eggstractor/issues/new 'https://github.com/bitovi/eggstractor/issues/new') | [Email us](mailto:support@bitovi.com 'mailto:support@bitovi.com')
 
-Need pros to help design & build your design system or app? [That’s us](https://www.bitovi.com/services/product-design-consulting "https://www.bitovi.com/services/product-design-consulting")!
+Need pros to help design & build your design system or app? [That’s us](https://www.bitovi.com/services/product-design-consulting 'https://www.bitovi.com/services/product-design-consulting')!
 
 <br>
-

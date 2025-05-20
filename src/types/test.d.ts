@@ -5,9 +5,9 @@ declare namespace NodeJS {
       variables: {
         getVariableByIdAsync: (id: string) => Promise<Variable | null>;
       };
-    }
+    };
   }
 }
 
 // For TypeScript 3.4+
-declare var global: NodeJS.Global; 
+declare var global: NodeJS.Global;

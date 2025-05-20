@@ -10,14 +10,14 @@ export async function collectTokens(): Promise<TokenCollection> {
     if ('type' in node && 'boundVariables' in node) {
       const nodePath = getNodePathName(node as SceneNode).split('_');
       const processors = getProcessorsForNode(node as SceneNode);
-      
+
       for (const processor of processors) {
         const tokens = await extractNodeToken(node as SceneNode, processor, nodePath);
         collection.tokens.push(...tokens);
       }
     }
 
-    if ("children" in node) {
+    if ('children' in node) {
       for (const child of node.children) {
         await processNode(child);
       }

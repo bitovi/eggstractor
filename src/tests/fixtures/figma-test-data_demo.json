@@ -37,28 +37,12 @@
       "effects": [],
       "effectStyleId": "",
       "relativeTransform": [
-        [
-          1,
-          0,
-          598
-        ],
-        [
-          0,
-          1,
-          -31
-        ]
+        [1, 0, 598],
+        [0, 1, -31]
       ],
       "absoluteTransform": [
-        [
-          1,
-          0,
-          598
-        ],
-        [
-          0,
-          1,
-          -31
-        ]
+        [1, 0, 598],
+        [0, 1, -31]
       ],
       "x": 598,
       "y": -31,
@@ -129,28 +113,12 @@
           "effects": [],
           "effectStyleId": "",
           "relativeTransform": [
-            [
-              1,
-              0,
-              10
-            ],
-            [
-              0,
-              1,
-              10
-            ]
+            [1, 0, 10],
+            [0, 1, 10]
           ],
           "absoluteTransform": [
-            [
-              1,
-              0,
-              608
-            ],
-            [
-              0,
-              1,
-              -21
-            ]
+            [1, 0, 608],
+            [0, 1, -21]
           ],
           "x": 10,
           "y": 10,
@@ -276,28 +244,12 @@
               ],
               "strokeGeometry": [],
               "relativeTransform": [
-                [
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  1,
-                  0
-                ]
+                [1, 0, 0],
+                [0, 1, 0]
               ],
               "absoluteTransform": [
-                [
-                  1,
-                  0,
-                  608
-                ],
-                [
-                  0,
-                  1,
-                  -21
-                ]
+                [1, 0, 608],
+                [0, 1, -21]
               ],
               "x": 0,
               "y": 0,
@@ -591,28 +543,12 @@
               "effects": [],
               "effectStyleId": "",
               "relativeTransform": [
-                [
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  1,
-                  26
-                ]
+                [1, 0, 0],
+                [0, 1, 26]
               ],
               "absoluteTransform": [
-                [
-                  1,
-                  0,
-                  608
-                ],
-                [
-                  0,
-                  1,
-                  5
-                ]
+                [1, 0, 608],
+                [0, 1, 5]
               ],
               "x": 0,
               "y": 26,
@@ -726,28 +662,12 @@
                   ],
                   "strokeGeometry": [],
                   "relativeTransform": [
-                    [
-                      1,
-                      0,
-                      12
-                    ],
-                    [
-                      0,
-                      1,
-                      11
-                    ]
+                    [1, 0, 12],
+                    [0, 1, 11]
                   ],
                   "absoluteTransform": [
-                    [
-                      1,
-                      0,
-                      620
-                    ],
-                    [
-                      0,
-                      1,
-                      16
-                    ]
+                    [1, 0, 620],
+                    [0, 1, 16]
                   ],
                   "x": 12,
                   "y": 11,
@@ -1461,28 +1381,12 @@
           "effects": [],
           "effectStyleId": "",
           "relativeTransform": [
-            [
-              1,
-              0,
-              10
-            ],
-            [
-              0,
-              1,
-              98
-            ]
+            [1, 0, 10],
+            [0, 1, 98]
           ],
           "absoluteTransform": [
-            [
-              1,
-              0,
-              608
-            ],
-            [
-              0,
-              1,
-              67
-            ]
+            [1, 0, 608],
+            [0, 1, 67]
           ],
           "x": 10,
           "y": 98,
@@ -1610,28 +1514,12 @@
               ],
               "strokeGeometry": [],
               "relativeTransform": [
-                [
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  1,
-                  0
-                ]
+                [1, 0, 0],
+                [0, 1, 0]
               ],
               "absoluteTransform": [
-                [
-                  1,
-                  0,
-                  608
-                ],
-                [
-                  0,
-                  1,
-                  67
-                ]
+                [1, 0, 608],
+                [0, 1, 67]
               ],
               "x": 0,
               "y": 0,
@@ -1925,28 +1813,12 @@
               "effects": [],
               "effectStyleId": "",
               "relativeTransform": [
-                [
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  1,
-                  26
-                ]
+                [1, 0, 0],
+                [0, 1, 26]
               ],
               "absoluteTransform": [
-                [
-                  1,
-                  0,
-                  608
-                ],
-                [
-                  0,
-                  1,
-                  93
-                ]
+                [1, 0, 608],
+                [0, 1, 93]
               ],
               "x": 0,
               "y": 26,
@@ -2060,28 +1932,12 @@
                   ],
                   "strokeGeometry": [],
                   "relativeTransform": [
-                    [
-                      1,
-                      0,
-                      12
-                    ],
-                    [
-                      0,
-                      1,
-                      11
-                    ]
+                    [1, 0, 12],
+                    [0, 1, 11]
                   ],
                   "absoluteTransform": [
-                    [
-                      1,
-                      0,
-                      620
-                    ],
-                    [
-                      0,
-                      1,
-                      104
-                    ]
+                    [1, 0, 620],
+                    [0, 1, 104]
                   ],
                   "x": 12,
                   "y": 11,
@@ -2795,28 +2651,12 @@
           "effects": [],
           "effectStyleId": "",
           "relativeTransform": [
-            [
-              1,
-              0,
-              10
-            ],
-            [
-              0,
-              1,
-              186
-            ]
+            [1, 0, 10],
+            [0, 1, 186]
           ],
           "absoluteTransform": [
-            [
-              1,
-              0,
-              608
-            ],
-            [
-              0,
-              1,
-              155
-            ]
+            [1, 0, 608],
+            [0, 1, 155]
           ],
           "x": 10,
           "y": 186,
@@ -2944,28 +2784,12 @@
               ],
               "strokeGeometry": [],
               "relativeTransform": [
-                [
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  1,
-                  0
-                ]
+                [1, 0, 0],
+                [0, 1, 0]
               ],
               "absoluteTransform": [
-                [
-                  1,
-                  0,
-                  608
-                ],
-                [
-                  0,
-                  1,
-                  155
-                ]
+                [1, 0, 608],
+                [0, 1, 155]
               ],
               "x": 0,
               "y": 0,
@@ -3223,28 +3047,12 @@
               "effects": [],
               "effectStyleId": "",
               "relativeTransform": [
-                [
-                  1,
-                  0,
-                  0
-                ],
-                [
-                  0,
-                  1,
-                  26
-                ]
+                [1, 0, 0],
+                [0, 1, 26]
               ],
               "absoluteTransform": [
-                [
-                  1,
-                  0,
-                  608
-                ],
-                [
-                  0,
-                  1,
-                  181
-                ]
+                [1, 0, 608],
+                [0, 1, 181]
               ],
               "x": 0,
               "y": 26,
@@ -3358,28 +3166,12 @@
                   ],
                   "strokeGeometry": [],
                   "relativeTransform": [
-                    [
-                      1,
-                      0,
-                      12
-                    ],
-                    [
-                      0,
-                      1,
-                      11
-                    ]
+                    [1, 0, 12],
+                    [0, 1, 11]
                   ],
                   "absoluteTransform": [
-                    [
-                      1,
-                      0,
-                      620
-                    ],
-                    [
-                      0,
-                      1,
-                      192
-                    ]
+                    [1, 0, 620],
+                    [0, 1, 192]
                   ],
                   "x": 12,
                   "y": 11,
@@ -4037,10 +3829,7 @@
       "strokeWeight": 1,
       "strokeAlign": "INSIDE",
       "strokeJoin": "MITER",
-      "dashPattern": [
-        10,
-        5
-      ],
+      "dashPattern": [10, 5],
       "strokeCap": "NONE",
       "strokeMiterLimit": 4,
       "fillGeometry": [
@@ -4127,11 +3916,7 @@
       },
       "variantGroupProperties": {
         "state": {
-          "values": [
-            "hover",
-            "active",
-            "resting"
-          ]
+          "values": ["hover", "active", "resting"]
         }
       },
       "componentPropertyDefinitions": {
@@ -4142,11 +3927,7 @@
         "state": {
           "type": "VARIANT",
           "defaultValue": "resting",
-          "variantOptions": [
-            "hover",
-            "active",
-            "resting"
-          ]
+          "variantOptions": ["hover", "active", "resting"]
         }
       },
       "type": "COMPONENT_SET",

@@ -7,7 +7,7 @@ interface NormalizeOptions {
 
 export function normalizeValue({ propertyName, value }: NormalizeOptions): string {
   const type = getValueType(propertyName);
-  
+
   switch (type) {
     case 'opacity':
       return normalizeOpacity(value);
@@ -42,5 +42,5 @@ function normalizeDimension(value: number): string {
 
 function shouldHaveDimension(propertyName: string): boolean {
   const unitlessProperties = ['font-weight', 'opacity', 'line-height'];
-  return !unitlessProperties.some(prop => propertyName.includes(prop));
-} 
+  return !unitlessProperties.some((prop) => propertyName.includes(prop));
+}

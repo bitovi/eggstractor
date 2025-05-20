@@ -27,14 +27,18 @@ interface BorderSideConfig {
 
 export const borderProcessors: StyleProcessor[] = [
   {
-    property: "border",
-    bindingKey: "strokes",
+    property: 'border',
+    bindingKey: 'strokes',
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
       if (!node) return null;
 
       // For non-rectangular shapes, we don't care about strokeAlign
-      const isRectangular = node.type === 'RECTANGLE' || node.type === 'COMPONENT' || node.type === 'INSTANCE';
-      if (isRectangular && ('strokeAlign' in node && node.strokeAlign !== 'CENTER' || !('strokeAlign' in node))) {
+      const isRectangular =
+        node.type === 'RECTANGLE' || node.type === 'COMPONENT' || node.type === 'INSTANCE';
+      if (
+        isRectangular &&
+        (('strokeAlign' in node && node.strokeAlign !== 'CENTER') || !('strokeAlign' in node))
+      ) {
         return null;
       }
 
@@ -47,11 +51,17 @@ export const borderProcessors: StyleProcessor[] = [
       if (!color) return null;
 
       // For lines, vectors, and ellipses, use strokeWeight
-      const width = node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE'
-        ? getBorderWidth('strokeWeight', 'strokeWeight' in node ? Number(node.strokeWeight) : 0, variables)
-        : getBorderWidth('strokeTopWeight', weights.top, variables);
+      const width =
+        node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE'
+          ? getBorderWidth(
+              'strokeWeight',
+              'strokeWeight' in node ? Number(node.strokeWeight) : 0,
+              variables,
+            )
+          : getBorderWidth('strokeTopWeight', weights.top, variables);
 
-      const type = node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
+      const type =
+        node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
 
       const value = `${width.value} ${type} ${color.value}`;
       const rawValue = `${width.rawValue} ${type} ${color.rawValue}`;
@@ -59,56 +69,56 @@ export const borderProcessors: StyleProcessor[] = [
       return {
         value,
         rawValue,
-        valueType: "px",
+        valueType: 'px',
       };
-    }
+    },
   },
   {
-    property: "border-top",
-    bindingKey: "strokes",
+    property: 'border-top',
+    bindingKey: 'strokes',
     process: async (variables, node?: SceneNode, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'top', propertyKey: 'strokeTopWeight' },
         variables,
         node,
-        processedProperties
-      )
+        processedProperties,
+      ),
   },
   {
-    property: "border-right",
-    bindingKey: "strokes",
+    property: 'border-right',
+    bindingKey: 'strokes',
     process: async (variables, node?: SceneNode, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'right', propertyKey: 'strokeRightWeight' },
         variables,
         node,
-        processedProperties
-      )
+        processedProperties,
+      ),
   },
   {
-    property: "border-bottom",
-    bindingKey: "strokes",
+    property: 'border-bottom',
+    bindingKey: 'strokes',
     process: async (variables, node?: SceneNode, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'bottom', propertyKey: 'strokeBottomWeight' },
         variables,
         node,
-        processedProperties
-      )
+        processedProperties,
+      ),
   },
   {
-    property: "border-left",
-    bindingKey: "strokes",
+    property: 'border-left',
+    bindingKey: 'strokes',
     process: async (variables, node?: SceneNode, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'left', propertyKey: 'strokeLeftWeight' },
         variables,
         node,
-        processedProperties
-      )
+        processedProperties,
+      ),
   },
   {
-    property: "outline",
+    property: 'outline',
     bindingKey: undefined,
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
       if (node && 'strokeAlign' in node && node.strokeAlign !== 'OUTSIDE') {
@@ -123,8 +133,13 @@ export const borderProcessors: StyleProcessor[] = [
       const color = getBorderColor(node, variables);
       if (!color) return null;
 
-      const width = getBorderWidth('strokeLeftWeight', Object.values(weights).find(w => w > 0) || 0, variables);
-      const type = node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
+      const width = getBorderWidth(
+        'strokeLeftWeight',
+        Object.values(weights).find((w) => w > 0) || 0,
+        variables,
+      );
+      const type =
+        node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
 
       const value = `${width.value} ${type} ${color.value}`;
       const rawValue = `${width.rawValue} ${type} ${color.rawValue}`;
@@ -132,12 +147,12 @@ export const borderProcessors: StyleProcessor[] = [
       return {
         value,
         rawValue,
-        valueType: "px",
+        valueType: 'px',
       };
-    }
+    },
   },
   {
-    property: "box-shadow",
+    property: 'box-shadow',
     bindingKey: undefined,
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
       if (node && 'strokeAlign' in node && node.strokeAlign !== 'INSIDE') {
@@ -184,12 +199,12 @@ export const borderProcessors: StyleProcessor[] = [
       return {
         value,
         rawValue,
-        valueType: "px",
+        valueType: 'px',
       };
-    }
+    },
   },
   {
-    property: "border-radius",
+    property: 'border-radius',
     bindingKey: undefined,
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
       // Handle ELLIPSE nodes
@@ -197,11 +212,9 @@ export const borderProcessors: StyleProcessor[] = [
         const EPSILON = 0.00001;
         if (
           !('arcData' in node) ||
-          (
-            Math.abs(node.arcData.startingAngle - 0) < EPSILON &&
-            Math.abs(node.arcData.endingAngle - (2 * Math.PI)) < EPSILON &&
-            node.arcData.innerRadius === 0
-          )
+          (Math.abs(node.arcData.startingAngle - 0) < EPSILON &&
+            Math.abs(node.arcData.endingAngle - 2 * Math.PI) < EPSILON &&
+            node.arcData.innerRadius === 0)
         ) {
           return { value: '50%', rawValue: '50%', valueType: '%' };
         }
@@ -216,9 +229,9 @@ export const borderProcessors: StyleProcessor[] = [
       return {
         value: radii.values.join(' '),
         rawValue: radii.rawValues.join(' '),
-        valueType: radii.valueType
+        valueType: radii.valueType,
       };
-    }
+    },
   },
 ];
 
@@ -233,7 +246,7 @@ const getBorderWeights = (node?: SceneNode): BorderWeights => {
       top: weight,
       right: weight,
       bottom: weight,
-      left: weight
+      left: weight,
     };
   }
 
@@ -242,7 +255,7 @@ const getBorderWeights = (node?: SceneNode): BorderWeights => {
     top: 'strokeTopWeight' in node ? node.strokeTopWeight : 0,
     right: 'strokeRightWeight' in node ? node.strokeRightWeight : 0,
     bottom: 'strokeBottomWeight' in node ? node.strokeBottomWeight : 0,
-    left: 'strokeLeftWeight' in node ? node.strokeLeftWeight : 0
+    left: 'strokeLeftWeight' in node ? node.strokeLeftWeight : 0,
   };
 };
 
@@ -253,8 +266,8 @@ const hasFullBorder = (weights: BorderWeights): boolean =>
   weights.top > 0 && weights.right > 0 && weights.bottom > 0 && weights.left > 0;
 
 const areAllBordersEqual = (weights: BorderWeights): boolean => {
-  const nonZeroWeights = Object.values(weights).filter(w => w !== 0);
-  return nonZeroWeights.length > 0 && nonZeroWeights.every(w => w === nonZeroWeights[0]);
+  const nonZeroWeights = Object.values(weights).filter((w) => w !== 0);
+  return nonZeroWeights.length > 0 && nonZeroWeights.every((w) => w === nonZeroWeights[0]);
 };
 
 const shouldUseShorthand = (node?: SceneNode, weights?: BorderWeights): boolean => {
@@ -270,24 +283,24 @@ const shouldUseShorthand = (node?: SceneNode, weights?: BorderWeights): boolean 
 };
 
 const getBorderColor = (node?: SceneNode, variables?: any[]): BorderColor | null => {
-  const borderVariable = variables?.find(v => v.property === 'strokes');
+  const borderVariable = variables?.find((v) => v.property === 'strokes');
   if (borderVariable) {
     return {
       value: borderVariable.value,
       rawValue: borderVariable.rawValue,
-      variable: borderVariable
+      variable: borderVariable,
     };
   }
 
   if (node && 'strokes' in node && Array.isArray(node.strokes) && node.strokes.length > 0) {
     const stroke = node.strokes[0] as Paint;
-    if (stroke?.type === "SOLID") {
+    if (stroke?.type === 'SOLID') {
       const { r, g, b } = stroke.color;
       const a = stroke.opacity ?? 1;
       const color = rgbaToString(r, g, b, a);
       return {
         value: color,
-        rawValue: color
+        rawValue: color,
       };
     }
   }
@@ -295,7 +308,7 @@ const getBorderColor = (node?: SceneNode, variables?: any[]): BorderColor | null
 };
 
 const getBorderWidth = (property: string, width: number, variables?: any[]): BorderWidth => {
-  const widthVariable = variables?.find(v => v.property === property);
+  const widthVariable = variables?.find((v) => v.property === property);
   if (widthVariable) {
     return {
       value: widthVariable.value,
@@ -306,7 +319,7 @@ const getBorderWidth = (property: string, width: number, variables?: any[]): Bor
   const value = `${String(width)}px`;
   return {
     value,
-    rawValue: value
+    rawValue: value,
   };
 };
 
@@ -314,7 +327,7 @@ const processBorderSide = async (
   config: BorderSideConfig,
   variables: any[],
   node?: SceneNode,
-  processedProperties?: Set<string>
+  processedProperties?: Set<string>,
 ): Promise<ProcessedValue | null> => {
   // For lines, vectors, and ellipses, don't process individual sides
   if (node && (node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE')) {
@@ -323,9 +336,11 @@ const processBorderSide = async (
 
   const weights = getBorderWeights(node);
 
-  if (processedProperties?.has('border') ||
+  if (
+    processedProperties?.has('border') ||
     weights[config.weightKey] === 0 ||
-    shouldUseShorthand(node, weights)) {
+    shouldUseShorthand(node, weights)
+  ) {
     return null;
   }
 
@@ -341,59 +356,61 @@ const processBorderSide = async (
   return {
     value,
     rawValue,
-    valueType: "px",
+    valueType: 'px',
   };
 };
 
 // Add this utility function near the other utility functions
 const getCornerRadii = (node: SceneNode, variables?: any[]) => {
-  if (!('topRightRadius' in node) && !('bottomRightRadius' in node) && 
-      !('bottomLeftRadius' in node) && !('topLeftRadius' in node)) {
+  if (
+    !('topRightRadius' in node) &&
+    !('bottomRightRadius' in node) &&
+    !('bottomLeftRadius' in node) &&
+    !('topLeftRadius' in node)
+  ) {
     return null;
   }
 
   // Handle variables first
   const cornerVars = [
-    variables?.find(v => v.property === 'topLeftRadius'),
-    variables?.find(v => v.property === 'topRightRadius'),
-    variables?.find(v => v.property === 'bottomRightRadius'),
-    variables?.find(v => v.property === 'bottomLeftRadius')
+    variables?.find((v) => v.property === 'topLeftRadius'),
+    variables?.find((v) => v.property === 'topRightRadius'),
+    variables?.find((v) => v.property === 'bottomRightRadius'),
+    variables?.find((v) => v.property === 'bottomLeftRadius'),
   ];
 
-  if (cornerVars.some(v => v)) {
-    const cssValues = cornerVars.map(v => v?.value || '0');
-    const rawValues = cornerVars.map(v => v?.rawValue || '0');
-    if (cssValues.every(v => v === '0')) return null;
-    
-    const valueType = rawValues.find(v => v !== '0')?.includes('%') ? '%' : 'px';
+  if (cornerVars.some((v) => v)) {
+    const cssValues = cornerVars.map((v) => v?.value || '0');
+    const rawValues = cornerVars.map((v) => v?.rawValue || '0');
+    if (cssValues.every((v) => v === '0')) return null;
+
+    const valueType = rawValues.find((v) => v !== '0')?.includes('%') ? '%' : 'px';
     return optimizeRadiusValues(cssValues, rawValues, valueType);
   }
 
   // Handle node values
   const corners = [
-    'topLeftRadius' in node ? node.topLeftRadius as number : 0,
-    'topRightRadius' in node ? node.topRightRadius as number : 0,
-    'bottomRightRadius' in node ? node.bottomRightRadius as number : 0,
-    'bottomLeftRadius' in node ? node.bottomLeftRadius as number : 0
+    'topLeftRadius' in node ? (node.topLeftRadius as number) : 0,
+    'topRightRadius' in node ? (node.topRightRadius as number) : 0,
+    'bottomRightRadius' in node ? (node.bottomRightRadius as number) : 0,
+    'bottomLeftRadius' in node ? (node.bottomLeftRadius as number) : 0,
   ];
 
-  if (corners.every(r => !r)) return null;
+  if (corners.every((r) => !r)) return null;
 
-  const cssValues = corners.map(radius => 
-    radius ? `${Math.round(radius)}px` : '0'
-  );
+  const cssValues = corners.map((radius) => (radius ? `${Math.round(radius)}px` : '0'));
 
-  const valueType = cssValues.find(v => v !== '0')?.includes('%') ? '%' : 'px';
+  const valueType = cssValues.find((v) => v !== '0')?.includes('%') ? '%' : 'px';
   return optimizeRadiusValues(cssValues, cssValues, valueType);
 };
 
 const optimizeRadiusValues = (values: string[], rawValues: string[], valueType: 'px' | '%') => {
   // If all values are the same, return single value
-  if (rawValues.every(v => v === rawValues[0])) {
+  if (rawValues.every((v) => v === rawValues[0])) {
     return {
       values: [values[0]],
       rawValues: [rawValues[0]],
-      valueType
+      valueType,
     };
   }
 
@@ -402,7 +419,7 @@ const optimizeRadiusValues = (values: string[], rawValues: string[], valueType: 
     return {
       values: [values[0], values[1]],
       rawValues: [rawValues[0], rawValues[1]],
-      valueType
+      valueType,
     };
   }
 
@@ -411,7 +428,7 @@ const optimizeRadiusValues = (values: string[], rawValues: string[], valueType: 
     return {
       values: [values[0], values[1], values[2]],
       rawValues: [rawValues[0], rawValues[1], rawValues[2]],
-      valueType
+      valueType,
     };
   }
 
@@ -419,6 +436,6 @@ const optimizeRadiusValues = (values: string[], rawValues: string[], valueType: 
   return {
     values,
     rawValues,
-    valueType
+    valueType,
   };
 };
