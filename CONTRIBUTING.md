@@ -3,6 +3,7 @@
 Thank you for your interest in contributing to Eggstractor! This document provides guidelines and information about contributing to this project.
 
 ## Table of Contents
+
 - [Getting Started](#getting-started)
 - [Development Process](#development-process)
 - [Project Structure](#project-structure)
@@ -22,13 +23,16 @@ Thank you for your interest in contributing to Eggstractor! This document provid
 
 1. Make your changes in your feature branch
 2. Run the plugin in Figma to test your changes
-  - Run `npm run dev` to start the plugin in watch mode
-  - Load the plugin in Figma and test your changes
+
+- Run `npm run dev` to start the plugin in watch mode
+- Load the plugin in Figma and test your changes
+
 3. Write or update tests as needed
 4. Run tests: `npm test`
 5. Run the visualizer to check your changes: `npm run visualizer`
 
 ## Project Structure
+
 ```
 src/
 ├── processors/ # property processors
@@ -83,19 +87,20 @@ The visualizer helps you see how your changes affect the CSS output:
 ```typescript
 export const newProcessor: StyleProcessor[] = [
   {
-    property: "css-property",
-    bindingKey: "figmaProperty",
+    property: 'css-property',
+    bindingKey: 'figmaProperty',
     process: async (variables, node?) => {
       // Your processing logic here
       return {
-        value: "processed-value",
-        rawValue: "raw-value",
-        valueType: "unit"
+        value: 'processed-value',
+        rawValue: 'raw-value',
+        valueType: 'unit',
       };
-    }
-  }
+    },
+  },
 ];
 ```
+
 3. Add tests in `src/tests/`
 4. Update `src/processors/index.ts` to include your processor
 

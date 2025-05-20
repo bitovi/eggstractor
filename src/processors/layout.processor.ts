@@ -6,13 +6,13 @@ interface NodeWithLayout {
   minHeight?: number;
   maxHeight?: number;
   layoutAlign?: string;
-  layoutMode?: "HORIZONTAL" | "VERTICAL" | "NONE";
-  primaryAxisSizingMode?: "FIXED" | "AUTO";
-  counterAxisSizingMode?: "FIXED" | "AUTO";
+  layoutMode?: 'HORIZONTAL' | 'VERTICAL' | 'NONE';
+  primaryAxisSizingMode?: 'FIXED' | 'AUTO';
+  counterAxisSizingMode?: 'FIXED' | 'AUTO';
   absoluteBoundingBox?: { width: number; height: number };
-  textAutoResize?: "NONE" | "WIDTH" | "HEIGHT" | "WIDTH_AND_HEIGHT";
+  textAutoResize?: 'NONE' | 'WIDTH' | 'HEIGHT' | 'WIDTH_AND_HEIGHT';
   type?: string;
-  layoutWrap?: "WRAP" | "NO_WRAP";
+  layoutWrap?: 'WRAP' | 'NO_WRAP';
 }
 
 function hasLayout(node: SceneNode): node is SceneNode & NodeWithLayout {
@@ -21,73 +21,82 @@ function hasLayout(node: SceneNode): node is SceneNode & NodeWithLayout {
 
 export const layoutProcessors: StyleProcessor[] = [
   {
-    property: "display",
+    property: 'display',
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && ('layoutMode' in node) && node.layoutMode !== "NONE") {
-        const value = "flex";
+      if (node && 'layoutMode' in node && node.layoutMode !== 'NONE') {
+        const value = 'flex';
         return { value, rawValue: value };
       }
 
       return null;
-    }
+    },
   },
   {
-    property: "flex-direction",
+    property: 'flex-direction',
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && 'layoutMode' in node && node.layoutMode !== "NONE") {
-        const value = node.layoutMode === "VERTICAL" ? "column" : "row";
+      if (node && 'layoutMode' in node && node.layoutMode !== 'NONE') {
+        const value = node.layoutMode === 'VERTICAL' ? 'column' : 'row';
         return { value, rawValue: value };
       }
       return null;
-    }
+    },
   },
   {
-    property: "justify-content",
+    property: 'justify-content',
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && 'layoutMode' in node && node.layoutMode !== "NONE" && 
-          'primaryAxisAlignItems' in node && node.primaryAxisAlignItems !== "MIN") {
+      if (
+        node &&
+        'layoutMode' in node &&
+        node.layoutMode !== 'NONE' &&
+        'primaryAxisAlignItems' in node &&
+        node.primaryAxisAlignItems !== 'MIN'
+      ) {
         const alignMap = {
-          CENTER: "center",
-          MAX: "flex-end",
-          SPACE_BETWEEN: "space-between"
+          CENTER: 'center',
+          MAX: 'flex-end',
+          SPACE_BETWEEN: 'space-between',
         };
-        const value = alignMap[node.primaryAxisAlignItems] || "flex-start";
+        const value = alignMap[node.primaryAxisAlignItems] || 'flex-start';
         return { value, rawValue: value };
       }
       return null;
-    }
+    },
   },
   {
-    property: "align-items",
+    property: 'align-items',
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && 'layoutMode' in node && node.layoutMode !== "NONE" && 
-          'counterAxisAlignItems' in node) {
+      if (
+        node &&
+        'layoutMode' in node &&
+        node.layoutMode !== 'NONE' &&
+        'counterAxisAlignItems' in node
+      ) {
         const alignMap = {
-          MIN: "flex-start",
-          CENTER: "center",
-          MAX: "flex-end",
-          BASELINE: "baseline"
+          MIN: 'flex-start',
+          CENTER: 'center',
+          MAX: 'flex-end',
+          BASELINE: 'baseline',
         };
         const value = alignMap[node.counterAxisAlignItems];
         return { value, rawValue: value };
       }
       return null;
-    }
+    },
   },
   {
-    property: "gap",
-    bindingKey: "itemSpacing",
+    property: 'gap',
+    bindingKey: 'itemSpacing',
     process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const gapVariable = variables.find(v => v.property === 'gap');
+      const gapVariable = variables.find((v) => v.property === 'gap');
       if (gapVariable) {
         return {
           value: gapVariable.value,
           rawValue: gapVariable.rawValue,
-          valueType: gapVariable.valueType
+          valueType: gapVariable.valueType,
         };
       }
 
@@ -96,18 +105,21 @@ export const layoutProcessors: StyleProcessor[] = [
         return { value, rawValue: value, valueType: 'px' };
       }
       return null;
-    }
+    },
   },
   {
-    property: "min-width",
-    bindingKey: "minWidth",
-    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
-      const minWidthVariable = variables.find(v => v.property === 'minWidth');
+    property: 'min-width',
+    bindingKey: 'minWidth',
+    process: async (
+      variables: VariableToken[],
+      node?: SceneNode,
+    ): Promise<ProcessedValue | null> => {
+      const minWidthVariable = variables.find((v) => v.property === 'minWidth');
       if (minWidthVariable) {
         return {
           value: `${minWidthVariable.value}`,
           rawValue: `${minWidthVariable.rawValue}`,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
 
@@ -115,22 +127,25 @@ export const layoutProcessors: StyleProcessor[] = [
         return {
           value: `${node.minWidth}px`,
           rawValue: `${node.minWidth}px`,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
       return null;
-    }
+    },
   },
   {
-    property: "max-width",
-    bindingKey: "maxWidth",
-    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
-      const maxWidthVariable = variables.find(v => v.property === 'maxWidth');
+    property: 'max-width',
+    bindingKey: 'maxWidth',
+    process: async (
+      variables: VariableToken[],
+      node?: SceneNode,
+    ): Promise<ProcessedValue | null> => {
+      const maxWidthVariable = variables.find((v) => v.property === 'maxWidth');
       if (maxWidthVariable) {
         return {
           value: `${maxWidthVariable.value}`,
           rawValue: `${maxWidthVariable.rawValue}`,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
 
@@ -138,22 +153,25 @@ export const layoutProcessors: StyleProcessor[] = [
         return {
           value: `${node.maxWidth}px`,
           rawValue: `${node.maxWidth}px`,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
       return null;
-    }
+    },
   },
   {
-    property: "min-height",
-    bindingKey: "minHeight",
-    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
-      const minHeightVariable = variables.find(v => v.property === 'minHeight');
+    property: 'min-height',
+    bindingKey: 'minHeight',
+    process: async (
+      variables: VariableToken[],
+      node?: SceneNode,
+    ): Promise<ProcessedValue | null> => {
+      const minHeightVariable = variables.find((v) => v.property === 'minHeight');
       if (minHeightVariable) {
         return {
           value: `${minHeightVariable.value}`,
           rawValue: `${minHeightVariable.rawValue}`,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
 
@@ -161,22 +179,25 @@ export const layoutProcessors: StyleProcessor[] = [
         return {
           value: `${node.minHeight}px`,
           rawValue: `${node.minHeight}px`,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
       return null;
-    }
+    },
   },
   {
-    property: "max-height",
-    bindingKey: "maxHeight",
-    process: async (variables: VariableToken[], node?: SceneNode): Promise<ProcessedValue | null> => {
-      const maxHeightVariable = variables.find(v => v.property === 'maxHeight');
+    property: 'max-height',
+    bindingKey: 'maxHeight',
+    process: async (
+      variables: VariableToken[],
+      node?: SceneNode,
+    ): Promise<ProcessedValue | null> => {
+      const maxHeightVariable = variables.find((v) => v.property === 'maxHeight');
       if (maxHeightVariable) {
         return {
           value: `${maxHeightVariable.value}`,
           rawValue: `${maxHeightVariable.rawValue}`,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
 
@@ -184,25 +205,25 @@ export const layoutProcessors: StyleProcessor[] = [
         return {
           value: `${node.maxHeight}px`,
           rawValue: `${node.maxHeight}px`,
-          valueType: 'px'
+          valueType: 'px',
         };
       }
       return null;
-    }
+    },
   },
   {
-    property: "width",
+    property: 'width',
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
       if (!node || !hasLayout(node)) return null;
 
       // Handle text nodes
-      if (node.type === "TEXT") {
-        if (node.textAutoResize === "NONE" || node.textAutoResize === "HEIGHT") {
+      if (node.type === 'TEXT') {
+        if (node.textAutoResize === 'NONE' || node.textAutoResize === 'HEIGHT') {
           return {
             value: `${node.absoluteBoundingBox?.width}px`,
             rawValue: `${node.absoluteBoundingBox?.width}px`,
-            valueType: 'px'
+            valueType: 'px',
           };
         }
         return null;
@@ -210,32 +231,34 @@ export const layoutProcessors: StyleProcessor[] = [
 
       // Handle auto layout frames
       if (node.layoutMode) {
-        if (node.layoutMode === "HORIZONTAL" && node.primaryAxisSizingMode === "FIXED" ||
-            node.layoutMode === "VERTICAL" && node.counterAxisSizingMode === "FIXED") {
+        if (
+          (node.layoutMode === 'HORIZONTAL' && node.primaryAxisSizingMode === 'FIXED') ||
+          (node.layoutMode === 'VERTICAL' && node.counterAxisSizingMode === 'FIXED')
+        ) {
           return {
             value: `${node.absoluteBoundingBox?.width}px`,
             rawValue: `${node.absoluteBoundingBox?.width}px`,
-            valueType: 'px'
+            valueType: 'px',
           };
         }
       }
 
       return null;
-    }
+    },
   },
   {
-    property: "height",
+    property: 'height',
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
       if (!node || !hasLayout(node)) return null;
 
       // Handle text nodes - height is usually determined by content
-      if (node.type === "TEXT") {
-        if (node.textAutoResize === "NONE" || node.textAutoResize === "WIDTH_AND_HEIGHT") {
+      if (node.type === 'TEXT') {
+        if (node.textAutoResize === 'NONE' || node.textAutoResize === 'WIDTH_AND_HEIGHT') {
           return {
             value: `${node.absoluteBoundingBox?.height}px`,
             rawValue: `${node.absoluteBoundingBox?.height}px`,
-            valueType: 'px'
+            valueType: 'px',
           };
         }
         return null;
@@ -243,28 +266,30 @@ export const layoutProcessors: StyleProcessor[] = [
 
       // Handle auto layout frames
       if (node.layoutMode) {
-        if (node.layoutMode === "VERTICAL" && node.primaryAxisSizingMode === "FIXED" ||
-            node.layoutMode === "HORIZONTAL" && node.counterAxisSizingMode === "FIXED") {
+        if (
+          (node.layoutMode === 'VERTICAL' && node.primaryAxisSizingMode === 'FIXED') ||
+          (node.layoutMode === 'HORIZONTAL' && node.counterAxisSizingMode === 'FIXED')
+        ) {
           return {
             value: `${node.absoluteBoundingBox?.height}px`,
             rawValue: `${node.absoluteBoundingBox?.height}px`,
-            valueType: 'px'
+            valueType: 'px',
           };
         }
       }
 
       return null;
-    }
+    },
   },
   {
-    property: "flex-wrap",
+    property: 'flex-wrap',
     bindingKey: undefined,
     process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && 'layoutMode' in node && node.layoutMode !== "NONE" && 'layoutWrap' in node) {
-        const value = node.layoutWrap === "WRAP" ? "wrap" : "";
+      if (node && 'layoutMode' in node && node.layoutMode !== 'NONE' && 'layoutWrap' in node) {
+        const value = node.layoutWrap === 'WRAP' ? 'wrap' : '';
         return { value, rawValue: value };
       }
       return null;
-    }
-  }
-]; 
+    },
+  },
+];

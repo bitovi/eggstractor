@@ -15,7 +15,11 @@ interface ConvertOptions {
   unit?: boolean;
 }
 
-const convert = (value: number | string | object, to: string = 'rem', options: ConvertOptions = {}): string => {
+const convert = (
+  value: number | string | object,
+  to: string = 'rem',
+  options: ConvertOptions = {},
+): string => {
   const { baseline, precision, unit } = { ...defaults, ...options };
 
   if (typeof value === 'number') {
@@ -30,7 +34,9 @@ const convert = (value: number | string | object, to: string = 'rem', options: C
   }
 
   if (typeof value === 'object') {
-    return Object.entries(value).map(([key, val]) => `${key}: ${convert(val, to, options)}`).join(', ');
+    return Object.entries(value)
+      .map(([key, val]) => `${key}: ${convert(val, to, options)}`)
+      .join(', ');
   }
 
   return value.replace(/(\d*\.?\d+)(rem|px)/g, (match: string, val: string, from: string) => {
@@ -48,7 +54,8 @@ const convert = (value: number | string | object, to: string = 'rem', options: C
 
 const rem = (value: number | string | object, options?: any) => convert(value, 'rem', options);
 
-const em = (value: number | string | object, baseline: number, options?: any) => convert(value, 'em', { baseline, ...options });
+const em = (value: number | string | object, baseline: number, options?: any) =>
+  convert(value, 'em', { baseline, ...options });
 
 const px = (value: number | string | object, options?: any) => convert(value, 'px', options);
 

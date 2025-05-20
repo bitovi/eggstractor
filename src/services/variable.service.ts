@@ -3,7 +3,10 @@ import { rgbaToString } from '../utils/color.utils';
 import { sanitizeName } from '../utils/string.utils';
 import { normalizeValue } from '../utils/value.utils';
 
-async function getVariableFallback(variable: Variable | null, propertyName: string = ''): Promise<string> {
+async function getVariableFallback(
+  variable: Variable | null,
+  propertyName: string = '',
+): Promise<string> {
   if (!variable) return '';
 
   const modeId = Object.keys(variable.valuesByMode)[0];
@@ -18,14 +21,14 @@ async function getVariableFallback(variable: Variable | null, propertyName: stri
   }
 
   switch (variable.resolvedType) {
-    case "FLOAT": {
+    case 'FLOAT': {
       const numValue = value as number;
-      return normalizeValue({ 
-        propertyName, 
-        value: numValue 
+      return normalizeValue({
+        propertyName,
+        value: numValue,
       });
     }
-    case "COLOR": {
+    case 'COLOR': {
       if (typeof value === 'object' && 'r' in value) {
         const color = value as RGB | RGBA;
         const opacity = 'a' in color ? color.a : 1;
@@ -33,14 +36,19 @@ async function getVariableFallback(variable: Variable | null, propertyName: stri
       }
       return '#000000';
     }
-    case "STRING":
+    case 'STRING':
       return value as string;
     default:
-      return "inherit";
+      return 'inherit';
   }
 }
 
-export async function collectBoundVariable(varId: string, property: string, path: string[], node: SceneNode): Promise<VariableToken | null> {
+export async function collectBoundVariable(
+  varId: string,
+  property: string,
+  path: string[],
+  node: SceneNode,
+): Promise<VariableToken | null> {
   const variable = await figma.variables.getVariableByIdAsync(varId);
   if (!variable) return null;
   const rawValue = await getVariableFallback(variable, property);
@@ -58,6 +66,6 @@ export async function collectBoundVariable(varId: string, property: string, path
       figmaId: node.id,
       variableId: variable.id,
       variableName: variable.name,
-    }
+    },
   };
 }

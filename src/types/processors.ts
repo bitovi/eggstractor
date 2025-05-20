@@ -34,4 +34,4 @@ export interface TransformerResult {
   result: string;
   warnings: string[];
   errors: string[];
-} 
+}

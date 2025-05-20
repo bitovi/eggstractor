@@ -20,4 +20,4 @@ export interface GradientToken {
 export interface GradientProcessing {
   value: string;
   rawValue: string;
-} 
+}

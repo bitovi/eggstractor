@@ -6,14 +6,9 @@
   "capabilities": [],
   "enableProposedApi": false,
   "documentAccess": "dynamic-page",
-  "editorType": [
-    "figma",
-    "dev"
-  ],
+  "editorType": ["figma", "dev"],
   "ui": "dist/ui.html",
   "networkAccess": {
-    "allowedDomains": [
-      "https://api.github.com"
-    ]
+    "allowedDomains": ["https://api.github.com"]
   }
 }

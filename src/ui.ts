@@ -36,28 +36,34 @@ window.onload = () => {
     const processedValue = branchNameInput.value.replace(/^\.|[^-\/.\w]|\/$/g, '-');
     branchNameInput.value = processedValue;
     saveConfig();
-  }
+  };
   githubTokenInput.onchange = saveConfig;
   function saveConfig() {
-    parent.postMessage({
-      pluginMessage: {
-        type: 'save-config',
-        repoPath: repoPathInput.value,
-        filePath: filePathInput.value,
-        branchName: branchNameInput.value,
-        githubToken: githubTokenInput.value
-      }
-    }, '*');
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: 'save-config',
+          repoPath: repoPathInput.value,
+          filePath: filePathInput.value,
+          branchName: branchNameInput.value,
+          githubToken: githubTokenInput.value,
+        },
+      },
+      '*',
+    );
   }
 
   generateBtn.onclick = () => {
     const format = isDevelopment ? formatSelect.value : 'scss';
-    parent.postMessage({
-      pluginMessage: {
-        type: 'generate-styles',
-        format
-      }
-    }, '*');
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: 'generate-styles',
+          format,
+        },
+      },
+      '*',
+    );
   };
 
   createPRBtn.onclick = () => {
@@ -71,14 +77,17 @@ window.onload = () => {
     const branchName = (document.getElementById('branchName') as HTMLInputElement).value;
 
     const checks = [
-      { value: githubToken, warning: "Please add a github token" },
-      { value: repoPath, warning: "Please add path to the repository" },
-      { value: filePath, warning: "Please add the path to your generated SCSS file" },
-      { value: branchName, warning: "Please specify the name of the branch to create or add the commit to" },
-      { value: generatedScss, warning: "Please generate the SCSS first" }
+      { value: githubToken, warning: 'Please add a github token' },
+      { value: repoPath, warning: 'Please add path to the repository' },
+      { value: filePath, warning: 'Please add the path to your generated SCSS file' },
+      {
+        value: branchName,
+        warning: 'Please specify the name of the branch to create or add the commit to',
+      },
+      { value: generatedScss, warning: 'Please generate the SCSS first' },
     ];
 
-    const missing = checks.filter(check => !check.value)
+    const missing = checks.filter((check) => !check.value);
     if (missing.length) {
       alert(missing[0].warning);
       createPRBtn.disabled = false;
@@ -86,15 +95,18 @@ window.onload = () => {
       return;
     }
 
-    parent.postMessage({
-      pluginMessage: {
-        type: 'create-pr',
-        githubToken,
-        repoPath,
-        filePath,
-        branchName,
-      }
-    }, '*');
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: 'create-pr',
+          githubToken,
+          repoPath,
+          filePath,
+          branchName,
+        },
+      },
+      '*',
+    );
   };
 
   // Add this function to handle copying
@@ -126,13 +138,15 @@ window.onload = () => {
           <details open>
             <summary>⚠️ Warnings (${msg.warnings.length}) ⚠️</summary>
             <ul>
-              ${msg.warnings.map((warning: string)  => {
-            const nodeMatch = warning.match(/\(node: ([^)]+)\)/);
-            const nodeId = nodeMatch?.[1];
-            return nodeId
-              ? `<li class="warning-item"><a href="#" data-node-id="${nodeId}">${warning}</a></li>`
-              : `<li class="warning-item">${warning}</li>`;
-          }).join('')}
+              ${msg.warnings
+                .map((warning: string) => {
+                  const nodeMatch = warning.match(/\(node: ([^)]+)\)/);
+                  const nodeId = nodeMatch?.[1];
+                  return nodeId
+                    ? `<li class="warning-item"><a href="#" data-node-id="${nodeId}">${warning}</a></li>`
+                    : `<li class="warning-item">${warning}</li>`;
+                })
+                .join('')}
             </ul>
           </details>`;
           warnings.innerHTML = warningsHtml;
@@ -148,12 +162,15 @@ window.onload = () => {
             e.preventDefault();
             const nodeId = target.dataset.nodeId;
             if (nodeId) {
-              parent.postMessage({
-                pluginMessage: {
-                  type: 'select-node',
-                  nodeId
-                }
-              }, '*');
+              parent.postMessage(
+                {
+                  pluginMessage: {
+                    type: 'select-node',
+                    nodeId,
+                  },
+                },
+                '*',
+              );
             }
           }
         });

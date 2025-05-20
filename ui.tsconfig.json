@@ -6,4 +6,4 @@
     "lib": ["es6", "dom"]
   },
   "include": ["src/ui.ts", "src/highlighter.ts"]
-} 
+}

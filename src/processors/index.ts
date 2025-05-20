@@ -7,15 +7,13 @@ import { spacingProcessors } from './spacing.processor';
 
 export function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
   switch (node.type) {
-    case "TEXT":
-      return [
-        ...fontProcessors,
-      ];
-    case "FRAME":
-    case "RECTANGLE":
-    case "INSTANCE":
-    case "ELLIPSE":
-    case "COMPONENT":
+    case 'TEXT':
+      return [...fontProcessors];
+    case 'FRAME':
+    case 'RECTANGLE':
+    case 'INSTANCE':
+    case 'ELLIPSE':
+    case 'COMPONENT':
       return [
         ...backgroundProcessors,
         ...layoutProcessors,
@@ -25,4 +23,4 @@ export function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
     default:
       return [];
   }
-} 
+}

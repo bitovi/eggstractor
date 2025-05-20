@@ -13,4 +13,4 @@ export function highlightCode(code: string, language: string = 'scss'): string {
     console.warn('Failed to highlight code:', error);
     return code;
   }
-} 
+}
