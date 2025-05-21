@@ -5,14 +5,16 @@
   "main": "code.js",
   "scripts": {
     "build": "webpack --mode=production",
-    "dev": "webpack --mode=development --watch",
+    "dev": "npm run generate-theme && webpack --mode=development --watch",
     "visualizer": "lite-server --baseDir=./visualizer",
     "prettier": "prettier --write .",
     "lint": "eslint --ext .ts,.tsx --ignore-pattern node_modules .",
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
     "watch": "npm run build -- --watch",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:snapshot": "jest --updateSnapshot",
+    "test:watch": "jest --watch",
+    "generate-theme": "node scripts/generate-theme.js"
   },
   "author": "Bitovi",
   "license": "MIT",
@@ -34,6 +36,7 @@
     "mini-css-extract-plugin": "^2.9.2",
     "prettier": "^3.5.3",
     "sass-rem": "^4.0.0",
+    "tailwindcss": "^3.4.17",
     "ts-jest": "^29.0.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.2",
@@ -70,6 +73,8 @@
     }
   },
   "dependencies": {
-    "highlight.js": "^11.8.0"
+    "culori": "^4.0.1",
+    "highlight.js": "^11.8.0",
+    "lodash.merge": "^4.6.2"
   }
 }

@@ -26,6 +26,10 @@ export interface StyleToken extends BaseToken {
   errors?: string[];
 }
 
+export type NonNullableStyleToken = {
+  [K in keyof StyleToken]: NonNullable<StyleToken[K]>;
+};
+
 export interface TokenCollection {
   tokens: (StyleToken | VariableToken)[];
 }
