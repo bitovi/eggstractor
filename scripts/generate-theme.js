@@ -56,7 +56,7 @@ function flattenValueToKeys(valueKeyObject) {
 }
 
 function flattenColorsToHexKeys(colorObj, prefix = '') {
-  const result = {};
+  let result = {};
 
   for (const [key, value] of Object.entries(colorObj)) {
     const fullKey = prefix ? `${prefix}-${key}` : key;
@@ -72,13 +72,20 @@ function flattenColorsToHexKeys(colorObj, prefix = '') {
         console.warn(`Invalid color: ${value}`, err);
       }
     } else if (typeof value === 'object') {
-      result = { result, ...flattenColorsToHexKeys(value, fullKey) };
+      result = { ...result, ...flattenColorsToHexKeys(value, fullKey) };
     }
   }
 
   return result;
 }
 
+/*
+  From Tailwind, we're grabbing specifically just the font size.
+  Some of the values return a font size and line height 
+  e.g. sm: ['0.875rem', { lineHeight: '1.25rem' }]
+
+  For now, we only want the fontSize.
+*/
 const fontSizeIndex = 0;
 const rawFontSizes = Object.fromEntries(
   Object.entries(fontSize).map(([key, val]) => [
