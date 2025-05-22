@@ -39,12 +39,12 @@ To add a new transformer (for example, to support a new CSS property or a custom
    ```
    <!-- @joggr:snippet(19b34500-3abf-4fbd-ac70-f7ebf65b6e18):end -->
 
-   * ```typescript
-     export const generateTailwindBoxShadowClass: Generator = ({ rawValue }) => {
-       // Custom logic for box-shadow
-       return `shadow-[${rawValue}]`;
-     };
-     ```
+   ```typescript
+   export const generateTailwindBoxShadowClass: Generator = ({ rawValue }) => {
+     // Custom logic for box-shadow
+     return `shadow-[${rawValue}]`;
+   };
+   ```
 
 2. **Register the Generator**
 
