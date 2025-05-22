@@ -1,5 +1,10 @@
 import { collectTokens } from './services';
-import { transformToScss, transformToCss, transformToTailwindScss } from './transformers';
+import {
+  transformToScss,
+  transformToCss,
+  transformToTailwindLayerUtilityClassV4,
+  transformToTailwindSassClass,
+} from './transformers';
 import Github from './github';
 import { serializeFigmaData } from './utils/test.utils';
 import { TransformerResult } from './types/processors';
@@ -17,7 +22,7 @@ figma.showUI(__html__, {
 
 // Main generation function
 async function generateStyles(
-  format: 'scss' | 'css' | 'tailwind-scss',
+  format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
 ): Promise<TransformerResult> {
   const tokens = await collectTokens();
   switch (format) {
@@ -26,7 +31,9 @@ async function generateStyles(
     case 'css':
       return transformToCss(tokens);
     case 'tailwind-scss':
-      return transformToTailwindScss(tokens);
+      return transformToTailwindSassClass(tokens);
+    case 'tailwind-v4':
+      return transformToTailwindLayerUtilityClassV4(tokens);
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
