@@ -27,5 +27,5 @@ export function sanitizeName(name: string): string {
 }
 
 export function sanitizeSegment(segment: string): string {
-  return segment.replace(/[^a-zA-Z0-9]/g, '-');
+  return segment.toLowerCase().replace(/[^a-z0-9]/g, '-');
 }

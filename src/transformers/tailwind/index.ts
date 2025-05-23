@@ -31,16 +31,14 @@ export function transformToTailwindLayerUtilityClassV4(collection: TokenCollecti
   const { warnings, errors } = deduplicateMessages(styleTokens);
   const groupedTokens = groupBy(styleTokens, (token) => token.path.join('_'));
 
-  let output = '/* Generated Tailwind-SCSS */\n@layer utilities {\n';
+  let output = '/* Generated Tailwind Utilities */\n';
 
   for (const [variantPath, tokens] of Object.entries(groupedTokens)) {
     const classesToApply = createTailwindClasses(tokens);
     if (classesToApply.length) {
-      output += `\n  .${variantPath} {\n    @apply ${classesToApply.join(' ')}; \n  }\n`;
+      output += `\n@utility ${variantPath} {\n  @apply ${classesToApply.join(' ')}; \n}\n`;
     }
   }
-  output += '}';
-
   return {
     result: output,
     warnings,
