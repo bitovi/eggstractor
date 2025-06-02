@@ -198,6 +198,10 @@ export function createTestData(jsonData: any) {
       return {
         figma: {
           currentPage: pageNode,
+          root: {
+            children: [pageNode], // Array of pages
+          },
+          loadAllPagesAsync: jest.fn().mockResolvedValue(undefined), // Mock this method
           variables: {
             getVariableByIdAsync,
           },
