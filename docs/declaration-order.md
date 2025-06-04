@@ -6,28 +6,28 @@ This document outlines an observed exception when combining utilities using `@ap
 
 ---
 
-## Base Case: Inline Utility Order
+    ## Base Case: Inline Utility Order
 
-```css
-@utility my-util {
-  @apply p-2 p-1;
-}
-```
+    ```css
+    @utility my-util {
+    @apply p-2 p-1;
+    }
+    ```
 
-**Expected**: padding from `p-1` is overridden by `p-2`
+    **Expected**: padding from `p-1` is overridden by `p-2`
 
-**Actual**: The final output is:
+    **Actual**: The final output is:
 
-```css
-.my-util {
-  padding: calc(var(--spacing) * 1);
-  padding: calc(var(--spacing) * 2);
-}
-```
+    ```css
+    .my-util {
+    padding: calc(var(--spacing) * 1);
+    padding: calc(var(--spacing) * 2);
+    }
+    ```
 
-The browser honors the **last** declaration (`p-2`), which is consistent with CSS rules.
+    The browser honors the **last** declaration (`p-2`), which is consistent with CSS rules.
 
-**Conclusion**: When using `@apply` with multiple Tailwind utilities in a single block, the output will include **all expanded declarations**, with order determined by Tailwind’s internal plugin ordering — **not necessarily the order you wrote them**.
+    **Conclusion**: When using `@apply` with multiple Tailwind utilities in a single block, the output will include **all expanded declarations**, with order determined by Tailwind’s internal plugin ordering — **not necessarily the order you wrote them**.
 
 ---
 
