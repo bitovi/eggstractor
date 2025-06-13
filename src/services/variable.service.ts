@@ -3,6 +3,8 @@ import { rgbaToString } from '../utils/color.utils';
 import { sanitizeName } from '../utils/string.utils';
 import { normalizeValue } from '../utils/value.utils';
 
+const variableCache = new Map<string, any>();
+
 async function getVariableFallback(
   variable: Variable | null,
   propertyName: string = '',
@@ -14,7 +16,16 @@ async function getVariableFallback(
 
   // Handle variable aliases first
   if (value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS') {
-    const aliasVariable = await figma.variables.getVariableByIdAsync(value.id);
+    // Check cache first!
+    let aliasVariable = variableCache.get(value.id);
+
+    if (!aliasVariable) {
+      aliasVariable = await figma.variables.getVariableByIdAsync(value.id);
+      if (aliasVariable) {
+        variableCache.set(value.id, aliasVariable);
+      }
+    }
+
     if (aliasVariable) {
       return getVariableFallback(aliasVariable, propertyName);
     }
@@ -49,8 +60,18 @@ export async function collectBoundVariable(
   path: string[],
   node: SceneNode,
 ): Promise<VariableToken | null> {
-  const variable = await figma.variables.getVariableByIdAsync(varId);
+  // Check cache first
+  let variable = variableCache.get(varId);
+
+  if (!variable) {
+    variable = await figma.variables.getVariableByIdAsync(varId);
+    if (variable) {
+      variableCache.set(varId, variable); // Cache it
+    }
+  }
+
   if (!variable) return null;
+
   const rawValue = await getVariableFallback(variable, property);
   const valueType = rawValue.includes('px') ? 'px' : null;
 
