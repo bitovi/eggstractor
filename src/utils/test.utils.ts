@@ -139,7 +139,7 @@ export async function createTestVariableResolver(testData: any) {
       return value;
     };
 
-    const modeId = Object.keys(variable.valuesByMode)[0];
+    const modeId = Object.keys(variable.valuesByMode).sort()[0];
     const resolvedValue = await resolveValue(variable.valuesByMode[modeId]);
 
     return {
