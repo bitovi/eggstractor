@@ -30,8 +30,11 @@
         </select>
       </div>
       <div class="button-group">
-        <button id="generateBtn" class="button">Generate Styles</button>
-        <button id="createPRBtn">Create PR</button>
+        <div class="button-container">
+          <button id="generateBtn" class="button">Generate Styles</button>
+          <div id="spinner" class="spinner hidden"></div>
+        </div>
+        <button id="createPRBtn" class="button">Create PR</button>
         <span id="status"></span>
       </div>
       <div id="progressContainer" style="display: none;">

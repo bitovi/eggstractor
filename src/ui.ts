@@ -13,6 +13,7 @@ window.onload = () => {
   const progressContainer = document.getElementById('progressContainer') as HTMLDivElement;
   const progressFill = document.getElementById('progressFill') as HTMLDivElement;
   const progressText = document.getElementById('progressText') as HTMLDivElement;
+  const spinner = document.getElementById('spinner') as HTMLDivElement;
   let generatedScss = false;
 
   // Load saved config when UI opens
@@ -248,6 +249,9 @@ window.onload = () => {
         progressContainer.style.display = 'block';
         progressFill.style.width = '0%';
         progressText.textContent = 'Starting...';
+        generateBtn.disabled = true;
+        spinner.classList.add('active');
+
         break;
       case 'progress-update':
         progressFill.style.width = `${msg.progress}%`;
@@ -255,7 +259,9 @@ window.onload = () => {
 
         // Hide when complete
         if (msg.progress >= 100) {
+          spinner.classList.remove('active');
           setTimeout(() => {
+            generateBtn.disabled = false;
             progressContainer.style.display = 'none';
           }, 2000);
         }
