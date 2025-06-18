@@ -88,6 +88,71 @@ pre {
 #status a:hover {
   text-decoration: underline;
 }
+.button-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#progressBar {
+  width: 100%;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#progressFill {
+  width: 0%;
+  height: 20px;
+  background: #007cba;
+  transition: width 0.3s;
+}
+
+#progressText {
+  color: #999999;
+}
+
+.button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.spinner {
+  display: none;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+
+  border: 2px solid #f0f0f0;
+  border-top-color: #007cba;
+  border-radius: 50%;
+
+  animation: spin 0.6s linear infinite;
+}
+
+.spinner.active {
+  display: block;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Optional: dim the button when disabled */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 /* Highlight.js VS2015 Theme */
 .hljs {
