@@ -7,7 +7,7 @@ import { createTailwindClasses } from './generators';
 export function transformToTailwindSassClass(collection: TokenCollection) {
   const styleTokens = filterStyleTokens(collection);
   const { warnings, errors } = deduplicateMessages(styleTokens);
-  const groupedTokens = groupBy(styleTokens, (token) => token.path.join('_'));
+  const groupedTokens = groupBy(styleTokens, (token) => token.name);
 
   let output = '/* Generated Tailwind-SCSS */';
 
@@ -29,7 +29,7 @@ export function transformToTailwindSassClass(collection: TokenCollection) {
 export function transformToTailwindLayerUtilityClassV4(collection: TokenCollection) {
   const styleTokens = filterStyleTokens(collection);
   const { warnings, errors } = deduplicateMessages(styleTokens);
-  const groupedTokens = groupBy(styleTokens, (token) => token.path.join('_'));
+  const groupedTokens = groupBy(styleTokens, (token) => token.name);
 
   let output = '/* Generated Tailwind Utilities */\n';
 

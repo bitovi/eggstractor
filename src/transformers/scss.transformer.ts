@@ -63,7 +63,8 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   // Filter for style tokens and group by path
   const styleTokens = tokens.tokens.filter((token): token is StyleToken => token.type === 'style');
 
-  const variantGroups = groupBy(styleTokens, (t) => t.path.join('_'));
+  const variantGroups = groupBy(styleTokens, (t) => t.name);
+  console.log('scss variantGroups', variantGroups);
 
   Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
     if (!variantPath) return;

@@ -8,11 +8,11 @@ export async function collectTokens(): Promise<TokenCollection> {
 
   async function processNode(node: BaseNode) {
     if ('type' in node && 'boundVariables' in node) {
-      const nodePath = getNodePathName(node as SceneNode).split('_');
-      const processors = getProcessorsForNode(node as SceneNode);
+      const nodePath = getNodePathName(node).split('_');
+      const processors = getProcessorsForNode(node);
 
       for (const processor of processors) {
-        const tokens = await extractNodeToken(node as SceneNode, processor, nodePath);
+        const tokens = await extractNodeToken(node, processor, nodePath);
         collection.tokens.push(...tokens);
       }
     }
