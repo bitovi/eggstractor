@@ -34,6 +34,12 @@
         <button id="createPRBtn">Create PR</button>
         <span id="status"></span>
       </div>
+      <div id="progressContainer" style="display: none;">
+        <div id="progressBar" style="width: 100%; background: #f0f0f0; border-radius: 4px; overflow: hidden;">
+          <div id="progressFill" style="width: 0%; height: 20px; background: #007cba; transition: width 0.3s;"></div>
+        </div>
+        <div id="progressText">Starting...</div>
+      </div>
       <div id="warnings"></div>
       <div class="output">
         <pre id="output"></pre>
