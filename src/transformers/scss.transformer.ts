@@ -65,6 +65,8 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
 
   const variantGroups = groupBy(styleTokens, (t) => t.path.join('_'));
 
+  console.log('transformToScss -> groupBy', variantGroups);
+
   Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
     if (!variantPath) return;
 

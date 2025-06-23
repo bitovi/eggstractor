@@ -25,6 +25,7 @@ async function generateStyles(
   format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
 ): Promise<TransformerResult> {
   const tokens = await collectTokens();
+  console.log(tokens);
   switch (format) {
     case 'scss':
       return transformToScss(tokens);

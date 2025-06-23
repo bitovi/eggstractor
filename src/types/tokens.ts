@@ -24,6 +24,22 @@ export interface StyleToken extends BaseToken {
   variables?: VariableToken[]; // Associated variable tokens
   warnings?: string[];
   errors?: string[];
+  componentId?: ComponentNode['id'];
+  componentSetId?: ComponentSetNode['id'];
+}
+
+export interface ComponentSetToken {
+  type: 'component-set';
+  id: ComponentSetNode['id'];
+  variantPropertyDefinitions: Record<string, string[]>;
+}
+
+export interface ComponentToken {
+  type: 'component';
+  id: ComponentNode['id'];
+  componentSetId: ComponentSetToken['id'];
+  variantProperties: NonNullable<ComponentNode['variantProperties']>;
+
 }
 
 export type NonNullableStyleToken = {
@@ -32,6 +48,8 @@ export type NonNullableStyleToken = {
 
 export interface TokenCollection {
   tokens: (StyleToken | VariableToken)[];
+  components: Record<ComponentToken['id'], ComponentToken>;
+  componentSets: Record<ComponentSetToken['id'], ComponentSetToken>;
 }
 
 export interface ProcessedValue {
