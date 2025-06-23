@@ -5,8 +5,10 @@ import { getNodePathName } from '../utils/node.utils';
 
 export async function collectTokens(): Promise<TokenCollection> {
   const collection: TokenCollection = { tokens: [] };
-
   async function processNode(node: BaseNode) {
+    // Eggstractor won't use the VECTOR nodes from FIGMA, and they are numerous, so skip them.
+    if ('type' in node && ['VECTOR', 'INSTANCE'].includes(node.type)) return;
+
     if ('type' in node && 'boundVariables' in node) {
       const nodePath = getNodePathName(node).split('_');
       const processors = getProcessorsForNode(node);
@@ -24,6 +26,12 @@ export async function collectTokens(): Promise<TokenCollection> {
     }
   }
 
-  await processNode(figma.currentPage);
+  await figma.loadAllPagesAsync();
+  const pagePromises = figma.root.children.map(async (page) => {
+    await processNode(page);
+  });
+
+  await Promise.all(pagePromises);
+
   return collection;
 }

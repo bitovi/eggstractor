@@ -2,7 +2,7 @@
 
 exports[`Text Processors Text Align Processor should process font style correctly: font-style 1`] = `
 "// Generated SCSS Variables
-$text-primary: #a3adad;
+$text-primary: #bfc5c6;
 $size-16: 1rem;
 $font-style-italic: italic;
 $font-weight-normal: normal;
@@ -74,7 +74,7 @@ $font-weight-medium: 31.25rem;
 
 exports[`Text Processors Text Align Processor should process paragraph alignment correctly: paragraph-alignment 1`] = `
 "// Generated SCSS Variables
-$text-primary: #a3adad;
+$text-primary: #bfc5c6;
 $size-16: 1rem;
 
 // Generated SCSS Mixins
