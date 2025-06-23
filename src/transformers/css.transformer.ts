@@ -20,7 +20,7 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
       token.rawValue !== '',
   );
 
-  const variantGroups = groupBy(styleTokens, (t) => t.path.join('_'));
+  const variantGroups = groupBy(styleTokens, (t) => t.name);
   Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
     if (!variantPath) return;
     // Remove properties with zero values and unnecessary defaults

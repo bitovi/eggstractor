@@ -38,7 +38,7 @@ Alternately, you can build your own, local plugin for private use. You will need
 
 This is to view the generated CSS in a browser.
 
-1. Run `npm run start:server` to start the local server
+1. Run `npm run visualizer` to start the local server
 2. Open `http://localhost:3000` in your browser
 
 ## Contributing
