@@ -1,4 +1,5 @@
 import { NonNullableStyleToken, StyleToken, TokenCollection } from '../types';
+import { sanitizeSegment } from '../utils';
 import { generateStyles } from './variants';
 
 export const convertVariantGroupBy = (
@@ -88,7 +89,7 @@ export const convertVariantGroupBy = (
       const cssByVariantCombinations = generateStyles(mixins);
 
       return Object.entries(cssByVariantCombinations).map(([variantsCombination, css]) => {
-        const variantCombinationName = mixins[0].path
+        const variantCombinationName = sanitizeSegment(mixins[0].path
           .map((part) => {
             // This path part lists the variant properties, override with the
             // subset needed for the variant combination
@@ -98,7 +99,7 @@ export const convertVariantGroupBy = (
 
             return part.name;
           })
-          .join('__');
+          .join('__'));
 
         return { variantCombinationName, css };
       });
@@ -107,9 +108,9 @@ export const convertVariantGroupBy = (
   console.log('parsedVariantInstances', parsedVariantInstances);
 
   // No combination parsing
-  //   return [...mixins];
+    return instanceGroupedByVariants;
   // With combination parsing
-  return [...instancesWithoutVariant, ...parsedVariantInstances];
+  // return [...instancesWithoutVariant, ...parsedVariantInstances];
 };
 
 export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {

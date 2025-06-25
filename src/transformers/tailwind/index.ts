@@ -24,7 +24,7 @@ export function transformToTailwindSassClass(collection: TokenCollection) {
 
   const _ = backToStyleTokens(parsedStyleTokens).sort((a, b) => a.variantPath.localeCompare(b.variantPath));;
 
-  const entriesGroupedTokens = Object.entries(groupedTokens).sort(([a], [b]) => a.localeCompare(b));
+  // const entriesGroupedTokens = Object.entries(groupedTokens).sort(([a], [b]) => a.localeCompare(b));
   // for (const [variantPath, tokens] of entriesGroupedTokens) {
   for (const { variantPath, tokens } of _) {
     const classesToApply = createTailwindClasses(tokens);
