@@ -4,22 +4,37 @@ export interface PRResult {
   prUrl: string;
 }
 
-interface GithubUserSettings {
-  token: string;
-  branchName: string;
-}
-
 export default {
-  saveUserSettings: async function saveUserSettings(token: string, branchName: string) {
-    await figma.clientStorage.setAsync('githubUserSettings', JSON.stringify({ token, branchName }));
+  saveToken: async function (token: string) {
+    const fileId = figma.root.id;
+    const userTokens = (await figma.clientStorage.getAsync('fileTokens')) || '{}';
+    const tokens = JSON.parse(userTokens);
+    tokens[fileId] = token;
+    await figma.clientStorage.setAsync('fileTokens', JSON.stringify(tokens));
   },
-  getUserSettings: async function getUserSettings(): Promise<GithubUserSettings | null> {
-    const settings = await figma.clientStorage.getAsync('githubUserSettings');
-    return settings ? JSON.parse(settings) : null;
+  getToken: async function (): Promise<string | null> {
+    const fileId = figma.root.id;
+    const userTokens = (await figma.clientStorage.getAsync('fileTokens')) || '{}';
+    const tokens = JSON.parse(userTokens);
+    return tokens[fileId] || null;
+  },
+  saveBranchName: async function (branchName: string) {
+    const fileId = figma.root.id;
+    const userBranches = (await figma.clientStorage.getAsync('fileBranches')) || '{}';
+    const branches = JSON.parse(userBranches);
+    branches[fileId] = branchName;
+    await figma.clientStorage.setAsync('fileBranches', JSON.stringify(branches));
+  },
+  getBranchName: async function (): Promise<string | null> {
+    const fileId = figma.root.id;
+    const userBranches = (await figma.clientStorage.getAsync('fileBranches')) || '{}';
+    const branches = JSON.parse(userBranches);
+    return branches[fileId] || null;
   },
   saveGithubConfig: async function saveGithubConfig(config: {
     repoPath: string;
     filePath: string;
+    outputFormat: string;
   }) {
     await figma.root.setPluginData('githubConfig', JSON.stringify(config));
   },
