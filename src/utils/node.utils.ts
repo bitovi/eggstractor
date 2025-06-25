@@ -1,22 +1,47 @@
 import { sanitizeSegment } from './string.utils';
 
-export function getNodePathName(node: SceneNode): string {
-  const pathParts: string[] = [];
+interface NodePathName {
+  type: SceneNode['type'];
+  name: string;
+}
+
+export function getNodePathNames(node: SceneNode): NodePathName[] {
+  const pathParts: NodePathName[] = [];
   let current: SceneNode | null = node;
 
   while (current && current.parent) {
     if (current.name.toLowerCase() !== 'components') {
-      pathParts.push(current.name);
+      pathParts.unshift({
+        name: current.name,
+        type: current.type,
+      });
     }
     current = current.parent as SceneNode;
   }
 
-  pathParts.reverse();
-  const processed = pathParts.map((p) => parseVariantWithoutKey(p));
-  return processed.join('_');
+  // console.log('getNodePathName -> pathParts', node.id, pathParts);
+  // console.log('getNodePathName -> pathParts', node.id, pathParts.map((p) => parseVariantWithoutKey(p.name)).join('_')));
+
+  // TODO: this is a mess
+  return pathParts.map((p) => ({
+    name: parseVariantWithoutKey(p.name),
+    type: p.type,
+  }));
+
+  // const processedWithoutVariants = pathParts.map((p) => parseVariantWithoutKey(p));
+  // return [processed.join('_'), processedWithoutVariants.join('_')];
 }
 
+// export function parseVariantWithoutKey(variant: string): string {
+//   const [_, valueRaw] = variant.split('=');
+//   if (!valueRaw) {
+//     return sanitizeSegment(variant);
+//   }
+//   return sanitizeSegment(valueRaw);
+// }
+
 export function parseVariantWithoutKey(variant: string): string {
+  // TODO: create using componentSet token and component token?
   const segment = variant.split(', ').map(part => {
     const [_, valueRaw] = part.split('=')
 
@@ -26,26 +51,6 @@ export function parseVariantWithoutKey(variant: string): string {
 
     return part;
   }).join('__and__');
-
-  const [_, valueRaw] = variant.split('=');
-
-  // const [_, valueRaw] = part.split('=')
-  //
-  // if (valueRaw) {
-  //   return sanitizeSegment(valueRaw);
-  // }
-  //
-  // return sanitizeSegment(segment);
-
-  if (valueRaw) {
-    console.log(`[${valueRaw}]`, variant);
-
-    console.log(`[${valueRaw}]`, 'new', segment);
-    console.log(`[${valueRaw}]`, 'new -> ', sanitizeSegment(segment));
-
-    console.log(`[${valueRaw}]`, 'old', valueRaw ?? variant);
-    console.log(`[${valueRaw}]`, 'old ->', sanitizeSegment(valueRaw ?? variant));
-  }
 
   return sanitizeSegment(segment);
 }

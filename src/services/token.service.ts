@@ -1,4 +1,4 @@
-import { ComponentSetToken, ComponentToken, StyleToken, VariableToken } from '../types';
+import { BaseToken, ComponentSetToken, ComponentToken, StyleToken, VariableToken } from '../types';
 import { StyleProcessor, VariableBindings } from '../types/processors';
 import { collectBoundVariable } from './variable.service';
 
@@ -32,6 +32,7 @@ export const extractComponentSetToken = (
   return {
     type: 'component-set',
     id: node.id,
+    name: node.name,
     variantPropertyDefinitions,
   }
 }
@@ -39,7 +40,7 @@ export const extractComponentSetToken = (
 export async function extractNodeToken(
   node: SceneNode,
   processor: StyleProcessor,
-  path: string[],
+  path: BaseToken['path'],
   componentToken?: ComponentToken | null,
   componentSetToken?: ComponentSetToken | null,
 ): Promise<(StyleToken | VariableToken)[]> {
@@ -101,17 +102,11 @@ export async function extractNodeToken(
     
     const styleToken: StyleToken = {
       type: 'style',
-      name: path.join('_'),
+      name: path.map(({ name }) => name).join('_'),
       value: processedValue.value,
       rawValue: processedValue.rawValue,
       valueType: processedValue.valueType,
       property: processor.property,
-      // variants: {
-      //   'variant-name': 'value',
-      //   'variant-name': 'value',
-      //   'variant-name': 'value',
-      //   'variant-name': 'value',
-      // },
       path, //: path.length > 1 ? path.slice(1) : path,
       variables: variableTokensMap.size > 0 ? [...variableTokensMap.values()] : undefined,
       metadata: {

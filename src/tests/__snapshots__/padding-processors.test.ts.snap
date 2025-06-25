@@ -9,164 +9,164 @@ $border-size-primary: 0.25rem;
 
 // Generated SCSS Mixins
 @mixin padding-left-right {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: 0rem 1rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 0rem 1rem;
+  background: #ffffff;
 }
 @mixin padding-left-right_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-left-right_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-left-right_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: 1.5rem 0rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 1.5rem 0rem;
+  background: #ffffff;
 }
 @mixin padding-top-bottom_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom-left-right {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: 1rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #ffffff;
 }
 @mixin padding-top-bottom-left-right_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom-left-right_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom-left-right_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topright-bottomleft {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: 1rem 1rem 1.5rem 1.5rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 1rem 1rem 1.5rem 1.5rem;
+  background: #ffffff;
 }
 @mixin padding-topright-bottomleft_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topright-bottomleft_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topright-bottomleft_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topbottom-leftright {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: 1.5rem 1rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  background: #ffffff;
 }
 @mixin padding-topbottom-leftright_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topbottom-leftright_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topbottom-leftright_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-left-right-variable {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: $size-null $corner-radius-primary;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $size-null $corner-radius-primary;
+  background: #ffffff;
 }
 @mixin padding-left-right-variable_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-left-right-variable_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-left-right-variable_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom-variable {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: $corner-radius-primary $size-null;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $corner-radius-primary $size-null;
+  background: #ffffff;
 }
 @mixin padding-top-bottom-variable_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom-variable_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom-variable_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom-left-right-variable {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: $corner-radius-primary;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $corner-radius-primary;
+  background: #ffffff;
 }
 @mixin padding-top-bottom-left-right-variable_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom-left-right-variable_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-top-bottom-left-right-variable_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topright-bottomleft-variable {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: $corner-radius-primary $corner-radius-primary $border-size-primary $border-size-primary;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $corner-radius-primary $corner-radius-primary $border-size-primary $border-size-primary;
+  background: #ffffff;
 }
 @mixin padding-topright-bottomleft-variable_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topright-bottomleft-variable_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topright-bottomleft-variable_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topbottom-leftright-variable {
- display: flex;
- flex-direction: row;
- gap: 0.5rem;
- padding: $border-size-primary $corner-radius-primary;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $border-size-primary $corner-radius-primary;
+  background: #ffffff;
 }
 @mixin padding-topbottom-leftright-variable_padding-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topbottom-leftright-variable_padding-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin padding-topbottom-leftright-variable_padding-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 "
 `;

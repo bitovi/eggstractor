@@ -6,154 +6,154 @@ $brand-primary: #00464a;
 
 // Generated SCSS Mixins
 @mixin alignment-bottom-left {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
 }
 @mixin alignment-bottom-left_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-bottom-left_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-bottom-left_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-bottom-center {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin alignment-bottom-center_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-bottom-center_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-bottom-center_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-bottom-right {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: flex-end;
 }
 @mixin alignment-bottom-right_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-bottom-right_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-bottom-right_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-center-left {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
 }
 @mixin alignment-center-left_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-center-left_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-center-left_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-center-center {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin alignment-center-center_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-center-center_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-center-center_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-center-right {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: flex-end;
 }
 @mixin alignment-center-right_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-center-right_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-center-right_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-top-left {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
 }
 @mixin alignment-top-left_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-top-left_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-top-left_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-top-center {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin alignment-top-center_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-top-center_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-top-center_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-top-right {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: flex-end;
 }
 @mixin alignment-top-right_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-top-right_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin alignment-top-right_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 "
 `;
@@ -164,53 +164,53 @@ $brand-primary: #00464a;
 
 // Generated SCSS Mixins
 @mixin vertical-layout {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin vertical-layout_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin vertical-layout_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin vertical-layout_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin horizontal-layout {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
 }
 @mixin horizontal-layout_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin horizontal-layout_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin horizontal-layout_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin wrapped-layout {
- display: flex;
- flex-direction: row;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
 }
 @mixin wrapped-layout_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin wrapped-layout_object-2 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin wrapped-layout_object-3 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 "
 `;
@@ -221,81 +221,81 @@ $brand-primary: #00464a;
 
 // Generated SCSS Mixins
 @mixin height-hug {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin height-hug_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin height-fill-container {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin height-fill-container_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin height-fixed-height {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin height-fixed-height_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin min-height-custom {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin min-height-custom_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin min-height-variable {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin min-height-variable_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin max-height-custom {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin max-height-custom_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin max-height-variable {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin max-height-variable_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 "
 `;
@@ -308,85 +308,85 @@ $size-16: 1rem;
 
 // Generated SCSS Mixins
 @mixin min-width-variable {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
- min-width: $size-48;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
+  min-width: $size-48;
 }
 @mixin min-width-variable_object-1 {
- background: $brand-primary;
- min-width: $size-16;
+  background: $brand-primary;
+  min-width: $size-16;
 }
 @mixin max-width-variable {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
- max-width: $size-48;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
+  max-width: $size-48;
 }
 @mixin max-width-variable_object-1 {
- background: $brand-primary;
- max-width: $size-16;
+  background: $brand-primary;
+  max-width: $size-16;
 }
 @mixin width-hug {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin width-hug_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin width-fill-container {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin width-fill-container_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin width-fixed-width {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin width-fixed-width_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin min-width-custom {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin min-width-custom_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 @mixin max-width-custom {
- display: flex;
- flex-direction: column;
- gap: 1.25rem;
- padding: 0rem;
- background: #ffffff;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0rem;
+  background: #ffffff;
+  justify-content: center;
 }
 @mixin max-width-custom_object-1 {
- background: $brand-primary;
+  background: $brand-primary;
 }
 "
 `;

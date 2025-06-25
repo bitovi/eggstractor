@@ -2,7 +2,10 @@ export interface BaseToken {
   type: 'variable' | 'style';
   name: string;
   property: string;
-  path: string[];
+  path: {
+    type: SceneNode['type'];
+    name: string;
+  }[];
   valueType?: string | null;
   metadata?: {
     figmaId?: string;
@@ -31,6 +34,7 @@ export interface StyleToken extends BaseToken {
 export interface ComponentSetToken {
   type: 'component-set';
   id: ComponentSetNode['id'];
+  name: ComponentSetNode['name'];
   variantPropertyDefinitions: Record<string, string[]>;
 }
 
@@ -39,7 +43,6 @@ export interface ComponentToken {
   id: ComponentNode['id'];
   componentSetId: ComponentSetToken['id'];
   variantProperties: NonNullable<ComponentNode['variantProperties']>;
-
 }
 
 export type NonNullableStyleToken = {

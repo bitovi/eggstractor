@@ -18,7 +18,16 @@ const basicToken: NonNullableStyleToken = {
   rawValue: '10px',
   valueType: 'px',
   property: 'blank',
-  path: ['basic', 'gap'],
+  path: [
+    {
+      type: 'TODO' as any,
+      name: 'basic',
+    },
+    {
+      type: 'TODO' as any,
+      name: 'gap',
+    },
+  ],
   metadata: {
     figmaId: 'notapplicable',
   },
