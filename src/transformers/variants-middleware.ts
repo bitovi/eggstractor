@@ -2,6 +2,8 @@ import { NonNullableStyleToken, StyleToken, TokenCollection } from '../types';
 import { sanitizeSegment } from '../utils';
 import { generateStyles } from './variants';
 
+const USE_VARIANT_COMBINATION_PARSING = false;
+
 export const convertVariantGroupBy = (
   tokens: TokenCollection,
   styleTokensGroupedByVariantCombination: Record<string, StyleToken[]>,
@@ -9,7 +11,6 @@ export const convertVariantGroupBy = (
 ) => {
   const instanceGroupedByVariants = Object.entries(styleTokensGroupedByVariantCombination)
     .map(([variantCombinationName, groupTokens]) => {
-      // TODO: rename back to component set id
       const componentId = groupTokens[0].componentId
         ? groupTokens.every((token) => token.componentId === groupTokens[0].componentId)
           ? groupTokens[0].componentId
@@ -35,18 +36,27 @@ export const convertVariantGroupBy = (
       );
 
       const _ = {
+        // Used for grouping
         variantCombinationName,
+        // Used for naming
         path: groupTokens[0].path,
+        // Used for finding variants
         componentId,
+        // Used for finding all possible variants
         componentSetId,
+        // Variants
         variants: componentId ? tokens.components[componentId].variantProperties : {},
         css,
-        // groupTokens,// Just for debugging
       };
 
       return _;
     })
     .filter((variantGroup) => Object.keys(variantGroup.css).length > 0);
+
+  if (!USE_VARIANT_COMBINATION_PARSING) {
+    // No combination parsing: existing behavior
+    return instanceGroupedByVariants;
+  }
 
   const instancesWithVariant: (Omit<
     (typeof instanceGroupedByVariants)[number],
@@ -105,16 +115,18 @@ export const convertVariantGroupBy = (
     },
   );
   
-  // No combination parsing
-    return instanceGroupedByVariants;
-  // With combination parsing
-  // return [...instancesWithoutVariant, ...parsedVariantInstances];
+  // With combination parsing: new behavior
+  return [...instancesWithoutVariant, ...parsedVariantInstances];
 };
 
+/**
+ * Used specifically for tailwind styles
+ */
 export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {
   return parsedStyleTokens.map((__) => {
     const tokens = Object.entries(__.css).map(
       ([property, rawValue]) =>
+        // Casting here since tailwind only needs these 2 properties
         ({
           property,
           rawValue,
