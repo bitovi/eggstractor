@@ -18,10 +18,6 @@ export function getNodePathNames(node: SceneNode): NodePathName[] {
     }
     current = current.parent as SceneNode;
   }
-
-  // console.log('getNodePathName -> pathParts', node.id, pathParts);
-  // console.log('getNodePathName -> pathParts', node.id, pathParts.map((p) => parseVariantWithoutKey(p.name)).join('_')));
-
   // TODO: this is a mess
   return pathParts.map((p) => ({
     name: parseVariantWithoutKey(p.name),

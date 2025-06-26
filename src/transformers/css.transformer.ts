@@ -104,7 +104,6 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
   // });
 
   for (const classNameDefinition of classNames) {
-    // for (const mixin of [...mixinsWithoutVariants, ...parsedVariantMixins]) {
     output += `\n.${classNameDefinition.variantCombinationName} {\n`;
     Object.entries(classNameDefinition.css).forEach(([property, value]) => {
       output += `  ${property}: ${value};\n`;

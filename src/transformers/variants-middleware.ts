@@ -85,7 +85,6 @@ export const convertVariantGroupBy = (
 
   const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(
     ([key, mixins]) => {
-      console.log('generateStyles', key);
       const cssByVariantCombinations = generateStyles(mixins);
 
       return Object.entries(cssByVariantCombinations).map(([variantsCombination, css]) => {
@@ -105,8 +104,7 @@ export const convertVariantGroupBy = (
       });
     },
   );
-  console.log('parsedVariantInstances', parsedVariantInstances);
-
+  
   // No combination parsing
     return instanceGroupedByVariants;
   // With combination parsing

@@ -17,10 +17,9 @@ export function transformToTailwindSassClass(collection: TokenCollection) {
   const styleTokens = filterStyleTokens(collection);
   const { warnings, errors } = deduplicateMessages(styleTokens);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
+  const parsedStyleTokens = convertVariantGroupBy(collection, groupedTokens, getStylePropertyAndValue);
 
   let output = '/* Generated Tailwind-SCSS */';
-
-  const parsedStyleTokens = convertVariantGroupBy(collection, groupedTokens, getStylePropertyAndValue);
 
   const _ = backToStyleTokens(parsedStyleTokens).sort((a, b) => a.variantPath.localeCompare(b.variantPath));;
 
