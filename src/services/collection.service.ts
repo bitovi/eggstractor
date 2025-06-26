@@ -25,7 +25,7 @@ function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
   return result;
 }
 
-export async function collectTokens(onProgress: (progress: number, message: string) => void) {
+export async function collectTokens(onProgress?: (progress: number, message: string) => void) {
   const collection: TokenCollection = { tokens: [] };
 
   let totalNodes = 0;
@@ -43,7 +43,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
     if (shouldUpdate) {
       lastTimestamp = currentPercentage;
-      onProgress(currentPercentage, `Processing nodes… ${processedNodes}/${totalNodes}`);
+      onProgress?.(currentPercentage, `Processing nodes… ${processedNodes}/${totalNodes}`);
 
       // throttle yields to at most once every 200 ms
       const now = Date.now();
@@ -64,25 +64,18 @@ export async function collectTokens(onProgress: (progress: number, message: stri
     }
   }
 
-  onProgress(0, 'Loading pages...');
+  onProgress?.(0, 'Loading pages...');
   await figma.loadAllPagesAsync();
 
-  onProgress(5, 'Counting nodes...');
+  onProgress?.(5, 'Counting nodes...');
   const validNodes = figma.root.children.flatMap((page) => getFlattenedValidNodes(page));
   totalNodes = validNodes.length;
 
-  onProgress(10, `Processing ${totalNodes} nodes...`);
+  onProgress?.(10, `Processing ${totalNodes} nodes...`);
 
-  // Process all pages in parallel for maximum speed
-  const pagePromises = figma.root.children.map(async (page) => {
-    const validNodes = getFlattenedValidNodes(page);
-
-    for (const node of validNodes) {
-      await processNode(node);
-    }
-  });
-
-  await Promise.all(pagePromises);
+  for (const node of validNodes) {
+    await processNode(node);
+  }
 
   return collection;
 }
