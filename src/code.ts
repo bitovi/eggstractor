@@ -28,8 +28,6 @@ async function generateStyles(
     type: 'progress-start',
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 10));
-
   let lastProgressTime = 0;
   const tokens = await collectTokens((progress, message) => {
     const now = Date.now();
