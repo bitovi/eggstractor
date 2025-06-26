@@ -96,49 +96,15 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
     return acc;
   }, {} as Record<string, StyleToken[]>);
 
-  // const mixins = convertVariantGroupBy(tokens, variantGroups, getMixinPropertyAndValue);
+  const mixins = convertVariantGroupBy(tokens, variantGroups, getMixinPropertyAndValue);
 
-  // for (const mixin of mixins) {
-  // // for (const mixin of [...mixinsWithoutVariants, ...parsedVariantMixins]) {
-  //   output += `@mixin ${mixin.variantCombinationName} {\n`;
-  //   Object.entries(mixin.css).forEach(([property, value]) => {
-  //     output += `  ${property}: ${value};\n`;
-  //   });
-  //   output += '}\n';
-  // }
-
-  Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
-    if (!variantPath) return;
-
-    // Sort and dedupe tokens as before...
-    const uniqueTokens = sortAndDedupeTokens(groupTokens as StyleToken[]);
-
-    if (!uniqueTokens.length) {
-      return;
-    }
-
-    output += `@mixin ${variantPath} {\n`;
-    uniqueTokens.forEach((token) => {
-      if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
-        // Only use CSS variables if the token has associated variables
-        if (token.variables && token.variables.length > 0) {
-          const gradientName = `gradient-${sanitizeName(token.name)}`;
-          output += `  ${token.property}: var(--${gradientName}, #{$${gradientName}});\n`;
-        } else {
-          // Use the raw value directly if no variables are involved
-          const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
-          output += `  ${token.property}: ${value};\n`;
-        }
-      } else {
-        const baseValue = token.valueType === 'px' ? rem(token.value!) : token.value;
-        // in SCSS negated variables are a parsing warning unless parenthesized
-        const processedValue = baseValue?.replace(/-\$(\w|-)+/g, (match) => `(${match})`);
-
-        output += `  ${token.property}: ${processedValue};\n`;
-      }
+  for (const mixin of mixins) {
+    output += `@mixin ${mixin.variantCombinationName} {\n`;
+    Object.entries(mixin.css).forEach(([property, value]) => {
+      output += `  ${property}: ${value};\n`;
     });
     output += '}\n';
-  });
+  }
 
   return {
     result: output,

@@ -20,11 +20,11 @@ const basicToken: NonNullableStyleToken = {
   property: 'blank',
   path: [
     {
-      type: 'TODO' as any,
+      type: 'FRAME',// Just a random type
       name: 'basic',
     },
     {
-      type: 'TODO' as any,
+      type: 'FRAME',// Just a random type
       name: 'gap',
     },
   ],

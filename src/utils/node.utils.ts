@@ -18,26 +18,15 @@ export function getNodePathNames(node: SceneNode): NodePathName[] {
     }
     current = current.parent as SceneNode;
   }
-  // TODO: this is a mess
+
   return pathParts.map((p) => ({
     name: parseVariantWithoutKey(p.name),
     type: p.type,
   }));
-
-  // const processedWithoutVariants = pathParts.map((p) => parseVariantWithoutKey(p));
-  // return [processed.join('_'), processedWithoutVariants.join('_')];
 }
 
-// export function parseVariantWithoutKey(variant: string): string {
-//   const [_, valueRaw] = variant.split('=');
-//   if (!valueRaw) {
-//     return sanitizeSegment(variant);
-//   }
-//   return sanitizeSegment(valueRaw);
-// }
-
 export function parseVariantWithoutKey(variant: string): string {
-  // TODO: create using componentSet token and component token?
+  // TODO: create using componentSet token and component token instead?
   const segment = variant.split(', ').map(part => {
     const [_, valueRaw] = part.split('=')
 

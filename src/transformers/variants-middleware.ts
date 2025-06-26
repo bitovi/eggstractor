@@ -69,8 +69,6 @@ export const convertVariantGroupBy = (
 
   for (const variantGroup of instanceGroupedByVariants) {
     if (variantGroup.componentSetId && variantGroup.componentSetId) {
-      // && Object.keys(mixin.variants).length > 0) {
-      // TODO
       instancesWithVariant.push(variantGroup as any);
       continue;
     }

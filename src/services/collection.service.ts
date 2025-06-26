@@ -6,7 +6,11 @@ import { getNodePathNames } from '../utils/node.utils';
 export async function collectTokens(): Promise<Readonly<TokenCollection>> {
   const collection: TokenCollection = { tokens: [], components: {}, componentSets: {} };
 
-  async function processNode(node: BaseNode, componentToken?: ComponentToken | null, componentSetToken?: ComponentSetToken | null): Promise<void> {
+  async function processNode(
+    node: BaseNode,
+    componentToken?: ComponentToken | null,
+    componentSetToken?: ComponentSetToken | null,
+  ): Promise<void> {
     // Eggstractor won't use the VECTOR nodes from FIGMA, and they are numerous, so skip them.
     if ('type' in node && ['VECTOR', 'INSTANCE'].includes(node.type)) return;
 
@@ -17,20 +21,23 @@ export async function collectTokens(): Promise<Readonly<TokenCollection>> {
       }
 
       if (node.type === 'COMPONENT') {
-        // TODO: handle
         componentToken = extractComponentToken(node, componentSetToken!);
         collection.components[node.id] = componentToken;
       }
 
-      // if (node.type !== 'COMPONENT' && node.type !== 'COMPONENT_SET') {
-        const nodePathNames = getNodePathNames(node);
-        const processors = getProcessorsForNode(node);
+      const nodePathNames = getNodePathNames(node);
+      const processors = getProcessorsForNode(node);
 
-        for (const processor of processors) {
-          const tokens = await extractNodeToken(node, processor, nodePathNames, componentToken, componentSetToken);
-          collection.tokens.push(...tokens);
-        }
-      // }
+      for (const processor of processors) {
+        const tokens = await extractNodeToken(
+          node,
+          processor,
+          nodePathNames,
+          componentToken,
+          componentSetToken,
+        );
+        collection.tokens.push(...tokens);
+      }
     }
 
     if ('children' in node) {

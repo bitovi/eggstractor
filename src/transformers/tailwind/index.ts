@@ -1,4 +1,4 @@
-import { NonNullableStyleToken, StyleToken, TokenCollection } from '../../types';
+import { StyleToken, TokenCollection } from '../../types';
 import { groupBy } from '../../utils';
 import { deduplicateMessages } from '../../utils/error.utils';
 import { backToStyleTokens, convertVariantGroupBy } from '../variants-middleware';
@@ -21,11 +21,12 @@ export function transformToTailwindSassClass(collection: TokenCollection) {
 
   let output = '/* Generated Tailwind-SCSS */';
 
-  const _ = backToStyleTokens(parsedStyleTokens).sort((a, b) => a.variantPath.localeCompare(b.variantPath));;
+  /**
+   * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
+   */
+  const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) => a.variantPath.localeCompare(b.variantPath));;
 
-  // const entriesGroupedTokens = Object.entries(groupedTokens).sort(([a], [b]) => a.localeCompare(b));
-  // for (const [variantPath, tokens] of entriesGroupedTokens) {
-  for (const { variantPath, tokens } of _) {
+  for (const { variantPath, tokens } of formattedStyleTokens) {
     const classesToApply = createTailwindClasses(tokens);
 
     if (classesToApply.length) {
@@ -49,11 +50,12 @@ export function transformToTailwindLayerUtilityClassV4(collection: TokenCollecti
 
   const parsedStyleTokens = convertVariantGroupBy(collection, groupedTokens, getStylePropertyAndValue);
 
-  const _ = backToStyleTokens(parsedStyleTokens).sort((a, b) => a.variantPath.localeCompare(b.variantPath));;
+  /**
+   * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
+   */
+  const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) => a.variantPath.localeCompare(b.variantPath));;
 
-  const entriesGroupedTokens = Object.entries(groupedTokens).sort(([a], [b]) => a.localeCompare(b));
-  for (const [variantPath, tokens] of entriesGroupedTokens) {
-  // for (const { variantPath, tokens } of _) {
+  for (const { variantPath, tokens } of formattedStyleTokens) {
     const classesToApply = createTailwindClasses(tokens);
     if (classesToApply.length) {
       output += `\n@utility ${variantPath} {\n  @apply ${classesToApply.join(' ')}; \n}\n`;
