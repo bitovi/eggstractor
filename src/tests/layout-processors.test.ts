@@ -13,7 +13,7 @@ describe('Layout Processors', () => {
 
     global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();
+    const tokens = await collectTokens(jest.fn());
     const { result } = transformToScss(tokens);
     expect(result).toMatchSnapshot('alignment');
   });
@@ -24,7 +24,7 @@ describe('Layout Processors', () => {
 
     global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();
+    const tokens = await collectTokens(jest.fn());
     const { result } = transformToScss(tokens);
     expect(result).toMatchSnapshot('direction');
   });
@@ -35,7 +35,7 @@ describe('Layout Processors', () => {
 
     global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();
+    const tokens = await collectTokens(jest.fn());
     const { result } = transformToScss(tokens);
     expect(result).toMatchSnapshot('width');
   });
@@ -46,7 +46,7 @@ describe('Layout Processors', () => {
 
     global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();
+    const tokens = await collectTokens(jest.fn());
     const { result } = transformToScss(tokens);
     expect(result).toMatchSnapshot('height');
   });
