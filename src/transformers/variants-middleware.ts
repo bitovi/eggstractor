@@ -1,8 +1,6 @@
 import { NonNullableStyleToken, StyleToken, TokenCollection } from '../types';
 import { sanitizeSegment } from '../utils';
-import { generateStyles } from './variants';
-
-const USE_VARIANT_COMBINATION_PARSING = false;
+import { generateStyles, USE_VARIANT_COMBINATION_PARSING } from './variants';
 
 export const convertVariantGroupBy = (
   tokens: TokenCollection,
@@ -53,7 +51,7 @@ export const convertVariantGroupBy = (
     })
     .filter((variantGroup) => Object.keys(variantGroup.css).length > 0);
 
-  if (!USE_VARIANT_COMBINATION_PARSING) {
+  if (!USE_VARIANT_COMBINATION_PARSING()) {
     // No combination parsing: existing behavior
     return instanceGroupedByVariants;
   }

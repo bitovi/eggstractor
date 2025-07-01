@@ -3,8 +3,21 @@ export type Input = {
   css: Record<string, string>;
 }[];
 
+type StyleNode = {
+  cssProperty: string;
+  cssValue: string;
+  variants: Record<string, string>;
+  possibleVariants: Record<string, string>;
+  id: number;
+};
+
+export const USE_VARIANT_COMBINATION_PARSING = () => {
+  return false;
+}
+
 let i = 0;
 /**
+ * @deprecated - not needed once we start using componentId from StyleToken
  * Unique numeric id's starting from 0
  */
 const getId = () => {
@@ -30,14 +43,6 @@ function shallowEqual<T extends Record<string, any>>(a: T, b: T): boolean {
 
   return true;
 }
-
-type StyleNode = {
-  cssProperty: string;
-  cssValue: string;
-  variants: Record<string, string>;
-  possibleVariants: Record<string, string>;
-  id: number;
-};
 
 /**
  * Filter any styles with unique variant combinations.
@@ -119,12 +124,19 @@ export const getInitialStyleNodes = (source: Input): StyleNode[] => {
       // The "origin" nodes are created in this loop for a single style's variants
       const id = getId();
 
+      // TODO: we can start with StyleTokens instead of doing this initial step:
+
       for (let i = 0; i < Object.keys(instance.variants).length; i++) {
         styleNodes.push({
+          // TODO: StyleToken "property"
           cssProperty,
+          // TODO: StyleToken "value" (rawValue vs value vs the 3rd one)
           cssValue,
+          // Always empty object
           variants: {},
+          // TODO: StyleToken Component variants
           possibleVariants: { ...instance.variants },
+          // TODO: StyleToken Component ID
           id,
         });
       }
