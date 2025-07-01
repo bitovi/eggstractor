@@ -11,7 +11,10 @@ export async function collectTokens(): Promise<Readonly<TokenCollection>> {
     componentToken?: ComponentToken | null,
     componentSetToken?: ComponentSetToken | null,
   ): Promise<void> {
-    // Eggstractor won't use the VECTOR nodes from FIGMA, and they are numerous, so skip them.
+    // Eggstractor won't use the VECTOR nodes from FIGMA, and they are numerous,
+    // so skip them.
+    // There are also INSTANCE nodes which are instances of components, which
+    // are not relevant for token extraction.
     if ('type' in node && ['VECTOR', 'INSTANCE'].includes(node.type)) return;
 
     if ('type' in node && 'boundVariables' in node) {

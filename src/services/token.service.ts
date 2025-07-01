@@ -4,12 +4,12 @@ import { collectBoundVariable } from './variable.service';
 
 export const extractComponentToken = (
   node: ComponentNode,
-  componentSetToken: ComponentSetToken,
+  componentSetToken?: ComponentSetToken,
 ): ComponentToken => {
   return {
     type: 'component',
     id: node.id,
-    componentSetId: componentSetToken.id,
+    componentSetId: componentSetToken?.id ?? null,
     variantProperties: node.variantProperties ?? {},
   }
 }

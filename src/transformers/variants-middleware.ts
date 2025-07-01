@@ -63,6 +63,7 @@ export const convertVariantGroupBy = (
     componentId: string;
     componentSetId: string;
   })[] = [];
+
   const instancesWithoutVariant: typeof instanceGroupedByVariants = [];
 
   for (const variantGroup of instanceGroupedByVariants) {
@@ -90,7 +91,7 @@ export const convertVariantGroupBy = (
   );
 
   const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(
-    ([key, mixins]) => {
+    ([_, mixins]) => {
       const cssByVariantCombinations = generateStyles(mixins);
 
       return Object.entries(cssByVariantCombinations).map(([variantsCombination, css]) => {

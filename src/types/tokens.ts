@@ -41,7 +41,11 @@ export interface ComponentSetToken {
 export interface ComponentToken {
   type: 'component';
   id: ComponentNode['id'];
-  componentSetId: ComponentSetToken['id'];
+  /**
+   * ID of the component set this component belongs to.
+   * If the component is not part of a set, this will be null.
+   */
+  componentSetId: ComponentSetToken['id'] | null;
   variantProperties: NonNullable<ComponentNode['variantProperties']>;
 }
 

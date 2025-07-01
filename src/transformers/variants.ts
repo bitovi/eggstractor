@@ -11,8 +11,12 @@ type StyleNode = {
   id: number;
 };
 
-export const USE_VARIANT_COMBINATION_PARSING = () => {
-  return false;
+/**
+ * When true, will parse variant combinations and create unique styles for each
+ * combination.
+ */
+export const USE_VARIANT_COMBINATION_PARSING = (): boolean => {
+  return true;
 }
 
 let i = 0;
