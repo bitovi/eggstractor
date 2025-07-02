@@ -62,17 +62,17 @@ figma.ui.onmessage = async (msg) => {
     ]);
     figma.ui.postMessage({ type: 'config-saved' });
   } else if (msg.type === 'load-config') {
-    const [githubToken, branchName, githubConfig] = await Promise.all([
+    const [githubToken, branchName, config] = await Promise.all([
       Github.getToken(),
       Github.getBranchName(),
       Github.getGithubConfig(),
     ]);
 
     if (githubToken || branchName) {
-      githubConfig.githubToken = githubToken;
-      githubConfig.branchName = branchName;
+      config.githubToken = githubToken;
+      config.branchName = branchName;
     }
-    figma.ui.postMessage({ type: 'config-loaded', githubConfig });
+    figma.ui.postMessage({ type: 'config-loaded', config });
   } else if (msg.type === 'create-pr') {
     try {
       const result = await Github.createGithubPR(

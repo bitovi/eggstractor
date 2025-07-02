@@ -28,6 +28,8 @@ window.onload = () => {
   // Save config when inputs change
   repoPathInput.onchange = saveConfig;
   filePathInput.onchange = saveConfig;
+  formatSelect.onchange = saveConfig;
+
   branchNameInput.onchange = () => {
     // git branch naming guidelines:
     //  alphanumeric and ._-/ are valid, but:
@@ -47,6 +49,7 @@ window.onload = () => {
           filePath: filePathInput.value,
           branchName: branchNameInput.value,
           githubToken: githubTokenInput.value,
+          format: formatSelect.value || 'scss',
         },
       },
       '*',
@@ -219,6 +222,8 @@ window.onload = () => {
         filePathInput.value = event.data.pluginMessage.config.filePath || '';
         branchNameInput.value = event.data.pluginMessage.config.branchName || '';
         githubTokenInput.value = event.data.pluginMessage.config.githubToken || '';
+        formatSelect.value = event.data.pluginMessage.config.outputFormat || 'scss';
+
         break;
       case 'pr-created':
         const statusEl = document.getElementById('status') as HTMLSpanElement;
