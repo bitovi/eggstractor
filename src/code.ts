@@ -24,7 +24,30 @@ figma.showUI(__html__, {
 async function generateStyles(
   format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
 ): Promise<TransformerResult> {
-  const tokens = await collectTokens();
+  figma.ui.postMessage({
+    type: 'progress-start',
+  });
+
+  let lastProgressTime = 0;
+  const tokens = await collectTokens((progress, message) => {
+    const now = Date.now();
+
+    if (now - lastProgressTime > 500) {
+      lastProgressTime = now;
+      figma.ui.postMessage({
+        type: 'progress-update',
+        progress,
+        message,
+      });
+    }
+  });
+
+  figma.ui.postMessage({
+    type: 'progress-update',
+    progress: 100,
+    message: 'Complete!',
+  });
+
   switch (format) {
     case 'scss':
       return transformToScss(tokens);

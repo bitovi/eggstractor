@@ -19,7 +19,7 @@ describe('Background Processors', () => {
 
     global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();
+    const tokens = await collectTokens(jest.fn());
     const { result: css } = transformToCss(tokens);
 
     const styles = {
@@ -38,7 +38,7 @@ describe('Background Processors', () => {
 
     global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();
+    const tokens = await collectTokens(jest.fn());
     const { result } = transformToScss(tokens);
 
     expect(result).toMatchSnapshot('solid styles');
@@ -50,7 +50,7 @@ describe('Background Processors', () => {
 
     global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();
+    const tokens = await collectTokens(jest.fn());
     const { result } = transformToScss(tokens);
 
     expect(result).toMatchSnapshot('opacity styles');
@@ -62,7 +62,7 @@ describe('Background Processors', () => {
 
     global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();
+    const tokens = await collectTokens(jest.fn());
     const { result: css, warnings } = transformToCss(tokens);
 
     // Test specific styles with snapshots
