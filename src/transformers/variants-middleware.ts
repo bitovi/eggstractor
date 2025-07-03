@@ -120,8 +120,8 @@ export const convertVariantGroupBy = (
  * Used specifically for tailwind styles
  */
 export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {
-  return parsedStyleTokens.map((__) => {
-    const tokens = Object.entries(__.css).map(
+  return parsedStyleTokens.map((parsedStyleToken) => {
+    const tokens = Object.entries(parsedStyleToken.css).map(
       ([property, rawValue]) =>
         // Casting here since tailwind only needs these 2 properties
         ({
@@ -131,7 +131,7 @@ export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVa
     );
 
     return {
-      variantPath: __.variantCombinationName,
+      variantPath: parsedStyleToken.variantCombinationName,
       tokens,
     };
   });

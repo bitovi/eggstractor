@@ -21,16 +21,7 @@ export const input = [
       color: "red",
       height: "20px",
       display: "block",
-    },
-    // variants: {
-    //     theme: "red-theme",
-    //     size: "medium",
-    //     icon: 'false',
-    // },
-    // css: {
-    //     color: "red",
-    //     height: "40px",
-    // },
+    }
   },
   {
     variants: {

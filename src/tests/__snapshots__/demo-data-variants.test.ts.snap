@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Demo Data (real world-ish example for variants) should process all demo data correctly with variant combinations: demo-data-variants 1`] = `
+exports[`Demo Data (real world-ish example for variant combinations) should process all demo data correctly with variant combinations: demo-data-variants 1`] = `
 "// Generated SCSS Variables
 $base-size-xs: 0.125rem;
 $base-colour-grey-400: #282828;

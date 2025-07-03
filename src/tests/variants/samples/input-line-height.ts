@@ -1,9 +1,3 @@
-// // // theme: red-theme, green-theme, yellow-theme, (pink-theme, purple-theme)
-
-// // // size: small, medium, large
-
-// // // icon: true, false
-
 export const input = [
   {
     variants: {
@@ -17,15 +11,6 @@ export const input = [
     },
   },
   {
-    // variants: {
-    //   theme: "red-theme",
-    //   size: "medium",
-    //   icon: "false",
-    // },
-    // css: {
-    //   color: "red",
-    //   height: "20px",
-    // },
     variants: {
       theme: "red-theme",
       size: "medium",

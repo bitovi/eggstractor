@@ -9,7 +9,6 @@ const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => 
     // Only use CSS variables if the token has associated variables
     if (token.variables && token.variables.length > 0) {
       const gradientName = `gradient-${sanitizeName(token.name)}`;
-      // output += ` ${token.property}: var(--${gradientName}, #{$${gradientName}});\n`;
       return { [token.property]: `$var(--${gradientName}, #{$${gradientName}})` };
     }
 
@@ -23,7 +22,6 @@ const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => 
   // in SCSS negated variables are a parsing warning unless parenthesized
   const processedValue = baseValue?.replace(/-\$(\w|-)+/g, (match) => `(${match})`);
 
-  // output += ` ${token.property}: ${processedValue};\n`;
   return { [token.property]: processedValue! };
 };
 

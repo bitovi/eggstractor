@@ -32,14 +32,14 @@ export interface StyleToken extends BaseToken {
 }
 
 export interface ComponentSetToken {
-  type: 'component-set';
+  type: ComponentSetNode['type'];
   id: ComponentSetNode['id'];
   name: ComponentSetNode['name'];
   variantPropertyDefinitions: Record<string, string[]>;
 }
 
 export interface ComponentToken {
-  type: 'component';
+  type: ComponentNode['type'];
   id: ComponentNode['id'];
   /**
    * ID of the component set this component belongs to.

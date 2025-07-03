@@ -7,7 +7,7 @@ export const extractComponentToken = (
   componentSetToken?: ComponentSetToken,
 ): ComponentToken => {
   return {
-    type: 'component',
+    type: node.type,
     id: node.id,
     componentSetId: componentSetToken?.id ?? null,
     variantProperties: node.variantProperties ?? {},
@@ -30,7 +30,7 @@ export const extractComponentSetToken = (
   }
 
   return {
-    type: 'component-set',
+    type: node.type,
     id: node.id,
     name: node.name,
     variantPropertyDefinitions,

@@ -11,15 +11,6 @@ export const input = [
     },
   },
   {
-    // variants: {
-    //   theme: "red-theme",
-    //   size: "medium",
-    //   icon: "false",
-    // },
-    // css: {
-    //   color: "red",
-    //   height: "20px",
-    // },
     variants: {
       theme: "red-theme",
       size: "medium",
