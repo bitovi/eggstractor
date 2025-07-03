@@ -14,7 +14,7 @@ describe('Demo Data (real world-ish example for variant combinations)', () => {
 
     global.figma = testSetup.figma;
 
-    const tokens = await collectTokens();
+    const tokens = await collectTokens(jest.fn());
     const { result } = transformToScss(tokens);
 
     expect(result).toMatchSnapshot('demo-data-variants');
