@@ -38,9 +38,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
   let lastTimestamp = Date.now();
   let lastPercentage = -1;
 
-  async function processNode(
-    node: BaseNode,
-  ) {
+  async function processNode(node: BaseNode) {
     processedNodes++;
 
     // calculate integer percent in your 10–95 range
