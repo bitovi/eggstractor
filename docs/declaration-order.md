@@ -1,37 +1,51 @@
-# Tailwind CSS `@apply` Ordering Behavior and Exceptions
+# Tailwind CSS `@apply` Directive Ordering Issue
 
-When using Tailwind CSS v4 and its `@apply` directive — especially in combination with `@utility` blocks — it's important to understand how **utility resolution order affects the final output**, and why it may not align with your written `@apply` sequence.
+When using Tailwind CSS v4's `@apply` directive, **the order you write utilities does not determine the final CSS output**. Instead, Tailwind uses its own internal utility ordering system, which can produce unexpected results that contradict normal CSS cascade behavior.
 
-This document outlines an observed exception when combining utilities using `@apply`.
-
----
-
-    ## Base Case: Inline Utility Order
-
-    ```css
-    @utility my-util {
-    @apply p-2 p-1;
-    }
-    ```
-
-    **Expected**: padding from `p-1` is overridden by `p-2`
-
-    **Actual**: The final output is:
-
-    ```css
-    .my-util {
-    padding: calc(var(--spacing) * 1);
-    padding: calc(var(--spacing) * 2);
-    }
-    ```
-
-    The browser honors the **last** declaration (`p-2`), which is consistent with CSS rules.
-
-    **Conclusion**: When using `@apply` with multiple Tailwind utilities in a single block, the output will include **all expanded declarations**, with order determined by Tailwind’s internal plugin ordering — **not necessarily the order you wrote them**.
+This document demonstrates how `@apply` ignores written order and provides examples of the unexpected behavior.
 
 ---
 
-## Exception: Composed Utilities
+## The Core Problem
+
+When you use `@apply` with conflicting utilities, **Tailwind ignores your written order** and applies its own internal ordering logic.
+
+### Example 1: Built-in Utility Conflict
+
+```css
+.test-many {
+  @apply gap-2 gap-10 gap-1 m-2 m-10 m-1 w-2 w-10 w-1 p-2 p-10 p-1;
+}
+```
+
+**Expected**: The utilities should appear in the order written, with `p-1` winning for padding, `w-1` winning for width, etc. (following normal CSS cascade)
+
+**Actual**: The final output is:
+
+```css
+.test-many {
+  margin: calc(var(--spacing) * 1);
+  margin: calc(var(--spacing) * 2);
+  margin: calc(var(--spacing) * 10);
+  width: calc(var(--spacing) * 1);
+  width: calc(var(--spacing) * 2);
+  width: calc(var(--spacing) * 10);
+  gap: calc(var(--spacing) * 1);
+  gap: calc(var(--spacing) * 2);
+  gap: calc(var(--spacing) * 10);
+  padding: calc(var(--spacing) * 1);
+  padding: calc(var(--spacing) * 2);
+  padding: calc(var(--spacing) * 10);
+}
+```
+
+**Result**: `m-10`, `w-10`, `gap-10`, and `p-10` win for their respective properties because **Tailwind sorts built-in utilities by CSS property alphabetically (gap, margin, padding, width), then numerically within each property (1, 2, 10)**. The complete disregard for written order means the largest numeric value wins for each property.
+
+---
+
+## Complex Case: Custom Utilities
+
+When using `@apply` with custom `@utility` blocks, Tailwind uses **alphabetical ordering by utility name**.
 
 ```css
 @utility foo {
@@ -42,95 +56,53 @@ This document outlines an observed exception when combining utilities using `@ap
   @apply p-2;
 }
 
-.foo-bar {
-  @apply foo bar;
+@utility baz {
+  @apply p-3;
 }
 
-.bar-foo {
-  @apply bar foo;
+@utility boom {
+  @apply p-4;
+}
+
+@utility bap {
+  @apply p-5;
+}
+
+@utility bow {
+  @apply p-6;
+}
+
+.test-custom {
+  @apply foo bar baz boom bap bow;
 }
 ```
 
-**Expected**:
+**Expected**: `bow` should win (written last, following normal CSS cascade)
 
-* `.foo-bar` → should resolve to `p-2`
-* `.bar-foo` → should resolve to `p-1`
-
-**Actual**:
+**Actual**: The final output is:
 
 ```css
-.bar-foo,
-.foo-bar {
-  padding: calc(var(--spacing) * 2);
-  padding: calc(var(--spacing) * 1);
+.test-custom {
+  padding: calc(var(--spacing) * 5);  /* bap */
+  padding: calc(var(--spacing) * 2);  /* bar */
+  padding: calc(var(--spacing) * 3);  /* baz */
+  padding: calc(var(--spacing) * 4);  /* boom */
+  padding: calc(var(--spacing) * 6);  /* bow */
+  padding: calc(var(--spacing) * 1);  /* foo */
 }
 ```
 
-Despite the different ordering in source, both `.foo-bar` and `.bar-foo` expand to identical declarations — with `p-2` appearing first, followed by `p-1`. This means the browser applies the **smaller padding**, due to CSS’s last-rule-wins behavior.
-
-**Unexpected Behavior**:
-Even though the application order in code differs (`foo bar` vs. `bar foo`), Tailwind flattens and merges utility blocks in a normalized way. This leads to both classes sharing the same output — and potentially conflicting logic.
+**Result**: `foo` (p-1) wins because **Tailwind sorts custom utilities alphabetically by utility name** (bap, bar, baz, boom, bow, foo). The utility `foo` appears last in alphabetical order, so `p-1` wins regardless of your written order.
 
 ---
 
-## Tailwind-SCSS Mixins (Tailwind v3)
+## Key Takeaway
 
-When using custom SCSS mixins that call Tailwind utility classes — such as those generated from a Tailwind theme mapping — the resulting CSS honors **the exact order** the mixins were applied.
+**The `@apply` directive uses two different ordering systems:**
 
-Example:
+1. **Built-in utilities**: Sorted by CSS property alphabetically, then numerically within each property (gap-1, gap-2, gap-10, then margin-1, margin-2, margin-10, then padding-1, padding-2, padding-10)
+2. **Custom utilities**: Sorted alphabetically by utility name (bar, foo, etc.)
 
-```scss
-@mixin spacing-small { padding: 0.25rem; }
-@mixin spacing-large { padding: 1rem; }
-
-.component {
-  @include spacing-small;
-  @include spacing-large;
-}
-```
-
-**Output:**
-
-```css
-.component {
-  padding: 0.25rem;
-  padding: 1rem;
-}
-```
-
-Unlike `@apply`, Sass mixins preserve declaration order strictly, which means your final CSS output will follow the exact sequence you've written — including any overrides or cascading declarations.
-
-**Conclusion**:
-
-Tailwind-SCSS integrations give you precise control over output order, which makes them ideal for theme token application, overrides, or deterministic builds.
+**Both systems ignore the order you write utilities in your `@apply` directive**, breaking normal CSS cascade expectations.
 
 ---
-
-## ⚠️ Key Takeaways
-
-* `@apply` does not guarantee preservation of order
-* When combining utility classes (`@apply foo bar`), the inner `@utility` blocks are expanded independently
-* Final ordering is affected by internal plugin and layer resolution order, **not the lexical order in your file**
-* To ensure predictable results, avoid conflicting utilities within composed classes (e.g. multiple `p-*` in one chain)
-
----
-
-## Recommendation
-
-* Prefer a single padding utility per composition
-* Avoid reapplying conflicting utilities through composed classes
-* If deterministic order matters, write raw CSS or use `@layer utilities` instead of `@apply`
-
-```css
-@layer utilities {
-  .foo-bar {
-    padding: calc(var(--spacing) * 2);
-  }
-}
-```
-
----
-
-## Further Consideration
-
-Consider building a static analysis step that flags multiple conflicting utilities in `@apply` chains, or writing composed utilities that deliberately avoid overlaps to keep behavior predictable.
