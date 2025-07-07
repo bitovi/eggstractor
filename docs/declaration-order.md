@@ -10,7 +10,7 @@ This document demonstrates how `@apply` ignores written order and provides examp
 
 When you use `@apply` with conflicting utilities, **Tailwind ignores your written order** and applies its own internal ordering logic.
 
-### Example 1: Built-in Utility Conflict
+### Example 1: Built-in Utilities
 
 ```css
 .test-many {
@@ -43,7 +43,7 @@ When you use `@apply` with conflicting utilities, **Tailwind ignores your writte
 
 ---
 
-## Complex Case: Custom Utilities
+## Example 2: Custom Utilities
 
 When using `@apply` with custom `@utility` blocks, Tailwind uses **alphabetical ordering by utility name**.
 
