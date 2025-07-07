@@ -74,20 +74,26 @@ figma.ui.onmessage = async (msg) => {
       errors: result.errors,
     });
   } else if (msg.type === 'save-config') {
-    await Github.saveUserSettings(msg.githubToken, msg.branchName);
-    await Github.saveGithubConfig({
-      repoPath: msg.repoPath,
-      filePath: msg.filePath,
-    });
+    await Promise.all([
+      Github.saveToken(msg.githubToken),
+      Github.saveBranchName(msg.branchName),
+      Github.saveGithubConfig({
+        repoPath: msg.repoPath,
+        filePath: msg.filePath,
+        outputFormat: msg.format || 'scss',
+      }),
+    ]);
     figma.ui.postMessage({ type: 'config-saved' });
   } else if (msg.type === 'load-config') {
-    const [config, userSettings] = await Promise.all([
+    const [githubToken, branchName, config] = await Promise.all([
+      Github.getToken(),
+      Github.getBranchName(),
       Github.getGithubConfig(),
-      Github.getUserSettings(),
     ]);
-    if (userSettings) {
-      config.githubToken = userSettings.token;
-      config.branchName = userSettings.branchName;
+
+    if (githubToken || branchName) {
+      config.githubToken = githubToken;
+      config.branchName = branchName;
     }
     figma.ui.postMessage({ type: 'config-loaded', config });
   } else if (msg.type === 'create-pr') {
