@@ -39,7 +39,7 @@ When you use `@apply` with conflicting utilities, **Tailwind ignores your writte
 }
 ```
 
-**Result**: `m-10`, `w-10`, `gap-10`, and `p-10` win for their respective properties because **Tailwind sorts built-in utilities by CSS property alphabetically (gap, margin, padding, width), then numerically within each property (1, 2, 10)**. The complete disregard for written order means the largest numeric value wins for each property.
+**Result**: `m-10`, `w-10`, `gap-10`, and `p-10` win for their respective properties because **Tailwind sorts built-in utilities by CSS property using its internal ordering system, then numerically within each property (1, 2, 10)**. The complete disregard for written order means the largest numeric value wins for each property.
 
 ---
 
@@ -100,7 +100,7 @@ When using `@apply` with custom `@utility` blocks, Tailwind uses **alphabetical 
 
 **The `@apply` directive uses two different ordering systems:**
 
-1. **Built-in utilities**: Sorted by CSS property alphabetically, then numerically within each property (gap-1, gap-2, gap-10, then margin-1, margin-2, margin-10, then padding-1, padding-2, padding-10)
+1. **Built-in utilities**: Sorted by CSS property using Tailwind's internal ordering system, then numerically within each property (e.g., margin-1, margin-2, margin-10, then width-1, width-2, width-10, etc.)
 2. **Custom utilities**: Sorted alphabetically by utility name (bar, foo, etc.)
 
 **Both systems ignore the order you write utilities in your `@apply` directive**, breaking normal CSS cascade expectations.
