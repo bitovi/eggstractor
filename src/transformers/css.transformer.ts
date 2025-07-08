@@ -2,6 +2,16 @@ import { StyleToken, TokenCollection, TransformerResult } from '../types';
 import { groupBy } from '../utils/index';
 import { deduplicateMessages } from '../utils/error.utils';
 import { rem } from '../utils/units.utils';
+import { convertVariantGroupBy } from './variants-middleware';
+
+const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {
+  const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue!;
+
+  return {
+    [token.property]: value,
+  };
+};
+
 export function transformToCss(tokens: TokenCollection): TransformerResult {
   let output = '/* Generated CSS */';
 
@@ -20,39 +30,45 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
       token.rawValue !== '',
   );
 
-  const variantGroups = groupBy(styleTokens, (t) => t.path.join('_'));
-  Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
-    if (!variantPath) return;
-    // Remove properties with zero values and unnecessary defaults
-    const uniqueTokens = groupTokens.reduce((acc, token) => {
-      const existing = acc.find((t) => t.property === token.property);
-      if (!existing && token.value !== 'inherit') {
-        // Skip zero values for certain properties
-        if (
-          ['gap', 'padding'].includes(token.property) &&
-          (token.value === '0' || token.value === '0px')
-        ) {
-          return acc;
+  const variantGroups = Object.entries(groupBy(styleTokens, (t) => t.name)).reduce(
+    (acc, [tokenName, tokens]) => {
+      // Remove properties with zero values and unnecessary defaults
+      const uniqueTokens = tokens.reduce((acc, token) => {
+        const existing = acc.find((t) => t.property === token.property);
+        if (!existing && token.value !== 'inherit') {
+          // Skip zero values for certain properties
+          if (
+            ['gap', 'padding'].includes(token.property) &&
+            (token.value === '0' || token.value === '0px')
+          ) {
+            return acc;
+          }
+          // Skip default values
+          if (token.property === 'border-width' && token.value === '1px') {
+            return acc;
+          }
+          acc.push(token);
         }
-        // Skip default values
-        if (token.property === 'border-width' && token.value === '1px') {
-          return acc;
-        }
-        acc.push(token);
+        return acc;
+      }, [] as StyleToken[]);
+
+      if (uniqueTokens.length) {
+        acc[tokenName] = uniqueTokens;
       }
       return acc;
-    }, [] as StyleToken[]);
+    },
+    {} as Record<string, StyleToken[]>,
+  );
 
-    // Only output class if there are non-inherited properties
-    if (uniqueTokens.length > 0) {
-      output += `\n.${variantPath} {\n`;
-      uniqueTokens.forEach((token) => {
-        const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
-        output += `  ${token.property}: ${value};\n`;
-      });
-      output += '}\n';
-    }
-  });
+  const classNames = convertVariantGroupBy(tokens, variantGroups, getClassNamePropertyAndValue);
+
+  for (const classNameDefinition of classNames) {
+    output += `\n.${classNameDefinition.variantCombinationName} {\n`;
+    Object.entries(classNameDefinition.css).forEach(([property, value]) => {
+      output += `  ${property}: ${value};\n`;
+    });
+    output += '}\n';
+  }
 
   return {
     result: output,

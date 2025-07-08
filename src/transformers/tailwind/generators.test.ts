@@ -18,7 +18,16 @@ const basicToken: NonNullableStyleToken = {
   rawValue: '10px',
   valueType: 'px',
   property: 'blank',
-  path: ['basic', 'gap'],
+  path: [
+    {
+      type: 'FRAME',// Just a random type
+      name: 'basic',
+    },
+    {
+      type: 'FRAME',// Just a random type
+      name: 'gap',
+    },
+  ],
   metadata: {
     figmaId: 'notapplicable',
   },

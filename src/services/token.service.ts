@@ -1,11 +1,48 @@
-import { StyleToken, VariableToken } from '../types';
+import { BaseToken, ComponentSetToken, ComponentToken, StyleToken, VariableToken } from '../types';
 import { StyleProcessor, VariableBindings } from '../types/processors';
 import { collectBoundVariable } from './variable.service';
+
+export const extractComponentToken = (
+  node: ComponentNode,
+  componentSetToken?: ComponentSetToken,
+): ComponentToken => {
+  return {
+    type: node.type,
+    id: node.id,
+    componentSetId: componentSetToken?.id ?? null,
+    variantProperties: node.variantProperties ?? {},
+  }
+}
+
+export const extractComponentSetToken = (
+  node: ComponentSetNode,
+): ComponentSetToken => {
+  node.componentPropertyDefinitions
+
+  const variantPropertyDefinitions: Record<string, string[]> = {};
+
+  for (const [key, value] of Object.entries(node.componentPropertyDefinitions)) {
+    if (value.type !== 'VARIANT') {
+      continue;
+    }
+
+    variantPropertyDefinitions[key] = value.variantOptions ?? [];
+  }
+
+  return {
+    type: node.type,
+    id: node.id,
+    name: node.name,
+    variantPropertyDefinitions,
+  }
+}
 
 export async function extractNodeToken(
   node: SceneNode,
   processor: StyleProcessor,
-  path: string[],
+  path: BaseToken['path'],
+  componentToken?: ComponentToken | null,
+  componentSetToken?: ComponentSetToken | null,
 ): Promise<(StyleToken | VariableToken)[]> {
   const tokens: (StyleToken | VariableToken)[] = [];
   const variableTokensMap = new Map<string, VariableToken>();
@@ -58,10 +95,14 @@ export async function extractNodeToken(
 
   // Step 4: Process the node and create Style Token
   const processedValue = await processor.process([...variableTokensMap.values()], node);
+
   if (processedValue) {
+    const componentSetId = componentSetToken?.id;
+    const componentId = componentToken?.id;
+    
     const styleToken: StyleToken = {
       type: 'style',
-      name: path.join('_'),
+      name: path.map(({ name }) => name).join('_'),
       value: processedValue.value,
       rawValue: processedValue.rawValue,
       valueType: processedValue.valueType,
@@ -73,6 +114,8 @@ export async function extractNodeToken(
       },
       warnings: processedValue.warnings,
       errors: processedValue.errors,
+      componentId,
+      componentSetId,
     };
     tokens.push(styleToken);
   }

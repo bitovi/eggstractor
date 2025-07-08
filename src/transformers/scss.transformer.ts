@@ -2,6 +2,29 @@ import { TokenCollection, StyleToken, TransformerResult } from '../types';
 import { sanitizeName, groupBy } from '../utils/index';
 import { deduplicateMessages } from '../utils/error.utils';
 import { rem } from '../utils/units.utils';
+import { convertVariantGroupBy } from './variants-middleware';
+
+const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
+  if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
+    // Only use CSS variables if the token has associated variables
+    if (token.variables && token.variables.length > 0) {
+      const gradientName = `gradient-${sanitizeName(token.name)}`;
+      return { [token.property]: `$var(--${gradientName}, #{$${gradientName}})` };
+    }
+
+    // Use the raw value directly if no variables are involved
+    const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+    // output += ` ${token.property}: ${value};\n`;
+    return { [token.property]: value };
+  }
+
+  const baseValue = token.valueType === 'px' ? rem(token.value!) : token.value;
+  // in SCSS negated variables are a parsing warning unless parenthesized
+  const processedValue = baseValue?.replace(/-\$(\w|-)+/g, (match) => `(${match})`);
+
+  return { [token.property]: processedValue! };
+};
+
 export function transformToScss(tokens: TokenCollection): TransformerResult {
   let output = '';
 
@@ -63,38 +86,23 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   // Filter for style tokens and group by path
   const styleTokens = tokens.tokens.filter((token): token is StyleToken => token.type === 'style');
 
-  const variantGroups = groupBy(styleTokens, (t) => t.path.join('_'));
-
-  Object.entries(variantGroups).forEach(([variantPath, groupTokens]) => {
-    if (!variantPath) return;
-
-    // Sort and dedupe tokens as before...
-    const uniqueTokens = sortAndDedupeTokens(groupTokens as StyleToken[]);
-
-    if (uniqueTokens.length > 0) {
-      output += `@mixin ${variantPath} {\n`;
-      uniqueTokens.forEach((token) => {
-        if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
-          // Only use CSS variables if the token has associated variables
-          if (token.variables && token.variables.length > 0) {
-            const gradientName = `gradient-${sanitizeName(token.name)}`;
-            output += ` ${token.property}: var(--${gradientName}, #{$${gradientName}});\n`;
-          } else {
-            // Use the raw value directly if no variables are involved
-            const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
-            output += ` ${token.property}: ${value};\n`;
-          }
-        } else {
-          const baseValue = token.valueType === 'px' ? rem(token.value!) : token.value;
-          // in SCSS negated variables are a parsing warning unless parenthesized
-          const processedValue = baseValue?.replace(/-\$(\w|-)+/g, (match) => `(${match})`);
-
-          output += ` ${token.property}: ${processedValue};\n`;
-        }
-      });
-      output += '}\n';
+  const variantGroups = Object.entries(groupBy(styleTokens, (t) => t.name)).reduce((acc, [tokenName, tokens]) => {
+    const filteredTokens = sortAndDedupeTokens(tokens);
+    if (filteredTokens.length) {
+      acc[tokenName] = filteredTokens;
     }
-  });
+    return acc;
+  }, {} as Record<string, StyleToken[]>);
+
+  const mixins = convertVariantGroupBy(tokens, variantGroups, getMixinPropertyAndValue);
+
+  for (const mixin of mixins) {
+    output += `@mixin ${mixin.variantCombinationName} {\n`;
+    Object.entries(mixin.css).forEach(([property, value]) => {
+      output += `  ${property}: ${value};\n`;
+    });
+    output += '}\n';
+  }
 
   return {
     result: output,

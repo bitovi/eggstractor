@@ -1,25 +1,41 @@
 import { sanitizeSegment } from './string.utils';
 
-export function getNodePathName(node: SceneNode): string {
-  const pathParts: string[] = [];
+interface NodePathName {
+  type: SceneNode['type'];
+  name: string;
+}
+
+export function getNodePathNames(node: SceneNode): NodePathName[] {
+  const pathParts: NodePathName[] = [];
   let current: SceneNode | null = node;
 
   while (current && current.parent) {
     if (current.name.toLowerCase() !== 'components') {
-      pathParts.push(current.name);
+      pathParts.unshift({
+        name: current.name,
+        type: current.type,
+      });
     }
     current = current.parent as SceneNode;
   }
 
-  pathParts.reverse();
-  const processed = pathParts.map((p) => parseVariantWithoutKey(p));
-  return processed.join('_');
+  return pathParts.map((p) => ({
+    name: parseVariantWithoutKey(p.name),
+    type: p.type,
+  }));
 }
 
 export function parseVariantWithoutKey(variant: string): string {
-  const [_, valueRaw] = variant.split('=');
-  if (!valueRaw) {
-    return sanitizeSegment(variant);
-  }
-  return sanitizeSegment(valueRaw);
+  // TODO: create using componentSet token and component token instead?
+  const segment = variant.split(', ').map(part => {
+    const [_, valueRaw] = part.split('=')
+
+    if (valueRaw) {
+      return valueRaw;
+    }
+
+    return part;
+  }).join('__and__');
+
+  return sanitizeSegment(segment);
 }

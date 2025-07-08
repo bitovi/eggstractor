@@ -14,6 +14,13 @@ Thank you for your interest in contributing to Eggstractor! This document provid
 
 ## Getting Started
 
+Expected versions of node and nvm:
+
+```bash
+node -v # v20.13.1
+npm -v # 10.5.2
+```
+
 1. Fork the repository
 2. Clone your fork: `git clone https://github.com/bitovi/eggstractor.git`
 3. Install dependencies: `npm install`

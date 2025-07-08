@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Demo Data (real world-ish exmaple) should process all demo data correctly: demo-data 1`] = `
+exports[`Demo Data (real world-ish example) should process all demo data correctly: demo-data 1`] = `
 "// Generated SCSS Variables
 $base-size-xs: 0.125rem;
 $base-colour-grey-400: #282828;
@@ -20,130 +20,278 @@ $base-colour-blue-300: #0177cc;
 
 // Generated SCSS Mixins
 @mixin input_resting {
- display: flex;
- flex-direction: column;
- align-items: flex-start;
- gap: $base-size-xs;
- padding: 0rem;
- width: 15.937rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $base-size-xs;
+  padding: 0rem;
+  width: 15.937rem;
 }
 @mixin input_resting_label {
- display: flex;
- flex-direction: column;
- color: $base-colour-grey-400;
- font-family: $global-font-uidefaultfont;
- font-size: $base-font-size-xl;
- font-weight: 500;
- font-style: normal;
- line-height: $base-font-linespacing-lg;
- width: 15.937rem;
+  display: flex;
+  flex-direction: column;
+  color: $base-colour-grey-400;
+  font-family: $global-font-uidefaultfont;
+  font-size: $base-font-size-xl;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $base-font-linespacing-lg;
+  width: 15.937rem;
 }
 @mixin input_resting_input-box {
- display: flex;
- flex-direction: row;
- align-items: center;
- gap: $base-size-lg;
- padding: 0.687rem $base-size-lg;
- background: $base-colour-static-white;
- width: 15.937rem;
- border: $global-size-border-width solid $base-colour-grey-100;
- box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-100, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-100, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-100, inset $global-size-border-width 0 0 0 $base-colour-grey-100;
- border-radius: $base-radius-sm;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $base-size-lg;
+  padding: 0.687rem $base-size-lg;
+  background: $base-colour-static-white;
+  width: 15.937rem;
+  border: $global-size-border-width solid $base-colour-grey-100;
+  box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-100, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-100, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-100, inset $global-size-border-width 0 0 0 $base-colour-grey-100;
+  border-radius: $base-radius-sm;
 }
 @mixin input_resting_input-box_input-text {
- display: flex;
- flex-direction: column;
- color: $global-colour-textonlight;
- font-family: $global-font-uidefaultfont;
- font-size: 1rem;
- font-weight: 400;
- font-style: normal;
- line-height: 20px;
- width: 14.437rem;
+  display: flex;
+  flex-direction: column;
+  color: $global-colour-textonlight;
+  font-family: $global-font-uidefaultfont;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  width: 14.437rem;
 }
 @mixin input_hover {
- display: flex;
- flex-direction: column;
- align-items: flex-start;
- gap: $base-size-xs;
- padding: 0rem;
- width: 15.937rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $base-size-xs;
+  padding: 0rem;
+  width: 15.937rem;
 }
 @mixin input_hover_label {
- display: flex;
- flex-direction: column;
- color: $base-colour-grey-400;
- font-family: $global-font-uidefaultfont;
- font-size: $base-font-size-xl;
- font-weight: 500;
- font-style: normal;
- line-height: $base-font-linespacing-lg;
- width: 15.937rem;
+  display: flex;
+  flex-direction: column;
+  color: $base-colour-grey-400;
+  font-family: $global-font-uidefaultfont;
+  font-size: $base-font-size-xl;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $base-font-linespacing-lg;
+  width: 15.937rem;
 }
 @mixin input_hover_input-box {
- display: flex;
- flex-direction: row;
- align-items: center;
- gap: $base-size-lg;
- padding: 0.687rem $base-size-lg;
- background: $base-colour-static-white;
- width: 15.937rem;
- border: $global-size-border-width solid $base-colour-grey-300;
- box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-300, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-300, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-300, inset $global-size-border-width 0 0 0 $base-colour-grey-300;
- border-radius: $base-radius-sm;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $base-size-lg;
+  padding: 0.687rem $base-size-lg;
+  background: $base-colour-static-white;
+  width: 15.937rem;
+  border: $global-size-border-width solid $base-colour-grey-300;
+  box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-300, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-300, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-300, inset $global-size-border-width 0 0 0 $base-colour-grey-300;
+  border-radius: $base-radius-sm;
 }
 @mixin input_hover_input-box_input-text {
- display: flex;
- flex-direction: column;
- color: $global-colour-textonlight;
- font-family: $global-font-uidefaultfont;
- font-size: 1rem;
- font-weight: 400;
- font-style: normal;
- line-height: 20px;
- width: 14.437rem;
+  display: flex;
+  flex-direction: column;
+  color: $global-colour-textonlight;
+  font-family: $global-font-uidefaultfont;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  width: 14.437rem;
 }
 @mixin input_active {
- display: flex;
- flex-direction: column;
- align-items: flex-start;
- gap: $base-size-xs;
- padding: 0rem;
- width: 15.937rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $base-size-xs;
+  padding: 0rem;
+  width: 15.937rem;
 }
 @mixin input_active_label {
- display: flex;
- flex-direction: column;
- color: $base-colour-blue-300;
- font-family: $global-font-uidefaultfont;
- font-size: $base-font-size-xl;
- font-weight: 500;
- font-style: normal;
- line-height: $base-font-linespacing-lg;
- width: 15.937rem;
+  display: flex;
+  flex-direction: column;
+  color: $base-colour-blue-300;
+  font-family: $global-font-uidefaultfont;
+  font-size: $base-font-size-xl;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $base-font-linespacing-lg;
+  width: 15.937rem;
 }
 @mixin input_active_input-box {
- display: flex;
- flex-direction: row;
- align-items: center;
- gap: $base-size-lg;
- padding: 0.687rem $base-size-lg;
- background: $base-colour-static-white;
- width: 15.937rem;
- border: 0.125rem solid $base-colour-blue-300;
- box-shadow: inset 0 0.125rem 0 0 $base-colour-blue-300, inset -0.125rem 0 0 0 $base-colour-blue-300, inset 0 -0.125rem 0 0 $base-colour-blue-300, inset 0.125rem 0 0 0 $base-colour-blue-300;
- border-radius: $base-radius-sm;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $base-size-lg;
+  padding: 0.687rem $base-size-lg;
+  background: $base-colour-static-white;
+  width: 15.937rem;
+  border: 0.125rem solid $base-colour-blue-300;
+  box-shadow: inset 0 0.125rem 0 0 $base-colour-blue-300, inset -0.125rem 0 0 0 $base-colour-blue-300, inset 0 -0.125rem 0 0 $base-colour-blue-300, inset 0.125rem 0 0 0 $base-colour-blue-300;
+  border-radius: $base-radius-sm;
 }
 @mixin input_active_input-box_input-text {
- display: flex;
- flex-direction: column;
- color: $global-colour-textonlight;
- font-family: $global-font-uidefaultfont;
- font-size: 1rem;
- font-weight: 400;
- font-style: normal;
- line-height: 20px;
- width: 14.437rem;
+  display: flex;
+  flex-direction: column;
+  color: $global-colour-textonlight;
+  font-family: $global-font-uidefaultfont;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  width: 14.437rem;
+}
+"
+`;
+
+exports[`Demo Data (real world-ish example) should process all demo data correctly: demo-data 1`] = `
+"// Generated SCSS Variables
+$base-size-xs: 0.125rem;
+$base-colour-grey-400: #282828;
+$base-font-size-xl: 1.25rem;
+$global-font-uidefaultfont: inter;
+$base-font-linespacing-lg: 1.5rem;
+$base-font-weight-semibold: 31.25rem;
+$base-colour-static-white: #ffffff;
+$base-size-lg: 0.75rem;
+$base-radius-sm: 0.25rem;
+$global-size-border-width: 0.062rem;
+$base-colour-grey-100: #d9d9d9;
+$global-colour-textonlight: #282828;
+$base-font-weight-regular: 25rem;
+$base-colour-grey-300: #747474;
+$base-colour-blue-300: #0177cc;
+
+// Generated SCSS Mixins
+@mixin input_resting {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $base-size-xs;
+  padding: 0rem;
+  width: 15.937rem;
+}
+@mixin input_resting_label {
+  display: flex;
+  flex-direction: column;
+  color: $base-colour-grey-400;
+  font-family: $global-font-uidefaultfont;
+  font-size: $base-font-size-xl;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $base-font-linespacing-lg;
+  width: 15.937rem;
+}
+@mixin input_resting_input-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $base-size-lg;
+  padding: 0.687rem $base-size-lg;
+  background: $base-colour-static-white;
+  width: 15.937rem;
+  border: $global-size-border-width solid $base-colour-grey-100;
+  box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-100, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-100, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-100, inset $global-size-border-width 0 0 0 $base-colour-grey-100;
+  border-radius: $base-radius-sm;
+}
+@mixin input_resting_input-box_input-text {
+  display: flex;
+  flex-direction: column;
+  color: $global-colour-textonlight;
+  font-family: $global-font-uidefaultfont;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  width: 14.437rem;
+}
+@mixin input_hover {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $base-size-xs;
+  padding: 0rem;
+  width: 15.937rem;
+}
+@mixin input_hover_label {
+  display: flex;
+  flex-direction: column;
+  color: $base-colour-grey-400;
+  font-family: $global-font-uidefaultfont;
+  font-size: $base-font-size-xl;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $base-font-linespacing-lg;
+  width: 15.937rem;
+}
+@mixin input_hover_input-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $base-size-lg;
+  padding: 0.687rem $base-size-lg;
+  background: $base-colour-static-white;
+  width: 15.937rem;
+  border: $global-size-border-width solid $base-colour-grey-300;
+  box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-300, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-300, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-300, inset $global-size-border-width 0 0 0 $base-colour-grey-300;
+  border-radius: $base-radius-sm;
+}
+@mixin input_hover_input-box_input-text {
+  display: flex;
+  flex-direction: column;
+  color: $global-colour-textonlight;
+  font-family: $global-font-uidefaultfont;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  width: 14.437rem;
+}
+@mixin input_active {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $base-size-xs;
+  padding: 0rem;
+  width: 15.937rem;
+}
+@mixin input_active_label {
+  display: flex;
+  flex-direction: column;
+  color: $base-colour-blue-300;
+  font-family: $global-font-uidefaultfont;
+  font-size: $base-font-size-xl;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $base-font-linespacing-lg;
+  width: 15.937rem;
+}
+@mixin input_active_input-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $base-size-lg;
+  padding: 0.687rem $base-size-lg;
+  background: $base-colour-static-white;
+  width: 15.937rem;
+  border: 0.125rem solid $base-colour-blue-300;
+  box-shadow: inset 0 0.125rem 0 0 $base-colour-blue-300, inset -0.125rem 0 0 0 $base-colour-blue-300, inset 0 -0.125rem 0 0 $base-colour-blue-300, inset 0.125rem 0 0 0 $base-colour-blue-300;
+  border-radius: $base-radius-sm;
+}
+@mixin input_active_input-box_input-text {
+  display: flex;
+  flex-direction: column;
+  color: $global-colour-textonlight;
+  font-family: $global-font-uidefaultfont;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  width: 14.437rem;
 }
 "
 `;

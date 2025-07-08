@@ -1,13 +1,14 @@
-import { TokenCollection } from '../types';
+import { ComponentSetToken, ComponentToken, TokenCollection } from '../types';
 import { getProcessorsForNode } from '../processors';
-import { extractNodeToken } from '../services';
-import { getNodePathName } from '../utils/node.utils';
+import { extractComponentSetToken, extractComponentToken, extractNodeToken } from '../services';
+import { getNodePathNames } from '../utils/node.utils';
 
 function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
   const result: BaseNode[] = [];
 
   function traverse(currentNode: BaseNode) {
-    // Skip VECTOR and INSTANCE nodes entirely
+    // Skip VECTOR and INSTANCE nodes entirely. INSTANCE nodes which are
+    // instances of components, which are not relevant for token extraction.
     if ('type' in currentNode && ['VECTOR', 'INSTANCE'].includes(currentNode.type)) {
       return;
     }
@@ -26,7 +27,10 @@ function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
 }
 
 export async function collectTokens(onProgress: (progress: number, message: string) => void) {
-  const collection: TokenCollection = { tokens: [] };
+  const collection: TokenCollection = { tokens: [], components: {}, componentSets: {} };
+
+  let componentToken: ComponentToken | null = null;
+  let componentSetToken: ComponentSetToken | null = null;
 
   let totalNodes = 0;
   let processedNodes = 0;
@@ -54,11 +58,27 @@ export async function collectTokens(onProgress: (progress: number, message: stri
     }
 
     if ('type' in node && 'boundVariables' in node) {
-      const nodePath = getNodePathName(node as SceneNode).split('_');
-      const processors = getProcessorsForNode(node as SceneNode);
+      if (node.type === 'COMPONENT_SET') {
+        componentSetToken = extractComponentSetToken(node);
+        collection.componentSets[node.id] = componentSetToken;
+      }
+
+      if (node.type === 'COMPONENT') {
+        componentToken = extractComponentToken(node, componentSetToken!);
+        collection.components[node.id] = componentToken;
+      }
+
+      const nodePathNames = getNodePathNames(node);
+      const processors = getProcessorsForNode(node);
 
       for (const processor of processors) {
-        const tokens = await extractNodeToken(node as SceneNode, processor, nodePath);
+        const tokens = await extractNodeToken(
+          node,
+          processor,
+          nodePathNames,
+          componentToken,
+          componentSetToken,
+        );
         collection.tokens.push(...tokens);
       }
     }
@@ -84,5 +104,5 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
   await Promise.all(pagePromises);
 
-  return collection;
+  return collection as Readonly<TokenCollection>;
 }
