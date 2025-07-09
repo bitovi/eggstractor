@@ -42,6 +42,8 @@ async function generateStyles(
     }
   });
 
+  console.log('tokens', tokens);
+
   figma.ui.postMessage({
     type: 'progress-update',
     progress: 100,

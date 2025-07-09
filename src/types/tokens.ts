@@ -49,6 +49,14 @@ export interface ComponentToken {
   variantProperties: NonNullable<ComponentNode['variantProperties']>;
 }
 
+export interface InstanceToken {
+  type: InstanceNode['type'];
+  id: InstanceNode['id'];
+  name: InstanceNode['name'];
+  remote: boolean;
+  componentNode: ComponentNode | null;
+}
+
 export type NonNullableStyleToken = {
   [K in keyof StyleToken]: NonNullable<StyleToken[K]>;
 };
@@ -57,6 +65,7 @@ export interface TokenCollection {
   tokens: (StyleToken | VariableToken)[];
   components: Record<ComponentToken['id'], ComponentToken>;
   componentSets: Record<ComponentSetToken['id'], ComponentSetToken>;
+  instances: Record<InstanceToken['id'], InstanceToken>;
 }
 
 export interface ProcessedValue {
