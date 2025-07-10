@@ -6,22 +6,6 @@ import { getNodePathNames } from '../utils/node.utils';
 function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
   const result: BaseNode[] = [];
 
-  // function traverse(currentNode: BaseNode) {
-  //   // Skip VECTOR and INSTANCE nodes entirely. INSTANCE nodes which are
-  //   // instances of components, which are not relevant for token extraction.
-  //   if ('type' in currentNode && ['VECTOR', 'INSTANCE'].includes(currentNode.type)) {
-  //     return;
-  //   }
-
-  //   result.push(currentNode);
-
-  //   if ('children' in currentNode) {
-  //     for (const child of currentNode.children) {
-  //       traverse(child);
-  //     }
-  //   }
-  // }
-
   function traverse(currentNode: BaseNode) {
     const currentNodeType = 'type' in currentNode ? currentNode.type : null;
 
@@ -33,9 +17,8 @@ function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
 
     result.push(currentNode);
 
-    // Avoid traversing children of INSTANCE nodes
+    // For INSTANCE nodes, we still want to collect them but not their children
     if (currentNodeType === 'INSTANCE') {
-      // For INSTANCE nodes, we still want to collect them but not their children
       return;
     }
 

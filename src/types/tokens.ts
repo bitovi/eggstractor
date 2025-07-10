@@ -54,7 +54,12 @@ export interface InstanceToken {
   id: InstanceNode['id'];
   name: InstanceNode['name'];
   remote: boolean;
+  /**
+   * This can be used to reference components -> component sets for non-remote
+   * components.
+   */
   componentNode: ComponentNode | null;
+  variantProperties: NonNullable<InstanceNode['variantProperties']>;
 }
 
 export type NonNullableStyleToken = {

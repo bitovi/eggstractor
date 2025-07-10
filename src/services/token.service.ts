@@ -10,7 +10,9 @@ export const extractInstanceSetToken = async (node: InstanceNode): Promise<Insta
     id: node.id,
     name: node.name,
     remote: componentNode?.remote ?? false,
+    // This can be used to reference components -> component sets for non-remote components
     componentNode,
+    variantProperties: node.variantProperties ?? {},
   };
 }
 
