@@ -1,19 +1,25 @@
 import { ComponentSetToken, ComponentToken, TokenCollection } from '../types';
 import { getProcessorsForNode } from '../processors';
-import { extractComponentSetToken, extractComponentToken, extractNodeToken } from '../services';
+import { extractComponentSetToken, extractComponentToken, extractInstanceSetToken, extractNodeToken } from '../services';
 import { getNodePathNames } from '../utils/node.utils';
 
 function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
   const result: BaseNode[] = [];
 
   function traverse(currentNode: BaseNode) {
-    // Skip VECTOR and INSTANCE nodes entirely. INSTANCE nodes which are
-    // instances of components, which are not relevant for token extraction.
-    if ('type' in currentNode && ['VECTOR', 'INSTANCE'].includes(currentNode.type)) {
+    const currentNodeType = 'type' in currentNode ? currentNode.type : null;
+
+    // Skip VECTOR which are not relevant for token extraction.
+    if (currentNodeType === 'VECTOR') {
       return;
     }
 
     result.push(currentNode);
+
+    // For INSTANCE nodes, we still want to collect them but not their children.
+    if (currentNodeType === 'INSTANCE') {
+      return;
+    }
 
     if ('children' in currentNode) {
       for (const child of currentNode.children) {
@@ -27,7 +33,7 @@ function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
 }
 
 export async function collectTokens(onProgress: (progress: number, message: string) => void) {
-  const collection: TokenCollection = { tokens: [], components: {}, componentSets: {} };
+  const collection: TokenCollection = { tokens: [], components: {}, componentSets: {}, instances: {} };
 
   let componentToken: ComponentToken | null = null;
   let componentSetToken: ComponentSetToken | null = null;
@@ -66,6 +72,11 @@ export async function collectTokens(onProgress: (progress: number, message: stri
       if (node.type === 'COMPONENT') {
         componentToken = extractComponentToken(node, componentSetToken!);
         collection.components[node.id] = componentToken;
+      }
+
+      if (node.type === 'INSTANCE') {
+        const instanceToken = await extractInstanceSetToken(node);
+        collection.instances[node.id] = instanceToken;
       }
 
       const nodePathNames = getNodePathNames(node);

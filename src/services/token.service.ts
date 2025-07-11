@@ -1,6 +1,20 @@
-import { BaseToken, ComponentSetToken, ComponentToken, StyleToken, VariableToken } from '../types';
+import { BaseToken, ComponentSetToken, ComponentToken, InstanceToken, StyleToken, VariableToken } from '../types';
 import { StyleProcessor, VariableBindings } from '../types/processors';
 import { collectBoundVariable } from './variable.service';
+
+export const extractInstanceSetToken = async (node: InstanceNode): Promise<InstanceToken> => {
+  const componentNode = await node.getMainComponentAsync();
+
+  return {
+    type: node.type,
+    id: node.id,
+    name: node.name,
+    remote: componentNode?.remote ?? false,
+    // This can be used to reference components -> component sets for non-remote components
+    componentNode,
+    variantProperties: node.variantProperties ?? {},
+  };
+}
 
 export const extractComponentToken = (
   node: ComponentNode,
