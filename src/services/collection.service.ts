@@ -9,15 +9,14 @@ function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
   function traverse(currentNode: BaseNode) {
     const currentNodeType = 'type' in currentNode ? currentNode.type : null;
 
-    // Skip VECTOR and INSTANCE nodes entirely. INSTANCE nodes which are
-    // instances of components, which are not relevant for token extraction.
+    // Skip VECTOR which are not relevant for token extraction.
     if (currentNodeType === 'VECTOR') {
       return;
     }
 
     result.push(currentNode);
 
-    // For INSTANCE nodes, we still want to collect them but not their children
+    // For INSTANCE nodes, we still want to collect them but not their children.
     if (currentNodeType === 'INSTANCE') {
       return;
     }
