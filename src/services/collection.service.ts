@@ -3,7 +3,7 @@ import { getProcessorsForNode } from '../processors';
 import { extractComponentSetToken, extractComponentToken, extractInstanceSetToken, extractNodeToken } from '../services';
 import { getNodePathNames } from '../utils/node.utils';
 
-function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
+export function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
   const result: BaseNode[] = [];
 
   function traverse(currentNode: BaseNode) {
@@ -11,6 +11,11 @@ function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
 
     // Skip VECTOR which are not relevant for token extraction.
     if (currentNodeType === 'VECTOR') {
+      return;
+    }
+
+    // Skip . and _ nodes entirely. These are components that are marked as hidden or private by designers.
+    if ('name' in currentNode && ['.', '_'].some((char) => currentNode.name.startsWith(char))) {
       return;
     }
 

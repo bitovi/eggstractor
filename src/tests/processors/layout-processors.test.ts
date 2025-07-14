@@ -1,10 +1,10 @@
-import { collectTokens } from '../services';
-import { transformToScss } from '../transformers';
-import { createTestData } from '../utils/test.utils';
-import testDataAlignment from './fixtures/figma-test-data_layout-alignment.json';
-import testDataDirection from './fixtures/figma-test-data_layout-direction.json';
-import testDataWidth from './fixtures/figma-test-data_width.json';
-import testDataHeight from './fixtures/figma-test-data_height.json';
+import { collectTokens } from '../../services';
+import { transformToScss } from '../../transformers';
+import { createTestData } from '../../utils/test.utils';
+import testDataAlignment from '../fixtures/figma-test-data_layout-alignment.json';
+import testDataDirection from '../fixtures/figma-test-data_layout-direction.json';
+import testDataWidth from '../fixtures/figma-test-data_width.json';
+import testDataHeight from '../fixtures/figma-test-data_height.json';
 
 describe('Layout Processors', () => {
   it('should process layout alignment correctly', async () => {
