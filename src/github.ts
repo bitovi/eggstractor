@@ -4,29 +4,41 @@ export interface PRResult {
   prUrl: string;
 }
 
+// Generate a unique file ID and store it in the file itself
+const getFileId = () => {
+  let fileId = figma.root.getPluginData('customFileId');
+  if (!fileId) {
+    fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    figma.root.setPluginData('customFileId', fileId);
+  }
+  return fileId;
+};
+
 export default {
   saveToken: async function (token: string) {
-    const fileId = figma.root.id;
+    const fileId = getFileId();
     const userTokens = (await figma.clientStorage.getAsync('fileTokens')) || '{}';
     const tokens = JSON.parse(userTokens);
+
     tokens[fileId] = token;
     await figma.clientStorage.setAsync('fileTokens', JSON.stringify(tokens));
   },
   getToken: async function (): Promise<string | null> {
-    const fileId = figma.root.id;
+    const fileId = getFileId();
     const userTokens = (await figma.clientStorage.getAsync('fileTokens')) || '{}';
     const tokens = JSON.parse(userTokens);
+
     return tokens[fileId] || null;
   },
   saveBranchName: async function (branchName: string) {
-    const fileId = figma.root.id;
+    const fileId = getFileId();
     const userBranches = (await figma.clientStorage.getAsync('fileBranches')) || '{}';
     const branches = JSON.parse(userBranches);
     branches[fileId] = branchName;
     await figma.clientStorage.setAsync('fileBranches', JSON.stringify(branches));
   },
   getBranchName: async function (): Promise<string | null> {
-    const fileId = figma.root.id;
+    const fileId = getFileId();
     const userBranches = (await figma.clientStorage.getAsync('fileBranches')) || '{}';
     const branches = JSON.parse(userBranches);
     return branches[fileId] || null;
