@@ -19,7 +19,7 @@ export default {
     const fileId = getFileId();
     const userTokens = (await figma.clientStorage.getAsync('fileTokens')) || '{}';
     const tokens = JSON.parse(userTokens);
-    console.log(fileId);
+
     tokens[fileId] = token;
     await figma.clientStorage.setAsync('fileTokens', JSON.stringify(tokens));
   },
@@ -27,7 +27,7 @@ export default {
     const fileId = getFileId();
     const userTokens = (await figma.clientStorage.getAsync('fileTokens')) || '{}';
     const tokens = JSON.parse(userTokens);
-    console.log(fileId);
+
     return tokens[fileId] || null;
   },
   saveBranchName: async function (branchName: string) {
