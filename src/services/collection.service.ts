@@ -139,15 +139,13 @@ export async function collectTokens(onProgress: (progress: number, message: stri
   onProgress(10, `Processing ${totalNodes} nodes...`);
 
   // Process all pages in parallel for maximum speed
-  const pagePromises = figma.root.children.map(async (page) => {
+  for (const page of figma.root.children) {
     const validNodes = getFlattenedValidNodes(page);
 
     for (const node of validNodes) {
       await processNode(node);
     }
-  });
-
-  await Promise.all(pagePromises);
+  }
 
   return collection as Readonly<TokenCollection>;
 }
