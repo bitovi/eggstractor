@@ -1,6 +1,11 @@
 import { ComponentSetToken, ComponentToken, TokenCollection } from '../types';
 import { getProcessorsForNode } from '../processors';
-import { extractComponentSetToken, extractComponentToken, extractInstanceSetToken, extractNodeToken } from '../services';
+import {
+  extractComponentSetToken,
+  extractComponentToken,
+  extractInstanceSetToken,
+  extractNodeToken,
+} from '../services';
 import { getNodePathNames } from '../utils/node.utils';
 
 export function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
@@ -38,7 +43,12 @@ export function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
 }
 
 export async function collectTokens(onProgress: (progress: number, message: string) => void) {
-  const collection: TokenCollection = { tokens: [], components: {}, componentSets: {}, instances: {} };
+  const collection: TokenCollection = {
+    tokens: [],
+    components: {},
+    componentSets: {},
+    instances: {},
+  };
 
   let componentToken: ComponentToken | null = null;
   let componentSetToken: ComponentSetToken | null = null;
@@ -52,15 +62,13 @@ export async function collectTokens(onProgress: (progress: number, message: stri
   async function processNode(node: BaseNode) {
     processedNodes++;
 
-    // calculate integer percent in your 10–95 range
     const currentPercentage = Math.floor((processedNodes / totalNodes) * 85) + 10;
     const shouldUpdate = currentPercentage !== lastPercentage || processedNodes === totalNodes;
 
     if (shouldUpdate) {
-      lastTimestamp = currentPercentage;
+      lastPercentage = currentPercentage;
       onProgress(currentPercentage, `Processing nodes… ${processedNodes}/${totalNodes}`);
 
-      // throttle yields to at most once every 200 ms
       const now = Date.now();
       if (now - lastTimestamp >= 200) {
         await new Promise((r) => setTimeout(r, 0));
@@ -70,18 +78,39 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
     if ('type' in node && 'boundVariables' in node) {
       if (node.type === 'COMPONENT_SET') {
-        componentSetToken = extractComponentSetToken(node);
-        collection.componentSets[node.id] = componentSetToken;
+        try {
+          componentSetToken = extractComponentSetToken(node);
+          collection.componentSets[node.id] = componentSetToken;
+        } catch (error) {
+          console.error(
+            `❌ Error extracting COMPONENT_SET token for "${node.name}":`,
+            error instanceof Error ? error.message : String(error),
+          );
+        }
       }
 
       if (node.type === 'COMPONENT') {
-        componentToken = extractComponentToken(node, componentSetToken!);
-        collection.components[node.id] = componentToken;
+        try {
+          componentToken = extractComponentToken(node, componentSetToken!);
+          collection.components[node.id] = componentToken;
+        } catch (error) {
+          console.error(
+            `❌ Error extracting COMPONENT token for "${node.name}":`,
+            error instanceof Error ? error.message : String(error),
+          );
+        }
       }
 
       if (node.type === 'INSTANCE') {
-        const instanceToken = await extractInstanceSetToken(node);
-        collection.instances[node.id] = instanceToken;
+        try {
+          const instanceToken = await extractInstanceSetToken(node);
+          collection.instances[node.id] = instanceToken;
+        } catch (error) {
+          console.error(
+            `❌ Error extracting INSTANCE token for "${node.name}":`,
+            error instanceof Error ? error.message : String(error),
+          );
+        }
       }
 
       const nodePathNames = getNodePathNames(node);
@@ -110,15 +139,13 @@ export async function collectTokens(onProgress: (progress: number, message: stri
   onProgress(10, `Processing ${totalNodes} nodes...`);
 
   // Process all pages in parallel for maximum speed
-  const pagePromises = figma.root.children.map(async (page) => {
+  for (const page of figma.root.children) {
     const validNodes = getFlattenedValidNodes(page);
 
     for (const node of validNodes) {
       await processNode(node);
     }
-  });
-
-  await Promise.all(pagePromises);
+  }
 
   return collection as Readonly<TokenCollection>;
 }
