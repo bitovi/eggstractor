@@ -1,4 +1,4 @@
-import { ComponentSetToken, ComponentToken, TokenCollection } from '../types';
+import { ComponentSetToken, ComponentToken, StyleToken, TokenCollection } from '../types';
 import { getProcessorsForNode } from '../processors';
 import {
   extractComponentSetToken,
@@ -8,8 +8,63 @@ import {
 } from '../services';
 import { getNodePathNames } from '../utils/node.utils';
 
-export function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
+function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]): StyleToken {
+  return {
+    property: `warning-${componentSetNode.id}`,
+    name: `duplicate-component-warning`,
+    type: 'style',
+    value: null,
+    rawValue: null,
+    path: [{ name: componentSetNode.name || 'unnamed', type: 'COMPONENT_SET' }],
+    warnings: [
+      `Component set "${componentSetNode.name}" contains duplicate variants: ${duplicateNames.join(', ')}. ` +
+        `Remove duplicate components in Figma to fix this issue.`,
+    ],
+    // Optional: mark it somehow so it gets filtered out of actual CSS generation
+    componentSetId: componentSetNode.id,
+  };
+}
+
+export function detectComponentSetDuplicates(componentSetNode: BaseNode): {
+  duplicateNames: string[];
+  hasDuplicates: boolean;
+} {
+  const duplicateNames: string[] = [];
+  const seenVariants = new Set<string>();
+
+  if (!('children' in componentSetNode)) {
+    return { duplicateNames, hasDuplicates: false };
+  }
+
+  for (const child of componentSetNode.children) {
+    if (child.type === 'COMPONENT') {
+      const variantName = child.name || 'unnamed';
+
+      if (seenVariants.has(variantName)) {
+        console.warn(
+          `🚨 DUPLICATE VARIANT in "${componentSetNode.name}" component set:\n` +
+            `  Layer: "${variantName}"\n` +
+            `  Found duplicate layers in Figma - check the layers panel for identical component names`,
+        );
+        duplicateNames.push(variantName);
+      } else {
+        seenVariants.add(variantName);
+      }
+    }
+  }
+
+  return {
+    duplicateNames,
+    hasDuplicates: duplicateNames.length > 0,
+  };
+}
+
+export function getFlattenedValidNodes(node: BaseNode): {
+  validNodes: BaseNode[];
+  warningTokens: StyleToken[];
+} {
   const result: BaseNode[] = [];
+  const warningTokens: StyleToken[] = [];
 
   function traverse(currentNode: BaseNode) {
     const currentNodeType = 'type' in currentNode ? currentNode.type : null;
@@ -22,6 +77,17 @@ export function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
     // Skip . and _ nodes entirely. These are components that are marked as hidden or private by designers.
     if ('name' in currentNode && ['.', '_'].some((char) => currentNode.name.startsWith(char))) {
       return;
+    }
+
+    // Check for duplicates and skip if found
+    if (currentNode.type === 'COMPONENT_SET') {
+      const { hasDuplicates, duplicateNames } = detectComponentSetDuplicates(currentNode);
+      if (hasDuplicates) {
+        console.warn(`⏭️ Skipping corrupted component set: ${currentNode.name}`);
+        warningTokens.push(createWarningToken(currentNode, duplicateNames));
+
+        return; // Skip the entire component set and all its children
+      }
     }
 
     result.push(currentNode);
@@ -39,7 +105,7 @@ export function getFlattenedValidNodes(node: BaseNode): BaseNode[] {
   }
 
   traverse(node);
-  return result;
+  return { validNodes: result, warningTokens };
 }
 
 export async function collectTokens(onProgress: (progress: number, message: string) => void) {
@@ -83,9 +149,16 @@ export async function collectTokens(onProgress: (progress: number, message: stri
           collection.componentSets[node.id] = componentSetToken;
         } catch (error) {
           console.error(
-            `❌ Error extracting COMPONENT_SET token for "${node.name}":`,
+            `❌ Error extracting COMPONENT token for "${node.name}":`,
             error instanceof Error ? error.message : String(error),
           );
+          console.error(`   🔍 Component ID: ${node.id}`);
+          console.error(`   🔍 Basic props:`, {
+            name: node.name,
+            type: node.type,
+            id: node.id,
+            visible: node.visible,
+          });
         }
       }
 
@@ -98,6 +171,13 @@ export async function collectTokens(onProgress: (progress: number, message: stri
             `❌ Error extracting COMPONENT token for "${node.name}":`,
             error instanceof Error ? error.message : String(error),
           );
+          console.error(`   🔍 Component ID: ${node.id}`);
+          console.error(`   🔍 Basic props:`, {
+            name: node.name,
+            type: node.type,
+            id: node.id,
+            visible: node.visible,
+          });
         }
       }
 
@@ -110,6 +190,13 @@ export async function collectTokens(onProgress: (progress: number, message: stri
             `❌ Error extracting INSTANCE token for "${node.name}":`,
             error instanceof Error ? error.message : String(error),
           );
+          console.error(`   🔍 Node keys only:`, Object.keys(node));
+          console.error(`   🔍 Basic props:`, {
+            name: node.name,
+            type: node.type,
+            id: node.id,
+            visible: node.visible,
+          });
         }
       }
 
@@ -124,6 +211,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
           componentToken,
           componentSetToken,
         );
+
         collection.tokens.push(...tokens);
       }
     }
@@ -138,9 +226,10 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
   onProgress(10, `Processing ${totalNodes} nodes...`);
 
-  // Process all pages in parallel for maximum speed
   for (const page of figma.root.children) {
-    const validNodes = getFlattenedValidNodes(page);
+    const { validNodes, warningTokens } = await getFlattenedValidNodes(page);
+
+    collection.tokens.push(...warningTokens);
 
     for (const node of validNodes) {
       await processNode(node);
