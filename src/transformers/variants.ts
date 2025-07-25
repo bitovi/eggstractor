@@ -16,8 +16,8 @@ type StyleNode = {
  * combination.
  */
 export const USE_VARIANT_COMBINATION_PARSING = (): boolean => {
-  return true;
-}
+  return false;
+};
 
 let i = 0;
 /**
@@ -60,10 +60,7 @@ const splitByMatch = (items: StyleNode[]): [StyleNode[], StyleNode[]] => {
     for (let j = i + 1; j < items.length; j++) {
       const a = items[i];
       const b = items[j];
-      if (
-        a.cssProperty === b.cssProperty &&
-        shallowEqual(a.variants, b.variants)
-      ) {
+      if (a.cssProperty === b.cssProperty && shallowEqual(a.variants, b.variants)) {
         if (a.cssValue === b.cssValue) {
           exceptionCounts[i] += 1;
           exceptionCounts[j] += 1;
@@ -85,7 +82,7 @@ const splitByMatch = (items: StyleNode[]): [StyleNode[], StyleNode[]] => {
     if (matchingCounts[i] && matchingCounts[i] > exceptionCounts[i]) {
       // TODO: Avoids "random" classNames that are short that should be included in existing classNames
       // but creates "longer" classNames
-    // if (matchingCounts[i]) {// && matchingCounts[i] > exceptionCounts[i]) {
+      // if (matchingCounts[i]) {// && matchingCounts[i] > exceptionCounts[i]) {
       matching.push(items[i]);
     } else {
       nonMatching.push(items[i]);
@@ -98,17 +95,12 @@ const splitByMatch = (items: StyleNode[]): [StyleNode[], StyleNode[]] => {
  * Compare element with every other element in array. If comparison is true, exclude from array
  */
 // TODO: is this just Array.filter()
-function removeByComparison<T>(
-  items: T[],
-  comparison: (a: T, b: T) => boolean,
-): T[] {
+function removeByComparison<T>(items: T[], comparison: (a: T, b: T) => boolean): T[] {
   const result: T[] = [];
 
   for (let i = 0; i < items.length; i++) {
     const current = items[i];
-    const isAlreadyIncluded = result.some((existing) =>
-      comparison(existing, current),
-    );
+    const isAlreadyIncluded = result.some((existing) => comparison(existing, current));
 
     if (!isAlreadyIncluded) {
       result.push(current);
@@ -150,9 +142,7 @@ export const getInitialStyleNodes = (source: Input): StyleNode[] => {
   return styleNodes;
 };
 
-const getFinalizedStyleNodes = (
-  styles: StyleNode[],
-): [StyleNode[], StyleNode[]] => {
+const getFinalizedStyleNodes = (styles: StyleNode[]): [StyleNode[], StyleNode[]] => {
   // "uniques" are finalized, duplicates need to be processed further
   const [uniques, duplicates] = splitByMatch(styles);
 
@@ -171,28 +161,25 @@ export const createChildStyleNodes = (styles: StyleNode[]): StyleNode[] => {
 
   const [uniques, duplicates] = getFinalizedStyleNodes(styles);
 
-  const nestedChildStyleNodes = duplicates
-    .flatMap((instance) => {
-      return Object.entries(instance.possibleVariants).map(
-        ([variantProperty, variantValue]) => {
-          const possibleVariants = { ...instance.possibleVariants };
-          delete possibleVariants[variantProperty];
+  const nestedChildStyleNodes = duplicates.flatMap((instance) => {
+    return Object.entries(instance.possibleVariants).map(([variantProperty, variantValue]) => {
+      const possibleVariants = { ...instance.possibleVariants };
+      delete possibleVariants[variantProperty];
 
-          const styleNode: StyleNode = {
-            cssProperty: instance.cssProperty,
-            cssValue: instance.cssValue,
-            variants: {
-              ...instance.variants,
-              [variantProperty]: variantValue,
-            },
-            possibleVariants,
-            id: instance.id,
-          };
-
-          return styleNode;
+      const styleNode: StyleNode = {
+        cssProperty: instance.cssProperty,
+        cssValue: instance.cssValue,
+        variants: {
+          ...instance.variants,
+          [variantProperty]: variantValue,
         },
-      );
+        possibleVariants,
+        id: instance.id,
+      };
+
+      return styleNode;
     });
+  });
 
   const cleanedNestedChildStyleNodes: StyleNode[] = removeByComparison(
     nestedChildStyleNodes,
@@ -221,18 +208,13 @@ export const convertStyleNodesToCssStylesheet = (
 
   // Group all styles by "className/mixin/utility"
   for (const style of styleNodes) {
-    const key = Object.entries(style.variants)
-      .map(
-        ([variantProperty, variantValue]) =>
-          `${variantProperty}-${variantValue}`,
-      )
-      .join("--") || 'ROOT';
+    const key =
+      Object.entries(style.variants)
+        .map(([variantProperty, variantValue]) => `${variantProperty}=${variantValue}`)
+        .join('--') || 'ROOT';
 
     styleTags[key] ??= {};
-    if (
-      styleTags[key][style.cssProperty] &&
-      styleTags[key][style.cssProperty] !== style.cssValue
-    ) {
+    if (styleTags[key][style.cssProperty] && styleTags[key][style.cssProperty] !== style.cssValue) {
       console.error(
         styleTags,
         key,
@@ -240,7 +222,7 @@ export const convertStyleNodesToCssStylesheet = (
         styleTags[key][style.cssProperty],
         style.cssValue,
       );
-      throw new Error("Unexpected style exists for combination of variant");
+      throw new Error('Unexpected style exists for combination of variant');
     }
     styleTags[key][style.cssProperty] = style.cssValue;
   }

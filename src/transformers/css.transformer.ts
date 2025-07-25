@@ -2,6 +2,7 @@ import { StyleToken, TokenCollection, TransformerResult } from '../types';
 import { deduplicateMessages, groupBy } from './utils';
 import { rem } from '../utils';
 import { convertVariantGroupBy } from './variants-middleware';
+import { createNamingConvention } from './helpers';
 
 const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {
   const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue!;
@@ -59,7 +60,13 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
     {} as Record<string, StyleToken[]>,
   );
 
-  const classNames = convertVariantGroupBy(tokens, variantGroups, getClassNamePropertyAndValue);
+  const namingFunctions = createNamingConvention();
+  const classNames = convertVariantGroupBy(
+    tokens,
+    variantGroups,
+    getClassNamePropertyAndValue,
+    namingFunctions,
+  );
 
   for (const classNameDefinition of classNames) {
     output += `\n.${classNameDefinition.variantCombinationName} {\n`;

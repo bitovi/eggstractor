@@ -28,6 +28,7 @@ module.exports = {
         },
       },
       fontFamily: {
+        'gt-america': ['GT America', 'Helvetica Neue', 'Arial', 'sans-serif'],
         bliss: ['Bliss Pro', 'sans-serif'],
       },
     },
