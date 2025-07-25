@@ -1,4 +1,7 @@
-import { getFlattenedValidNodes } from '../../services/collection.service';
+import {
+  getFlattenedValidNodes,
+  detectComponentSetDuplicates,
+} from '../../services/collection.service';
 
 describe('getFlattenedValidNodes', () => {
   it('should filter out VECTOR and INSTANCE nodes', () => {
@@ -14,8 +17,8 @@ describe('getFlattenedValidNodes', () => {
       ],
     } as unknown as FrameNode;
 
-    const result = getFlattenedValidNodes(testNode);
-    const types = result.map((node: BaseNode) => node.type);
+    const { validNodes } = getFlattenedValidNodes(testNode);
+    const types = validNodes.map((node: BaseNode) => node.type);
 
     expect(types).not.toContain('VECTOR');
     expect(types).toContain('INSTANCE');
@@ -36,12 +39,71 @@ describe('getFlattenedValidNodes', () => {
       ],
     } as unknown as FrameNode;
 
-    const result = getFlattenedValidNodes(testNode);
-    const names = result.map((node: BaseNode) => node.name);
+    const { validNodes } = getFlattenedValidNodes(testNode);
+    const names = validNodes.map((node: BaseNode) => node.name);
 
     expect(names).not.toContain('.hidden');
     expect(names).not.toContain('_private');
     expect(names).toContain('normal');
     expect(names).toContain('test');
+  });
+});
+
+describe('Component Set Duplicate Detection', () => {
+  const mockComponentSet = {
+    type: 'COMPONENT_SET',
+    name: 'Button',
+    id: '265:2',
+    children: [
+      {
+        type: 'COMPONENT',
+        id: '265:48',
+        name: 'State=Resting, Size=Regular, Intent=Brand, Variant=Solid, Rounded?=False',
+      },
+      {
+        type: 'COMPONENT',
+        id: '2174:408',
+        name: 'State=Resting, Size=Regular, Intent=Brand, Variant=Solid, Rounded?=False',
+      },
+    ],
+  } as unknown as BaseNode;
+  it('should detect duplicate variants in component set', () => {
+    const result = detectComponentSetDuplicates(mockComponentSet);
+    expect(result.hasDuplicates).toBe(true);
+    expect(result.duplicateNames).toContain(
+      'State=Resting, Size=Regular, Intent=Brand, Variant=Solid, Rounded?=False',
+    );
+  });
+
+  it('should pass validation for unique variants', () => {
+    const mockUniqueComponentSet = {
+      ...mockComponentSet,
+      children: [
+        {
+          type: 'COMPONENT',
+          id: '265:48',
+          name: 'State=Resting, Size=Regular, Intent=Brand, Variant=Solid, Rounded?=False',
+        },
+        {
+          type: 'COMPONENT',
+          id: '2174:408',
+          name: 'State=Resting, Size=Regular, Intent=Brand, Variant=Solid, Rounded?=True',
+        },
+      ],
+    } as unknown as BaseNode;
+
+    expect(detectComponentSetDuplicates(mockUniqueComponentSet).hasDuplicates).toBe(false);
+    expect(detectComponentSetDuplicates(mockUniqueComponentSet).duplicateNames).toEqual([]);
+  });
+
+  it('should filter out corrupted component sets from node tree', () => {
+    const nodes = getFlattenedValidNodes(mockComponentSet);
+
+    expect(nodes).not.toContainEqual(
+      expect.objectContaining({
+        type: 'COMPONENT_SET',
+        name: 'Button',
+      }),
+    );
   });
 });

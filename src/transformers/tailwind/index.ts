@@ -14,17 +14,22 @@ const getStylePropertyAndValue = (token: StyleToken): Record<string, string> => 
 };
 
 export function transformToTailwindSassClass(collection: TokenCollection) {
-  const styleTokens = filterStyleTokens(collection);
-  const { warnings, errors } = deduplicateMessages(styleTokens);
+  const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
-  const parsedStyleTokens = convertVariantGroupBy(collection, groupedTokens, getStylePropertyAndValue);
+  const parsedStyleTokens = convertVariantGroupBy(
+    collection,
+    groupedTokens,
+    getStylePropertyAndValue,
+  );
 
   let output = '/* Generated Tailwind-SCSS */';
 
   /**
    * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
    */
-  const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) => a.variantPath.localeCompare(b.variantPath));;
+  const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) =>
+    a.variantPath.localeCompare(b.variantPath),
+  );
 
   for (const { variantPath, tokens } of formattedStyleTokens) {
     const classesToApply = createTailwindClasses(tokens);
@@ -42,18 +47,23 @@ export function transformToTailwindSassClass(collection: TokenCollection) {
 }
 
 export function transformToTailwindLayerUtilityClassV4(collection: TokenCollection) {
-  const styleTokens = filterStyleTokens(collection);
-  const { warnings, errors } = deduplicateMessages(styleTokens);
+  const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
 
   let output = '/* Generated Tailwind Utilities */\n';
 
-  const parsedStyleTokens = convertVariantGroupBy(collection, groupedTokens, getStylePropertyAndValue);
+  const parsedStyleTokens = convertVariantGroupBy(
+    collection,
+    groupedTokens,
+    getStylePropertyAndValue,
+  );
 
   /**
    * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
    */
-  const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) => a.variantPath.localeCompare(b.variantPath));;
+  const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) =>
+    a.variantPath.localeCompare(b.variantPath),
+  );
 
   for (const { variantPath, tokens } of formattedStyleTokens) {
     const classesToApply = createTailwindClasses(tokens);
