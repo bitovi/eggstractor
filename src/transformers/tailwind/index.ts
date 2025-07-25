@@ -1,17 +1,9 @@
-import { StyleToken, TokenCollection } from '../../types';
+import { TokenCollection } from '../../types';
 import { groupBy } from '../../utils';
-import { deduplicateMessages } from '../../utils/error.utils';
 import { backToStyleTokens, convertVariantGroupBy } from '../variants-middleware';
 import { filterStyleTokens } from './filters';
 import { createTailwindClasses } from './generators';
-
-const getStylePropertyAndValue = (token: StyleToken): Record<string, string> => {
-  const output: Record<string, string> = {
-    [token.property]: token.rawValue!,
-  };
-
-  return output;
-};
+import { createNamingConvention, NamingContext, getStylePropertyAndValue } from '../helpers/index';
 
 export function transformToTailwindSassClass(collection: TokenCollection) {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
@@ -50,21 +42,31 @@ export function transformToTailwindLayerUtilityClassV4(collection: TokenCollecti
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
 
-  let output = '/* Generated Tailwind Utilities */\n';
+  const tailwind4NamingConvention: NamingContext = {
+    env: 'tailwind-v4',
+    delimiters: {
+      pathSeparator: '/',
+      afterComponentName: '.',
+      variantEqualSign: '_',
+      betweenVariants: '.',
+    },
+    duplicate: (name, count) => `${name}${count}`,
+  };
+
+  const namingFunctions = createNamingConvention(tailwind4NamingConvention);
 
   const parsedStyleTokens = convertVariantGroupBy(
     collection,
     groupedTokens,
     getStylePropertyAndValue,
+    namingFunctions, // Pass the object with both functions
   );
 
-  /**
-   * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
-   */
   const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) =>
     a.variantPath.localeCompare(b.variantPath),
   );
 
+  let output = '/* Generated Tailwind Utilities */\n';
   for (const { variantPath, tokens } of formattedStyleTokens) {
     const classesToApply = createTailwindClasses(tokens);
     if (classesToApply.length) {
