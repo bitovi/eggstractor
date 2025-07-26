@@ -1,13 +1,34 @@
 import { StyleToken, TokenCollection } from '../../types';
 import { groupBy } from '../../utils';
-import { deduplicateMessages } from '../../utils/error.utils';
 import { backToStyleTokens, convertVariantGroupBy } from '../variants-middleware';
 import { filterStyleTokens } from './filters';
 import { createTailwindClasses } from './generators';
 
-const createTailwind4NamingConvention = (context?: NamingContext) => {
+interface NamingContext {
+  env: string;
+  prefix?: string;
+  delimiters: {
+    pathSeparator: string;
+    afterComponentName: string;
+    variantEqualSign: string;
+    betweenVariants: string;
+  };
+  duplicate?: (name: string, count: number) => string;
+}
+
+const defaultContext: NamingContext = {
+  env: 'css',
+  delimiters: {
+    pathSeparator: '-',
+    afterComponentName: '-',
+    variantEqualSign: '_',
+    betweenVariants: '-',
+  },
+  duplicate: (name, count) => `${name}${count}`,
+};
+
+const createNamingConvention = (context: NamingContext = defaultContext) => {
   const nameCountMap = new Map<string, number>();
-  const valueCountMap = new Map<string, number>(); // Track value usage across properties
 
   return (path: Array<{ name: string; type: string }>, variantsCombination: string) => {
     // Extract base path
@@ -15,7 +36,7 @@ const createTailwind4NamingConvention = (context?: NamingContext) => {
       path
         ?.filter((part) => part.type !== 'COMPONENT')
         ?.map((part) => part.name.replace(/\s+/g, '-'))
-        ?.join(ctx.delimiters.pathSeparator) || '';
+        ?.join(context.delimiters.pathSeparator) || '';
 
     // Process variants
     const variantParts = variantsCombination.split('--').filter(Boolean);
@@ -42,7 +63,7 @@ const createTailwind4NamingConvention = (context?: NamingContext) => {
 
           // Use property_value format only if value appears multiple times
           if (valueOccurrences.get(value)! > 1) {
-            return `${property}${ctx.delimiters.variantEqualSign}${value}`;
+            return `${property}${context.delimiters.variantEqualSign}${value}`;
           }
 
           // Otherwise just use the value
@@ -56,14 +77,15 @@ const createTailwind4NamingConvention = (context?: NamingContext) => {
     let newName = basePath;
     if (processedVariants.length > 0) {
       newName +=
-        ctx.delimiters.afterComponentName + processedVariants.join(ctx.delimiters.betweenVariants);
+        context.delimiters.afterComponentName +
+        processedVariants.join(context.delimiters.betweenVariants);
     }
 
     // Handle duplicates
     const baseNewName = newName;
     let counter = nameCountMap.get(baseNewName) || 0;
     if (counter > 0) {
-      newName = ctx.duplicate!(baseNewName, counter + 1);
+      newName = context.duplicate!(baseNewName, counter + 1);
     }
     nameCountMap.set(baseNewName, counter + 1);
 
@@ -115,9 +137,19 @@ export function transformToTailwindSassClass(collection: TokenCollection) {
 export function transformToTailwindLayerUtilityClassV4(collection: TokenCollection) {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
+  const tailwind4NamingConvention: NamingContext = {
+    env: 'tailwind-v4',
+    delimiters: {
+      pathSeparator: '/',
+      afterComponentName: '.',
+      variantEqualSign: '_',
+      betweenVariants: '.',
+    },
+    duplicate: (name, count) => `${name}${count}`,
+  };
 
   let output = '/* Generated Tailwind Utilities */\n';
-  const namingFunction = createTailwind4NamingConvention();
+  const namingFunction = createNamingConvention(tailwind4NamingConvention);
 
   const parsedStyleTokens = convertVariantGroupBy(
     collection,
