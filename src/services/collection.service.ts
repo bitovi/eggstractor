@@ -221,19 +221,18 @@ export async function collectTokens(onProgress: (progress: number, message: stri
   await figma.loadAllPagesAsync();
 
   onProgress(5, 'Counting nodes...');
-  const validNodes = figma.root.children.flatMap((page) => getFlattenedValidNodes(page));
-  totalNodes = validNodes.length;
+  const allPageResults = figma.root.children.map((page) => getFlattenedValidNodes(page));
+  const allValidNodes = allPageResults.flatMap((result) => result.validNodes);
+  const allWarningTokens = allPageResults.flatMap((result) => result.warningTokens);
+
+  totalNodes = allValidNodes.length;
 
   onProgress(10, `Processing ${totalNodes} nodes...`);
 
-  for (const page of figma.root.children) {
-    const { validNodes, warningTokens } = await getFlattenedValidNodes(page);
+  collection.tokens.push(...allWarningTokens);
 
-    collection.tokens.push(...warningTokens);
-
-    for (const node of validNodes) {
-      await processNode(node);
-    }
+  for (const node of allValidNodes) {
+    await processNode(node);
   }
 
   return collection as Readonly<TokenCollection>;
