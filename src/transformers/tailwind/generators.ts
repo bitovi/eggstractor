@@ -199,6 +199,13 @@ const generateTailwindDisplayClass: Generator = ({ rawValue }) => {
   return rawValue;
 };
 
+export const generateTailwindBoxShadowClass: Generator = ({ rawValue }) => {
+  // Clean up the value for Tailwind arbitrary syntax
+  // Replace spaces with underscores, keep commas for multiple shadows
+  const cleanValue = rawValue.replace(/\s+/g, '_');
+  return `shadow-[${cleanValue}]`;
+};
+
 type Generator = (token: NonNullableStyleToken) => string;
 
 const tailwindClassGenerators: Record<string, Generator> = {
@@ -206,6 +213,7 @@ const tailwindClassGenerators: Record<string, Generator> = {
   display: generateTailwindDisplayClass,
   'border-radius': generateTailwindBorderRadiusClass,
   border: generateTailwindBorderClass,
+  'box-shadow': generateTailwindBoxShadowClass,
   'font-weight': ({ rawValue }) => `font-${normalizeTailwindToken(fontWeight, rawValue)}`,
   'font-size': ({ rawValue }) => `text-${normalizeTailwindToken(fontSize, rawValue)}`,
   'font-family': generateTailwindFontFamilyOutput,
@@ -220,6 +228,7 @@ export function createTailwindClasses(tokens: NonNullableStyleToken[]): string[]
   let classOutput: string[] = [];
 
   for (const token of tokens) {
+    console.log(token.property, token.rawValue);
     const generator = tailwindClassGenerators[token.property];
     if (generator) {
       classOutput.push(generator(token));
