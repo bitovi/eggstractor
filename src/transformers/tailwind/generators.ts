@@ -200,9 +200,13 @@ const generateTailwindDisplayClass: Generator = ({ rawValue }) => {
 };
 
 export const generateTailwindBoxShadowClass: Generator = ({ rawValue }) => {
-  // Clean up the value for Tailwind arbitrary syntax
-  // Replace spaces with underscores, keep commas for multiple shadows
-  const cleanValue = rawValue.replace(/\s+/g, '_');
+  // Replace spaces with underscores, but preserve comma separation
+  // Split by comma, trim and process each shadow separately, then rejoin
+  const cleanValue = rawValue
+    .split(',')
+    .map((shadow) => shadow.trim().replace(/\s+/g, '_'))
+    .join(',');
+
   return `shadow-[${cleanValue}]`;
 };
 
