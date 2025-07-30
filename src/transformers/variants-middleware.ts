@@ -7,48 +7,55 @@ export const convertVariantGroupBy = (
   styleTokensGroupedByVariantCombination: Record<string, StyleToken[]>,
   transform: (token: StyleToken) => Record<string, string>,
 ) => {
+  // Pre-compute transforms to avoid duplicate work
+  const transformCache = new Map<StyleToken, Record<string, string>>();
+
   const instanceGroupedByVariants = Object.entries(styleTokensGroupedByVariantCombination)
     .map(([variantCombinationName, groupTokens]) => {
       try {
-        const componentId = groupTokens[0].componentId
-          ? groupTokens.every((token) => token.componentId === groupTokens[0].componentId)
-            ? groupTokens[0].componentId
-            : (() => {
-                throw new Error('Unexpected component id mismatch');
-              })()
-          : undefined;
+        if (groupTokens.length === 0) return null;
 
-        const componentSetId = groupTokens[0].componentSetId
-          ? groupTokens.every((token) => token.componentSetId === groupTokens[0].componentSetId)
-            ? groupTokens[0].componentSetId
-            : (() => {
-                throw new Error('Unexpected component id mismatch');
-              })()
-          : undefined;
+        const firstToken = groupTokens[0];
 
-        const css = groupTokens.reduce(
-          (styles, token) => {
-            const singleStyle = transform(token);
-            return { ...styles, ...singleStyle };
-          },
-          {} as Record<string, string>,
-        );
+        // Fast validation using early exit instead of .every()
+        let componentId = firstToken.componentId;
+        let componentSetId = firstToken.componentSetId;
 
-        const _ = {
-          // Used for grouping
+        if (componentId || componentSetId) {
+          for (let i = 1; i < groupTokens.length; i++) {
+            if (componentId && groupTokens[i].componentId !== componentId) {
+              throw new Error('Unexpected component id mismatch');
+            }
+            if (componentSetId && groupTokens[i].componentSetId !== componentSetId) {
+              throw new Error('Unexpected component set id mismatch');
+            }
+          }
+        }
+
+        // Optimized CSS building - avoid object spreading
+        const css: Record<string, string> = {};
+        for (const token of groupTokens) {
+          let singleStyle = transformCache.get(token);
+          if (!singleStyle) {
+            singleStyle = transform(token);
+            transformCache.set(token, singleStyle);
+          }
+
+          // Direct assignment instead of spreading
+          Object.assign(css, singleStyle);
+        }
+
+        // Early exit if no styles
+        if (Object.keys(css).length === 0) return null;
+
+        return {
           variantCombinationName,
-          // Used for naming
-          path: groupTokens[0].path,
-          // Used for finding variants
+          path: firstToken.path,
           componentId,
-          // Used for finding all possible variants
           componentSetId,
-          // Variants
           variants: componentId ? tokens.components[componentId].variantProperties : {},
           css,
         };
-
-        return _;
       } catch (error: any) {
         console.error(
           `❌ Skipping token group "${variantCombinationName}" due to error:`,
@@ -58,8 +65,7 @@ export const convertVariantGroupBy = (
       }
     })
     .filter(
-      (variantGroup): variantGroup is NonNullable<typeof variantGroup> =>
-        variantGroup !== null && Object.keys(variantGroup?.css || {}).length > 0,
+      (variantGroup): variantGroup is NonNullable<typeof variantGroup> => variantGroup !== null,
     );
 
   if (!USE_VARIANT_COMBINATION_PARSING()) {
@@ -67,57 +73,63 @@ export const convertVariantGroupBy = (
     return instanceGroupedByVariants;
   }
 
-  const instancesWithVariant: (Omit<
-    (typeof instanceGroupedByVariants)[number],
-    'componentId' | 'componentSetId'
-  > & {
+  // Pre-filter with Set for O(1) lookups
+  const instancesWithVariant: Array<{
+    variantCombinationName: string;
+    path: any[];
     componentId: string;
     componentSetId: string;
-  })[] = [];
+    variants: any;
+    css: Record<string, string>;
+  }> = [];
 
-  const instancesWithoutVariant: typeof instanceGroupedByVariants = [];
+  const instancesWithoutVariant = [];
 
   for (const variantGroup of instanceGroupedByVariants) {
-    if (variantGroup.componentSetId && variantGroup.componentSetId) {
+    if (variantGroup.componentSetId && variantGroup.componentId) {
       instancesWithVariant.push(variantGroup as any);
-      continue;
+    } else {
+      instancesWithoutVariant.push(variantGroup);
     }
-
-    instancesWithoutVariant.push(variantGroup);
   }
+
+  // Cache path key generation
+  const pathKeyCache = new Map<any[], string>();
 
   const instancesWithVariantMap = instancesWithVariant.reduce(
     (acc, variantGroup) => {
-      // Strip the variant path name for grouping
-      const key = variantGroup.path
-        .filter((part) => part.type !== 'COMPONENT')
-        .map(({ name }) => name)
-        .join('__and__');
+      let key = pathKeyCache.get(variantGroup.path);
+      if (!key) {
+        key = variantGroup.path
+          .filter((part) => part.type !== 'COMPONENT')
+          .map(({ name }) => name)
+          .join('__and__');
+        pathKeyCache.set(variantGroup.path, key);
+      }
 
-      acc[key] ??= [];
+      if (!acc[key]) acc[key] = [];
       acc[key].push(variantGroup);
       return acc;
     },
     {} as Record<string, typeof instancesWithVariant>,
   );
 
+  // Cache sanitized variant names
+  const variantNameCache = new Map<string, string>();
+
   const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(([_, mixins]) => {
     const cssByVariantCombinations = generateStyles(mixins);
 
     return Object.entries(cssByVariantCombinations).map(([variantsCombination, css]) => {
-      const variantCombinationName = sanitizeSegment(
-        mixins[0].path
-          .map((part) => {
-            // This path part lists the variant properties, override with the
-            // subset needed for the variant combination
-            if (part.type === 'COMPONENT') {
-              return variantsCombination;
-            }
+      const pathKey = mixins[0].path
+        .map((part) => (part.type === 'COMPONENT' ? variantsCombination : part.name))
+        .join('__');
 
-            return part.name;
-          })
-          .join('__'),
-      );
+      let variantCombinationName = variantNameCache.get(pathKey);
+      if (!variantCombinationName) {
+        variantCombinationName = sanitizeSegment(pathKey);
+        variantNameCache.set(pathKey, variantCombinationName);
+      }
 
       return { variantCombinationName, css };
     });
@@ -128,22 +140,29 @@ export const convertVariantGroupBy = (
 };
 
 /**
- * Used specifically for tailwind styles
+ * Optimized version for tailwind styles
  */
 export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {
-  return parsedStyleTokens.map((parsedStyleToken) => {
-    const tokens = Object.entries(parsedStyleToken.css).map(
-      ([property, rawValue]) =>
-        // Casting here since tailwind only needs these 2 properties
-        ({
-          property,
-          rawValue,
-        }) as NonNullableStyleToken,
-    );
+  // Pre-allocate array if possible
+  const result = new Array(parsedStyleTokens.length);
 
-    return {
+  for (let i = 0; i < parsedStyleTokens.length; i++) {
+    const parsedStyleToken = parsedStyleTokens[i];
+    const cssEntries = Object.entries(parsedStyleToken.css);
+
+    // Pre-allocate tokens array
+    const tokens = new Array(cssEntries.length);
+
+    for (let j = 0; j < cssEntries.length; j++) {
+      const [property, rawValue] = cssEntries[j];
+      tokens[j] = { property, rawValue } as NonNullableStyleToken;
+    }
+
+    result[i] = {
       variantPath: parsedStyleToken.variantCombinationName,
       tokens,
     };
-  });
+  }
+
+  return result;
 };

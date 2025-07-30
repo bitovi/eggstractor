@@ -27,7 +27,10 @@ export interface VariableBindings {
 export interface StyleProcessor {
   property: string;
   bindingKey: keyof VariableBindings | undefined;
-  process: (variables: VariableToken[], node?: SceneNode) => Promise<ProcessedValue | null>;
+  process: (
+    variableMap: Map<string, VariableToken>,
+    node?: SceneNode,
+  ) => Promise<ProcessedValue | null>;
 }
 
 export interface TransformerResult {

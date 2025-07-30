@@ -90,8 +90,11 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'gap',
     bindingKey: 'itemSpacing',
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const gapVariable = variables.find((v) => v.property === 'gap');
+    process: async (
+      variableMap: Map<string, VariableToken>,
+      node?: SceneNode,
+    ): Promise<ProcessedValue | null> => {
+      const gapVariable = variableMap.get('gap');
       if (gapVariable) {
         return {
           value: gapVariable.value,
@@ -111,10 +114,10 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'min-width',
     bindingKey: 'minWidth',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const minWidthVariable = variables.find((v) => v.property === 'minWidth');
+      const minWidthVariable = variableMap.get('minWidth');
       if (minWidthVariable) {
         return {
           value: `${minWidthVariable.value}`,
@@ -137,10 +140,10 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'max-width',
     bindingKey: 'maxWidth',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const maxWidthVariable = variables.find((v) => v.property === 'maxWidth');
+      const maxWidthVariable = variableMap.get('maxWidth');
       if (maxWidthVariable) {
         return {
           value: `${maxWidthVariable.value}`,
@@ -163,10 +166,10 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'min-height',
     bindingKey: 'minHeight',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const minHeightVariable = variables.find((v) => v.property === 'minHeight');
+      const minHeightVariable = variableMap.get('minHeight');
       if (minHeightVariable) {
         return {
           value: `${minHeightVariable.value}`,
@@ -189,10 +192,10 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'max-height',
     bindingKey: 'maxHeight',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const maxHeightVariable = variables.find((v) => v.property === 'maxHeight');
+      const maxHeightVariable = variableMap.get('maxHeight');
       if (maxHeightVariable) {
         return {
           value: `${maxHeightVariable.value}`,

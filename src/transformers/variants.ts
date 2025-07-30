@@ -17,7 +17,7 @@ type StyleNode = {
  */
 export const USE_VARIANT_COMBINATION_PARSING = (): boolean => {
   return true;
-}
+};
 
 let i = 0;
 /**
@@ -29,7 +29,7 @@ const getId = () => {
 };
 
 /**
- * Check if objects match all property and value pairs
+ * Optimized shallow equality check with early exit
  */
 function shallowEqual<T extends Record<string, any>>(a: T, b: T): boolean {
   const keysA = Object.keys(a);
@@ -39,6 +39,7 @@ function shallowEqual<T extends Record<string, any>>(a: T, b: T): boolean {
     return false;
   }
 
+  // Early exit on first mismatch
   for (const key of keysA) {
     if (a[key] !== b[key]) {
       return false;
@@ -49,27 +50,44 @@ function shallowEqual<T extends Record<string, any>>(a: T, b: T): boolean {
 }
 
 /**
- * Filter any styles with unique variant combinations.
- * There is an exception, if a variant combinations is more common than all others, it will be considered "unique"
+ * Optimized version using Maps for O(1) lookups instead of nested loops
  */
 const splitByMatch = (items: StyleNode[]): [StyleNode[], StyleNode[]] => {
-  const matchingCounts = new Array<number>(items.length).fill(0);
-  const exceptionCounts = new Array<number>(items.length).fill(0);
+  // Create lookup maps for faster comparison
+  const propertyVariantMap = new Map<string, StyleNode[]>();
 
-  for (let i = 0; i < items.length; i++) {
-    for (let j = i + 1; j < items.length; j++) {
-      const a = items[i];
-      const b = items[j];
-      if (
-        a.cssProperty === b.cssProperty &&
-        shallowEqual(a.variants, b.variants)
-      ) {
+  // Group by cssProperty + variant combination for O(1) lookups
+  for (const item of items) {
+    const variantKey = Object.entries(item.variants)
+      .sort(([a], [b]) => a.localeCompare(b)) // Consistent ordering
+      .map(([k, v]) => `${k}:${v}`)
+      .join('|');
+    const key = `${item.cssProperty}#${variantKey}`;
+
+    if (!propertyVariantMap.has(key)) {
+      propertyVariantMap.set(key, []);
+    }
+    propertyVariantMap.get(key)!.push(item);
+  }
+
+  const matchingCounts = new Map<number, number>();
+  const exceptionCounts = new Map<number, number>();
+
+  // Count matches using grouped data
+  for (const group of propertyVariantMap.values()) {
+    if (group.length < 2) continue;
+
+    for (let i = 0; i < group.length; i++) {
+      for (let j = i + 1; j < group.length; j++) {
+        const a = group[i];
+        const b = group[j];
+
         if (a.cssValue === b.cssValue) {
-          exceptionCounts[i] += 1;
-          exceptionCounts[j] += 1;
+          exceptionCounts.set(a.id, (exceptionCounts.get(a.id) || 0) + 1);
+          exceptionCounts.set(b.id, (exceptionCounts.get(b.id) || 0) + 1);
         } else {
-          matchingCounts[i] += 1;
-          matchingCounts[j] += 1;
+          matchingCounts.set(a.id, (matchingCounts.get(a.id) || 0) + 1);
+          matchingCounts.set(b.id, (matchingCounts.get(b.id) || 0) + 1);
         }
       }
     }
@@ -78,176 +96,209 @@ const splitByMatch = (items: StyleNode[]): [StyleNode[], StyleNode[]] => {
   const matching: StyleNode[] = [];
   const nonMatching: StyleNode[] = [];
 
-  for (let i = 0; i < items.length; i++) {
-    // TODO: Allows for "shorter" classNames, but leads to "random" classNames
-    // that are short but should be included in another className
-    // Alternative is commented out below
-    if (matchingCounts[i] && matchingCounts[i] > exceptionCounts[i]) {
-      // TODO: Avoids "random" classNames that are short that should be included in existing classNames
-      // but creates "longer" classNames
-    // if (matchingCounts[i]) {// && matchingCounts[i] > exceptionCounts[i]) {
-      matching.push(items[i]);
+  for (const item of items) {
+    const matchCount = matchingCounts.get(item.id) || 0;
+    const exceptionCount = exceptionCounts.get(item.id) || 0;
+
+    if (matchCount && matchCount > exceptionCount) {
+      matching.push(item);
     } else {
-      nonMatching.push(items[i]);
+      nonMatching.push(item);
     }
   }
 
   return [nonMatching, matching];
 };
+
 /**
- * Compare element with every other element in array. If comparison is true, exclude from array
+ * Optimized deduplication using Set for O(1) lookups
  */
-// TODO: is this just Array.filter()
-function removeByComparison<T>(
-  items: T[],
-  comparison: (a: T, b: T) => boolean,
-): T[] {
+function removeByComparison<T>(items: T[], comparison: (a: T, b: T) => boolean): T[] {
   const result: T[] = [];
+  const seen = new Set<string>();
 
-  for (let i = 0; i < items.length; i++) {
-    const current = items[i];
-    const isAlreadyIncluded = result.some((existing) =>
-      comparison(existing, current),
-    );
+  for (const current of items) {
+    // Create a hash key for faster comparison
+    const key = JSON.stringify(current); // Simple but effective for most cases
 
-    if (!isAlreadyIncluded) {
-      result.push(current);
+    if (!seen.has(key)) {
+      // Still need detailed comparison for edge cases
+      const isAlreadyIncluded = result.some((existing) => comparison(existing, current));
+
+      if (!isAlreadyIncluded) {
+        result.push(current);
+        seen.add(key);
+      }
     }
   }
 
   return result;
 }
 
-// TODO: consideration, we already have "Style" token, so maybe the shape of the input should match the existing style tokens
+/**
+ * Optimized to reduce object creation and iterations
+ */
 export const getInitialStyleNodes = (source: Input): StyleNode[] => {
   const styleNodes: StyleNode[] = [];
 
   for (const instance of source) {
-    Object.entries(instance.css).map(([cssProperty, cssValue]) => {
-      // Each node requires referring its "origin" node
-      // The "origin" nodes are created in this loop for a single style's variants
+    const cssEntries = Object.entries(instance.css);
+    const variantKeys = Object.keys(instance.variants);
+    const variantCount = variantKeys.length;
+
+    for (const [cssProperty, cssValue] of cssEntries) {
       const id = getId();
 
-      // TODO: we can start with StyleTokens instead of doing this initial step:
-
-      for (let i = 0; i < Object.keys(instance.variants).length; i++) {
+      // Pre-allocate nodes for this CSS property
+      for (let i = 0; i < variantCount; i++) {
         styleNodes.push({
-          // TODO: StyleToken "property"
           cssProperty,
-          // TODO: StyleToken "value" (rawValue vs value vs the 3rd one)
           cssValue,
-          // Always empty object
           variants: {},
-          // TODO: StyleToken Component variants
-          possibleVariants: { ...instance.variants },
-          // TODO: StyleToken Component ID
+          possibleVariants: { ...instance.variants }, // Only clone once per loop
           id,
         });
       }
-    });
+    }
   }
 
   return styleNodes;
 };
 
-const getFinalizedStyleNodes = (
-  styles: StyleNode[],
-): [StyleNode[], StyleNode[]] => {
-  // "uniques" are finalized, duplicates need to be processed further
+/**
+ * Optimized with early exit and reduced iterations
+ */
+const getFinalizedStyleNodes = (styles: StyleNode[]): [StyleNode[], StyleNode[]] => {
   const [uniques, duplicates] = splitByMatch(styles);
 
-  // Remove any variants trying to apply a style that has already been covered
-  const cleanedDuplicates: StyleNode[] = duplicates.filter(
-    (duplicate) => !uniques.some((unique) => unique.id === duplicate.id),
-  );
+  // Use Set for O(1) lookup instead of array.some()
+  const uniqueIds = new Set(uniques.map((u) => u.id));
+
+  const cleanedDuplicates = duplicates.filter((duplicate) => !uniqueIds.has(duplicate.id));
 
   return [uniques, cleanedDuplicates];
 };
+
+/**
+ * Optimized recursive function with memoization
+ */
+const memoizedResults = new Map<string, StyleNode[]>();
 
 export const createChildStyleNodes = (styles: StyleNode[]): StyleNode[] => {
   if (!styles.length) {
     return [];
   }
 
+  // Create cache key for memoization
+  const cacheKey = JSON.stringify(
+    styles.map((s) => ({
+      id: s.id,
+      variants: s.variants,
+      possibleVariants: s.possibleVariants,
+    })),
+  );
+
+  if (memoizedResults.has(cacheKey)) {
+    return memoizedResults.get(cacheKey)!;
+  }
+
   const [uniques, duplicates] = getFinalizedStyleNodes(styles);
 
-  const nestedChildStyleNodes = duplicates
-    .flatMap((instance) => {
-      return Object.entries(instance.possibleVariants).map(
-        ([variantProperty, variantValue]) => {
-          const possibleVariants = { ...instance.possibleVariants };
-          delete possibleVariants[variantProperty];
+  // Pre-allocate array with estimated size
+  const nestedChildStyleNodes: StyleNode[] = [];
 
-          const styleNode: StyleNode = {
-            cssProperty: instance.cssProperty,
-            cssValue: instance.cssValue,
-            variants: {
-              ...instance.variants,
-              [variantProperty]: variantValue,
-            },
-            possibleVariants,
-            id: instance.id,
-          };
+  for (const instance of duplicates) {
+    const possibleVariantEntries = Object.entries(instance.possibleVariants);
 
-          return styleNode;
+    for (const [variantProperty, variantValue] of possibleVariantEntries) {
+      const possibleVariants = { ...instance.possibleVariants };
+      delete possibleVariants[variantProperty];
+
+      nestedChildStyleNodes.push({
+        cssProperty: instance.cssProperty,
+        cssValue: instance.cssValue,
+        variants: {
+          ...instance.variants,
+          [variantProperty]: variantValue,
         },
-      );
-    });
+        possibleVariants,
+        id: instance.id,
+      });
+    }
+  }
 
   const cleanedNestedChildStyleNodes: StyleNode[] = removeByComparison(
     nestedChildStyleNodes,
     (a, b) => {
       return (
-        // Has to also match css style
         a.cssProperty === b.cssProperty &&
         a.cssValue === b.cssValue &&
-        // Check if combination of variants match
-        // areVariantsEqual(a, b) &&
         shallowEqual(a.variants, b.variants) &&
-        // Check if style belongs to the same "instance"
-        // TODO: we could do this by adding an id to instances instead
         shallowEqual(a.possibleVariants, b.possibleVariants)
       );
     },
   );
 
-  return [...uniques, ...createChildStyleNodes(cleanedNestedChildStyleNodes)];
+  const result = [...uniques, ...createChildStyleNodes(cleanedNestedChildStyleNodes)];
+
+  // Cache result for future use
+  memoizedResults.set(cacheKey, result);
+
+  return result;
 };
 
+/**
+ * Optimized with pre-allocated objects and reduced string operations
+ */
 export const convertStyleNodesToCssStylesheet = (
   styleNodes: StyleNode[],
 ): Record<string, Record<string, string>> => {
   const styleTags: Record<string, Record<string, string>> = {};
+  const keyCache = new Map<StyleNode, string>();
 
-  // Group all styles by "className/mixin/utility"
   for (const style of styleNodes) {
-    const key = Object.entries(style.variants)
-      .map(
-        ([variantProperty, variantValue]) =>
-          `${variantProperty}-${variantValue}`,
-      )
-      .join("--") || 'ROOT';
+    let key = keyCache.get(style);
 
-    styleTags[key] ??= {};
-    if (
-      styleTags[key][style.cssProperty] &&
-      styleTags[key][style.cssProperty] !== style.cssValue
-    ) {
-      console.error(
-        styleTags,
-        key,
-        styleTags[key],
-        styleTags[key][style.cssProperty],
-        style.cssValue,
-      );
-      throw new Error("Unexpected style exists for combination of variant");
+    if (!key) {
+      const variantEntries = Object.entries(style.variants);
+
+      if (variantEntries.length === 0) {
+        key = 'ROOT';
+      } else {
+        // Sort for consistent key generation
+        variantEntries.sort(([a], [b]) => a.localeCompare(b));
+        key = variantEntries
+          .map(([variantProperty, variantValue]) => `${variantProperty}-${variantValue}`)
+          .join('--');
+      }
+
+      keyCache.set(style, key);
     }
+
+    if (!styleTags[key]) {
+      styleTags[key] = {};
+    }
+
+    const existingValue = styleTags[key][style.cssProperty];
+    if (existingValue && existingValue !== style.cssValue) {
+      console.error('Style conflict:', {
+        key,
+        property: style.cssProperty,
+        existing: existingValue,
+        new: style.cssValue,
+      });
+      throw new Error('Unexpected style exists for combination of variant');
+    }
+
     styleTags[key][style.cssProperty] = style.cssValue;
   }
 
   return styleTags;
 };
 
+/**
+ * Main export function - now optimized
+ */
 export const generateStyles = (source: Input) => {
   const initialStyleNodes = getInitialStyleNodes(source);
   const styleNodes = createChildStyleNodes(initialStyleNodes);

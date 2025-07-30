@@ -8,7 +8,7 @@ export const backgroundProcessors: StyleProcessor[] = [
     property: 'background',
     bindingKey: 'fills',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
       if (node && 'fills' in node && Array.isArray(node.fills)) {
@@ -21,7 +21,7 @@ export const backgroundProcessors: StyleProcessor[] = [
         const backgrounds = await Promise.all(
           visibleFills.map(async (fill: Paint) => {
             if (fill.type === 'SOLID') {
-              const fillVariable = variables.find((v) => v.property === 'fills');
+              const fillVariable = variableMap.get('fills');
               if (fillVariable) {
                 return {
                   value: fillVariable.value,
@@ -78,11 +78,11 @@ export const backgroundProcessors: StyleProcessor[] = [
     property: 'opacity',
     bindingKey: 'opacity',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
       if (node && 'opacity' in node && node.opacity !== 1) {
-        const opacityVariable = variables.find((v) => v.property === 'opacity');
+        const opacityVariable = variableMap.get('opacity');
         if (opacityVariable) {
           return {
             value: opacityVariable.value,

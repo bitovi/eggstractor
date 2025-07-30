@@ -23,41 +23,46 @@ function hasTextAlign(node: SceneNode): node is SceneNode & NodeWithTextAlign {
 export const fontProcessors: StyleProcessor[] = [
   {
     property: 'color',
-    bindingKey: 'fills',
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const colorVariable = variables.find((v) => v.property === 'fills');
-      if (colorVariable) {
-        return {
-          value: colorVariable.value,
-          rawValue: colorVariable.rawValue,
-        };
-      }
-
-      if (
-        node?.type === 'TEXT' &&
-        node.fills &&
-        Array.isArray(node.fills) &&
-        node.fills.length > 0
-      ) {
-        const fill = node.fills[0] as Paint;
-        if (fill?.type === 'SOLID') {
-          const { r, g, b } = fill.color;
-          const a = fill.opacity ?? 1;
-          const value = rgbaToString(r, g, b, a);
-          return { value, rawValue: value };
+    bindingKey: undefined,
+    process: async (variableMap: Map<string, VariableToken>, node?: SceneNode) => {
+      try {
+        const colorVariable = variableMap.get('fills');
+        if (colorVariable) {
+          return {
+            value: colorVariable.value,
+            rawValue: colorVariable.rawValue,
+          };
         }
+
+        if (
+          node?.type === 'TEXT' &&
+          node.fills &&
+          Array.isArray(node.fills) &&
+          node.fills.length > 0
+        ) {
+          const fill = node.fills[0] as Paint;
+          if (fill?.type === 'SOLID') {
+            const { r, g, b } = fill.color;
+            const a = fill.opacity ?? 1;
+            const value = rgbaToString(r, g, b, a);
+            return { value, rawValue: value };
+          }
+        }
+        return null;
+      } catch (error) {
+        console.error('Error in font color processor:', error);
+        return null;
       }
-      return null;
     },
   },
   {
     property: 'font-family',
     bindingKey: 'fontFamily',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const fontVariable = variables.find((v) => v.property === 'fontFamily');
+      const fontVariable = variableMap.get('fontFamily');
       if (fontVariable) {
         return {
           value: fontVariable.value,
@@ -76,10 +81,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'font-size',
     bindingKey: 'fontSize',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const sizeVariable = variables.find((v) => v.property === 'fontSize');
+      const sizeVariable = variableMap.get('fontSize');
       if (sizeVariable) {
         return {
           value: sizeVariable.value,
@@ -98,7 +103,10 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'font-weight',
     bindingKey: 'fontWeight',
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (
+      variableMap: Map<string, VariableToken>,
+      node?: SceneNode,
+    ): Promise<ProcessedValue | null> => {
       if (!node || !hasFont(node)) return null;
 
       if (node.fontWeight) {
@@ -108,7 +116,7 @@ export const fontProcessors: StyleProcessor[] = [
         };
       }
 
-      const weightVariable = variables.find((v) => v.property === 'fontWeight');
+      const weightVariable = variableMap.get('fontWeight');
       if (weightVariable) {
         return {
           value: weightVariable.value,
@@ -145,10 +153,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'font-style',
     bindingKey: 'fontStyle',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const styleVariable = variables.find((v) => v.property === 'fontStyle');
+      const styleVariable = variableMap.get('fontStyle');
       if (styleVariable) {
         return {
           value: styleVariable.value.toLowerCase(),
@@ -167,10 +175,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'line-height',
     bindingKey: 'lineHeight',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const heightVariable = variables.find((v) => v.property === 'lineHeight');
+      const heightVariable = variableMap.get('lineHeight');
       if (heightVariable) {
         return {
           value: heightVariable.value,
@@ -200,10 +208,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'letter-spacing',
     bindingKey: 'letterSpacing',
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const spacingVariable = variables.find((v) => v.property === 'letterSpacing');
+      const spacingVariable = variableMap.get('letterSpacing');
       if (spacingVariable) {
         return {
           value: spacingVariable.value,
@@ -297,7 +305,7 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'width',
     bindingKey: undefined,
     process: async (
-      variables: VariableToken[],
+      variableMap: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
       // Only apply width if text doesn't auto-resize width
