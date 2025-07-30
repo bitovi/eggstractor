@@ -3,6 +3,17 @@ import {
   detectComponentSetDuplicates,
 } from '../../services/collection.service';
 
+beforeEach(() => {
+  // Suppress console output for cleaner test results
+  jest.spyOn(console, 'log').mockImplementation(() => {});
+  jest.spyOn(console, 'warn').mockImplementation(() => {});
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
 describe('getFlattenedValidNodes', () => {
   it('should filter out VECTOR and INSTANCE nodes', () => {
     const testNode = {
