@@ -1,0 +1,230 @@
+{
+  "architectural_domains": {
+    "figma_plugin_orchestration": {
+      "description": "The main entry point and orchestration layer for the Figma plugin, handling UI communication and coordinating the design token extraction process",
+      "patterns": [
+        "Event-driven architecture with message passing between plugin and UI",
+        "Command pattern for handling different UI actions (generate, save-config, create-pr)",
+        "Strategy pattern for format selection (scss, css, tailwind variants)",
+        "Async/await coordination for token collection and transformation"
+      ],
+      "constraints": [
+        "Must conform to Figma Plugin API",
+        "Limited to main thread execution for Figma API calls",
+        "UI thread separation requires message passing",
+        "Storage limited to Figma's clientStorage API"
+      ],
+      "key_responsibilities": [
+        "Plugin lifecycle management",
+        "Message routing between UI and core logic",
+        "Format strategy selection and execution",
+        "Progress reporting and error handling",
+        "GitHub integration coordination"
+      ]
+    },
+    "design_token_extraction": {
+      "description": "Core domain responsible for traversing Figma nodes and extracting design tokens using a processor-based architecture",
+      "patterns": [
+        "Visitor pattern for node traversal",
+        "Strategy pattern for different node type processors",
+        "Pipeline pattern for token processing stages",
+        "Factory pattern for creating appropriate processors",
+        "Observer pattern for progress reporting"
+      ],
+      "constraints": [
+        "Must handle all Figma node types correctly",
+        "Performance constraints for large design files",
+        "Memory constraints for token collection",
+        "Type safety with Figma's complex type system"
+      ],
+      "key_responsibilities": [
+        "Figma page and node traversal",
+        "Node validation and filtering",
+        "Component and variant detection",
+        "Token collection coordination",
+        "Progress tracking and reporting"
+      ]
+    },
+    "style_processing_pipeline": {
+      "description": "Processor-based system that converts Figma node properties into standardized design tokens using specialized processors for different style categories",
+      "patterns": [
+        "Strategy pattern for different style processors",
+        "Chain of responsibility for processing pipeline",
+        "Template method for common processing logic",
+        "Adapter pattern for Figma API to CSS property mapping",
+        "Decorator pattern for adding metadata to tokens"
+      ],
+      "constraints": [
+        "Must handle all Figma style properties",
+        "Consistent output format across processors",
+        "Variable binding resolution complexity",
+        "Error handling without breaking pipeline"
+      ],
+      "key_responsibilities": [
+        "Background/fill processing (gradients, solids)",
+        "Typography processing (fonts, alignment, sizing)",
+        "Layout processing (flexbox, dimensions, spacing)",
+        "Border processing (styles, radius, shadows)",
+        "Variable resolution and binding"
+      ]
+    },
+    "output_transformation": {
+      "description": "Transformation layer that converts collected design tokens into various output formats (CSS, SCSS, Tailwind) with variant handling",
+      "patterns": [
+        "Strategy pattern for different output formats",
+        "Template method for common transformation logic",
+        "Builder pattern for constructing complex output",
+        "Middleware pattern for variant processing",
+        "Decorator pattern for adding format-specific features"
+      ],
+      "constraints": [
+        "Must generate valid CSS/SCSS/Tailwind syntax",
+        "Consistent naming conventions across formats",
+        "Variable reference resolution",
+        "Performance for large token collections"
+      ],
+      "key_responsibilities": [
+        "CSS class generation with proper syntax",
+        "SCSS mixin and variable generation",
+        "Tailwind utility class creation",
+        "Variant combination handling",
+        "Error and warning collection"
+      ]
+    },
+    "variant_management": {
+      "description": "Specialized system for handling Figma component variants and converting them into CSS class hierarchies",
+      "patterns": [
+        "Composite pattern for variant tree structures",
+        "State pattern for variant combinations",
+        "Factory pattern for variant token creation",
+        "Interpreter pattern for variant naming",
+        "Middleware pattern for variant processing pipeline"
+      ],
+      "constraints": [
+        "Complex variant combination logic",
+        "Naming collision avoidance",
+        "Performance with large variant sets",
+        "Maintainable class hierarchies"
+      ],
+      "key_responsibilities": [
+        "Component variant detection and parsing",
+        "Variant combination generation",
+        "Class name generation and sanitization",
+        "Variant-specific token filtering",
+        "Hierarchical CSS structure creation"
+      ]
+    },
+    "github_integration": {
+      "description": "External integration layer for GitHub operations including authentication, repository management, and pull request creation",
+      "patterns": [
+        "Repository pattern for GitHub API interactions",
+        "Command pattern for GitHub operations",
+        "Strategy pattern for different GitHub actions",
+        "Adapter pattern for GitHub API integration",
+        "Singleton pattern for configuration management"
+      ],
+      "constraints": [
+        "GitHub API rate limits and authentication",
+        "Network connectivity requirements",
+        "Security for token storage",
+        "Error handling for external API failures"
+      ],
+      "key_responsibilities": [
+        "GitHub authentication and token management",
+        "Repository and branch operations",
+        "File creation and updates in repositories",
+        "Pull request creation and management",
+        "Configuration persistence across sessions"
+      ]
+    },
+    "testing_infrastructure": {
+      "description": "Comprehensive testing system with fixture-based testing, snapshot testing, and mock Figma API simulation",
+      "patterns": [
+        "Mock object pattern for Figma API simulation",
+        "Fixture pattern for test data management",
+        "Builder pattern for test setup",
+        "Template method for common test scenarios",
+        "Snapshot pattern for regression testing"
+      ],
+      "constraints": [
+        "Must accurately simulate Figma API behavior",
+        "Maintainable test fixtures",
+        "Performance for large test suites",
+        "Cross-platform test reliability"
+      ],
+      "key_responsibilities": [
+        "Figma API mocking and simulation",
+        "Test fixture creation and management",
+        "Snapshot testing for regression detection",
+        "Test data serialization and deserialization",
+        "Cross-processor testing coordination"
+      ]
+    },
+    "utility_services": {
+      "description": "Supporting services and utilities for common operations like string manipulation, color processing, and error handling",
+      "patterns": [
+        "Utility pattern for stateless helper functions",
+        "Strategy pattern for different utility operations",
+        "Factory pattern for creating specialized utilities",
+        "Singleton pattern for shared configurations",
+        "Decorator pattern for adding functionality"
+      ],
+      "constraints": [
+        "Performance for frequently used utilities",
+        "Type safety across utility functions",
+        "Consistent error handling patterns",
+        "Minimal dependencies between utilities"
+      ],
+      "key_responsibilities": [
+        "String sanitization and formatting",
+        "Color format conversion and manipulation",
+        "Unit conversion and validation",
+        "Error aggregation and deduplication",
+        "Array and object manipulation helpers"
+      ]
+    }
+  },
+  "cross_cutting_concerns": {
+    "error_handling": {
+      "description": "Standardized error handling across all domains with warning/error collection and user feedback",
+      "implementation": "Consistent error interfaces, centralized error collection, user-friendly error messages"
+    },
+    "type_safety": {
+      "description": "Strong TypeScript typing throughout the system with comprehensive interface definitions",
+      "implementation": "Shared type definitions, generic interfaces, strict type checking"
+    },
+    "performance": {
+      "description": "Performance optimization for large Figma files and complex token collections",
+      "implementation": "Lazy loading, efficient algorithms, memory management, progress reporting"
+    },
+    "extensibility": {
+      "description": "Plugin architecture allowing for new processors, transformers, and output formats",
+      "implementation": "Interface-based design, factory patterns, configuration-driven behavior"
+    }
+  },
+  "data_flow_architecture": {
+    "primary_flow": [
+      "Figma Plugin Orchestration receives UI commands",
+      "Design Token Extraction traverses Figma nodes",
+      "Style Processing Pipeline processes each node with appropriate processors",
+      "Tokens are collected into standardized format",
+      "Variant Management processes component variants",
+      "Output Transformation converts tokens to requested format",
+      "Results are returned to UI or GitHub Integration"
+    ],
+    "data_transformation_stages": [
+      "Raw Figma Node Properties",
+      "Processed Style Values with Variable Resolution",
+      "Standardized Design Tokens",
+      "Variant-Enhanced Token Collections",
+      "Format-Specific Output (CSS/SCSS/Tailwind)"
+    ]
+  },
+  "architectural_constraints": {
+    "figma_api_limitations": "Must work within Figma Plugin API constraints and capabilities",
+    "performance_requirements": "Must handle large design files efficiently without blocking UI",
+    "extensibility_needs": "Architecture must support adding new processors and output formats",
+    "type_safety_requirements": "Strong typing throughout to prevent runtime errors",
+    "error_resilience": "Graceful handling of malformed or unexpected Figma data"
+  }
+}
