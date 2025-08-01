@@ -296,7 +296,7 @@ const getBorderColor = (node?: SceneNode, variables?: any[]): BorderColor | null
     const stroke = node.strokes[0] as Paint;
     if (stroke?.type === 'SOLID') {
       const { r, g, b } = stroke.color;
-      const a = stroke.opacity ?? 1;
+      const a = stroke.opacity !== undefined ? stroke.opacity : 1;
       const color = rgbaToString(r, g, b, a);
       return {
         value: color,

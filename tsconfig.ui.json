@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2017",
+    "lib": ["ES2017", "DOM", "DOM.Iterable"],
+    "jsx": "react",
+    "noEmit": false,
+    "outDir": "./dist"
+  },
+  "include": ["src/ui/**/*", "src/highlighter.ts", "src/types/**/*"]
+}

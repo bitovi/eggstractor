@@ -20,7 +20,7 @@ export async function processGradientStops(
         };
       } else {
         const { r, g, b, a } = stop.color;
-        const directColor = rgbaToString(r, g, b, a ?? 1);
+        const directColor = rgbaToString(r, g, b, a !== undefined ? a : 1);
         color = { value: directColor, rawValue: directColor };
       }
 

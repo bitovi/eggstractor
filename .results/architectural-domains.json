@@ -1,0 +1,86 @@
+{
+    "style-processing": {
+        "required_patterns": {
+            "processor-pattern": "All style extraction must use StyleProcessor interface with property, bindingKey, and process function",
+            "variable-bindings": "Use VariableBindings interface for mapping Figma variables to CSS properties",
+            "async-processing": "All processors must return Promise<ProcessedValue | null>"
+        },
+        "architectural_constraints": {
+            "processor-registration": "Processors must be registered via getProcessorsForNode() function based on node type",
+            "node-type-specific": "Different node types (TEXT, FRAME, RECTANGLE, etc.) have specific processor arrays",
+            "null-handling": "Processors must handle null values when properties don't exist on nodes"
+        }
+    },
+    "code-transformation": {
+        "required_patterns": {
+            "transformer-interface": "All transformers must implement TransformerResult with result, warnings, and errors",
+            "token-collection-input": "Transformers accept TokenCollection as primary input",
+            "format-specific": "Each output format (SCSS, CSS, Tailwind) has dedicated transformer"
+        },
+        "architectural_constraints": {
+            "error-deduplication": "Must use deduplicateMessages utility for warnings/errors",
+            "sanitization": "All names must be sanitized using sanitizeName utility",
+            "unit-conversion": "Must use rem() utility for px to rem conversion in SCSS"
+        }
+    },
+    "figma-plugin-architecture": {
+        "required_patterns": {
+            "message-passing": "UI and main thread communicate via figma.ui.postMessage/onmessage",
+            "async-operations": "All Figma API calls must be async/await",
+            "node-traversal": "Use figma.currentPage for accessing design elements"
+        },
+        "architectural_constraints": {
+            "sandbox-separation": "UI code cannot directly access Figma API - must use message passing",
+            "manifest-driven": "Plugin capabilities defined in manifest.json",
+            "single-page-scope": "Operations limited to current page only"
+        }
+    },
+    "service-layer": {
+        "required_patterns": {
+            "token-extraction": "Use specific extract functions (extractNodeToken, extractComponentToken, etc.)",
+            "collection-service": "Central collectTokens function orchestrates all token extraction",
+            "variable-service": "collectBoundVariable handles Figma variable binding resolution"
+        },
+        "architectural_constraints": {
+            "node-type-specific-extraction": "Different node types require different extraction strategies",
+            "component-variant-handling": "Must detect and handle duplicate component variants",
+            "remote-component-support": "Handle both local and remote Figma components"
+        }
+    },
+    "utility-system": {
+        "required_patterns": {
+            "domain-specific-utils": "Utilities organized by domain (color, gradient, units, etc.)",
+            "pure-functions": "All utilities are stateless, pure functions",
+            "error-handling": "Consistent error/warning accumulation pattern"
+        },
+        "architectural_constraints": {
+            "no-side-effects": "Utility functions must not modify global state",
+            "type-safety": "All utilities must maintain strict TypeScript typing",
+            "null-safe": "Handle null/undefined values gracefully"
+        }
+    },
+    "github-integration": {
+        "required_patterns": {
+            "rest-api-client": "Use GitHub REST API for all repository operations",
+            "authentication": "Personal Access Token (PAT) based authentication",
+            "branch-workflow": "Create branch -> commit changes -> create pull request"
+        },
+        "architectural_constraints": {
+            "single-file-operations": "Limited to single file commits per operation",
+            "error-propagation": "Must propagate GitHub API errors to UI",
+            "base64-encoding": "File content must be base64 encoded for GitHub API"
+        }
+    },
+    "testing-strategy": {
+        "required_patterns": {
+            "snapshot-testing": "Use Jest snapshots for output consistency testing",
+            "fixture-data": "Test with real Figma data fixtures",
+            "processor-isolation": "Test each processor independently"
+        },
+        "architectural_constraints": {
+            "test-utils": "Must use test utilities for data serialization/mocking",
+            "category-separation": "Tests organized by component category (processors, services, etc.)",
+            "no-real-api-calls": "Tests must not make real Figma or GitHub API calls"
+        }
+    }
+}

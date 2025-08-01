@@ -42,7 +42,7 @@ export const fontProcessors: StyleProcessor[] = [
         const fill = node.fills[0] as Paint;
         if (fill?.type === 'SOLID') {
           const { r, g, b } = fill.color;
-          const a = fill.opacity ?? 1;
+          const a = fill.opacity !== undefined ? fill.opacity : 1;
           const value = rgbaToString(r, g, b, a);
           return { value, rawValue: value };
         }
