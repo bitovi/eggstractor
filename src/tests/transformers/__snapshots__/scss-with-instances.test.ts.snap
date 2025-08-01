@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Instance Override SCSS Generation should create snapshot of generated SCSS with instances: instance-warnings 1`] = `[]`;
+
+exports[`Instance Override SCSS Generation should create snapshot of generated SCSS with instances: scss-with-instances 1`] = `
+"
+// Generated SCSS Mixins
+"
+`;

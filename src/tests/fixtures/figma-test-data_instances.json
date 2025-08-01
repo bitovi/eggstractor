@@ -1,0 +1,171 @@
+{
+  "id": "0:0",
+  "name": "Document",
+  "type": "DOCUMENT",
+  "children": [
+    {
+      "id": "0:1",
+      "name": "Page 1",
+      "type": "CANVAS",
+      "children": [
+        {
+          "id": "component-set-1",
+          "name": "Button",
+          "type": "COMPONENT_SET",
+          "children": [
+            {
+              "id": "component-1",
+              "name": "State=Default",
+              "type": "COMPONENT",
+              "componentPropertyDefinitions": {
+                "State": {
+                  "type": "VARIANT",
+                  "variantOptions": ["Default", "Hover"]
+                }
+              },
+              "variantProperties": {
+                "State": "Default"
+              },
+              "fills": [
+                {
+                  "type": "SOLID",
+                  "color": {
+                    "r": 0.2,
+                    "g": 0.4,
+                    "b": 0.8
+                  },
+                  "opacity": 1,
+                  "visible": true
+                }
+              ],
+              "strokeWeight": 1,
+              "strokes": [
+                {
+                  "type": "SOLID",
+                  "color": {
+                    "r": 0.1,
+                    "g": 0.2,
+                    "b": 0.4
+                  },
+                  "opacity": 1,
+                  "visible": true
+                }
+              ],
+              "cornerRadius": 8,
+              "width": 120,
+              "height": 40,
+              "layoutMode": "HORIZONTAL",
+              "primaryAxisAlignItems": "CENTER",
+              "counterAxisAlignItems": "CENTER",
+              "paddingTop": 8,
+              "paddingRight": 16,
+              "paddingBottom": 8,
+              "paddingLeft": 16
+            }
+          ],
+          "componentPropertyDefinitions": {
+            "State": {
+              "type": "VARIANT",
+              "variantOptions": ["Default", "Hover"]
+            }
+          }
+        },
+        {
+          "id": "instance-1",
+          "name": "Primary Button",
+          "type": "INSTANCE",
+          "mainComponent": {
+            "id": "component-1",
+            "type": "COMPONENT"
+          },
+          "variantProperties": {
+            "State": "Default"
+          },
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": {
+                "r": 0.8,
+                "g": 0.2,
+                "b": 0.2
+              },
+              "opacity": 1,
+              "visible": true
+            }
+          ],
+          "strokeWeight": 2,
+          "strokes": [
+            {
+              "type": "SOLID",
+              "color": {
+                "r": 0.6,
+                "g": 0.1,
+                "b": 0.1
+              },
+              "opacity": 1,
+              "visible": true
+            }
+          ],
+          "cornerRadius": 12,
+          "width": 120,
+          "height": 40,
+          "layoutMode": "HORIZONTAL",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "paddingTop": 8,
+          "paddingRight": 16,
+          "paddingBottom": 8,
+          "paddingLeft": 16
+        },
+        {
+          "id": "instance-2",
+          "name": "Secondary Button",
+          "type": "INSTANCE",
+          "mainComponent": {
+            "id": "component-1",
+            "type": "COMPONENT"
+          },
+          "variantProperties": {
+            "State": "Default"
+          },
+          "fills": [
+            {
+              "type": "SOLID",
+              "color": {
+                "r": 0.9,
+                "g": 0.9,
+                "b": 0.9
+              },
+              "opacity": 1,
+              "visible": true
+            }
+          ],
+          "strokeWeight": 1,
+          "strokes": [
+            {
+              "type": "SOLID",
+              "color": {
+                "r": 0.5,
+                "g": 0.5,
+                "b": 0.5
+              },
+              "opacity": 1,
+              "visible": true
+            }
+          ],
+          "cornerRadius": 4,
+          "width": 120,
+          "height": 40,
+          "layoutMode": "HORIZONTAL",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "paddingTop": 8,
+          "paddingRight": 16,
+          "paddingBottom": 8,
+          "paddingLeft": 16
+        }
+      ]
+    }
+  ],
+  "variables": {}
+}

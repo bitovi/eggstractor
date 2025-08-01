@@ -3,6 +3,7 @@ import { sanitizeName, groupBy } from '../utils/index';
 import { deduplicateMessages } from '../utils/error.utils';
 import { rem } from '../utils/units.utils';
 import { convertVariantGroupBy } from './variants-middleware';
+import { detectInstanceOverrides, InstanceOverride } from '../services/instance.service';
 
 const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
@@ -154,4 +155,66 @@ function sortAndDedupeTokens(tokens: StyleToken[]): StyleToken[] {
     }
     return acc;
   }, [] as StyleToken[]);
+}
+
+/**
+ * Generates instance-specific SCSS mixins with override styles only
+ */
+export function generateInstanceMixins(overrides: InstanceOverride[]): string {
+  let output = '';
+  
+  if (overrides.length === 0) {
+    return output;
+  }
+
+  output += '\n// Generated Instance Mixins (Override Styles Only)\n';
+
+  for (const override of overrides) {
+    const mixinName = sanitizeName(override.instanceName);
+    
+    output += `@mixin ${mixinName} {\n`;
+    
+    if (override.overrideTokens.length === 0) {
+      // Even if no overrides, include a comment to show the mixin exists
+      output += `  // No override styles - inherits all styles from component\n`;
+    } else {
+      // Sort tokens by property for consistent output
+      const sortedTokens = override.overrideTokens.sort((a, b) => a.property.localeCompare(b.property));
+      
+      for (const token of sortedTokens) {
+        const properties = getMixinPropertyAndValue(token);
+        Object.entries(properties).forEach(([property, value]) => {
+          output += `  ${property}: ${value};\n`;
+        });
+      }
+    }
+    
+    output += '}\n';
+  }
+
+  return output;
+}
+
+export async function transformToScssWithInstances(tokens: TokenCollection): Promise<TransformerResult> {
+  // First generate regular SCSS output
+  const regularResult = transformToScss(tokens);
+  
+  // Then add instance-specific mixins
+  try {
+    const instanceOverrides = await detectInstanceOverrides(tokens);
+    const instanceMixins = generateInstanceMixins(instanceOverrides);
+    
+    return {
+      result: regularResult.result + instanceMixins,
+      warnings: regularResult.warnings,
+      errors: regularResult.errors,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error generating instance mixins';
+    return {
+      result: regularResult.result,
+      warnings: [...regularResult.warnings, `Warning: Could not generate instance mixins: ${errorMessage}`],
+      errors: regularResult.errors,
+    };
+  }
 }

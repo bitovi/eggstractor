@@ -1,6 +1,7 @@
 import { collectTokens } from './services';
 import {
   transformToScss,
+  transformToScssWithInstances,
   transformToCss,
   transformToTailwindLayerUtilityClassV4,
   transformToTailwindSassClass,
@@ -50,7 +51,7 @@ async function generateStyles(
 
   switch (format) {
     case 'scss':
-      return transformToScss(tokens);
+      return await transformToScssWithInstances(tokens);
     case 'css':
       return transformToCss(tokens);
     case 'tailwind-scss':
