@@ -1,4 +1,4 @@
-import { ComponentSetToken, ComponentToken, StyleToken, TokenCollection } from '../types';
+import { ComponentSetToken, ComponentToken, StyleToken, TokenCollection, InstanceToken } from '../types';
 import { getProcessorsForNode } from '../processors';
 import {
   extractComponentSetToken,
@@ -235,5 +235,121 @@ export async function collectTokens(onProgress: (progress: number, message: stri
     await processNode(node);
   }
 
+  // Second pass: Process component instances that should be exported as references
+  onProgress(90, 'Processing component references...');
+  await processComponentReferences(collection, allValidNodes);
+
   return collection as Readonly<TokenCollection>;
+}
+
+/**
+ * Checks if a component instance should be exported as a component reference
+ * rather than being broken down into individual style properties
+ */
+export function shouldExportAsComponentReference(
+  instanceToken: InstanceToken,
+  collection: TokenCollection
+): boolean {
+  // Skip remote components as they can't be reliably referenced
+  if (instanceToken.remote) {
+    return false;
+  }
+
+  // Check if the component exists in our collection
+  const componentToken = instanceToken.componentNode ? collection.components[instanceToken.componentNode.id] : null;
+  if (!componentToken) {
+    return false;
+  }
+
+  // Check if this is a variant of a component set
+  const componentSetToken = componentToken.componentSetId ? collection.componentSets[componentToken.componentSetId] : null;
+  
+  // Only export as reference if it's part of a component set (has variants)
+  // or if it's a standalone component that's been reused
+  return !!(componentSetToken || isReusedComponent(instanceToken, collection));
+}
+
+/**
+ * Determines if a component is reused across the design
+ */
+function isReusedComponent(instanceToken: InstanceToken, collection: TokenCollection): boolean {
+  if (!instanceToken.componentNode) return false;
+
+  // Count how many instances of this component exist
+  const componentId = instanceToken.componentNode.id;
+  const instanceCount = Object.values(collection.instances).filter(
+    instance => instance.componentNode?.id === componentId
+  ).length;
+
+  // Consider it reused if there are multiple instances
+  return instanceCount > 1;
+}
+
+/**
+ * Creates a component reference token instead of style tokens
+ */
+export function createComponentReferenceToken(
+  instanceToken: InstanceToken,
+  collection: TokenCollection
+): StyleToken {
+  const componentToken = instanceToken.componentNode ? collection.components[instanceToken.componentNode.id] : null;
+  const componentSetToken = componentToken?.componentSetId ? 
+    collection.componentSets[componentToken.componentSetId] : null;
+
+  let componentReferenceName = '';
+  
+  if (componentSetToken) {
+    // For component sets, include variant information
+    const variantProperties = instanceToken.variantProperties || {};
+    const variantParts = Object.entries(variantProperties)
+      .map(([key, value]) => `${key}-${value}`)
+      .join('--');
+    
+    componentReferenceName = componentSetToken.name;
+    if (variantParts) {
+      componentReferenceName += `--${variantParts}`;
+    }
+  } else if (componentToken) {
+    // For standalone components, just use the component name
+    componentReferenceName = instanceToken.name || componentToken.id;
+  }
+
+  return {
+    type: 'style',
+    name: instanceToken.name || 'unnamed',
+    property: 'component-reference',
+    value: `@include ${componentReferenceName}()`,
+    rawValue: `/* Component reference: ${componentReferenceName} */`,
+    path: [{ name: instanceToken.name, type: 'INSTANCE' }],
+    componentId: componentToken?.id,
+    componentSetId: componentToken?.componentSetId || undefined,
+    metadata: {
+      figmaId: instanceToken.id,
+    }
+  };
+}
+
+/**
+ * Second pass processing for component instances that should be exported as references
+ */
+async function processComponentReferences(collection: TokenCollection, allValidNodes: BaseNode[]) {
+  const instanceNodes = allValidNodes.filter(node => node.type === 'INSTANCE') as InstanceNode[];
+  
+  for (const instanceNode of instanceNodes) {
+    const instanceToken = collection.instances[instanceNode.id];
+    if (!instanceToken) continue;
+
+    // Check if this instance should be exported as a component reference
+    if (shouldExportAsComponentReference(instanceToken, collection)) {
+      const referenceToken = createComponentReferenceToken(instanceToken, collection);
+      collection.tokens.push(referenceToken);
+
+      // Remove existing style tokens for this instance node to avoid duplication
+      collection.tokens = collection.tokens.filter(token => 
+        !(token.type === 'style' && 
+          token.path.some(pathNode => pathNode.type === 'INSTANCE' && pathNode.name === instanceNode.name) &&
+          token.property !== 'component-reference')
+      );
+    }
+  }
 }

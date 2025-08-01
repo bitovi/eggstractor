@@ -4,6 +4,36 @@
 
 We traverse the Figma page, get all the variables. We then use those variables and process the nodes to create style tokens. With the style and variable tokens we use this to transform into CSS/SASS.
 
+## New Feature: Component Instance References (EGG-46)
+
+Eggstractor now supports exporting nested component instances as component references instead of breaking them down into individual CSS properties. This feature:
+
+- **Identifies reused components**: Detects when button components are reused inside modal components or other contexts
+- **Handles component variants**: Recognizes component variants (e.g., large outlined button) and includes variant information in the reference
+- **Generates SCSS mixins**: Exports component instances as `@include ComponentName--variant-value()` calls
+- **Reduces output size**: Prevents duplication of styles by referencing existing component definitions
+- **Handles overrides**: Supports components with styling overrides applied (future enhancement)
+
+### How it works:
+
+1. **Collection Phase**: All component instances are collected and analyzed for reuse patterns
+2. **Analysis Phase**: Determines which instances should be exported as references vs. expanded styles:
+   - Component set instances (variants) are always referenced
+   - Standalone components that appear multiple times are referenced  
+   - Remote components are excluded from referencing
+3. **Generation Phase**: Creates `@include` statements in SCSS output for referenced components
+
+### Example Output:
+
+```scss
+// Component References
+// Component reference: Button--size-large--theme-primary  
+@include Button--size-large--theme-primary()
+
+// Component reference: Modal--variant-compact
+@include Modal--variant-compact()
+```
+
 ## System Flow
 
 <img src="flow.svg" />

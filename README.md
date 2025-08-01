@@ -11,7 +11,18 @@ This plugin generates SCSS variables and mixins from Figma, it also enables you 
 - Extracts colors, background colors, padding, margin, font size, line height, font weight, opacity, and more from current page.
 - Generates SCSS variables for each color.
 - Handles text nodes to extract font colors.
+- **Component Instance References**: Intelligently identifies reused components and exports them as SCSS mixin references instead of expanding individual styles
 - Outputs the generated SCSS code to the plugin UI.
+
+### Component Instance References (New!)
+
+Eggstractor now detects when components are reused across your design and exports them as component references:
+
+- **Button variants** → `@include Button--size-large--theme-primary()`
+- **Modal components** → `@include Modal--variant-compact()`
+- **Reused elements** → Avoids style duplication by referencing existing mixins
+
+This feature helps maintain cleaner, more maintainable SCSS output by leveraging component relationships rather than duplicating styles.
 
 <a href="https://www.youtube.com/watch?v=m7i-IexlZqQ">
   <img src="https://github.com/user-attachments/assets/3b8925f5-2fd5-47b3-8a7b-7763cec1eeec" alt="Eggstractor Introduction - Figma to CSS Mixins - Design and Development working in harmony" width="300">

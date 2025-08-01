@@ -5,6 +5,11 @@ import { rem } from '../utils/units.utils';
 import { convertVariantGroupBy } from './variants-middleware';
 
 const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
+  // Handle component references
+  if (token.property === 'component-reference') {
+    return {}; // Component references don't contribute to the mixin content
+  }
+
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
     // Only use CSS variables if the token has associated variables
     if (token.variables && token.variables.length > 0) {
@@ -102,6 +107,16 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
       output += `  ${property}: ${value};\n`;
     });
     output += '}\n';
+  }
+
+  // Generate component reference mixins
+  const componentReferenceTokens = styleTokens.filter(token => token.property === 'component-reference');
+  if (componentReferenceTokens.length > 0) {
+    output += '\n// Component References\n';
+    componentReferenceTokens.forEach(token => {
+      output += `// ${token.rawValue}\n`;
+      output += `${token.value}\n`;
+    });
   }
 
   return {
