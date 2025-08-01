@@ -19,7 +19,24 @@ This plugin generates SCSS variables and mixins from Figma, it also enables you 
 
 ## Development
 
-Use `npm run dev` to run the webpack compiler in watch mode.
+Use `npm run dev` to build the plugin for development. The project uses Vite with React for the UI.
+
+### Architecture
+
+- **Build System**: Vite with React
+- **UI Framework**: React with TypeScript
+- **Main Thread**: TypeScript (`src/code.ts`)
+- **UI Thread**: React app (`src/ui/`)
+- **Output**: Single-file HTML with inlined CSS/JS for Figma compatibility
+
+### Scripts
+
+- `npm run dev` - Build for development
+- `npm run dev:ui` - Start UI development server on localhost:5173
+- `npm run build` - Build for production
+- `npm run build:ui` - Build React UI
+- `npm run build:code` - Build main thread code
+- `npm run build:html` - Combine builds into Figma-compatible format
 
 ### Figma plugin
 
