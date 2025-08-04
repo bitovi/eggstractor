@@ -8,6 +8,7 @@ import {
   generateTailwindBorderRadiusClass,
   generateTailwindFontFamilyOutput,
   generateTailwindPaddingClass,
+  generateTailwindBoxShadowClass,
 } from './generators';
 import { NonNullableStyleToken } from '../../types';
 
@@ -20,11 +21,11 @@ const basicToken: NonNullableStyleToken = {
   property: 'blank',
   path: [
     {
-      type: 'FRAME',// Just a random type
+      type: 'FRAME', // Just a random type
       name: 'basic',
     },
     {
-      type: 'FRAME',// Just a random type
+      type: 'FRAME', // Just a random type
       name: 'gap',
     },
   ],
@@ -248,5 +249,57 @@ describe('generateTailwindGapClass', () => {
     const twoGapValuesToken = { ...gapToken, rawValue: '24px 16px' };
     const result = generateTailwindGapClass(twoGapValuesToken);
     expect(result).toBe('gap-x-6 gap-y-4');
+  });
+});
+
+describe('generateTailwindBoxShadowClass', () => {
+  const boxShadowToken = {
+    ...basicToken,
+    property: 'box-shadow',
+    rawValue: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  };
+
+  it('should return tailwind shadow with arbitrary value for simple shadow', () => {
+    const result = generateTailwindBoxShadowClass(boxShadowToken);
+    expect(result).toBe('shadow-[0_4px_6px_rgba(0,0,0,0.1)]');
+  });
+
+  it('should handle inset shadows (inside strokes)', () => {
+    const insetShadowToken = {
+      ...boxShadowToken,
+      rawValue: 'inset 0 1px 0 0 #0a1264',
+    };
+    const result = generateTailwindBoxShadowClass(insetShadowToken);
+    expect(result).toBe('shadow-[inset_0_1px_0_0_#0a1264]');
+  });
+
+  it('should handle multiple box shadows (complex inside strokes)', () => {
+    const multiShadowToken = {
+      ...boxShadowToken,
+      rawValue:
+        'inset 0 1px 0 0 #0a1264, inset -1px 0 0 0 #0a1264, inset 0 -1px 0 0 #0a1264, inset 1px 0 0 0 #0a1264',
+    };
+    const result = generateTailwindBoxShadowClass(multiShadowToken);
+    expect(result).toBe(
+      'shadow-[inset_0_1px_0_0_#0a1264,inset_-1px_0_0_0_#0a1264,inset_0_-1px_0_0_#0a1264,inset_1px_0_0_0_#0a1264]',
+    );
+  });
+
+  it('should handle box shadows with extra spaces', () => {
+    const spacedShadowToken = {
+      ...boxShadowToken,
+      rawValue: '0   4px   6px   rgba(0, 0, 0, 0.1)',
+    };
+    const result = generateTailwindBoxShadowClass(spacedShadowToken);
+    expect(result).toBe('shadow-[0_4px_6px_rgba(0,0,0,0.1)]');
+  });
+
+  it('should handle mixed regular and inset shadows', () => {
+    const mixedShadowToken = {
+      ...boxShadowToken,
+      rawValue: '0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 0 #0a1264',
+    };
+    const result = generateTailwindBoxShadowClass(mixedShadowToken);
+    expect(result).toBe('shadow-[0_4px_6px_rgba(0,0,0,0.1),inset_0_1px_0_0_#0a1264]');
   });
 });

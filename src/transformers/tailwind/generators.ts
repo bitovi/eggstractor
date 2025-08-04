@@ -199,6 +199,17 @@ const generateTailwindDisplayClass: Generator = ({ rawValue }) => {
   return rawValue;
 };
 
+export const generateTailwindBoxShadowClass: Generator = ({ rawValue }) => {
+  // Replace spaces with underscores, but preserve comma separation
+  // Split by comma, trim and process each shadow separately, then rejoin
+  const cleanValue = rawValue
+    .split(',')
+    .map((shadow) => shadow.trim().replace(/\s+/g, '_'))
+    .join(',');
+
+  return `shadow-[${cleanValue}]`;
+};
+
 type Generator = (token: NonNullableStyleToken) => string;
 
 const tailwindClassGenerators: Record<string, Generator> = {
@@ -206,6 +217,7 @@ const tailwindClassGenerators: Record<string, Generator> = {
   display: generateTailwindDisplayClass,
   'border-radius': generateTailwindBorderRadiusClass,
   border: generateTailwindBorderClass,
+  'box-shadow': generateTailwindBoxShadowClass,
   'font-weight': ({ rawValue }) => `font-${normalizeTailwindToken(fontWeight, rawValue)}`,
   'font-size': ({ rawValue }) => `text-${normalizeTailwindToken(fontSize, rawValue)}`,
   'font-family': generateTailwindFontFamilyOutput,
@@ -214,6 +226,7 @@ const tailwindClassGenerators: Record<string, Generator> = {
   gap: (token) => generateTailwindGapClass(token),
   'flex-direction': ({ rawValue }) => flexDirection[rawValue],
   'align-items': ({ rawValue }) => alignItems[rawValue],
+  height: ({ rawValue }) => `h-${normalizeTailwindToken(spacing, rawValue)}`,
 };
 
 export function createTailwindClasses(tokens: NonNullableStyleToken[]): string[] {
