@@ -226,13 +226,13 @@ const tailwindClassGenerators: Record<string, Generator> = {
   gap: (token) => generateTailwindGapClass(token),
   'flex-direction': ({ rawValue }) => flexDirection[rawValue],
   'align-items': ({ rawValue }) => alignItems[rawValue],
+  height: ({ rawValue }) => `h-${normalizeTailwindToken(spacing, rawValue)}`,
 };
 
 export function createTailwindClasses(tokens: NonNullableStyleToken[]): string[] {
   let classOutput: string[] = [];
 
   for (const token of tokens) {
-    console.log(token.property, token.rawValue);
     const generator = tailwindClassGenerators[token.property];
     if (generator) {
       classOutput.push(generator(token));
