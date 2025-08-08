@@ -94,7 +94,7 @@ export const convertVariantGroupBy = (
         .map(({ name }) => name)
         .join('__and__');
 
-      acc[key] ??= [];
+      acc[key] = acc[key] || [];
       acc[key].push(variantGroup);
       return acc;
     },

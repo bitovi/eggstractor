@@ -1,0 +1,157 @@
+{
+    "figma-plugin-core": [
+        "./src/code.ts",
+        "./src/ui.ts",
+        "./manifest.json"
+    ],
+    "ui-components": [
+        "./src/ui.html",
+        "./src/ui.css"
+    ],
+    "github-integration": [
+        "./src/github.ts"
+    ],
+    "syntax-highlighting": [
+        "./src/highlighter.ts"
+    ],
+    "design-tokens": [
+        "./src/theme-tokens.ts"
+    ],
+    "services": [
+        "./src/services/index.ts",
+        "./src/services/collection.service.ts",
+        "./src/services/token.service.ts",
+        "./src/services/variable.service.ts"
+    ],
+    "processors": [
+        "./src/processors/index.ts",
+        "./src/processors/background.processor.ts",
+        "./src/processors/border.processor.ts",
+        "./src/processors/font.processor.ts",
+        "./src/processors/gradient.processor.ts",
+        "./src/processors/layout.processor.ts",
+        "./src/processors/spacing.processor.ts"
+    ],
+    "transformers": [
+        "./src/transformers/index.ts",
+        "./src/transformers/css.transformer.ts",
+        "./src/transformers/scss.transformer.ts",
+        "./src/transformers/variants.ts",
+        "./src/transformers/variants-middleware.ts"
+    ],
+    "tailwind-transformers": [
+        "./src/transformers/tailwind/index.ts",
+        "./src/transformers/tailwind/filters.ts",
+        "./src/transformers/tailwind/generators.ts"
+    ],
+    "utility-functions": [
+        "./src/utils/index.ts",
+        "./src/utils/array.utils.ts",
+        "./src/utils/color.utils.ts",
+        "./src/utils/error.utils.ts",
+        "./src/utils/gradient.utils.ts",
+        "./src/utils/node.utils.ts",
+        "./src/utils/string.utils.ts",
+        "./src/utils/units.utils.ts",
+        "./src/utils/value.utils.ts"
+    ],
+    "test-utilities": [
+        "./src/utils/test.utils.ts"
+    ],
+    "types": [
+        "./src/types/index.ts",
+        "./src/types/gradients.ts",
+        "./src/types/processor.types.ts",
+        "./src/types/processors.ts",
+        "./src/types/tokens.ts",
+        "./src/types/json.d.ts",
+        "./src/types/test.d.ts"
+    ],
+    "unit-tests": [
+        "./src/tests/demo-data.test.ts",
+        "./src/tests/demo-data-variants.test.ts",
+        "./src/tests/value.utils.test.ts"
+    ],
+    "service-tests": [
+        "./src/tests/services/collection.service.test.ts"
+    ],
+    "processor-tests": [
+        "./src/tests/processors/background-processors.test.ts",
+        "./src/tests/processors/border-processors.test.ts",
+        "./src/tests/processors/layout-processors.test.ts",
+        "./src/tests/processors/text-processors.test.ts"
+    ],
+    "transformer-tests": [
+        "./src/transformers/tailwind/generators.test.ts"
+    ],
+    "variant-tests": [
+        "./src/tests/variants/variants.test.ts"
+    ],
+    "test-snapshots": [
+        "./src/tests/__snapshots__/demo-data.test.ts.snap",
+        "./src/tests/__snapshots__/demo-data-variants.test.ts.snap"
+    ],
+    "test-fixtures": [
+        "./src/tests/fixtures/figma-test-data_background.json",
+        "./src/tests/fixtures/figma-test-data_border-color.json",
+        "./src/tests/fixtures/figma-test-data_border-position.json",
+        "./src/tests/fixtures/figma-test-data_border-radius.json",
+        "./src/tests/fixtures/figma-test-data_border-shape.json",
+        "./src/tests/fixtures/figma-test-data_border-sides.json",
+        "./src/tests/fixtures/figma-test-data_demo.json",
+        "./src/tests/fixtures/figma-test-data_font-style.json",
+        "./src/tests/fixtures/figma-test-data_height.json",
+        "./src/tests/fixtures/figma-test-data_layout-alignment.json",
+        "./src/tests/fixtures/figma-test-data_layout-direction.json",
+        "./src/tests/fixtures/figma-test-data_opacity.json",
+        "./src/tests/fixtures/figma-test-data_padding.json",
+        "./src/tests/fixtures/figma-test-data_paragraph.json",
+        "./src/tests/fixtures/figma-test-data_width.json",
+        "./src/tests/fixtures/figma-test-data-alignment.json",
+        "./src/tests/fixtures/figma-test-simple_background.json"
+    ],
+    "build-scripts": [
+        "./scripts/generate-theme.js"
+    ],
+    "build-config": [
+        "./webpack.config.js",
+        "./tsconfig.json",
+        "./ui.tsconfig.json",
+        "./jest.config.js",
+        "./tailwind.config.js"
+    ],
+    "linting-config": [
+        "./prettier.config.js",
+        "./.eslintrc.json",
+        "./.eslintrc.js"
+    ],
+    "package-management": [
+        "./package.json",
+        "./.nvmrc"
+    ],
+    "documentation": [
+        "./README.md",
+        "./CONTRIBUTING.md",
+        "./docs/DOCS.md",
+        "./docs/declaration-order.md",
+        "./src/processors/README.md"
+    ],
+    "visualizer": [
+        "./visualizer/index.html",
+        "./visualizer/script.js",
+        "./visualizer/styles.css",
+        "./visualizer/bs-config.json",
+        "./visualizer/README.md"
+    ],
+    "ci-cd": [
+        "./.github/workflows/test.yml"
+    ],
+    "assets": [
+        "./img/bitovi.png",
+        "./img/eggstractor.png",
+        "./docs/flow.svg"
+    ],
+    "project-config": [
+        "./.gitignore"
+    ]
+}

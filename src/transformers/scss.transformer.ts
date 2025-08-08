@@ -71,7 +71,7 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   // Output gradient variables
   gradientVariables.forEach((token, name) => {
     // Replace color values with variable references if they exist
-    let gradientValue = token.rawValue ?? '';
+    let gradientValue = token.rawValue || '';
     colorVariables.forEach((value, colorName) => {
       gradientValue = gradientValue.replace(value, `$${colorName}`);
     });
@@ -86,13 +86,16 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   // Filter for style tokens and group by path
   const styleTokens = tokens.tokens.filter((token): token is StyleToken => token.type === 'style');
 
-  const variantGroups = Object.entries(groupBy(styleTokens, (t) => t.name)).reduce((acc, [tokenName, tokens]) => {
-    const filteredTokens = sortAndDedupeTokens(tokens);
-    if (filteredTokens.length) {
-      acc[tokenName] = filteredTokens;
-    }
-    return acc;
-  }, {} as Record<string, StyleToken[]>);
+  const variantGroups = Object.entries(groupBy(styleTokens, (t) => t.name)).reduce(
+    (acc, [tokenName, tokens]) => {
+      const filteredTokens = sortAndDedupeTokens(tokens);
+      if (filteredTokens.length) {
+        acc[tokenName] = filteredTokens;
+      }
+      return acc;
+    },
+    {} as Record<string, StyleToken[]>,
+  );
 
   const mixins = convertVariantGroupBy(tokens, variantGroups, getMixinPropertyAndValue);
 

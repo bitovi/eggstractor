@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "none",
+    "target": "es2017",
+    "lib": ["es2017"],
+    "jsx": "preserve",
+    "noEmit": false,
+    "outDir": "./dist"
+  },
+  "include": [
+    "src/code.ts",
+    "src/processors/**/*",
+    "src/services/**/*",
+    "src/transformers/**/*",
+    "src/types/**/*",
+    "src/utils/**/*",
+    "src/github.ts",
+    "src/theme-tokens.ts"
+  ],
+  "exclude": ["src/ui/**/*", "src/highlighter.ts"]
+}

@@ -30,7 +30,7 @@ export const backgroundProcessors: StyleProcessor[] = [
               }
 
               const { r, g, b } = fill.color;
-              const a = fill.opacity ?? 1;
+              const a = fill.opacity !== undefined ? fill.opacity : 1;
               const value = rgbaToString(r, g, b, a);
               return { value, rawValue: value };
             }

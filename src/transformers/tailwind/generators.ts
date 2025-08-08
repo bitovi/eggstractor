@@ -66,7 +66,7 @@ export function normalizeBorderRadius(value: string): [string, string, string, s
 export const normalizeTailwindToken = (themeMapping: Record<string, string>, value: string) => {
   const mapping = themeMapping[value];
   if (mapping === 'DEFAULT') return '';
-  return mapping ?? `[${value}]`;
+  return mapping || `[${value}]`;
 };
 
 /*
