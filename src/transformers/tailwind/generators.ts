@@ -227,6 +227,7 @@ const tailwindClassGenerators: Record<string, Generator> = {
   'flex-direction': ({ rawValue }) => flexDirection[rawValue],
   'align-items': ({ rawValue }) => alignItems[rawValue],
   height: ({ rawValue }) => `h-${normalizeTailwindToken(spacing, rawValue)}`,
+  width: ({ rawValue }) => `w-${normalizeTailwindToken(spacing, rawValue)}`,
 };
 
 export function createTailwindClasses(tokens: NonNullableStyleToken[]): string[] {
