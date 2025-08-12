@@ -119,7 +119,12 @@ export const convertVariantGroupBy = (
           .join('__'),
       );
 
-      return { variantCombinationName, css };
+      return {
+        variantCombinationName,
+        css,
+        // Preserve the path for context-aware generators
+        path: mixins[0].path,
+      };
     });
   });
 
@@ -138,6 +143,8 @@ export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVa
         ({
           property,
           rawValue,
+          // Preserve the path for context-aware generators
+          path: parsedStyleToken.path,
         }) as NonNullableStyleToken,
     );
 

@@ -69,13 +69,13 @@ export function getFlattenedValidNodes(node: BaseNode): {
   function traverse(currentNode: BaseNode) {
     const currentNodeType = 'type' in currentNode ? currentNode.type : null;
 
-    // Skip VECTOR which are not relevant for token extraction.
-    if (currentNodeType === 'VECTOR') {
+    // Skip . and _ nodes entirely. These are components that are marked as hidden or private by designers.
+    if ('name' in currentNode && ['.', '_'].some((char) => currentNode.name.startsWith(char))) {
       return;
     }
 
-    // Skip . and _ nodes entirely. These are components that are marked as hidden or private by designers.
-    if ('name' in currentNode && ['.', '_'].some((char) => currentNode.name.startsWith(char))) {
+    // Nodes hidden by designers aren't valid to process.
+    if ('visible' in currentNode && currentNode.visible === false) {
       return;
     }
 
@@ -85,17 +85,11 @@ export function getFlattenedValidNodes(node: BaseNode): {
       if (hasDuplicates) {
         console.warn(`⏭️ Skipping corrupted component set: ${currentNode.name}`);
         warningTokens.push(createWarningToken(currentNode, duplicateNames));
-
         return; // Skip the entire component set and all its children
       }
     }
 
     result.push(currentNode);
-
-    // For INSTANCE nodes, we still want to collect them but not their children.
-    if (currentNodeType === 'INSTANCE') {
-      return;
-    }
 
     if ('children' in currentNode) {
       for (const child of currentNode.children) {
