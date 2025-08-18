@@ -50,6 +50,15 @@ const alignItems: Record<string, string> = {
   baseline: 'items-baseline',
 };
 
+const justifyContent: Record<string, string> = {
+  'flex-start': 'justify-start',
+  'flex-end': 'justify-end',
+  center: 'justify-center',
+  'space-between': 'justify-between',
+  'space-around': 'justify-around',
+  'space-evenly': 'justify-evenly',
+};
+
 export function normalizeTwoSides(value: string): [string, string] {
   const [a, b = a] = value.trim().split(/\s+/);
 
@@ -226,7 +235,9 @@ const tailwindClassGenerators: Record<string, Generator> = {
   gap: (token) => generateTailwindGapClass(token),
   'flex-direction': ({ rawValue }) => flexDirection[rawValue],
   'align-items': ({ rawValue }) => alignItems[rawValue],
+  'justify-content': ({ rawValue }) => justifyContent[rawValue],
   height: ({ rawValue }) => `h-${normalizeTailwindToken(spacing, rawValue)}`,
+  width: ({ rawValue }) => `w-${normalizeTailwindToken(spacing, rawValue)}`,
 };
 
 export function createTailwindClasses(tokens: NonNullableStyleToken[]): string[] {
