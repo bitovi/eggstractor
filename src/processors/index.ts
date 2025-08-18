@@ -22,6 +22,9 @@ export function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
     case 'INSTANCE':
     case 'ELLIPSE':
     case 'COMPONENT':
+    case 'VECTOR':
+    case 'STAR':
+    case 'POLYGON':
       return LAYOUT_PROCESSORS;
     default:
       return [];

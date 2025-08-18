@@ -1,4 +1,11 @@
-import { BaseToken, ComponentSetToken, ComponentToken, InstanceToken, StyleToken, VariableToken } from '../types';
+import {
+  BaseToken,
+  ComponentSetToken,
+  ComponentToken,
+  InstanceToken,
+  StyleToken,
+  VariableToken,
+} from '../types';
 import { StyleProcessor, VariableBindings } from '../types/processors';
 import { collectBoundVariable } from './variable.service';
 
@@ -14,7 +21,7 @@ export const extractInstanceSetToken = async (node: InstanceNode): Promise<Insta
     componentNode,
     variantProperties: node.variantProperties ?? {},
   };
-}
+};
 
 export const extractComponentToken = (
   node: ComponentNode,
@@ -25,13 +32,11 @@ export const extractComponentToken = (
     id: node.id,
     componentSetId: componentSetToken?.id ?? null,
     variantProperties: node.variantProperties ?? {},
-  }
-}
+  };
+};
 
-export const extractComponentSetToken = (
-  node: ComponentSetNode,
-): ComponentSetToken => {
-  node.componentPropertyDefinitions
+export const extractComponentSetToken = (node: ComponentSetNode): ComponentSetToken => {
+  node.componentPropertyDefinitions;
 
   const variantPropertyDefinitions: Record<string, string[]> = {};
 
@@ -48,8 +53,8 @@ export const extractComponentSetToken = (
     id: node.id,
     name: node.name,
     variantPropertyDefinitions,
-  }
-}
+  };
+};
 
 export async function extractNodeToken(
   node: SceneNode,
@@ -111,9 +116,6 @@ export async function extractNodeToken(
   const processedValue = await processor.process([...variableTokensMap.values()], node);
 
   if (processedValue) {
-    const componentSetId = componentSetToken?.id;
-    const componentId = componentToken?.id;
-    
     const styleToken: StyleToken = {
       type: 'style',
       name: path.map(({ name }) => name).join('_'),
@@ -128,8 +130,8 @@ export async function extractNodeToken(
       },
       warnings: processedValue.warnings,
       errors: processedValue.errors,
-      componentId,
-      componentSetId,
+      componentId: componentToken?.id,
+      componentSetId: componentSetToken?.id,
     };
     tokens.push(styleToken);
   }

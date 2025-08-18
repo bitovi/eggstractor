@@ -1,3 +1,61 @@
+jest.mock('../../theme-tokens', () => ({
+  themeTokens: {
+    colors: {
+      '#ffffff': 'white',
+      '#507e15': 'green-500',
+      '#BA0C2F': 'red-500',
+      '#0a1264': 'blue-900',
+    },
+    spacing: {
+      '0px': '0',
+      '4px': '1',
+      '8px': '2',
+      '12px': '3',
+      '16px': '4',
+      '20px': '5',
+      '24px': '6',
+      '28px': '7',
+      '32px': '8',
+      '36px': '9',
+      '40px': '10',
+      '44px': '11',
+      '48px': '12',
+      '56px': '14',
+      '64px': '16',
+      '80px': '20',
+      '96px': '24',
+      '112px': '28',
+      '128px': '32',
+      '144px': '36',
+      '160px': '40',
+      '176px': '44',
+      '192px': '48',
+      '208px': '52',
+      '224px': '56',
+      '240px': '60',
+      '256px': '64',
+      '288px': '72',
+      '320px': '80',
+      '384px': '96',
+      '1px': 'px',
+      '2px': '0.5',
+      '6px': '1.5',
+      '10px': '2.5',
+      '14px': '3.5',
+    },
+    fontFamily: {
+      sans: 'sans',
+    },
+    borderWidths: {
+      '1px': 'DEFAULT',
+      '2px': '2',
+    },
+    borderRadius: {
+      '4px': 'DEFAULT',
+    },
+  },
+}));
+
 import {
   generateTailwindGapClass,
   normalizeFourSides,
@@ -9,6 +67,7 @@ import {
   generateTailwindFontFamilyOutput,
   generateTailwindPaddingClass,
   generateTailwindBoxShadowClass,
+  createContextAwareColorGenerator,
 } from './generators';
 import { NonNullableStyleToken } from '../../types';
 
@@ -301,5 +360,93 @@ describe('generateTailwindBoxShadowClass', () => {
     };
     const result = generateTailwindBoxShadowClass(mixedShadowToken);
     expect(result).toBe('shadow-[0_4px_6px_rgba(0,0,0,0.1),inset_0_1px_0_0_#0a1264]');
+  });
+});
+
+describe('createContextAwareColorGenerator', () => {
+  const vectorToken: NonNullableStyleToken = {
+    ...basicToken,
+    property: 'background',
+    rawValue: '#507e15',
+    path: [
+      { type: 'FRAME', name: 'modal-dialog' },
+      { type: 'INSTANCE', name: 'icon' },
+      { type: 'VECTOR', name: 'vector' },
+    ],
+  };
+
+  const regularToken: NonNullableStyleToken = {
+    ...basicToken,
+    property: 'background',
+    rawValue: '#ffffff',
+    path: [
+      { type: 'FRAME', name: 'modal-dialog' },
+      { type: 'FRAME', name: 'header' },
+    ],
+  };
+
+  it('should use default prefix when no context rules match', () => {
+    const generator = createContextAwareColorGenerator('bg', []);
+    const result = generator(regularToken);
+    expect(result).toBe('bg-white');
+  });
+
+  it('should use context rule prefix when condition matches', () => {
+    const generator = createContextAwareColorGenerator('bg', [
+      {
+        condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+        prefix: 'text',
+      },
+    ]);
+
+    const result = generator(vectorToken);
+    expect(result).toBe('text-green-500');
+  });
+
+  it('should use default prefix when context rule condition does not match', () => {
+    const generator = createContextAwareColorGenerator('bg', [
+      {
+        condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+        prefix: 'text',
+      },
+    ]);
+
+    const result = generator(regularToken);
+    expect(result).toBe('bg-white');
+  });
+
+  it('should use first matching context rule when multiple rules exist', () => {
+    const generator = createContextAwareColorGenerator('bg', [
+      {
+        condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+        prefix: 'text',
+      },
+      {
+        condition: (token) => token.path?.some((pathItem) => pathItem.name?.includes('icon')),
+        prefix: 'fill',
+      },
+    ]);
+
+    const result = generator(vectorToken);
+    expect(result).toBe('text-green-500');
+  });
+
+  it('should handle tokens without path gracefully', () => {
+    const tokenWithoutPath: NonNullableStyleToken = {
+      ...basicToken,
+      property: 'background',
+      rawValue: '#ffffff',
+      path: [],
+    };
+
+    const generator = createContextAwareColorGenerator('bg', [
+      {
+        condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+        prefix: 'text',
+      },
+    ]);
+
+    const result = generator(tokenWithoutPath);
+    expect(result).toBe('bg-white');
   });
 });

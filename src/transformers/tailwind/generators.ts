@@ -219,6 +219,23 @@ export const generateTailwindBoxShadowClass: Generator = ({ rawValue }) => {
   return `shadow-[${cleanValue}]`;
 };
 
+export const createContextAwareColorGenerator = (
+  defaultPrefix: string,
+  contextRules: Array<{
+    condition: (token: NonNullableStyleToken) => boolean;
+    prefix: string;
+  }>,
+): Generator => {
+  return (token) => {
+    const matchedRule = contextRules.find((rule) => rule.condition(token));
+    const prefix = matchedRule?.prefix || defaultPrefix;
+
+    const normalizedToken = normalizeTailwindToken(colors, token.rawValue);
+
+    return `${prefix}-${normalizedToken}`;
+  };
+};
+
 type Generator = (token: NonNullableStyleToken) => string;
 
 const tailwindClassGenerators: Record<string, Generator> = {
@@ -231,7 +248,12 @@ const tailwindClassGenerators: Record<string, Generator> = {
   'font-size': ({ rawValue }) => `text-${normalizeTailwindToken(fontSize, rawValue)}`,
   'font-family': generateTailwindFontFamilyOutput,
   color: ({ rawValue }) => `text-${normalizeTailwindToken(colors, rawValue)}`,
-  background: ({ rawValue }) => `bg-${normalizeTailwindToken(colors, rawValue)}`,
+  background: createContextAwareColorGenerator('bg', [
+    {
+      condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+      prefix: 'text',
+    },
+  ]),
   gap: (token) => generateTailwindGapClass(token),
   'flex-direction': ({ rawValue }) => flexDirection[rawValue],
   'align-items': ({ rawValue }) => alignItems[rawValue],
@@ -246,7 +268,8 @@ export function createTailwindClasses(tokens: NonNullableStyleToken[]): string[]
   for (const token of tokens) {
     const generator = tailwindClassGenerators[token.property];
     if (generator) {
-      classOutput.push(generator(token));
+      const result = generator(token);
+      classOutput.push(result);
     }
   }
   return classOutput;
