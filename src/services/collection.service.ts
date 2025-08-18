@@ -1,4 +1,10 @@
-import { ComponentSetToken, ComponentToken, StyleToken, TokenCollection } from '../types';
+import {
+  ComponentSetToken,
+  ComponentToken,
+  InstanceToken,
+  StyleToken,
+  TokenCollection,
+} from '../types';
 import { getProcessorsForNode } from '../processors';
 import {
   extractComponentSetToken,
@@ -25,6 +31,26 @@ function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]
   };
 }
 
+export function shouldSkipInstanceTokenGeneration(
+  node: InstanceNode,
+  instanceToken: InstanceToken,
+  collection: TokenCollection,
+): boolean {
+  // If this instance references a component we already have tokens for, skip it
+  if (instanceToken.componentNode) {
+    const baseComponentId = instanceToken.componentNode.id;
+    const baseComponent = collection.components[baseComponentId];
+
+    if (baseComponent) {
+      console.info(
+        `🎯 Instance "${node.name}" duplicates component "${baseComponentId}" - skipping tokens`,
+      );
+      return true;
+    }
+  }
+  return false;
+}
+
 export function detectComponentSetDuplicates(componentSetNode: BaseNode): {
   duplicateNames: string[];
   hasDuplicates: boolean;
@@ -43,8 +69,8 @@ export function detectComponentSetDuplicates(componentSetNode: BaseNode): {
       if (seenVariants.has(variantName)) {
         console.warn(
           `🚨 DUPLICATE VARIANT in "${componentSetNode.name}" component set:\n` +
-            `  Layer: "${variantName}"\n` +
-            `  Found duplicate layers in Figma - check the layers panel for identical component names`,
+            ` Layer: "${variantName}"\n` +
+            ` Found duplicate layers in Figma - check the layers panel for identical component names`,
         );
         duplicateNames.push(variantName);
       } else {
@@ -82,6 +108,7 @@ export function getFlattenedValidNodes(node: BaseNode): {
     // Check for duplicates and skip if found
     if (currentNode.type === 'COMPONENT_SET') {
       const { hasDuplicates, duplicateNames } = detectComponentSetDuplicates(currentNode);
+
       if (hasDuplicates) {
         console.warn(`⏭️ Skipping corrupted component set: ${currentNode.name}`);
         warningTokens.push(createWarningToken(currentNode, duplicateNames));
@@ -112,24 +139,21 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
   let componentToken: ComponentToken | null = null;
   let componentSetToken: ComponentSetToken | null = null;
-
   let totalNodes = 0;
   let processedNodes = 0;
-
   let lastTimestamp = Date.now();
   let lastPercentage = -1;
 
   async function processNode(node: BaseNode) {
     processedNodes++;
-
     const currentPercentage = Math.floor((processedNodes / totalNodes) * 85) + 10;
     const shouldUpdate = currentPercentage !== lastPercentage || processedNodes === totalNodes;
 
     if (shouldUpdate) {
       lastPercentage = currentPercentage;
       onProgress(currentPercentage, `Processing nodes… ${processedNodes}/${totalNodes}`);
-
       const now = Date.now();
+
       if (now - lastTimestamp >= 200) {
         await new Promise((r) => setTimeout(r, 0));
         lastTimestamp = now;
@@ -146,8 +170,8 @@ export async function collectTokens(onProgress: (progress: number, message: stri
             `❌ Error extracting COMPONENT token for "${node.name}":`,
             error instanceof Error ? error.message : String(error),
           );
-          console.error(`   🔍 Component ID: ${node.id}`);
-          console.error(`   🔍 Basic props:`, {
+          console.error(` 🔍 Component ID: ${node.id}`);
+          console.error(` 🔍 Basic props:`, {
             name: node.name,
             type: node.type,
             id: node.id,
@@ -165,8 +189,8 @@ export async function collectTokens(onProgress: (progress: number, message: stri
             `❌ Error extracting COMPONENT token for "${node.name}":`,
             error instanceof Error ? error.message : String(error),
           );
-          console.error(`   🔍 Component ID: ${node.id}`);
-          console.error(`   🔍 Basic props:`, {
+          console.error(` 🔍 Component ID: ${node.id}`);
+          console.error(` 🔍 Basic props:`, {
             name: node.name,
             type: node.type,
             id: node.id,
@@ -179,13 +203,17 @@ export async function collectTokens(onProgress: (progress: number, message: stri
         try {
           const instanceToken = await extractInstanceSetToken(node);
           collection.instances[node.id] = instanceToken;
+
+          if (shouldSkipInstanceTokenGeneration(node, instanceToken, collection)) {
+            return;
+          }
         } catch (error) {
           console.error(
             `❌ Error extracting INSTANCE token for "${node.name}":`,
             error instanceof Error ? error.message : String(error),
           );
-          console.error(`   🔍 Node keys only:`, Object.keys(node));
-          console.error(`   🔍 Basic props:`, {
+          console.error(` 🔍 Node keys only:`, Object.keys(node));
+          console.error(` 🔍 Basic props:`, {
             name: node.name,
             type: node.type,
             id: node.id,
@@ -205,7 +233,6 @@ export async function collectTokens(onProgress: (progress: number, message: stri
           componentToken,
           componentSetToken,
         );
-
         collection.tokens.push(...tokens);
       }
     }
@@ -213,16 +240,14 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
   onProgress(0, 'Loading pages...');
   await figma.loadAllPagesAsync();
-
   onProgress(5, 'Counting nodes...');
+
   const allPageResults = figma.root.children.map((page) => getFlattenedValidNodes(page));
   const allValidNodes = allPageResults.flatMap((result) => result.validNodes);
   const allWarningTokens = allPageResults.flatMap((result) => result.warningTokens);
 
   totalNodes = allValidNodes.length;
-
   onProgress(10, `Processing ${totalNodes} nodes...`);
-
   collection.tokens.push(...allWarningTokens);
 
   for (const node of allValidNodes) {

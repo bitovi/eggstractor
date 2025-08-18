@@ -1,7 +1,9 @@
 import {
   getFlattenedValidNodes,
   detectComponentSetDuplicates,
+  shouldSkipInstanceTokenGeneration,
 } from '../../services/collection.service';
+import { InstanceToken, TokenCollection } from '../../types';
 
 beforeEach(() => {
   // Suppress console output for cleaner test results
@@ -99,5 +101,75 @@ describe('Component Set Duplicate Detection', () => {
         name: 'Button',
       }),
     );
+  });
+});
+
+describe('shouldSkipInstanceTokenGeneration', () => {
+  const mockInstanceNode = {
+    type: 'INSTANCE',
+    name: 'Button Instance',
+    id: 'instance-123',
+  } as InstanceNode;
+
+  const mockInstanceToken = {
+    componentNode: {
+      id: 'component-456',
+    },
+  } as InstanceToken;
+
+  const mockCollection = {
+    tokens: [],
+    components: {
+      'component-456': {
+        id: 'component-456',
+        name: 'Button Component',
+        type: 'COMPONENT',
+        componentSetId: null,
+        variantProperties: {},
+      },
+    },
+    componentSets: {},
+    instances: {},
+  } as TokenCollection;
+
+  it('should skip token generation when instance references existing component', () => {
+    const consoleSpy = jest.spyOn(console, 'info');
+    const result = shouldSkipInstanceTokenGeneration(
+      mockInstanceNode,
+      mockInstanceToken,
+      mockCollection,
+    );
+
+    expect(result).toBe(true);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '🎯 Instance "Button Instance" duplicates component "component-456" - skipping tokens',
+    );
+  });
+
+  it('should not skip token generation when component does not exist in collection', () => {
+    const mockEmptyCollection = {
+      ...mockCollection,
+      components: {},
+    };
+
+    const result = shouldSkipInstanceTokenGeneration(
+      mockInstanceNode,
+      mockInstanceToken,
+      mockEmptyCollection,
+    );
+
+    expect(result).toBe(false);
+  });
+
+  it('should not skip token generation when instance token has no componentNode', () => {
+    const mockEmptyInstanceToken = {} as InstanceToken;
+
+    const result = shouldSkipInstanceTokenGeneration(
+      mockInstanceNode,
+      mockEmptyInstanceToken,
+      mockCollection,
+    );
+
+    expect(result).toBe(false);
   });
 });
