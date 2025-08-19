@@ -264,6 +264,7 @@ window.onload = () => {
         progressFill.style.width = `${progress}%`;
         progressText.textContent = message;
 
+        // Notify the main thread that UI has been updated
         parent.postMessage({ pluginMessage: { type: 'progress-updated', id } }, '*');
 
         break;

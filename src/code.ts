@@ -40,6 +40,7 @@ const progressUpdateTasks: Record<number, null | (() => void)> = {};
 function updateProgress(progress: number, message: string): Promise<void> {
   const id = ++progressUpdateIdCount;
 
+  // Allow promise to resolve once UI has received the update
   let resolve: () => void, reject: () => void;
   const progressUpdated = new Promise<void>((res, rej) => {
     resolve = res;
