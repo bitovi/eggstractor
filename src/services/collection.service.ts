@@ -154,8 +154,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
       const now = Date.now();
 
       if (now - lastTimestamp >= 200) {
-        // await delay(0);
-        await new Promise((r) => setTimeout(r, 0));
+        await delay(0);
         lastTimestamp = now;
       }
     }

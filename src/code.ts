@@ -22,20 +22,29 @@ figma.showUI(__html__, {
   title: 'Eggstractor',
 });
 
+/**
+ * Used to track each update to the ui
+ */
 let progressUpdateIdCount = 0;
 
+/**
+ * Collection of updates to the UI. Needed for continuing commutations after the
+ * UI has finished updating.
+ */
 const progressUpdateTasks: Record<number, null | (() => void)> = {};
 
+/**
+ * Communicate to the UI that progress has been made. When promise resolves, the
+ * UI has received the update.
+ */
 function updateProgress(progress: number, message: string): Promise<void> {
   const id = ++progressUpdateIdCount;
-  console.log(id);
-  let resolve: () => void, reject: () => void;
 
+  let resolve: () => void, reject: () => void;
   const progressUpdated = new Promise<void>((res, rej) => {
     resolve = res;
     reject = rej;
   });
-
   progressUpdateTasks[id] = () => {
     resolve();
   };
@@ -68,7 +77,7 @@ function transformTokensToStylesheet(
   }
 }
 
-// Main generation function
+/* Main generation function */
 async function generateStyles(
   format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
 ): Promise<TransformerResult> {
@@ -167,8 +176,8 @@ figma.ui.onmessage = async (msg) => {
       throw new Error(`No progress update handler found for ID: ${msg.id}`);
     }
     resolve();
-    // TODO deal with this
-    progressUpdateTasks[msg.id] = null; // Clear the task after resolving
+    // Clear the reference to task after resolving
+    progressUpdateTasks[msg.id] = null;
   } else {
     throw new Error(`Unknown message type: ${msg.type}`);
   }
