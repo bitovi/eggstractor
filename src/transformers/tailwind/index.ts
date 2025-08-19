@@ -1,5 +1,5 @@
 import { StyleToken, TokenCollection } from '../../types';
-import { groupBy } from '../../utils';
+import { groupBy } from '../utils';
 
 import { backToStyleTokens, convertVariantGroupBy } from '../variants-middleware';
 import { filterStyleTokens } from './filters';
