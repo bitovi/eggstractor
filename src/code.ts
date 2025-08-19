@@ -8,6 +8,8 @@ import {
 import Github from './github';
 import { serializeFigmaData } from './utils/test.utils';
 import { TransformerResult } from './types/processors';
+import { MAX_PROGRESS_PERCENTAGE } from './services/utilities';
+import { TokenCollection } from './types';
 
 // Store the generated SCSS
 let generatedScss: string = '';
@@ -20,7 +22,63 @@ figma.showUI(__html__, {
   title: 'Eggstractor',
 });
 
-// Main generation function
+/**
+ * Used to track each update to the ui
+ */
+let progressUpdateIdCount = 0;
+
+/**
+ * Collection of updates to the UI. Needed for continuing commutations after the
+ * UI has finished updating.
+ */
+const progressUpdateTasks: Record<number, null | (() => void)> = {};
+
+/**
+ * Communicate to the UI that progress has been made. When promise resolves, the
+ * UI has received the update.
+ */
+function updateProgress(progress: number, message: string): Promise<void> {
+  const id = ++progressUpdateIdCount;
+
+  // Allow promise to resolve once UI has received the update
+  let resolve: () => void, reject: () => void;
+  const progressUpdated = new Promise<void>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  progressUpdateTasks[id] = () => {
+    resolve();
+  };
+
+  figma.ui.postMessage({
+    type: 'progress-update',
+    progress,
+    message,
+    id,
+  });
+
+  return progressUpdated;
+}
+
+function transformTokensToStylesheet(
+  tokens: Readonly<TokenCollection>,
+  format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
+): TransformerResult {
+  switch (format) {
+    case 'scss':
+      return transformToScss(tokens);
+    case 'css':
+      return transformToCss(tokens);
+    case 'tailwind-scss':
+      return transformToTailwindSassClass(tokens);
+    case 'tailwind-v4':
+      return transformToTailwindLayerUtilityClassV4(tokens);
+    default:
+      throw new Error(`Unsupported format: ${format}`);
+  }
+}
+
+/* Main generation function */
 async function generateStyles(
   format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
 ): Promise<TransformerResult> {
@@ -34,32 +92,19 @@ async function generateStyles(
 
     if (now - lastProgressTime > 500) {
       lastProgressTime = now;
-      figma.ui.postMessage({
-        type: 'progress-update',
-        progress,
-        message,
-      });
+      void updateProgress(progress, message);
     }
   });
 
+  await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
+
+  const stylesheet = await transformTokensToStylesheet(tokens, format);
+
   figma.ui.postMessage({
-    type: 'progress-update',
-    progress: 100,
-    message: 'Complete!',
+    type: 'progress-end',
   });
 
-  switch (format) {
-    case 'scss':
-      return transformToScss(tokens);
-    case 'css':
-      return transformToCss(tokens);
-    case 'tailwind-scss':
-      return transformToTailwindSassClass(tokens);
-    case 'tailwind-v4':
-      return transformToTailwindLayerUtilityClassV4(tokens);
-    default:
-      throw new Error(`Unsupported format: ${format}`);
-  }
+  return stylesheet;
 }
 
 // Listen for messages from the UI
@@ -126,5 +171,15 @@ figma.ui.onmessage = async (msg) => {
       figma.currentPage.selection = [node as SceneNode];
       figma.viewport.scrollAndZoomIntoView([node]);
     }
+  } else if (msg.type === 'progress-updated') {
+    const resolve = progressUpdateTasks[msg.id];
+    if (!resolve) {
+      throw new Error(`No progress update handler found for ID: ${msg.id}`);
+    }
+    resolve();
+    // Clear the reference to task after resolving
+    progressUpdateTasks[msg.id] = null;
+  } else {
+    throw new Error(`Unknown message type: ${msg.type}`);
   }
 };

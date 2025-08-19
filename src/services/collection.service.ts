@@ -13,6 +13,7 @@ import {
   extractNodeToken,
 } from '../services';
 import { getNodePathNames } from '../utils/node.utils';
+import { delay, MAX_PROGRESS_PERCENTAGE } from './utilities';
 
 function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]): StyleToken {
   return {
@@ -93,8 +94,6 @@ export function getFlattenedValidNodes(node: BaseNode): {
   const warningTokens: StyleToken[] = [];
 
   function traverse(currentNode: BaseNode) {
-    const currentNodeType = 'type' in currentNode ? currentNode.type : null;
-
     // Skip . and _ nodes entirely. These are components that are marked as hidden or private by designers.
     if ('name' in currentNode && ['.', '_'].some((char) => currentNode.name.startsWith(char))) {
       return;
@@ -146,7 +145,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
   async function processNode(node: BaseNode) {
     processedNodes++;
-    const currentPercentage = Math.floor((processedNodes / totalNodes) * 85) + 10;
+    const currentPercentage = Math.floor((processedNodes / totalNodes) * (MAX_PROGRESS_PERCENTAGE - 10)) + 10;
     const shouldUpdate = currentPercentage !== lastPercentage || processedNodes === totalNodes;
 
     if (shouldUpdate) {
@@ -155,7 +154,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
       const now = Date.now();
 
       if (now - lastTimestamp >= 200) {
-        await new Promise((r) => setTimeout(r, 0));
+        await delay(0);
         lastTimestamp = now;
       }
     }

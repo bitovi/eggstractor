@@ -259,17 +259,24 @@ window.onload = () => {
 
         break;
       case 'progress-update':
-        progressFill.style.width = `${msg.progress}%`;
-        progressText.textContent = msg.message;
+        const { progress, message, id } = msg;
 
-        // Hide when complete
-        if (msg.progress >= 100) {
-          spinner.classList.remove('active');
-          setTimeout(() => {
-            generateBtn.disabled = false;
-            progressContainer.style.display = 'none';
-          }, 2000);
-        }
+        progressFill.style.width = `${progress}%`;
+        progressText.textContent = message;
+
+        // Notify the main thread that UI has been updated
+        parent.postMessage({ pluginMessage: { type: 'progress-updated', id } }, '*');
+
+        break;
+      case 'progress-end':
+        progressFill.style.width = `100%`;
+        progressText.textContent = 'Complete!';
+
+        spinner.classList.remove('active');
+        setTimeout(() => {
+          generateBtn.disabled = false;
+          progressContainer.style.display = 'none';
+        }, 2000);
 
         break;
     }
