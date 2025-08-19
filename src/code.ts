@@ -7,7 +7,12 @@ import {
 } from './transformers';
 import Github from './github';
 import { serializeFigmaData, MAX_PROGRESS_PERCENTAGE, getValidStylesheetFormat } from './utils';
-import { TransformerResult, TokenCollection, StylesheetFormat } from './types';
+import {
+  TransformerResult,
+  TokenCollection,
+  StylesheetFormat,
+  MessageToMainThreadPayload,
+} from './types';
 
 // Store the generated SCSS
 let generatedScss: string = '';
@@ -60,7 +65,7 @@ function updateProgress(progress: number, message: string): Promise<void> {
 
 function transformTokensToStylesheet(
   tokens: Readonly<TokenCollection>,
-  format: StylesheetFormat
+  format: StylesheetFormat,
 ): TransformerResult {
   switch (format) {
     case 'scss':
@@ -77,9 +82,7 @@ function transformTokensToStylesheet(
 }
 
 /* Main generation function */
-async function generateStyles(
-  format: StylesheetFormat,
-): Promise<TransformerResult> {
+async function generateStyles(format: StylesheetFormat): Promise<TransformerResult> {
   figma.ui.postMessage({
     type: 'progress-start',
   });
@@ -106,7 +109,7 @@ async function generateStyles(
 }
 
 // Listen for messages from the UI
-figma.ui.onmessage = async (msg) => {
+figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
   if (msg.type === 'generate-styles') {
     const result = await generateStyles(getValidStylesheetFormat(msg.format));
     generatedScss = result.result; // Store just the generated code
@@ -178,6 +181,8 @@ figma.ui.onmessage = async (msg) => {
     // Clear the reference to task after resolving
     progressUpdateTasks[msg.id] = null;
   } else {
-    throw new Error(`Unknown message type: ${msg.type}`);
+    throw new Error(
+      `Unknown message type: ${'type' in msg ? (msg as { type: unknown }).type : msg}`,
+    );
   }
 };
