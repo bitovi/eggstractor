@@ -13,7 +13,7 @@ import {
   extractNodeToken,
 } from '../services';
 import { getNodePathNames } from '../utils/node.utils';
-// import { delay, MAX_PROGRESS_PERCENTAGE } from './utilities';
+import { delay, MAX_PROGRESS_PERCENTAGE } from './utilities';
 
 function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]): StyleToken {
   return {
@@ -145,8 +145,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
   async function processNode(node: BaseNode) {
     processedNodes++;
-    // const currentPercentage = Math.floor((processedNodes / totalNodes) * (MAX_PROGRESS_PERCENTAGE - 10)) + 10;
-    const currentPercentage = Math.floor((processedNodes / totalNodes) * (95 - 10)) + 10;
+    const currentPercentage = Math.floor((processedNodes / totalNodes) * (MAX_PROGRESS_PERCENTAGE - 10)) + 10;
     const shouldUpdate = currentPercentage !== lastPercentage || processedNodes === totalNodes;
 
     if (shouldUpdate) {

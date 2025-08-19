@@ -264,20 +264,20 @@ window.onload = () => {
         progressFill.style.width = `${progress}%`;
         progressText.textContent = message;
 
-        // parent.postMessage({ pluginMessage: { type: 'progress-updated', id } }, '*');
+        parent.postMessage({ pluginMessage: { type: 'progress-updated', id } }, '*');
 
         break;
-      // case 'progress-end':
-      //   progressFill.style.width = `100%`;
-      //   progressText.textContent = 'Complete!';
+      case 'progress-end':
+        progressFill.style.width = `100%`;
+        progressText.textContent = 'Complete!';
 
-      //   spinner.classList.remove('active');
-      //   setTimeout(() => {
-      //     generateBtn.disabled = false;
-      //     progressContainer.style.display = 'none';
-      //   }, 2000);
+        spinner.classList.remove('active');
+        setTimeout(() => {
+          generateBtn.disabled = false;
+          progressContainer.style.display = 'none';
+        }, 2000);
 
-      //   break;
+        break;
     }
   };
 };

@@ -1,15 +1,15 @@
 import { collectTokens } from './services';
-// import {
-//   transformToScss,
-//   transformToCss,
-//   transformToTailwindLayerUtilityClassV4,
-//   transformToTailwindSassClass,
-// } from './transformers';
+import {
+  transformToScss,
+  transformToCss,
+  transformToTailwindLayerUtilityClassV4,
+  transformToTailwindSassClass,
+} from './transformers';
 import Github from './github';
 import { serializeFigmaData } from './utils/test.utils';
 import { TransformerResult } from './types/processors';
-// import { MAX_PROGRESS_PERCENTAGE } from './services/utilities';
-// import { TokenCollection } from './types';
+import { MAX_PROGRESS_PERCENTAGE } from './services/utilities';
+import { TokenCollection } from './types';
 
 // Store the generated SCSS
 let generatedScss: string = '';
@@ -22,53 +22,51 @@ figma.showUI(__html__, {
   title: 'Eggstractor',
 });
 
-// let progressUpdateIdCount = 0;
+let progressUpdateIdCount = 0;
 
-// const progressUpdateTasks: Record<number, null | (() => void)> = {};
+const progressUpdateTasks: Record<number, null | (() => void)> = {};
 
-// function updateProgress(progress: number, message: string): Promise<void> {
-  // const id = ++progressUpdateIdCount;
-  // console.log(id);
-  // let resolve: () => void, reject: () => void;
+function updateProgress(progress: number, message: string): Promise<void> {
+  const id = ++progressUpdateIdCount;
+  console.log(id);
+  let resolve: () => void, reject: () => void;
 
-  // const progressUpdated = new Promise<void>((res, rej) => {
-  //   resolve = res;
-  //   reject = rej;
-  // });
+  const progressUpdated = new Promise<void>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
 
-  // progressUpdateTasks[id] = () => {
-  //   resolve();
-  // };
+  progressUpdateTasks[id] = () => {
+    resolve();
+  };
 
-  // figma.ui.postMessage({
-  //   type: 'progress-update',
-  //   progress,
-  //   message,
-  //   id,
-  // });
+  figma.ui.postMessage({
+    type: 'progress-update',
+    progress,
+    message,
+    id,
+  });
 
-  // return progressUpdated;
+  return progressUpdated;
+}
 
-  // return Promise.resolve();
-// }
-
-// function transformTokensToStylesheet(
-//   tokens: Readonly<TokenCollection>,
-//   format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
-// ): TransformerResult {
-//   switch (format) {
-//     case 'scss':
-//       return transformToScss(tokens);
-//     case 'css':
-//       return transformToCss(tokens);
-//     case 'tailwind-scss':
-//       return transformToTailwindSassClass(tokens);
-//     case 'tailwind-v4':
-//       return transformToTailwindLayerUtilityClassV4(tokens);
-//     default:
-//       throw new Error(`Unsupported format: ${format}`);
-//   }
-// }
+function transformTokensToStylesheet(
+  tokens: Readonly<TokenCollection>,
+  format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
+): TransformerResult {
+  switch (format) {
+    case 'scss':
+      return transformToScss(tokens);
+    case 'css':
+      return transformToCss(tokens);
+    case 'tailwind-scss':
+      return transformToTailwindSassClass(tokens);
+    case 'tailwind-v4':
+      return transformToTailwindLayerUtilityClassV4(tokens);
+    default:
+      throw new Error(`Unsupported format: ${format}`);
+  }
+}
 
 // Main generation function
 async function generateStyles(
@@ -84,20 +82,19 @@ async function generateStyles(
 
     if (now - lastProgressTime > 500) {
       lastProgressTime = now;
-      // void updateProgress(progress, message);
+      void updateProgress(progress, message);
     }
   });
 
-  // await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
+  await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
 
-  // const stylesheet = await transformTokensToStylesheet(tokens, format);
+  const stylesheet = await transformTokensToStylesheet(tokens, format);
 
-  // figma.ui.postMessage({
-  //   type: 'progress-end',
-  // });
+  figma.ui.postMessage({
+    type: 'progress-end',
+  });
 
-  // return stylesheet;
-  return Promise.resolve({} as any);
+  return stylesheet;
 }
 
 // Listen for messages from the UI
@@ -165,14 +162,14 @@ figma.ui.onmessage = async (msg) => {
       figma.viewport.scrollAndZoomIntoView([node]);
     }
   } else if (msg.type === 'progress-updated') {
-    // const resolve = progressUpdateTasks[msg.id];
-    // if (!resolve) {
-    //   throw new Error(`No progress update handler found for ID: ${msg.id}`);
-    // }
-    // resolve();
+    const resolve = progressUpdateTasks[msg.id];
+    if (!resolve) {
+      throw new Error(`No progress update handler found for ID: ${msg.id}`);
+    }
+    resolve();
     // TODO deal with this
-    // progressUpdateTasks[msg.id] = null; // Clear the task after resolving
+    progressUpdateTasks[msg.id] = null; // Clear the task after resolving
   } else {
-    // throw new Error(`Unknown message type: ${msg.type}`);
+    throw new Error(`Unknown message type: ${msg.type}`);
   }
 };
