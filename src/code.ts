@@ -12,7 +12,13 @@ import {
   TokenCollection,
   StylesheetFormat,
   MessageToMainThreadPayload,
+  GithubConfig,
+  MessageToUIPayload,
 } from './types';
+
+const postMessageToUI = (message: MessageToUIPayload) => {
+  figma.ui.postMessage(message);
+};
 
 // Store the generated SCSS
 let generatedScss: string = '';
@@ -53,7 +59,7 @@ function updateProgress(progress: number, message: string): Promise<void> {
     resolve();
   };
 
-  figma.ui.postMessage({
+  postMessageToUI({
     type: 'progress-update',
     progress,
     message,
@@ -83,7 +89,7 @@ function transformTokensToStylesheet(
 
 /* Main generation function */
 async function generateStyles(format: StylesheetFormat): Promise<TransformerResult> {
-  figma.ui.postMessage({
+  postMessageToUI({
     type: 'progress-start',
   });
 
@@ -101,7 +107,7 @@ async function generateStyles(format: StylesheetFormat): Promise<TransformerResu
 
   const stylesheet = await transformTokensToStylesheet(tokens, format);
 
-  figma.ui.postMessage({
+  postMessageToUI({
     type: 'progress-end',
   });
 
@@ -113,7 +119,7 @@ figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
   if (msg.type === 'generate-styles') {
     const result = await generateStyles(getValidStylesheetFormat(msg.format));
     generatedScss = result.result; // Store just the generated code
-    figma.ui.postMessage({
+    postMessageToUI({
       type: 'output-styles',
       styles: result.result,
       warnings: result.warnings,
@@ -129,7 +135,7 @@ figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
         outputFormat: getValidStylesheetFormat(msg.format),
       }),
     ]);
-    figma.ui.postMessage({ type: 'config-saved' });
+    postMessageToUI({ type: 'config-saved' });
   } else if (msg.type === 'load-config') {
     const [githubToken, branchName, config] = await Promise.all([
       Github.getToken(),
@@ -137,11 +143,15 @@ figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
       Github.getGithubConfig(),
     ]);
 
+    const modifiedConfig: Partial<GithubConfig> = config || {};
+
+    // If there are any changes to the config, add them and remove any missing ones
     if (githubToken || branchName) {
-      config.githubToken = githubToken;
-      config.branchName = branchName;
+      modifiedConfig.githubToken = githubToken;
+      modifiedConfig.branchName = branchName;
     }
-    figma.ui.postMessage({ type: 'config-loaded', config });
+
+    postMessageToUI({ type: 'config-loaded', config: modifiedConfig });
   } else if (msg.type === 'create-pr') {
     try {
       const result = await Github.createGithubPR(
@@ -151,17 +161,17 @@ figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
         msg.branchName,
         generatedScss,
       );
-      figma.ui.postMessage({
+      postMessageToUI({
         type: 'pr-created',
         prUrl: result.prUrl,
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'An unknown error occurred';
-      figma.ui.postMessage({ type: 'error', message });
+      postMessageToUI({ type: 'error', message });
     }
   } else if (msg.type === 'export-test-data') {
     const testData = await serializeFigmaData(figma.currentPage);
-    figma.ui.postMessage({
+    postMessageToUI({
       type: 'test-data-exported',
       data: JSON.stringify(testData, null, 2),
     });

@@ -1,6 +1,6 @@
 import './ui.css';
 import { highlightCode } from './highlighter';
-import { MessageToMainThreadPayload } from './types';
+import { MessageToMainThreadPayload, MessageToUIPayload } from './types';
 import { getValidStylesheetFormat } from './utils';
 
 const messageMainThread = (pluginMessage: MessageToMainThreadPayload) => {
@@ -124,7 +124,8 @@ window.onload = () => {
 
   // Update the message handler
   window.onmessage = async (event) => {
-    const msg = event.data.pluginMessage;
+    const msg = event.data.pluginMessage as MessageToUIPayload;
+    
     switch (msg.type) {
       case 'output-styles':
         generatedScss = true;
@@ -209,21 +210,21 @@ window.onload = () => {
         }
         break;
       case 'config-loaded':
-        repoPathInput.value = event.data.pluginMessage.config.repoPath || '';
-        filePathInput.value = event.data.pluginMessage.config.filePath || '';
-        branchNameInput.value = event.data.pluginMessage.config.branchName || '';
-        githubTokenInput.value = event.data.pluginMessage.config.githubToken || '';
-        formatSelect.value = getValidStylesheetFormat(event.data.pluginMessage.config.outputFormat);
+        repoPathInput.value = msg.config.repoPath || '';
+        filePathInput.value = msg.config.filePath || '';
+        branchNameInput.value = msg.config.branchName || '';
+        githubTokenInput.value = msg.config.githubToken || '';
+        formatSelect.value = getValidStylesheetFormat(msg.config.outputFormat);
 
         break;
       case 'pr-created':
         const statusEl = document.getElementById('status') as HTMLSpanElement;
-        statusEl.innerHTML = `PR created! <a href="${event.data.pluginMessage.prUrl}" target="_blank">View PR</a>`;
+        statusEl.innerHTML = `PR created! <a href="${msg.prUrl}" target="_blank">View PR</a>`;
         createPRBtn.disabled = false;
         break;
       case 'error':
         createPRBtn.disabled = false;
-        alert(`Error: ${event.data.pluginMessage.message}`);
+        alert(`Error: ${msg.message}`);
         break;
       case 'test-data-exported':
         // Create and trigger download
