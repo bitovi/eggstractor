@@ -1,13 +1,15 @@
 import { collectTokens } from './services';
-import {
-  transformToScss,
-  transformToCss,
-  transformToTailwindLayerUtilityClassV4,
-  transformToTailwindSassClass,
-} from './transformers';
+// import {
+//   transformToScss,
+//   transformToCss,
+//   transformToTailwindLayerUtilityClassV4,
+//   transformToTailwindSassClass,
+// } from './transformers';
 import Github from './github';
 import { serializeFigmaData } from './utils/test.utils';
 import { TransformerResult } from './types/processors';
+// import { MAX_PROGRESS_PERCENTAGE } from './services/utilities';
+// import { TokenCollection } from './types';
 
 // Store the generated SCSS
 let generatedScss: string = '';
@@ -19,6 +21,54 @@ figma.showUI(__html__, {
   themeColors: true,
   title: 'Eggstractor',
 });
+
+// let progressUpdateIdCount = 0;
+
+// const progressUpdateTasks: Record<number, null | (() => void)> = {};
+
+// function updateProgress(progress: number, message: string): Promise<void> {
+  // const id = ++progressUpdateIdCount;
+  // console.log(id);
+  // let resolve: () => void, reject: () => void;
+
+  // const progressUpdated = new Promise<void>((res, rej) => {
+  //   resolve = res;
+  //   reject = rej;
+  // });
+
+  // progressUpdateTasks[id] = () => {
+  //   resolve();
+  // };
+
+  // figma.ui.postMessage({
+  //   type: 'progress-update',
+  //   progress,
+  //   message,
+  //   id,
+  // });
+
+  // return progressUpdated;
+
+  // return Promise.resolve();
+// }
+
+// function transformTokensToStylesheet(
+//   tokens: Readonly<TokenCollection>,
+//   format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
+// ): TransformerResult {
+//   switch (format) {
+//     case 'scss':
+//       return transformToScss(tokens);
+//     case 'css':
+//       return transformToCss(tokens);
+//     case 'tailwind-scss':
+//       return transformToTailwindSassClass(tokens);
+//     case 'tailwind-v4':
+//       return transformToTailwindLayerUtilityClassV4(tokens);
+//     default:
+//       throw new Error(`Unsupported format: ${format}`);
+//   }
+// }
 
 // Main generation function
 async function generateStyles(
@@ -34,32 +84,20 @@ async function generateStyles(
 
     if (now - lastProgressTime > 500) {
       lastProgressTime = now;
-      figma.ui.postMessage({
-        type: 'progress-update',
-        progress,
-        message,
-      });
+      // void updateProgress(progress, message);
     }
   });
 
-  figma.ui.postMessage({
-    type: 'progress-update',
-    progress: 100,
-    message: 'Complete!',
-  });
+  // await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
 
-  switch (format) {
-    case 'scss':
-      return transformToScss(tokens);
-    case 'css':
-      return transformToCss(tokens);
-    case 'tailwind-scss':
-      return transformToTailwindSassClass(tokens);
-    case 'tailwind-v4':
-      return transformToTailwindLayerUtilityClassV4(tokens);
-    default:
-      throw new Error(`Unsupported format: ${format}`);
-  }
+  // const stylesheet = await transformTokensToStylesheet(tokens, format);
+
+  // figma.ui.postMessage({
+  //   type: 'progress-end',
+  // });
+
+  // return stylesheet;
+  return Promise.resolve({} as any);
 }
 
 // Listen for messages from the UI
@@ -126,5 +164,15 @@ figma.ui.onmessage = async (msg) => {
       figma.currentPage.selection = [node as SceneNode];
       figma.viewport.scrollAndZoomIntoView([node]);
     }
+  } else if (msg.type === 'progress-updated') {
+    // const resolve = progressUpdateTasks[msg.id];
+    // if (!resolve) {
+    //   throw new Error(`No progress update handler found for ID: ${msg.id}`);
+    // }
+    // resolve();
+    // TODO deal with this
+    // progressUpdateTasks[msg.id] = null; // Clear the task after resolving
+  } else {
+    // throw new Error(`Unknown message type: ${msg.type}`);
   }
 };
