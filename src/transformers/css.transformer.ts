@@ -1,7 +1,6 @@
 import { StyleToken, TokenCollection, TransformerResult } from '../types';
-import { groupBy } from '../utils/index';
-import { deduplicateMessages } from '../utils/error.utils';
-import { rem } from '../utils/units.utils';
+import { deduplicateMessages, groupBy } from './utils';
+import { rem } from '../utils';
 import { convertVariantGroupBy } from './variants-middleware';
 
 const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {

@@ -1,7 +1,6 @@
 import { StyleProcessor, VariableToken, ProcessedValue } from '../types';
-import { rgbaToString } from '../utils/color.utils';
-import { processGradient } from '../utils/gradient.utils';
-import { normalizeValue } from '../utils/value.utils';
+import { rgbaToString, normalizeValue } from '../utils';
+import { processGradient } from './utils';
 
 export const backgroundProcessors: StyleProcessor[] = [
   {

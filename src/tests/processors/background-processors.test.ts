@@ -2,7 +2,7 @@ import { collectTokens } from '../../services';
 import { transformToCss, transformToScss } from '../../transformers';
 import testData from '../fixtures/figma-test-data_background.json';
 import testDataOpacity from '../fixtures/figma-test-data_opacity.json';
-import { createTestData } from '../../utils/test.utils';
+import { createTestData } from '../../utils';
 
 // Add this helper function at the top of the test file
 function parseCssClass(css: string, className: string): string | null {

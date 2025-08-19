@@ -1,4 +1,4 @@
-import { toBase64 } from './utils/index';
+import { toBase64 } from './utils';
 
 export interface PRResult {
   prUrl: string;

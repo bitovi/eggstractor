@@ -1,7 +1,5 @@
 import { BaseToken, VariableToken } from '../types';
-import { rgbaToString } from '../utils/color.utils';
-import { sanitizeName } from '../utils/string.utils';
-import { normalizeValue } from '../utils/value.utils';
+import { rgbaToString, sanitizeName, normalizeValue } from '../utils';
 
 const variableCache = new Map<string, any>();
 

@@ -15,7 +15,7 @@ interface ConvertOptions {
   unit?: boolean;
 }
 
-const convert = (
+export const convert = (
   value: number | string | object,
   to: string = 'rem',
   options: ConvertOptions = {},
@@ -52,12 +52,9 @@ const convert = (
   });
 };
 
-const rem = (value: number | string | object, options?: any) => convert(value, 'rem', options);
+export const rem = (value: number | string | object, options?: any) => convert(value, 'rem', options);
 
-const em = (value: number | string | object, baseline: number, options?: any) =>
+export const em = (value: number | string | object, baseline: number, options?: any) =>
   convert(value, 'em', { baseline, ...options });
 
-const px = (value: number | string | object, options?: any) => convert(value, 'px', options);
-
-export default rem;
-export { convert, em, px, rem };
+export const px = (value: number | string | object, options?: any) => convert(value, 'px', options);

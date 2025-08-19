@@ -5,6 +5,21 @@ interface NodePathName {
   name: string;
 }
 
+function parseVariantWithoutKey(variant: string): string {
+  // TODO: create using componentSet token and component token instead?
+  const segment = variant.split(', ').map(part => {
+    const [_, valueRaw] = part.split('=')
+
+    if (valueRaw) {
+      return valueRaw;
+    }
+
+    return part;
+  }).join('__and__');
+
+  return sanitizeSegment(segment);
+}
+
 export function getNodePathNames(node: SceneNode): NodePathName[] {
   const pathParts: NodePathName[] = [];
   let current: SceneNode | null = node;
@@ -23,19 +38,4 @@ export function getNodePathNames(node: SceneNode): NodePathName[] {
     name: parseVariantWithoutKey(p.name),
     type: p.type,
   }));
-}
-
-export function parseVariantWithoutKey(variant: string): string {
-  // TODO: create using componentSet token and component token instead?
-  const segment = variant.split(', ').map(part => {
-    const [_, valueRaw] = part.split('=')
-
-    if (valueRaw) {
-      return valueRaw;
-    }
-
-    return part;
-  }).join('__and__');
-
-  return sanitizeSegment(segment);
 }

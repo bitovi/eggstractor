@@ -1,5 +1,5 @@
 import { GradientProcessing, VariableToken } from '../types';
-import { rgbaToString } from '../utils/color.utils';
+import { rgbaToString } from '../utils';
 
 export async function processGradientStops(
   stops: readonly ColorStop[],

@@ -6,10 +6,8 @@ import {
   transformToTailwindSassClass,
 } from './transformers';
 import Github from './github';
-import { serializeFigmaData } from './utils/test.utils';
-import { TransformerResult } from './types/processors';
-import { MAX_PROGRESS_PERCENTAGE } from './services/utilities';
-import { TokenCollection } from './types';
+import { serializeFigmaData, MAX_PROGRESS_PERCENTAGE, getValidStylesheetFormat } from './utils';
+import { TransformerResult, TokenCollection, StylesheetFormat } from './types';
 
 // Store the generated SCSS
 let generatedScss: string = '';
@@ -62,7 +60,7 @@ function updateProgress(progress: number, message: string): Promise<void> {
 
 function transformTokensToStylesheet(
   tokens: Readonly<TokenCollection>,
-  format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
+  format: StylesheetFormat
 ): TransformerResult {
   switch (format) {
     case 'scss':
@@ -80,7 +78,7 @@ function transformTokensToStylesheet(
 
 /* Main generation function */
 async function generateStyles(
-  format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
+  format: StylesheetFormat,
 ): Promise<TransformerResult> {
   figma.ui.postMessage({
     type: 'progress-start',
@@ -110,7 +108,7 @@ async function generateStyles(
 // Listen for messages from the UI
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'generate-styles') {
-    const result = await generateStyles(msg.format || 'scss');
+    const result = await generateStyles(getValidStylesheetFormat(msg.format));
     generatedScss = result.result; // Store just the generated code
     figma.ui.postMessage({
       type: 'output-styles',
@@ -125,7 +123,7 @@ figma.ui.onmessage = async (msg) => {
       Github.saveGithubConfig({
         repoPath: msg.repoPath,
         filePath: msg.filePath,
-        outputFormat: msg.format || 'scss',
+        outputFormat: getValidStylesheetFormat(msg.format),
       }),
     ]);
     figma.ui.postMessage({ type: 'config-saved' });

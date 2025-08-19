@@ -1,4 +1,4 @@
-import { normalizeValue } from '../utils/value.utils';
+import { normalizeValue } from '../utils';
 
 describe('normalizeValue', () => {
   it('should normalize opacity values', () => {

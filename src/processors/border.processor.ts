@@ -1,5 +1,5 @@
 import { StyleProcessor, ProcessedValue } from '../types';
-import { rgbaToString } from '../utils/index';
+import { rgbaToString } from '../utils';
 
 interface BorderWeights {
   top: number;

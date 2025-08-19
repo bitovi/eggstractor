@@ -1,5 +1,69 @@
 import './ui.css';
 import { highlightCode } from './highlighter';
+import { StylesheetFormat } from './types';
+import { getValidStylesheetFormat } from './utils';
+
+type MessageType =
+  | 'load-config'
+  | 'create-pr'
+  | 'save-config'
+  | 'generate-styles'
+  | 'export-test-data'
+  | 'select-node'
+  | 'progress-updated';
+
+type BaseMessageToMainThreadPayload = {
+  type: MessageType;
+};
+
+interface LoadConfigPayload extends BaseMessageToMainThreadPayload {
+  type: 'load-config';
+}
+
+interface CreatePRPayload extends BaseMessageToMainThreadPayload {
+  type: 'create-pr';
+  githubToken: string;
+  filePath: string;
+  repoPath: string;
+  branchName: string;
+}
+
+interface SaveConfigPayload extends Omit<CreatePRPayload, 'type'> {
+  type: 'save-config';
+  format: StylesheetFormat;
+}
+
+interface GenerateStylesPayload extends BaseMessageToMainThreadPayload {
+  type: 'generate-styles';
+  format: StylesheetFormat;
+}
+
+interface SelectNodePayload extends BaseMessageToMainThreadPayload {
+  type: 'select-node';
+  nodeId: string;
+}
+
+interface ProgressUpdatedPayload extends BaseMessageToMainThreadPayload {
+  type: 'progress-updated';
+  id: number;
+}
+
+interface ExportTestDataPayload extends BaseMessageToMainThreadPayload {
+  type: 'export-test-data';
+}
+
+type MessageToMainThreadPayload =
+  | LoadConfigPayload
+  | CreatePRPayload
+  | SaveConfigPayload
+  | GenerateStylesPayload
+  | SelectNodePayload
+  | ProgressUpdatedPayload
+  | ExportTestDataPayload;
+
+const messageMainThread = (pluginMessage: MessageToMainThreadPayload) => {
+  parent.postMessage({ pluginMessage }, '*');
+};
 
 window.onload = () => {
   const generateBtn = document.getElementById('generateBtn') as HTMLButtonElement;
@@ -18,7 +82,8 @@ window.onload = () => {
 
   // Load saved config when UI opens
 
-  parent.postMessage({ pluginMessage: { type: 'load-config' } }, '*');
+  messageMainThread({ type: 'load-config' });
+  // parent.postMessage({ pluginMessage: { type: 'load-config' } }, '*');
   // Check if we're in development mode
   const isDevelopment = process.env.NODE_ENV === 'development';
   if (isDevelopment) {
@@ -45,32 +110,50 @@ window.onload = () => {
   };
   githubTokenInput.onchange = saveConfig;
   function saveConfig() {
-    parent.postMessage(
-      {
-        pluginMessage: {
-          type: 'save-config',
-          repoPath: repoPathInput.value,
-          filePath: filePathInput.value,
-          branchName: branchNameInput.value,
-          githubToken: githubTokenInput.value,
-          format: formatSelect.value || 'scss',
-        },
-      },
-      '*',
-    );
+    messageMainThread({
+      type: 'save-config',
+      repoPath: repoPathInput.value,
+      filePath: filePathInput.value,
+      branchName: branchNameInput.value,
+      githubToken: githubTokenInput.value,
+      format: getValidStylesheetFormat(formatSelect.value),
+    });
   }
 
+    // parent.postMessage(
+    //   {
+    //     pluginMessage: {
+    //       type: 'save-config',
+    //       repoPath: repoPathInput.value,
+    //       filePath: filePathInput.value,
+    //       branchName: branchNameInput.value,
+    //       githubToken: githubTokenInput.value,
+    //       format: getValidStylesheetFormat(formatSelect.value),
+    //     },
+    //   },
+    //   '*',
+    // );
+  // }
+
   generateBtn.onclick = () => {
-    const format = isDevelopment ? formatSelect.value : 'scss';
-    parent.postMessage(
+    const format = isDevelopment ? getValidStylesheetFormat(formatSelect.value) : 'scss';
+
+    messageMainThread(
       {
-        pluginMessage: {
           type: 'generate-styles',
           format,
-        },
-      },
-      '*',
+        }
     );
+
+    // parent.postMessage(
+    //   {
+    //     pluginMessage: {
+    //       type: 'generate-styles',
+    //       format,
+    //     },
+    //   },
+    //   '*',
+    // );
   };
 
   createPRBtn.onclick = () => {
@@ -102,18 +185,27 @@ window.onload = () => {
       return;
     }
 
-    parent.postMessage(
-      {
-        pluginMessage: {
+    messageMainThread({
           type: 'create-pr',
           githubToken,
           repoPath,
           filePath,
           branchName,
-        },
-      },
-      '*',
-    );
+        }
+      );
+
+    // parent.postMessage(
+    //   {
+    //     pluginMessage: {
+    //       type: 'create-pr',
+    //       githubToken,
+    //       repoPath,
+    //       filePath,
+    //       branchName,
+    //     },
+    //   },
+    //   '*',
+    // );
   };
 
   // Add this function to handle copying
@@ -127,7 +219,8 @@ window.onload = () => {
   }
 
   document.getElementById('exportTestDataBtn')?.addEventListener('click', () => {
-    parent.postMessage({ pluginMessage: { type: 'export-test-data' } }, '*');
+    messageMainThread({ type: 'export-test-data' });
+    // parent.postMessage({ pluginMessage: { type: 'export-test-data' } }, '*');
   });
 
   // Update the message handler
@@ -169,15 +262,19 @@ window.onload = () => {
             e.preventDefault();
             const nodeId = target.dataset.nodeId;
             if (nodeId) {
-              parent.postMessage(
-                {
-                  pluginMessage: {
+              messageMainThread({
                     type: 'select-node',
                     nodeId,
-                  },
-                },
-                '*',
-              );
+                  });
+              // parent.postMessage(
+              //   {
+              //     pluginMessage: {
+              //       type: 'select-node',
+              //       nodeId,
+              //     },
+              //   },
+              //   '*',
+              // );
             }
           }
         });
@@ -226,7 +323,7 @@ window.onload = () => {
         filePathInput.value = event.data.pluginMessage.config.filePath || '';
         branchNameInput.value = event.data.pluginMessage.config.branchName || '';
         githubTokenInput.value = event.data.pluginMessage.config.githubToken || '';
-        formatSelect.value = event.data.pluginMessage.config.outputFormat || 'scss';
+        formatSelect.value = getValidStylesheetFormat(event.data.pluginMessage.config.outputFormat);
 
         break;
       case 'pr-created':
@@ -265,7 +362,8 @@ window.onload = () => {
         progressText.textContent = message;
 
         // Notify the main thread that UI has been updated
-        parent.postMessage({ pluginMessage: { type: 'progress-updated', id } }, '*');
+        messageMainThread({ type: 'progress-updated', id });
+        // parent.postMessage({ pluginMessage: { type: 'progress-updated', id } }, '*');
 
         break;
       case 'progress-end':
