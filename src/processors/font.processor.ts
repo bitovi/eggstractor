@@ -1,5 +1,5 @@
 import { StyleProcessor, VariableToken, ProcessedValue } from '../types';
-import { rgbaToString } from '../utils/color.utils';
+import { rgbaToString } from '../utils';
 
 interface NodeWithFont {
   fontSize?: number;

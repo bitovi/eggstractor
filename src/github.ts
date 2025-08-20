@@ -1,4 +1,5 @@
-import { toBase64 } from './utils/index';
+import { GithubConfig } from './types';
+import { toBase64 } from './utils';
 
 export interface PRResult {
   prUrl: string;
@@ -43,17 +44,13 @@ export default {
     const branches = JSON.parse(userBranches);
     return branches[fileId] || null;
   },
-  saveGithubConfig: async function saveGithubConfig(config: {
-    repoPath: string;
-    filePath: string;
-    outputFormat: string;
-  }) {
+  saveGithubConfig: async function saveGithubConfig(config: GithubConfig) {
     await figma.root.setPluginData('githubConfig', JSON.stringify(config));
   },
   getGithubConfig: async function getGithubConfig() {
     try {
       const savedConfig = figma.root.getPluginData('githubConfig');
-      const config = savedConfig ? JSON.parse(savedConfig) : {};
+      const config = savedConfig ? JSON.parse(savedConfig) as GithubConfig : null;
       return config;
     } catch (error) {
       console.error('Error reading config:', error);

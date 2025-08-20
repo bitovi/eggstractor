@@ -1,4 +1,4 @@
-import { ProcessorResult } from '../types/processor.types';
+import { ProcessorResult } from '../../types/processor.types';
 
 function calculateGradientAngle(matrix: Transform): number {
   const [[a], [b]] = matrix;

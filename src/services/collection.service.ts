@@ -12,8 +12,7 @@ import {
   extractInstanceSetToken,
   extractNodeToken,
 } from '../services';
-import { getNodePathNames } from '../utils/node.utils';
-import { delay, MAX_PROGRESS_PERCENTAGE } from './utilities';
+import { getNodePathNames, MAX_PROGRESS_PERCENTAGE, delay } from '../utils';
 
 function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]): StyleToken {
   return {

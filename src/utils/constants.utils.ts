@@ -4,12 +4,3 @@
  * transforming the tokens to the requested format.
  */
 export const MAX_PROGRESS_PERCENTAGE = 95;
-
-/**
- * Promise wrapped setTimeout.
- */
-export function delay(ms: number): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
-}

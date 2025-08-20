@@ -6,10 +6,19 @@ import {
   transformToTailwindSassClass,
 } from './transformers';
 import Github from './github';
-import { serializeFigmaData } from './utils/test.utils';
-import { TransformerResult } from './types/processors';
-import { MAX_PROGRESS_PERCENTAGE } from './services/utilities';
-import { TokenCollection } from './types';
+import { serializeFigmaData, MAX_PROGRESS_PERCENTAGE, getValidStylesheetFormat } from './utils';
+import {
+  TransformerResult,
+  TokenCollection,
+  StylesheetFormat,
+  MessageToMainThreadPayload,
+  GithubConfig,
+  MessageToUIPayload,
+} from './types';
+
+const postMessageToUI = (message: MessageToUIPayload) => {
+  figma.ui.postMessage(message);
+};
 
 // Store the generated SCSS
 let generatedScss: string = '';
@@ -50,7 +59,7 @@ function updateProgress(progress: number, message: string): Promise<void> {
     resolve();
   };
 
-  figma.ui.postMessage({
+  postMessageToUI({
     type: 'progress-update',
     progress,
     message,
@@ -62,7 +71,7 @@ function updateProgress(progress: number, message: string): Promise<void> {
 
 function transformTokensToStylesheet(
   tokens: Readonly<TokenCollection>,
-  format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
+  format: StylesheetFormat,
 ): TransformerResult {
   switch (format) {
     case 'scss':
@@ -79,10 +88,8 @@ function transformTokensToStylesheet(
 }
 
 /* Main generation function */
-async function generateStyles(
-  format: 'scss' | 'css' | 'tailwind-scss' | 'tailwind-v4',
-): Promise<TransformerResult> {
-  figma.ui.postMessage({
+async function generateStyles(format: StylesheetFormat): Promise<TransformerResult> {
+  postMessageToUI({
     type: 'progress-start',
   });
 
@@ -100,7 +107,7 @@ async function generateStyles(
 
   const stylesheet = await transformTokensToStylesheet(tokens, format);
 
-  figma.ui.postMessage({
+  postMessageToUI({
     type: 'progress-end',
   });
 
@@ -108,11 +115,11 @@ async function generateStyles(
 }
 
 // Listen for messages from the UI
-figma.ui.onmessage = async (msg) => {
+figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
   if (msg.type === 'generate-styles') {
-    const result = await generateStyles(msg.format || 'scss');
+    const result = await generateStyles(getValidStylesheetFormat(msg.format));
     generatedScss = result.result; // Store just the generated code
-    figma.ui.postMessage({
+    postMessageToUI({
       type: 'output-styles',
       styles: result.result,
       warnings: result.warnings,
@@ -125,10 +132,10 @@ figma.ui.onmessage = async (msg) => {
       Github.saveGithubConfig({
         repoPath: msg.repoPath,
         filePath: msg.filePath,
-        outputFormat: msg.format || 'scss',
+        outputFormat: getValidStylesheetFormat(msg.format),
       }),
     ]);
-    figma.ui.postMessage({ type: 'config-saved' });
+    postMessageToUI({ type: 'config-saved' });
   } else if (msg.type === 'load-config') {
     const [githubToken, branchName, config] = await Promise.all([
       Github.getToken(),
@@ -136,11 +143,15 @@ figma.ui.onmessage = async (msg) => {
       Github.getGithubConfig(),
     ]);
 
+    const modifiedConfig: Partial<GithubConfig> = config || {};
+
+    // If there are any changes to the config, add them and remove any missing ones
     if (githubToken || branchName) {
-      config.githubToken = githubToken;
-      config.branchName = branchName;
+      modifiedConfig.githubToken = githubToken;
+      modifiedConfig.branchName = branchName;
     }
-    figma.ui.postMessage({ type: 'config-loaded', config });
+
+    postMessageToUI({ type: 'config-loaded', config: modifiedConfig });
   } else if (msg.type === 'create-pr') {
     try {
       const result = await Github.createGithubPR(
@@ -150,17 +161,17 @@ figma.ui.onmessage = async (msg) => {
         msg.branchName,
         generatedScss,
       );
-      figma.ui.postMessage({
+      postMessageToUI({
         type: 'pr-created',
         prUrl: result.prUrl,
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'An unknown error occurred';
-      figma.ui.postMessage({ type: 'error', message });
+      postMessageToUI({ type: 'error', message });
     }
   } else if (msg.type === 'export-test-data') {
     const testData = await serializeFigmaData(figma.currentPage);
-    figma.ui.postMessage({
+    postMessageToUI({
       type: 'test-data-exported',
       data: JSON.stringify(testData, null, 2),
     });
@@ -180,6 +191,8 @@ figma.ui.onmessage = async (msg) => {
     // Clear the reference to task after resolving
     progressUpdateTasks[msg.id] = null;
   } else {
-    throw new Error(`Unknown message type: ${msg.type}`);
+    throw new Error(
+      `Unknown message type: ${'type' in msg ? (msg as { type: unknown }).type : msg}`,
+    );
   }
 };

@@ -133,7 +133,7 @@ describe('shouldSkipInstanceTokenGeneration', () => {
   } as TokenCollection;
 
   it('should skip token generation when instance references existing component', () => {
-    const consoleSpy = jest.spyOn(console, 'info');
+    const consoleSpy = jest.spyOn(console, 'info').mockImplementationOnce(() => {/* stub */});
     const result = shouldSkipInstanceTokenGeneration(
       mockInstanceNode,
       mockInstanceToken,

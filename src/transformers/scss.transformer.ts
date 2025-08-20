@@ -1,7 +1,6 @@
 import { TokenCollection, StyleToken, TransformerResult } from '../types';
-import { sanitizeName, groupBy } from '../utils/index';
-import { deduplicateMessages } from '../utils/error.utils';
-import { rem } from '../utils/units.utils';
+import { sanitizeName, rem } from '../utils';
+import { deduplicateMessages, groupBy } from './utils';
 import { convertVariantGroupBy } from './variants-middleware';
 
 const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
