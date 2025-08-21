@@ -16,7 +16,7 @@ describe('Text Processors', () => {
         type: 'RECTANGLE',
       } as SceneNode;
 
-      const result = await processor.process([], node);
+      const result = await processor.process(new Map(), node);
       expect(result).toBeNull();
     });
 
@@ -58,7 +58,7 @@ describe('Text Processors', () => {
       ];
 
       for (const testCase of testCases) {
-        const result = await processor.process([], testCase.input);
+        const result = await processor.process(new Map(), testCase.input);
         expect(result).toEqual(testCase.expected as ProcessedValue);
       }
     });

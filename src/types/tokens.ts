@@ -24,7 +24,15 @@ export interface StyleToken extends BaseToken {
   type: 'style';
   value: string | null; // CSS with variable references e.g. background: $color-primary
   rawValue: string | null; // CSS with actual values e.g. background: #FF0000
+  /**
+   * @deprecated use `variableTokenMapByProperty` instead or create a new map for your query
+   */
   variables?: VariableToken[]; // Associated variable tokens
+  variableTokenMapByProperty: Map<string, VariableToken>;
+  /**
+   * // Map of variable tokens by property. Each VariableToken should be unique
+   * based on its property.
+   */
   warnings?: string[];
   errors?: string[];
   componentId?: ComponentNode['id'];

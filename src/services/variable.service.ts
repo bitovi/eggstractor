@@ -1,14 +1,12 @@
 import { BaseToken, VariableToken } from '../types';
 import { rgbaToString, sanitizeName, normalizeValue } from '../utils';
 
-const variableCache = new Map<string, any>();
+const variableCache = new Map<string, Variable>();
 
 async function getVariableFallback(
-  variable: Variable | null,
-  propertyName: string = '',
+  variable: Variable,
+  propertyName: string,
 ): Promise<string> {
-  if (!variable) return '';
-
   const modeId = Object.keys(variable.valuesByMode)[0];
   const value = variable.valuesByMode[modeId];
 
@@ -18,15 +16,17 @@ async function getVariableFallback(
     let aliasVariable = variableCache.get(value.id);
 
     if (!aliasVariable) {
-      aliasVariable = await figma.variables.getVariableByIdAsync(value.id);
-      if (aliasVariable) {
-        variableCache.set(value.id, aliasVariable);
+      const aliasVariableFromFigma = await figma.variables.getVariableByIdAsync(value.id);
+
+      if (!aliasVariableFromFigma) {
+        throw new Error('Unexpected missing variable from Figma');
       }
+
+      variableCache.set(value.id, aliasVariableFromFigma);
+      aliasVariable = aliasVariableFromFigma;
     }
 
-    if (aliasVariable) {
-      return getVariableFallback(aliasVariable, propertyName);
-    }
+    return getVariableFallback(aliasVariable, propertyName);
   }
 
   switch (variable.resolvedType) {
@@ -52,6 +52,11 @@ async function getVariableFallback(
   }
 }
 
+/**
+ * Get VariableToken for a given variable ID and property.
+ * This function checks the cache first, then fetches the variable from Figma if
+ * not cached.
+ */
 export async function collectBoundVariable(
   varId: string,
   property: string,
@@ -59,7 +64,7 @@ export async function collectBoundVariable(
   node: SceneNode,
 ): Promise<VariableToken | null> {
   // Check cache first
-  let variable = variableCache.get(varId);
+  let variable: Variable | null | undefined = variableCache.get(varId);
 
   if (!variable) {
     variable = await figma.variables.getVariableByIdAsync(varId);

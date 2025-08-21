@@ -56,6 +56,8 @@ export const extractComponentSetToken = (node: ComponentSetNode): ComponentSetTo
   };
 };
 
+const variableTokensCache = new Map<string, VariableToken>();
+
 export async function extractNodeToken(
   node: SceneNode,
   processor: StyleProcessor,
@@ -69,15 +71,29 @@ export async function extractNodeToken(
   // Helper to check or add variable token
   const getOrCreateVariableToken = async (varId: string, property: string) => {
     const key = `${varId}-${property}`;
-    if (variableTokensMap.has(key)) {
-      return variableTokensMap.get(key)!;
+
+    let token: VariableToken | null | undefined;
+
+    // Check global cache first
+    if (variableTokensCache.has(key)) {
+      token = variableTokensCache.get(key)!;
     }
 
-    const token = await collectBoundVariable(varId, property, path, node);
-    if (token) {
+    // All variable tokens of a property should already be unique and varId shouldn't have to be included
+    // This is because any style token should only attempt to set one variable.
+    token ??= await collectBoundVariable(varId, property, path, node);
+
+    if (!token) {
+      throw new Error('Unexpected null token for variable');
+    }
+
+    // Check scoped cache to StyleToken
+    if (!variableTokensMap.has(key)) {
       variableTokensMap.set(key, token);
+      // Deprecated and should be removed in the future
       tokens.push(token);
     }
+
     return token;
   };
 
@@ -112,8 +128,23 @@ export async function extractNodeToken(
     }
   }
 
+  const variableTokenMapByProperty = new Map<string /* property */, VariableToken>();
+
+  variableTokensMap.forEach((token, key) => {
+    if (!variableTokenMapByProperty.has(token.property)) {
+      variableTokenMapByProperty.set(token.property, token);
+    } else {
+      // All VariableTokens for a single StyleToken should be unique by property
+      // This is because we currently are not supporting multiple variable
+      // tokens for the same property.
+      throw new Error(
+        `Variable token for property "${token.property}" already exists in the map. Key: ${key}`,
+      );
+    }
+  });
+
   // Step 4: Process the node and create Style Token
-  const processedValue = await processor.process([...variableTokensMap.values()], node);
+  const processedValue = await processor.process(variableTokenMapByProperty, node);
 
   if (processedValue) {
     const styleToken: StyleToken = {
@@ -124,10 +155,9 @@ export async function extractNodeToken(
       valueType: processedValue.valueType,
       property: processor.property,
       path, //: path.length > 1 ? path.slice(1) : path,
+      // Deprecated and will be removed in the future
       variables: variableTokensMap.size > 0 ? [...variableTokensMap.values()] : undefined,
-      metadata: {
-        figmaId: node.id,
-      },
+      variableTokenMapByProperty,
       warnings: processedValue.warnings,
       errors: processedValue.errors,
       componentId: componentToken?.id,
