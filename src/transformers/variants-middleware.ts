@@ -6,7 +6,6 @@ export const convertVariantGroupBy = (
   styleTokensGroupedByVariantCombination: Record<string, StyleToken[]>,
   transform: (token: StyleToken) => Record<string, string>,
   nameTransform: {
-    createGroupingKey: (path: Array<{ name: string; type: string }>) => string;
     createName: (
       path: Array<{ name: string; type: string }>,
       variantsCombination: string,
@@ -125,7 +124,10 @@ export const convertVariantGroupBy = (
 
   const instancesWithVariantMap = instancesWithVariant.reduce(
     (acc, variantGroup) => {
-      const key = nameTransform.createGroupingKey(variantGroup.path);
+      const key = variantGroup.path
+        .filter((part) => part.type !== 'COMPONENT')
+        .map(({ name }) => name.replace(/\s+/g, '-'))
+        .join('.');
 
       acc[key] ??= [];
       acc[key].push(variantGroup);

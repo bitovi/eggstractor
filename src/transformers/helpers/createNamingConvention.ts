@@ -75,12 +75,6 @@ export const createNamingConvention = (context: NamingContext = defaultContext) 
   };
 
   return {
-    createGroupingKey: (path: Array<{ name: string; type: string }>) => {
-      const filteredPath = path.filter((part) => part.type !== 'COMPONENT');
-      const pathToUse = context.includePageInPath ? filteredPath : filteredPath.slice(1);
-      return pathToUse.map(({ name }) => name.replace(/\s+/g, '-')).join('.');
-    },
-
     createName: (
       path: Array<{ name: string; type: string }>,
       variantsCombination: string,

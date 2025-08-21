@@ -162,40 +162,6 @@ describe('createNamingConvention', () => {
         });
       });
     });
-
-    describe('createGroupingKey', () => {
-      it('should create grouping key without COMPONENT types', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-          { name: 'large--variant', type: 'COMPONENT' },
-          { name: 'text', type: 'TEXT' },
-        ];
-        const result = namingFunctions.createGroupingKey(path);
-        expect(result).toBe('button-page.button.text');
-      });
-
-      it('should handle spaces in grouping key', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button set', type: 'COMPONENT_SET' },
-        ];
-        const result = namingFunctions.createGroupingKey(path);
-        expect(result).toBe('button-page.button-set');
-      });
-
-      it('should handle empty path', () => {
-        const path: Array<{ name: string; type: string }> = [];
-        const result = namingFunctions.createGroupingKey(path);
-        expect(result).toBe('');
-      });
-
-      it('should handle path with only COMPONENT types', () => {
-        const path = [{ name: 'component', type: 'COMPONENT' }];
-        const result = namingFunctions.createGroupingKey(path);
-        expect(result).toBe('');
-      });
-    });
   });
   describe('with context that has page disabled', () => {
     const testContext: NamingContext = {
@@ -232,18 +198,6 @@ describe('createNamingConvention', () => {
         );
 
         expect(result).toBe('button/text.size_default---primary---hover');
-      });
-    });
-
-    describe('createGroupingKey', () => {
-      it('should exclude page and use dots for grouping (same as default)', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-          { name: 'text', type: 'TEXT' },
-        ];
-        const result = namingFunctions.createGroupingKey(path);
-        expect(result).toBe('button.text');
       });
     });
   });
