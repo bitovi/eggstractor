@@ -1,22 +1,11 @@
 import { createNamingConvention } from './createNamingConvention';
-import { USE_VARIANT_COMBINATION_PARSING } from '../variants';
 import { NamingContext } from '../utils';
-
-jest.mock('../variants', () => ({
-  USE_VARIANT_COMBINATION_PARSING: jest.fn(),
-}));
-
-const mockUseVariantCombinationParsing = USE_VARIANT_COMBINATION_PARSING as jest.MockedFunction<
-  typeof USE_VARIANT_COMBINATION_PARSING
->;
 
 describe('createNamingConvention', () => {
   describe('with default context', () => {
     let namingFunctions: ReturnType<typeof createNamingConvention>;
 
     beforeEach(() => {
-      // Default to combinatorial parsing (true)
-      mockUseVariantCombinationParsing.mockReturnValue(true);
       namingFunctions = createNamingConvention();
     });
 
@@ -131,12 +120,22 @@ describe('createNamingConvention', () => {
         const result = namingFunctions.createName(path, 'Size=LARGE');
         expect(result).toBe('button-page-button-large');
       });
+
+      it('should handle boolean values with special rules', () => {
+        const path = [
+          { name: 'button page', type: 'PAGE' },
+          { name: 'button', type: 'COMPONENT_SET' },
+        ];
+        const result = namingFunctions.createName(
+          path,
+          'Disabled=True--Required=False--Active=Yes--Hidden=No',
+        );
+        // true/yes = no prefix, false/no = always prefixed
+        expect(result).toBe('button-page-button-true-required_false-yes-hidden_no');
+      });
+
       describe('for templated input', () => {
         it('should handle --and-- format', () => {
-          // Mock to simulate templated mode (false)
-          mockUseVariantCombinationParsing.mockReturnValue(false);
-          namingFunctions = createNamingConvention(); // Recreate with new mock value
-
           const path = [
             { name: 'button page', type: 'PAGE' },
             { name: 'button', type: 'COMPONENT_SET' },
@@ -146,10 +145,6 @@ describe('createNamingConvention', () => {
         });
 
         it('should handle conflicts and --and-- format', () => {
-          // Mock to simulate templated mode (false)
-          mockUseVariantCombinationParsing.mockReturnValue(false);
-          namingFunctions = createNamingConvention(); // Recreate with new mock value
-
           const path = [
             { name: 'button page', type: 'PAGE' },
             { name: 'button', type: 'COMPONENT_SET' },
@@ -218,7 +213,6 @@ describe('createNamingConvention', () => {
     let namingFunctions: ReturnType<typeof createNamingConvention>;
 
     beforeEach(() => {
-      mockUseVariantCombinationParsing.mockReturnValue(true);
       namingFunctions = createNamingConvention(testContext);
     });
 

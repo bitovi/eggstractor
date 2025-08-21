@@ -1,4 +1,3 @@
-import { USE_VARIANT_COMBINATION_PARSING } from '../variants';
 import { NamingContext, defaultContext } from '../utils';
 
 export const createNamingConvention = (context: NamingContext = defaultContext) => {
@@ -22,10 +21,6 @@ export const createNamingConvention = (context: NamingContext = defaultContext) 
   ) => {
     if (!variantsCombination || variantsCombination === 'ROOT') {
       return '';
-    }
-
-    if (USE_VARIANT_COMBINATION_PARSING()) {
-      return variantsCombination;
     }
 
     // NEW: If we have variants object, reconstruct as property=value format
@@ -107,17 +102,38 @@ export const createNamingConvention = (context: NamingContext = defaultContext) 
           if (value === 'root') return null;
 
           const cleanValue = value.trim().replace(/\s+/g, '-');
+          const cleanProperty = property?.trim().replace(/\s+/g, '-');
+
+          // Check if this PROPERTY appears in ANY conflict
           const propertyHasConflicts =
             property &&
             Object.values(propertyNameConflicts || {}).some((conflictingProperties) =>
               conflictingProperties.includes(property),
             );
 
-          if (property && propertyHasConflicts) {
-            return `${property}${context.delimiters.variantEqualSign}${cleanValue}`;
-          } else {
-            return cleanValue;
+          // NEW: Special handling for boolean-like values
+          const isFalsyBoolean = ['false', 'no'].includes(cleanValue.toLowerCase());
+          const isTruthyBoolean = ['true', 'yes'].includes(cleanValue.toLowerCase());
+
+          if (property) {
+            // For falsy boolean values, ALWAYS prefix (regardless of conflicts)
+            if (isFalsyBoolean) {
+              return `${cleanProperty}${context.delimiters.variantEqualSign}${cleanValue}`; // Use cleanProperty
+            }
+
+            // For truthy boolean values, NEVER prefix (unless there are conflicts)
+            if (isTruthyBoolean && !propertyHasConflicts) {
+              return cleanValue;
+            }
+
+            // For conflicts (including truthy booleans with conflicts), prefix
+            if (propertyHasConflicts) {
+              return `${cleanProperty}${context.delimiters.variantEqualSign}${cleanValue}`; // Use cleanProperty
+            }
           }
+
+          // Default: no prefix for non-boolean values without conflicts
+          return cleanValue;
         })
         .filter(Boolean);
 

@@ -16,7 +16,7 @@ type StyleNode = {
  * combination.
  */
 export const USE_VARIANT_COMBINATION_PARSING = (): boolean => {
-  return false;
+  return true;
 };
 
 let i = 0;
