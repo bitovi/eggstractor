@@ -53,9 +53,8 @@ async function getVariableFallback(
 }
 
 /**
- * Get VariableToken for a given variable ID and property.
- * This function checks the cache first, then fetches the variable from Figma if
- * not cached.
+ * Get VariableToken for a given variable ID and property. This function checks
+ * the cache first, then fetches the variable from Figma if not cached.
  */
 export async function collectBoundVariable(
   varId: string,

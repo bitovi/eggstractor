@@ -29,10 +29,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: 'border',
     bindingKey: 'strokes',
-    process: async (
-      variableTokenMapByProperty,
-      node,
-    ): Promise<ProcessedValue | null> => {
+    process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
       if (!node) return null;
 
       // For non-rectangular shapes, we don't care about strokeAlign
@@ -79,11 +76,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: 'border-top',
     bindingKey: 'strokes',
-    process: async (
-      variableTokenMapByProperty,
-      node,
-      processedProperties?: Set<string>,
-    ) =>
+    process: async (variableTokenMapByProperty, node, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'top', propertyKey: 'strokeTopWeight' },
         variableTokenMapByProperty,
@@ -94,11 +87,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: 'border-right',
     bindingKey: 'strokes',
-    process: async (
-      variableTokenMapByProperty,
-      node,
-      processedProperties?: Set<string>,
-    ) =>
+    process: async (variableTokenMapByProperty, node, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'right', propertyKey: 'strokeRightWeight' },
         variableTokenMapByProperty,
@@ -109,11 +98,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: 'border-bottom',
     bindingKey: 'strokes',
-    process: async (
-      variableTokenMapByProperty,
-      node,
-      processedProperties?: Set<string>,
-    ) =>
+    process: async (variableTokenMapByProperty, node, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'bottom', propertyKey: 'strokeBottomWeight' },
         variableTokenMapByProperty,
@@ -124,11 +109,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: 'border-left',
     bindingKey: 'strokes',
-    process: async (
-      variableTokenMapByProperty,
-      node,
-      processedProperties?: Set<string>,
-    ) =>
+    process: async (variableTokenMapByProperty, node, processedProperties?: Set<string>) =>
       processBorderSide(
         { weightKey: 'left', propertyKey: 'strokeLeftWeight' },
         variableTokenMapByProperty,
@@ -139,10 +120,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: 'outline',
     bindingKey: undefined,
-    process: async (
-      variableTokenMapByProperty,
-      node?: SceneNode,
-    ): Promise<ProcessedValue | null> => {
+    process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
       if (node && 'strokeAlign' in node && node.strokeAlign !== 'OUTSIDE') {
         return null;
       }
@@ -176,10 +154,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: 'box-shadow',
     bindingKey: undefined,
-    process: async (
-      variableTokenMapByProperty,
-      node?: SceneNode,
-    ): Promise<ProcessedValue | null> => {
+    process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
       if (node && 'strokeAlign' in node && node.strokeAlign !== 'INSIDE') {
         return null;
       }
@@ -243,10 +218,7 @@ export const borderProcessors: StyleProcessor[] = [
   {
     property: 'border-radius',
     bindingKey: undefined,
-    process: async (
-      variableTokenMapByProperty,
-      node?: SceneNode,
-    ): Promise<ProcessedValue | null> => {
+    process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
       // Handle ELLIPSE nodes
       if (node?.type === 'ELLIPSE') {
         const EPSILON = 0.00001;

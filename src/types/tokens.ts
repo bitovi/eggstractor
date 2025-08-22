@@ -28,11 +28,11 @@ export interface StyleToken extends BaseToken {
    * @deprecated use `variableTokenMapByProperty` instead or create a new map for your query
    */
   variables?: VariableToken[]; // Associated variable tokens
-  variableTokenMapByProperty: Map<string, VariableToken>;
   /**
-   * // Map of variable tokens by property. Each VariableToken should be unique
-   * based on its property.
+   * Map of VariableTokens by property. Each VariableToken should be unique
+   * based on its property to this StyleToken.
    */
+  variableTokenMapByProperty: Map<string, VariableToken>;
   warnings?: string[];
   errors?: string[];
   componentId?: ComponentNode['id'];

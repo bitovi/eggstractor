@@ -79,8 +79,9 @@ export async function extractNodeToken(
       token = variableTokensCache.get(key)!;
     }
 
-    // All variable tokens of a property should already be unique and varId shouldn't have to be included
-    // This is because any style token should only attempt to set one variable.
+    // All variable tokens of a property should already be unique and varId
+    // shouldn't have to be included. This is because any style token should
+    // only attempt to set one css property.
     token ??= await collectBoundVariable(varId, property, path, node);
 
     if (!token) {
@@ -158,6 +159,9 @@ export async function extractNodeToken(
       // Deprecated and will be removed in the future
       variables: variableTokensMap.size > 0 ? [...variableTokensMap.values()] : undefined,
       variableTokenMapByProperty,
+      metadata: {
+        figmaId: node.id,
+      },
       warnings: processedValue.warnings,
       errors: processedValue.errors,
       componentId: componentToken?.id,

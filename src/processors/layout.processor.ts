@@ -90,10 +90,7 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'gap',
     bindingKey: 'itemSpacing',
-    process: async (
-      variableTokenMapByProperty,
-      node?: SceneNode,
-    ): Promise<ProcessedValue | null> => {
+    process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
       const gapVariable = variableTokenMapByProperty.get('gap');
       if (gapVariable) {
         return {

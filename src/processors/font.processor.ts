@@ -24,10 +24,7 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'color',
     bindingKey: 'fills',
-    process: async (
-      variableTokenMapByProperty,
-      node?: SceneNode,
-    ): Promise<ProcessedValue | null> => {
+    process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
       const colorVariable = variableTokenMapByProperty.get('fills');
       if (colorVariable) {
         return {
@@ -152,7 +149,7 @@ export const fontProcessors: StyleProcessor[] = [
     bindingKey: 'fontStyle',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node,
     ): Promise<ProcessedValue | null> => {
       const styleVariable = variableTokenMapByProperty.get('fontStyle');
       if (styleVariable) {

@@ -72,15 +72,12 @@ describe('Background Processors', () => {
     };
 
     // Snapshot all styles
-    // expect(warnings).toMatchSnapshot('gradient warnings');
     expect(styles).toMatchSnapshot('gradient styles');
 
     // We no longer warn on these values since they are skipped in the collection
-    // expect(warnings).toHaveLength(12);
     expect(warnings).toHaveLength(0);
 
     // Keep direct assertions for critical values
-    // expect(styles.linear).toBe('background: linear-gradient(224deg, #00464A 0%, #04646A 100%);');
     expect(styles.linear).toBe(null);
     expect(styles.linearAlpha).toBe(null);
   });
