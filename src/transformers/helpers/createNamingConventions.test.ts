@@ -1,5 +1,6 @@
 import { createNamingConvention } from './createNamingConvention';
 import { NamingContext } from '../utils';
+import { BaseToken } from '../../types';
 
 describe('createNamingConvention', () => {
   describe('with default context', () => {
@@ -14,56 +15,36 @@ describe('createNamingConvention', () => {
     });
 
     describe('createName', () => {
+      const path: BaseToken['path'] = [
+        { name: 'button page', type: 'SECTION' },
+        { name: 'button', type: 'COMPONENT_SET' },
+      ];
       it('should handle ROOT variant', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-        ];
         const result = namingFunctions.createName(path, 'ROOT');
         expect(result).toBe('button-page-button');
       });
 
       it('should extract just the value from property-value pairs', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-        ];
         const result = namingFunctions.createName(path, 'Size=Large');
         expect(result).toBe('button-page-button-large');
       });
 
       it('should handle multiple variants', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-        ];
         const result = namingFunctions.createName(path, 'Size=Large--Theme=Primary');
         expect(result).toBe('button-page-button-large-primary');
       });
 
       it('should handle multi-word values', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-        ];
         const result = namingFunctions.createName(path, 'Icon Only=True');
         expect(result).toBe('button-page-button-true');
       });
 
-      it('should convert "Icon Only" to "icon-only"', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-        ];
-        const result = namingFunctions.createName(path, 'Icon Only=Icon Only');
-        expect(result).toBe('button-page-button-icon-only');
+      it('should convert "Multi Bold" to "multi-bold"', () => {
+        const result = namingFunctions.createName(path, 'Weight=Multi Bold');
+        expect(result).toBe('button-page-button-multi-bold');
       });
 
       it('should handle property name conflicts with prefixing', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-        ];
         const conflicts = { default: ['size', 'theme', 'sentiment'] };
 
         const result = namingFunctions.createName(
@@ -75,57 +56,44 @@ describe('createNamingConvention', () => {
       });
 
       it('should filter out COMPONENT type from path', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
+        const componentPath: BaseToken['path'] = [
+          ...path,
           { name: 'large--and--link--and--default', type: 'COMPONENT' },
           { name: 'text', type: 'TEXT' },
         ];
-        const result = namingFunctions.createName(path, 'Size=Large');
+        const result = namingFunctions.createName(componentPath, 'Size=Large');
         expect(result).toBe('button-page-button-text-large');
       });
 
       it('should handle empty variant combination', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-        ];
         const result = namingFunctions.createName(path, '');
-        expect(result).toBe('button-page-button'); // Now this will work!
+        expect(result).toBe('button-page-button');
       });
 
       it('should handle variants without properties (legacy format)', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-        ];
         const result = namingFunctions.createName(path, 'primary');
         expect(result).toBe('button-page-button-primary');
       });
 
       it('should handle spaces in path names', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
+        const pathSet: BaseToken['path'] = [
+          { name: 'button page', type: 'SECTION' },
           { name: 'button set', type: 'COMPONENT_SET' },
         ];
-        const result = namingFunctions.createName(path, 'Size=Large');
+        const result = namingFunctions.createName(pathSet, 'Size=Large');
         expect(result).toBe('button-page-button-set-large');
       });
 
       it('should convert everything to lowercase', () => {
-        const path = [
-          { name: 'BUTTON PAGE', type: 'PAGE' },
+        const pathUpperCase: BaseToken['path'] = [
+          { name: 'BUTTON PAGE', type: 'SECTION' },
           { name: 'Button', type: 'COMPONENT_SET' },
         ];
-        const result = namingFunctions.createName(path, 'Size=LARGE');
+        const result = namingFunctions.createName(pathUpperCase, 'Size=LARGE');
         expect(result).toBe('button-page-button-large');
       });
 
       it('should handle boolean values with special rules', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
-          { name: 'button', type: 'COMPONENT_SET' },
-        ];
         const result = namingFunctions.createName(
           path,
           'Disabled=True--Required=False--Active=Yes--Hidden=No',
@@ -136,19 +104,11 @@ describe('createNamingConvention', () => {
 
       describe('for templated input', () => {
         it('should handle --and-- format', () => {
-          const path = [
-            { name: 'button page', type: 'PAGE' },
-            { name: 'button', type: 'COMPONENT_SET' },
-          ];
           const result = namingFunctions.createName(path, 'large--and--primary--and--default');
           expect(result).toBe('button-page-button-large-primary-default');
         });
 
         it('should handle conflicts and --and-- format', () => {
-          const path = [
-            { name: 'button page', type: 'PAGE' },
-            { name: 'button', type: 'COMPONENT_SET' },
-          ];
           const conflicts = { default: ['size', 'theme'] };
 
           const variants = { size: 'default', theme: 'primary', state: 'hover' };
@@ -184,8 +144,8 @@ describe('createNamingConvention', () => {
 
     describe('createName', () => {
       it('should use all custom delimiters and exclude page from path', () => {
-        const path = [
-          { name: 'button page', type: 'PAGE' },
+        const path: BaseToken['path'] = [
+          { name: 'button page', type: 'SECTION' },
           { name: 'button', type: 'COMPONENT_SET' },
           { name: 'text', type: 'TEXT' },
         ];

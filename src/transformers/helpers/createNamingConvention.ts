@@ -1,10 +1,22 @@
 import { NamingContext, defaultContext } from '../utils';
+import { BaseToken } from '../../types';
 
-export const createNamingConvention = (context: NamingContext = defaultContext) => {
+export interface NamingFunctions {
+  createName: (
+    path: BaseToken['path'],
+    variantsCombination: string,
+    propertyNameConflicts?: Record<string, string[]>,
+    variants?: Record<string, string>,
+  ) => string;
+}
+
+export const createNamingConvention = (
+  context: NamingContext = defaultContext,
+): NamingFunctions => {
   const nameCountMap = new Map<string, number>();
 
   // Extract path processing
-  const buildBasePath = (path: Array<{ name: string; type: string }>) => {
+  const buildBasePath = (path: BaseToken['path']) => {
     const pathSegments = path
       ?.filter((part) => part.type !== 'COMPONENT')
       ?.map((part) => part.name.replace(/\s+/g, '-'));
@@ -75,12 +87,7 @@ export const createNamingConvention = (context: NamingContext = defaultContext) 
   };
 
   return {
-    createName: (
-      path: Array<{ name: string; type: string }>,
-      variantsCombination: string,
-      propertyNameConflicts?: Record<string, string[]>,
-      variants: Record<string, string> = {},
-    ) => {
+    createName(path, variantsCombination, propertyNameConflicts = {}, variants = {}): string {
       const standardizedVariants = standardizeVariantCombination(
         variantsCombination,
         path,
@@ -101,7 +108,7 @@ export const createNamingConvention = (context: NamingContext = defaultContext) 
           // Check if this PROPERTY appears in ANY conflict
           const propertyHasConflicts =
             property &&
-            Object.values(propertyNameConflicts || {}).some((conflictingProperties) =>
+            Object.values(propertyNameConflicts).some((conflictingProperties) =>
               conflictingProperties.includes(property),
             );
 

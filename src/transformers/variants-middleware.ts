@@ -1,17 +1,13 @@
 import { NonNullableStyleToken, StyleToken, TokenCollection } from '../types';
 import { generateStyles, USE_VARIANT_COMBINATION_PARSING } from './variants';
+import { NamingFunctions } from './helpers/createNamingConvention';
 
 export const convertVariantGroupBy = (
   tokens: TokenCollection,
   styleTokensGroupedByVariantCombination: Record<string, StyleToken[]>,
   transform: (token: StyleToken) => Record<string, string>,
   nameTransform: {
-    createName: (
-      path: Array<{ name: string; type: string }>,
-      variantsCombination: string,
-      propertyNameConflicts?: Record<string, string[]>,
-      variants?: Record<string, string>,
-    ) => string;
+    createName: NamingFunctions['createName'];
   },
 ) => {
   const globalValueConflicts = new Map<string, Set<string>>();

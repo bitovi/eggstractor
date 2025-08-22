@@ -54,6 +54,9 @@ export function transformToTailwindLayerUtilityClassV4(collection: TokenCollecti
     namingFunctions,
   );
 
+  /**
+   * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
+   */
   const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) =>
     a.variantPath.localeCompare(b.variantPath),
   );

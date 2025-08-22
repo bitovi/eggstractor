@@ -1,5 +1,5 @@
 export interface NamingContext {
-  env: 'css' | 'tailwind-v4' | 'tailwind-v3-sass';
+  env: 'css' | 'scss ' | 'tailwind-v4' | 'tailwind-v3-sass';
   prefix?: string;
   includePageInPath?: boolean;
   delimiters: {
