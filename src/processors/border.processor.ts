@@ -31,7 +31,7 @@ export const borderProcessors: StyleProcessor[] = [
     bindingKey: 'strokes',
     process: async (
       variableTokenMapByProperty,
-      node?: SceneNode,
+      node,
     ): Promise<ProcessedValue | null> => {
       if (!node) return null;
 
@@ -81,7 +81,7 @@ export const borderProcessors: StyleProcessor[] = [
     bindingKey: 'strokes',
     process: async (
       variableTokenMapByProperty,
-      node?: SceneNode,
+      node,
       processedProperties?: Set<string>,
     ) =>
       processBorderSide(
@@ -96,7 +96,7 @@ export const borderProcessors: StyleProcessor[] = [
     bindingKey: 'strokes',
     process: async (
       variableTokenMapByProperty,
-      node?: SceneNode,
+      node,
       processedProperties?: Set<string>,
     ) =>
       processBorderSide(
@@ -111,7 +111,7 @@ export const borderProcessors: StyleProcessor[] = [
     bindingKey: 'strokes',
     process: async (
       variableTokenMapByProperty,
-      node?: SceneNode,
+      node,
       processedProperties?: Set<string>,
     ) =>
       processBorderSide(
@@ -126,7 +126,7 @@ export const borderProcessors: StyleProcessor[] = [
     bindingKey: 'strokes',
     process: async (
       variableTokenMapByProperty,
-      node?: SceneNode,
+      node,
       processedProperties?: Set<string>,
     ) =>
       processBorderSide(
