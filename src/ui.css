@@ -273,28 +273,6 @@ summary:hover {
   opacity: 0.9;
 }
 
-.checkbox-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-top: 10px;
-  color: #ffffff;
-}
-
-.checkbox-wrapper input[type='checkbox'] {
-  /* Keep it simple - just override the basic styling */
-  width: 16px;
-  height: 16px;
-  margin: 0;
-}
-
-.checkbox-wrapper label {
-  cursor: pointer;
-  user-select: none;
-  font-size: 13px;
-  margin-bottom: 0; /* Override the default label margin */
-}
-
 .parsing-mode-group {
   margin-top: 10px;
 }
