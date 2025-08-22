@@ -72,23 +72,27 @@ function updateProgress(progress: number, message: string): Promise<void> {
 function transformTokensToStylesheet(
   tokens: Readonly<TokenCollection>,
   format: StylesheetFormat,
+  useCombinatorialParsing: boolean,
 ): TransformerResult {
   switch (format) {
     case 'scss':
-      return transformToScss(tokens);
+      return transformToScss(tokens, useCombinatorialParsing);
     case 'css':
       return transformToCss(tokens);
     case 'tailwind-scss':
-      return transformToTailwindSassClass(tokens);
+      return transformToTailwindSassClass(tokens, useCombinatorialParsing);
     case 'tailwind-v4':
-      return transformToTailwindLayerUtilityClassV4(tokens);
+      return transformToTailwindLayerUtilityClassV4(tokens, useCombinatorialParsing);
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
 }
 
 /* Main generation function */
-async function generateStyles(format: StylesheetFormat): Promise<TransformerResult> {
+async function generateStyles(
+  format: StylesheetFormat,
+  useCombinatorialParsing: boolean,
+): Promise<TransformerResult> {
   postMessageToUI({
     type: 'progress-start',
   });
@@ -105,7 +109,7 @@ async function generateStyles(format: StylesheetFormat): Promise<TransformerResu
 
   await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
 
-  const stylesheet = await transformTokensToStylesheet(tokens, format);
+  const stylesheet = await transformTokensToStylesheet(tokens, format, useCombinatorialParsing);
 
   postMessageToUI({
     type: 'progress-end',
@@ -117,7 +121,10 @@ async function generateStyles(format: StylesheetFormat): Promise<TransformerResu
 // Listen for messages from the UI
 figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
   if (msg.type === 'generate-styles') {
-    const result = await generateStyles(getValidStylesheetFormat(msg.format));
+    const result = await generateStyles(
+      getValidStylesheetFormat(msg.format),
+      msg.useCombinatorialParsing,
+    );
     generatedScss = result.result; // Store just the generated code
     postMessageToUI({
       type: 'output-styles',
@@ -133,6 +140,7 @@ figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
         repoPath: msg.repoPath,
         filePath: msg.filePath,
         outputFormat: getValidStylesheetFormat(msg.format),
+        useCombinatorialParsing: msg.useCombinatorialParsing,
       }),
     ]);
     postMessageToUI({ type: 'config-saved' });

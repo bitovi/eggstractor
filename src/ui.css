@@ -272,3 +272,33 @@ pre {
 summary:hover {
   opacity: 0.9;
 }
+
+.parsing-mode-group {
+  margin-top: 10px;
+}
+
+.parsing-mode-label {
+  display: block;
+  color: #ffffff;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 16px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.radio-option input[type='radio'] {
+  margin: 0;
+  cursor: pointer;
+}
