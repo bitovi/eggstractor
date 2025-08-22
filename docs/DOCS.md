@@ -6,7 +6,7 @@ We traverse the Figma page, get all the variables. We then use those variables a
 
 There are 2 types of output:
 
-Templatized/Templated (default) - Each mixin/classname/tailwind utility contains all the styles for a component of a component set. The naming/selector contains all of the required variants for that component.
+Templated (default) - Each mixin/classname/tailwind utility contains all the styles for a component of a component set. The naming/selector contains all of the required variants for that component.
 
 Combinatorial - Each mixin/classname/tailwind utility contains partial styles for components of a component set. The naming/selector contains only the subset of the required variants for that component related to those styles.
 
@@ -24,7 +24,7 @@ The Figma client application environment has a reference to the global Figma ins
 
 `src/ui.ts` - Code that handles communication from the Figma client application to the eggstractor Figma plugin.
 
-`src/processors` - Code that converts a Figma node to a variable or style token. Style tokens will be used to generate CSS/SCSS using the Templatized/Templated algorithm (default) or Combinatorial.
+`src/processors` - Code that converts a Figma node to a variable or style token. Style tokens will be used to generate CSS/SCSS using the Templated algorithm (default) or Combinatorial.
 
 - Variable Token - Contains metadata based on Figma variable names, which are used to name SCSS variables, CSS custom properties, and other named values related to a CSS style.
 
@@ -36,7 +36,7 @@ The Figma client application environment has a reference to the global Figma ins
 
 `src/transformers/tailwind/generators.ts` - Exclusive to tailwind transformers. used to generate variable and style token metadata to style values or Tailwind class names.
 
-`src/transformers/variants-middleware.ts` - Code that converts the collection of Templatized/Templated style tokens to style tokens that will generate Combinatorial output.
+`src/transformers/variants-middleware.ts` - Code that converts the collection of Templated style tokens to style tokens that will generate Combinatorial output.
 
 <img src="flow.svg" />
 
