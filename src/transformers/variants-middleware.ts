@@ -1,5 +1,5 @@
 import { NonNullableStyleToken, StyleToken, TokenCollection } from '../types';
-import { generateStyles, USE_VARIANT_COMBINATION_PARSING } from './variants';
+import { generateStyles } from './variants';
 import { NamingFunctions } from './helpers/createNamingConvention';
 
 export const convertVariantGroupBy = (
@@ -9,6 +9,7 @@ export const convertVariantGroupBy = (
   nameTransform: {
     createName: NamingFunctions['createName'];
   },
+  useCombinatorialParsing: boolean = true,
 ) => {
   const globalValueConflicts = new Map<string, Set<string>>();
 
@@ -77,7 +78,7 @@ export const convertVariantGroupBy = (
     })
     .filter((variantGroup) => Object.keys(variantGroup.css).length > 0);
 
-  if (!USE_VARIANT_COMBINATION_PARSING()) {
+  if (!useCombinatorialParsing) {
     return instanceGroupedByVariants.map((variantGroup) => {
       // FIX: Reconstruct property=value format for templated
       const propertyValueFormat =

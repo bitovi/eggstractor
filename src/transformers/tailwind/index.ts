@@ -6,7 +6,10 @@ import { createTailwindClasses } from './generators';
 import { createNamingConvention, getStylePropertyAndValue } from '../helpers/index';
 import { tailwind4NamingConvention } from '../utils';
 
-export function transformToTailwindSassClass(collection: TokenCollection) {
+export function transformToTailwindSassClass(
+  collection: TokenCollection,
+  useCombinatorialParsing: boolean,
+) {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token: NonNullableStyleToken) => token.name);
   const namingFunctions = createNamingConvention();
@@ -15,6 +18,7 @@ export function transformToTailwindSassClass(collection: TokenCollection) {
     groupedTokens,
     getStylePropertyAndValue,
     namingFunctions,
+    useCombinatorialParsing,
   );
 
   let output = '/* Generated Tailwind-SCSS */';
@@ -41,7 +45,10 @@ export function transformToTailwindSassClass(collection: TokenCollection) {
   };
 }
 
-export function transformToTailwindLayerUtilityClassV4(collection: TokenCollection) {
+export function transformToTailwindLayerUtilityClassV4(
+  collection: TokenCollection,
+  useCombinatorialParsing: boolean,
+) {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
 
@@ -52,6 +59,7 @@ export function transformToTailwindLayerUtilityClassV4(collection: TokenCollecti
     groupedTokens,
     getStylePropertyAndValue,
     namingFunctions,
+    useCombinatorialParsing,
   );
 
   /**

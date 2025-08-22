@@ -11,14 +11,6 @@ type StyleNode = {
   id: number;
 };
 
-/**
- * When true, will parse variant combinations and create unique styles for each
- * combination.
- */
-export const USE_VARIANT_COMBINATION_PARSING = (): boolean => {
-  return true;
-};
-
 let i = 0;
 /**
  * @deprecated - not needed once we start using componentId from StyleToken

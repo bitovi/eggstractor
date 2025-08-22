@@ -1,4 +1,4 @@
-import { StylesheetFormat } from "./stylesheet-format";
+import { StylesheetFormat } from './stylesheet-format';
 
 export type MessageType =
   | 'load-config'
@@ -28,11 +28,13 @@ export interface CreatePRPayload extends BaseMessageToMainThreadPayload {
 export interface SaveConfigPayload extends Omit<CreatePRPayload, 'type'> {
   type: 'save-config';
   format: StylesheetFormat;
+  useCombinatorialParsing: boolean;
 }
 
 export interface GenerateStylesPayload extends BaseMessageToMainThreadPayload {
   type: 'generate-styles';
   format: StylesheetFormat;
+  useCombinatorialParsing: boolean;
 }
 
 export interface SelectNodePayload extends BaseMessageToMainThreadPayload {

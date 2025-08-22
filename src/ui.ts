@@ -20,6 +20,9 @@ window.onload = () => {
   const progressFill = document.getElementById('progressFill') as HTMLDivElement;
   const progressText = document.getElementById('progressText') as HTMLDivElement;
   const spinner = document.getElementById('spinner') as HTMLDivElement;
+  const parsingModeRadios = document.querySelectorAll(
+    'input[name="parsingMode"]',
+  ) as NodeListOf<HTMLInputElement>;
   let generatedScss = false;
 
   // Load saved config when UI opens
@@ -50,7 +53,16 @@ window.onload = () => {
     saveConfig();
   };
   githubTokenInput.onchange = saveConfig;
+
+  // Add to saveConfig
+  parsingModeRadios.forEach((radio) => radio.addEventListener('change', saveConfig));
+
   function saveConfig() {
+    const selectedParsingMode = document.querySelector(
+      'input[name="parsingMode"]:checked',
+    ) as HTMLInputElement;
+    const useCombinatorialParsing = selectedParsingMode?.value === 'combinatorial';
+
     messageMainThread({
       type: 'save-config',
       repoPath: repoPathInput.value,
@@ -58,15 +70,20 @@ window.onload = () => {
       branchName: branchNameInput.value,
       githubToken: githubTokenInput.value,
       format: getValidStylesheetFormat(formatSelect.value),
+      useCombinatorialParsing,
     });
   }
 
   generateBtn.onclick = () => {
-    const format = isDevelopment ? getValidStylesheetFormat(formatSelect.value) : 'scss';
+    const selectedParsingMode = document.querySelector(
+      'input[name="parsingMode"]:checked',
+    ) as HTMLInputElement;
+    const useCombinatorialParsing = selectedParsingMode?.value === 'combinatorial';
 
     messageMainThread({
       type: 'generate-styles',
-      format,
+      format: isDevelopment ? getValidStylesheetFormat(formatSelect.value) : 'scss',
+      useCombinatorialParsing,
     });
   };
 
@@ -125,7 +142,7 @@ window.onload = () => {
   // Update the message handler
   window.onmessage = async (event) => {
     const msg = event.data.pluginMessage as MessageToUIPayload;
-    
+
     switch (msg.type) {
       case 'output-styles':
         generatedScss = true;
@@ -215,6 +232,13 @@ window.onload = () => {
         branchNameInput.value = msg.config.branchName || '';
         githubTokenInput.value = msg.config.githubToken || '';
         formatSelect.value = getValidStylesheetFormat(msg.config.outputFormat);
+
+        const shouldUseCombinatorial = msg.config.useCombinatorialParsing ?? true;
+        const targetValue = shouldUseCombinatorial ? 'combinatorial' : 'templated';
+        const targetRadio = document.querySelector(
+          `input[name="parsingMode"][value="${targetValue}"]`,
+        ) as HTMLInputElement;
+        if (targetRadio) targetRadio.checked = true;
 
         break;
       case 'pr-created':

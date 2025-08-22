@@ -25,7 +25,10 @@ const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => 
   return { [token.property]: processedValue! };
 };
 
-export function transformToScss(tokens: TokenCollection): TransformerResult {
+export function transformToScss(
+  tokens: TokenCollection,
+  useCombinatorialParsing: boolean,
+): TransformerResult {
   let output = '';
 
   // Deduplicate warnings and errors from style tokens only
@@ -103,6 +106,7 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
     variantGroups,
     getMixinPropertyAndValue,
     namingFunctions,
+    useCombinatorialParsing,
   );
 
   for (const mixin of mixins) {

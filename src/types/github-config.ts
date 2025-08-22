@@ -7,4 +7,5 @@ export interface GithubConfig {
   outputFormat: string;
   githubToken?: string | null;
   branchName?: string | null;
+  useCombinatorialParsing: boolean;
 }
