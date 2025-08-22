@@ -91,6 +91,8 @@ const basicToken: NonNullableStyleToken = {
   metadata: {
     figmaId: 'notapplicable',
   },
+  // STUB
+  variableTokenMapByProperty: new Map(),
 };
 
 describe('normalizeTailwindToken', () => {

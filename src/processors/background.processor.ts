@@ -1,13 +1,12 @@
 import { StyleProcessor, VariableToken, ProcessedValue } from '../types';
 import { rgbaToString, normalizeValue } from '../utils';
-import { processGradient } from './utils';
 
 export const backgroundProcessors: StyleProcessor[] = [
   {
     property: 'background',
     bindingKey: 'fills',
     process: async (
-      variables: VariableToken[],
+      variableTokenMapByProperty: Map<string, VariableToken>, 
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
       if (node && 'fills' in node && Array.isArray(node.fills)) {
@@ -20,7 +19,7 @@ export const backgroundProcessors: StyleProcessor[] = [
         const backgrounds = await Promise.all(
           visibleFills.map(async (fill: Paint) => {
             if (fill.type === 'SOLID') {
-              const fillVariable = variables.find((v) => v.property === 'fills');
+              const fillVariable = variableTokenMapByProperty.get('fills');
               if (fillVariable) {
                 return {
                   value: fillVariable.value,
@@ -32,23 +31,6 @@ export const backgroundProcessors: StyleProcessor[] = [
               const a = fill.opacity ?? 1;
               const value = rgbaToString(r, g, b, a);
               return { value, rawValue: value };
-            }
-
-            if (fill.type.startsWith('GRADIENT_')) {
-              const result = processGradient(fill as GradientPaint, node.id);
-              if (result.warnings) {
-                result.warnings.forEach((warning) => warningsSet.add(warning));
-              }
-              if (result.errors) {
-                result.errors.forEach((error) => errorsSet.add(error));
-              }
-
-              if (result.value) {
-                return {
-                  value: result.value,
-                  rawValue: result.value,
-                };
-              }
             }
 
             return null;
@@ -77,11 +59,11 @@ export const backgroundProcessors: StyleProcessor[] = [
     property: 'opacity',
     bindingKey: 'opacity',
     process: async (
-      variables: VariableToken[],
+      variableTokenMapByProperty: Map<string, VariableToken>, 
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
       if (node && 'opacity' in node && node.opacity !== 1) {
-        const opacityVariable = variables.find((v) => v.property === 'opacity');
+        const opacityVariable = variableTokenMapByProperty.get('opacity');
         if (opacityVariable) {
           return {
             value: opacityVariable.value,
