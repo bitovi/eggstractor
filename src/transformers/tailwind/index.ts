@@ -8,7 +8,7 @@ import { tailwind4NamingConvention } from '../utils';
 
 export function transformToTailwindSassClass(
   collection: TokenCollection,
-  useCombinatorialParsing: boolean,
+  useCombinatorialParsing: boolean = true,
 ) {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token: NonNullableStyleToken) => token.name);
@@ -47,7 +47,7 @@ export function transformToTailwindSassClass(
 
 export function transformToTailwindLayerUtilityClassV4(
   collection: TokenCollection,
-  useCombinatorialParsing: boolean,
+  useCombinatorialParsing: boolean = true,
 ) {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);

@@ -27,7 +27,7 @@ const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => 
 
 export function transformToScss(
   tokens: TokenCollection,
-  useCombinatorialParsing: boolean,
+  useCombinatorialParsing: boolean = true,
 ): TransformerResult {
   let output = '';
 

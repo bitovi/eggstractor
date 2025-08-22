@@ -6,9 +6,6 @@ import * as variants from '../transformers/variants';
 
 describe('Demo Data (real world-ish example for variant combinations)', () => {
   it('should process all demo data correctly with variant combinations', async () => {
-    // Force feature flag for variant combinations to true for new behavior
-    jest.spyOn(variants, 'USE_VARIANT_COMBINATION_PARSING').mockReturnValueOnce(true);
-    
     const { setupTest } = createTestData(testDataDemo);
     const testSetup = await setupTest();
 
