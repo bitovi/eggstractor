@@ -1,6 +1,6 @@
 import { TokenCollection, NonNullableStyleToken } from '../../types';
 
-export function filterStyleTokens({ tokens }: TokenCollection): {
+export function filterStyleTokens({ tokens, instances }: TokenCollection): {
   styleTokens: NonNullableStyleToken[];
   warnings: string[];
   errors: string[];
@@ -27,7 +27,7 @@ export function filterStyleTokens({ tokens }: TokenCollection): {
   });
 
   return {
-    styleTokens,
+    styleTokens: styleTokens,
     warnings: Array.from(warningsSet),
     errors: Array.from(errorsSet),
   };

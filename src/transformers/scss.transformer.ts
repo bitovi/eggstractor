@@ -2,6 +2,7 @@ import { TokenCollection, StyleToken, TransformerResult } from '../types';
 import { sanitizeName, rem } from '../utils';
 import { deduplicateMessages, groupBy } from './utils';
 import { convertVariantGroupBy } from './variants-middleware';
+import { createNamingConvention } from './helpers';
 
 const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
@@ -85,15 +86,24 @@ export function transformToScss(tokens: TokenCollection): TransformerResult {
   // Filter for style tokens and group by path
   const styleTokens = tokens.tokens.filter((token): token is StyleToken => token.type === 'style');
 
-  const variantGroups = Object.entries(groupBy(styleTokens, (t) => t.name)).reduce((acc, [tokenName, tokens]) => {
-    const filteredTokens = sortAndDedupeTokens(tokens);
-    if (filteredTokens.length) {
-      acc[tokenName] = filteredTokens;
-    }
-    return acc;
-  }, {} as Record<string, StyleToken[]>);
+  const variantGroups = Object.entries(groupBy(styleTokens, (t) => t.name)).reduce(
+    (acc, [tokenName, tokens]) => {
+      const filteredTokens = sortAndDedupeTokens(tokens);
+      if (filteredTokens.length) {
+        acc[tokenName] = filteredTokens;
+      }
+      return acc;
+    },
+    {} as Record<string, StyleToken[]>,
+  );
 
-  const mixins = convertVariantGroupBy(tokens, variantGroups, getMixinPropertyAndValue);
+  const namingFunctions = createNamingConvention();
+  const mixins = convertVariantGroupBy(
+    tokens,
+    variantGroups,
+    getMixinPropertyAndValue,
+    namingFunctions,
+  );
 
   for (const mixin of mixins) {
     output += `@mixin ${mixin.variantCombinationName} {\n`;
