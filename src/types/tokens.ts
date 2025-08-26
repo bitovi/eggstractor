@@ -1,12 +1,18 @@
 export interface BaseToken {
+  /** Distinguishes between variable references and style declarations. */
   type: 'variable' | 'style';
+  /** Generated token name based on Figma node path. */
   name: string;
+  /** CSS property name (e.g., 'background-color', 'font-size'). */
   property: string;
+  /** Hierarchical path from root to node with type and name. */
   path: {
     type: SceneNode['type'];
     name: string;
   }[];
+  /** Data type classification for the value. */
   valueType?: string | null;
+  /** Figma-specific identifiers and references. */
   metadata?: {
     figmaId?: string;
     variableId?: string;
@@ -16,15 +22,25 @@ export interface BaseToken {
 
 export interface VariableToken extends BaseToken {
   type: 'variable';
-  value: string; // SASS variable reference e.g. $color-primary
-  rawValue: string; // Actual value e.g. #FF0000
+  /**
+   * SASS variable reference e.g. $color-primary.
+   */
+  value: string;
+  /**
+   * Actual value e.g. #FF0000.
+   */
+  rawValue: string;
 }
 
 export interface StyleToken extends BaseToken {
   type: 'style';
-  value: string | null; // CSS with variable references e.g. background: $color-primary
-  rawValue: string | null; // CSS with actual values e.g. background: #FF0000
+  /** CSS with variable references (e.g., background: $color-primary). */
+  value: string | null;
+  /** CSS with actual values (e.g., background: #FF0000). */
+  rawValue: string | null;
   /**
+   * Array of associated VariableToken objects.
+   *
    * @deprecated use `variableTokenMapByProperty` instead or create a new map for your query
    */
   variables?: VariableToken[]; // Associated variable tokens
@@ -33,9 +49,13 @@ export interface StyleToken extends BaseToken {
    * based on its property to this StyleToken.
    */
   variableTokenMapByProperty: Map<string, VariableToken>;
+  /** Processing warnings. */
   warnings?: string[];
+  /** Processing errors. */
   errors?: string[];
+  /** Associated Figma component ID if applicable. */
   componentId?: ComponentNode['id'];
+  /** Associated Figma component set ID if applicable. */
   componentSetId?: ComponentSetNode['id'];
 }
 

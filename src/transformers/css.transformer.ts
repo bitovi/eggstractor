@@ -1,8 +1,7 @@
 import { StyleToken, TokenCollection, TransformerResult } from '../types';
 import { deduplicateMessages, groupBy } from './utils';
-import { rem } from '../utils';
+import { createNamingConvention, rem } from '../utils';
 import { convertVariantGroupBy } from './variants-middleware';
-import { createNamingConvention } from './helpers';
 
 const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {
   const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue!;
