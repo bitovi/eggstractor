@@ -3,8 +3,8 @@ import { groupBy } from '../utils/group-by.utils';
 import { backToStyleTokens, convertVariantGroupBy } from '../variants-middleware';
 import { filterStyleTokens } from './filters';
 import { createTailwindClasses } from './generators';
-import { createNamingConvention, getStylePropertyAndValue } from '../helpers/index';
-import { tailwind4NamingConvention } from '../utils';
+import { getStylePropertyAndValue } from '../utils';
+import { createNamingConvention, tailwind4NamingConvention } from '../../utils';
 
 export function transformToTailwindSassClass(
   collection: TokenCollection,

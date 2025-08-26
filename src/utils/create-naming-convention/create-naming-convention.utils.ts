@@ -1,5 +1,6 @@
-import { NamingContext, defaultContext } from '../utils';
+
 import { BaseToken } from '../../types';
+import { defaultContext, NamingContext } from './naming-contexts.utils';
 
 export interface NamingFunctions {
   createName: (

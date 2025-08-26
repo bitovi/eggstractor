@@ -1,12 +1,12 @@
 import { NonNullableStyleToken, StyleToken, TokenCollection } from '../types';
+import { NamingFunctions } from '../utils';
 import { generateStyles } from './variants';
-import { NamingFunctions } from './helpers/createNamingConvention';
 
 export const convertVariantGroupBy = (
   tokens: TokenCollection,
   styleTokensGroupedByVariantCombination: Record<string, StyleToken[]>,
   transform: (token: StyleToken) => Record<string, string>,
-  nameTransform: {
+  namingFunctions: {
     createName: NamingFunctions['createName'];
   },
   useCombinatorialParsing: boolean = true,
@@ -86,7 +86,7 @@ export const convertVariantGroupBy = (
           .map(([prop, val]) => `${prop}=${val}`)
           .join('--') || variantGroup.variantCombinationName;
 
-      const finalName = nameTransform.createName(
+      const finalName = namingFunctions.createName(
         variantGroup.path,
         propertyValueFormat,
         conflictMap,
@@ -137,7 +137,7 @@ export const convertVariantGroupBy = (
     const cssByVariantCombinations = generateStyles(mixins);
 
     return Object.entries(cssByVariantCombinations).map(([variantsCombination, css]) => {
-      const variantCombinationName = nameTransform.createName(
+      const variantCombinationName = namingFunctions.createName(
         mixins[0].path,
         variantsCombination,
         conflictMap,

@@ -1,8 +1,7 @@
 import { TokenCollection, StyleToken, TransformerResult } from '../types';
-import { sanitizeName, rem } from '../utils';
+import { sanitizeName, rem, createNamingConvention } from '../utils';
 import { deduplicateMessages, groupBy } from './utils';
 import { convertVariantGroupBy } from './variants-middleware';
-import { createNamingConvention } from './helpers';
 
 const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {

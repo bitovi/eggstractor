@@ -1,6 +1,6 @@
-import { createNamingConvention } from './createNamingConvention';
-import { NamingContext } from '../utils';
+import { createNamingConvention } from './create-naming-convention.utils';
 import { BaseToken } from '../../types';
+import { NamingContext } from './naming-contexts.utils';
 
 describe('createNamingConvention', () => {
   describe('with default context', () => {
