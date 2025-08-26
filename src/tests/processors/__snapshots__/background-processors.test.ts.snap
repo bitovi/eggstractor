@@ -1,36 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Background Processors should process background gradient correctly: gradient styles 1`] = `
-{
-  "linear": "background: linear-gradient(224deg, #00464A 0%, #04646A 100%);",
-  "linearAlpha": "background: linear-gradient(224deg, rgba(0, 70, 74, 0.5) 0%, #04646A 100%);",
-}
-`;
-
-exports[`Background Processors should process background gradient correctly: gradient warnings 1`] = `
-[
-  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:27)",
-  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:29)",
-  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:30)",
-  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:39)",
-  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:41)",
-  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:42)",
-  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:7)",
-  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:10)",
-  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:11)",
-  "GRADIENT_RADIAL gradients are not yet implemented (node: 5:43)",
-  "GRADIENT_ANGULAR gradients are not yet implemented (node: 5:45)",
-  "GRADIENT_DIAMOND gradients are not yet implemented (node: 5:46)",
-]
-`;
-
 exports[`Background Processors should process background solid correctly - sass: solid styles 1`] = `
 "// Generated SCSS Variables
 $brand-primary: #00464a;
 $teal-800-50: rgba(0, 70, 74, 0.5);
-$teal-medium: #04646a;
-$teal-dark: #00464a;
-$brand-secondary: #04646a;
 $teal-800: #00464a;
 
 // Generated SCSS Mixins
@@ -40,23 +13,11 @@ $teal-800: #00464a;
 @mixin background-solid-alpha-variable {
   background: $teal-800-50;
 }
-@mixin background-gradient-linear-style {
-  background: linear-gradient(224deg, #00464A 0%, #04646A 100%);
-}
-@mixin background-gradient-linear-alpha-style {
-  background: linear-gradient(224deg, rgba(0, 70, 74, 0.5) 0%, #04646A 100%);
-}
 @mixin background-solid-custom {
   background: #00464a;
 }
 @mixin background-solid-alpha-custom {
   background: rgba(0, 70, 74, 0.5);
-}
-@mixin background-gradient-linear-custom {
-  background: linear-gradient(224deg, #00464A 0%, #04646A 100%);
-}
-@mixin background-gradient-linear-alpha-custom {
-  background: linear-gradient(224deg, rgba(0, 70, 74, 0.5) 0%, #04646A 100%);
 }
 @mixin background-solid-hex-style {
   background: #00464a;
@@ -143,4 +104,11 @@ $spacing-9: 0.48;
   height: 1rem;
 }
 "
+`;
+
+exports[`Background Processors should skip background gradient correctly: gradient styles 1`] = `
+{
+  "linear": null,
+  "linearAlpha": null,
+}
 `;

@@ -14,6 +14,9 @@ import {
 } from '../services';
 import { getNodePathNames, MAX_PROGRESS_PERCENTAGE, delay } from '../utils';
 
+/**
+ * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
+ */
 function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]): StyleToken {
   return {
     property: `warning-${componentSetNode.id}`,
@@ -28,6 +31,8 @@ function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]
     ],
     // Optional: mark it somehow so it gets filtered out of actual CSS generation
     componentSetId: componentSetNode.id,
+    // STUB
+    variableTokenMapByProperty: new Map(),
   };
 }
 
@@ -98,6 +103,18 @@ export function getFlattenedValidNodes(node: BaseNode): {
       return;
     }
 
+    if ('fills' in currentNode && Array.isArray(currentNode.fills)) {
+      // VariableTokens do not current support multiple values.
+      if (currentNode.fills.length > 1) {
+        return;
+      }
+
+      // VariableTokens do not current support gradient styles.
+      if (currentNode.fills.some((fill) => fill.type.startsWith('GRADIENT'))) {
+        return;
+      }
+    }
+
     // Nodes hidden by designers aren't valid to process.
     if ('visible' in currentNode && currentNode.visible === false) {
       return;
@@ -144,7 +161,8 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
   async function processNode(node: BaseNode) {
     processedNodes++;
-    const currentPercentage = Math.floor((processedNodes / totalNodes) * (MAX_PROGRESS_PERCENTAGE - 10)) + 10;
+    const currentPercentage =
+      Math.floor((processedNodes / totalNodes) * (MAX_PROGRESS_PERCENTAGE - 10)) + 10;
     const shouldUpdate = currentPercentage !== lastPercentage || processedNodes === totalNodes;
 
     if (shouldUpdate) {
