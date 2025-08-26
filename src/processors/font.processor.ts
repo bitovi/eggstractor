@@ -24,8 +24,8 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'color',
     bindingKey: 'fills',
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
-      const colorVariable = variables.find((v) => v.property === 'fills');
+    process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
+      const colorVariable = variableTokenMapByProperty.get('fills');
       if (colorVariable) {
         return {
           value: colorVariable.value,
@@ -54,10 +54,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'font-family',
     bindingKey: 'fontFamily',
     process: async (
-      variables: VariableToken[],
+      variableTokenMapByProperty: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const fontVariable = variables.find((v) => v.property === 'fontFamily');
+      const fontVariable = variableTokenMapByProperty.get('fontFamily');
       if (fontVariable) {
         return {
           value: fontVariable.value,
@@ -76,10 +76,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'font-size',
     bindingKey: 'fontSize',
     process: async (
-      variables: VariableToken[],
+      variableTokenMapByProperty: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const sizeVariable = variables.find((v) => v.property === 'fontSize');
+      const sizeVariable = variableTokenMapByProperty.get('fontSize');
       if (sizeVariable) {
         return {
           value: sizeVariable.value,
@@ -98,7 +98,10 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'font-weight',
     bindingKey: 'fontWeight',
-    process: async (variables, node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (
+      variableTokenMapByProperty,
+      node?: SceneNode,
+    ): Promise<ProcessedValue | null> => {
       if (!node || !hasFont(node)) return null;
 
       if (node.fontWeight) {
@@ -108,7 +111,7 @@ export const fontProcessors: StyleProcessor[] = [
         };
       }
 
-      const weightVariable = variables.find((v) => v.property === 'fontWeight');
+      const weightVariable = variableTokenMapByProperty.get('fontWeight');
       if (weightVariable) {
         return {
           value: weightVariable.value,
@@ -145,10 +148,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'font-style',
     bindingKey: 'fontStyle',
     process: async (
-      variables: VariableToken[],
-      node?: SceneNode,
+      variableTokenMapByProperty: Map<string, VariableToken>,
+      node,
     ): Promise<ProcessedValue | null> => {
-      const styleVariable = variables.find((v) => v.property === 'fontStyle');
+      const styleVariable = variableTokenMapByProperty.get('fontStyle');
       if (styleVariable) {
         return {
           value: styleVariable.value.toLowerCase(),
@@ -167,10 +170,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'line-height',
     bindingKey: 'lineHeight',
     process: async (
-      variables: VariableToken[],
+      variableTokenMapByProperty: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const heightVariable = variables.find((v) => v.property === 'lineHeight');
+      const heightVariable = variableTokenMapByProperty.get('lineHeight');
       if (heightVariable) {
         return {
           value: heightVariable.value,
@@ -200,10 +203,10 @@ export const fontProcessors: StyleProcessor[] = [
     property: 'letter-spacing',
     bindingKey: 'letterSpacing',
     process: async (
-      variables: VariableToken[],
+      variableTokenMapByProperty: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      const spacingVariable = variables.find((v) => v.property === 'letterSpacing');
+      const spacingVariable = variableTokenMapByProperty.get('letterSpacing');
       if (spacingVariable) {
         return {
           value: spacingVariable.value,
@@ -296,10 +299,7 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'width',
     bindingKey: undefined,
-    process: async (
-      variables: VariableToken[],
-      node?: SceneNode,
-    ): Promise<ProcessedValue | null> => {
+    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
       // Only apply width if text doesn't auto-resize width
       if (node?.type === 'TEXT' && !['WIDTH_AND_HEIGHT', 'WIDTH'].includes(node.textAutoResize)) {
         return { value: `${node.width}px`, rawValue: `${node.width}px`, valueType: 'px' };

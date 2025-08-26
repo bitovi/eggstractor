@@ -28,7 +28,7 @@ export const spacingProcessors: StyleProcessor[] = [
     property: 'padding',
     bindingKey: undefined,
     process: async (
-      variables: VariableToken[],
+      variableTokenMapByProperty: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
       if (!node || !hasNodePadding(node)) return null;
@@ -43,10 +43,10 @@ export const spacingProcessors: StyleProcessor[] = [
 
       // Find variable values from passed in variables
       const varValues: Partial<PaddingValues> = {
-        top: variables.find((v) => v.property === 'paddingTop')?.value,
-        right: variables.find((v) => v.property === 'paddingRight')?.value,
-        bottom: variables.find((v) => v.property === 'paddingBottom')?.value,
-        left: variables.find((v) => v.property === 'paddingLeft')?.value,
+        top: variableTokenMapByProperty.get('paddingTop')?.value,
+        right: variableTokenMapByProperty.get('paddingRight')?.value,
+        bottom: variableTokenMapByProperty.get('paddingBottom')?.value,
+        left: variableTokenMapByProperty.get('paddingLeft')?.value,
       };
 
       // Helper to get final value (variable or pixel)

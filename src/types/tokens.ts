@@ -22,8 +22,14 @@ export interface BaseToken {
 
 export interface VariableToken extends BaseToken {
   type: 'variable';
-  value: string; // SASS variable reference e.g. $color-primary
-  rawValue: string; // Actual value e.g. #FF0000
+  /**
+   * SASS variable reference e.g. $color-primary.
+   */
+  value: string;
+  /**
+   * Actual value e.g. #FF0000.
+   */
+  rawValue: string;
 }
 
 export interface StyleToken extends BaseToken {
@@ -32,15 +38,24 @@ export interface StyleToken extends BaseToken {
   value: string | null;
   /** CSS with actual values (e.g., background: #FF0000). */
   rawValue: string | null;
-  /** Array of associated VariableToken objects */
+  /**
+   * Array of associated VariableToken objects.
+   *
+   * @deprecated use `variableTokenMapByProperty` instead or create a new map for your query
+   */
   variables?: VariableToken[]; // Associated variable tokens
-  /** Processing warnings */
+  /**
+   * Map of VariableTokens by property. Each VariableToken should be unique
+   * based on its property to this StyleToken.
+   */
+  variableTokenMapByProperty: Map<string, VariableToken>;
+  /** Processing warnings. */
   warnings?: string[];
-  /** Processing errors */
+  /** Processing errors. */
   errors?: string[];
   /** Associated Figma component ID if applicable. */
   componentId?: ComponentNode['id'];
-  /** Associated Figma component set ID if applicable */
+  /** Associated Figma component set ID if applicable. */
   componentSetId?: ComponentSetNode['id'];
 }
 
