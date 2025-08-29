@@ -1,5 +1,5 @@
 import { TokenCollection, StyleToken, TransformerResult } from '../types';
-import { sanitizeName, rem, createNamingConvention } from '../utils';
+import { sanitizeName, rem, createNamingContext } from '../utils';
 import { deduplicateMessages, groupBy } from './utils';
 import { convertVariantGroupBy } from './variants-middleware';
 
@@ -99,12 +99,12 @@ export function transformToScss(
     {} as Record<string, StyleToken[]>,
   );
 
-  const namingFunctions = createNamingConvention();
+  const namingContext = createNamingContext();
   const mixins = convertVariantGroupBy(
     tokens,
     variantGroups,
     getMixinPropertyAndValue,
-    namingFunctions,
+    namingContext,
     useCombinatorialParsing,
   );
 

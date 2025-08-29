@@ -1,5 +1,5 @@
 export * from './color.utils';
-export * from './create-naming-convention'
+export * from './create-naming-context'
 export * from './constants.utils';
 export * from './delay.utils';
 export * from './get-valid-stylesheet-format.utils';
