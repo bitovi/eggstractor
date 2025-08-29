@@ -19,13 +19,13 @@ export type DefaultNamingContextConfig = DeepRequired<NamingContextConfig>;
 export const defaultContextConfig = {
   env: 'css',
   includePageInPath: true,
-  duplicate: (name: string, count: number) => `${name}${count}`,
   delimiters: {
     pathSeparator: '-',
     afterComponentName: '-',
     variantEqualSign: '_',
     betweenVariants: '-',
-  }
+  },
+  duplicate: (name: string, count: number) => `${name}${count}`,
 } as const satisfies DefaultNamingContextConfig;
 
 export const tailwind4NamingConfig = {

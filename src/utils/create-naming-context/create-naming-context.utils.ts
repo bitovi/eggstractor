@@ -111,11 +111,11 @@ export const createNamingContext = (
           const cleanValue = value.trim().replace(/\s+/g, '-').toLowerCase();
 
           // Check if this PROPERTY appears in ANY conflict
-          const propertyHasConflicts =
-            property ?
-            Object.values(propertyNameConflicts).some((conflictingProperties) =>
-              conflictingProperties.includes(property),
-            ) : false;
+          const propertyHasConflicts = property
+            ? Object.values(propertyNameConflicts).some((conflictingProperties) =>
+                conflictingProperties.includes(property),
+              )
+            : false;
 
           // NEW: Special handling for boolean-like values
           const isFalsyBoolean = ['false', 'no'].includes(cleanValue);
@@ -125,7 +125,7 @@ export const createNamingContext = (
             const cleanProperty = property.trim().replace(/\s+/g, '-');
 
             // For falsy boolean values, ALWAYS prefix (regardless of conflicts)
-            if (isFalsyBoolean) {              
+            if (isFalsyBoolean) {
               return `${cleanProperty}${config.delimiters.variantEqualSign}${cleanValue}`;
             }
 
