@@ -10,9 +10,11 @@ export interface NamingContextConfig {
   duplicate?: (name: string, count: number) => string;
 }
 
- type DeepRequired<T> = T extends object ? {
-        [P in keyof T]-?: DeepRequired<T[P]>;
-    } : T;
+type DeepRequired<T> = T extends object
+  ? {
+      [P in keyof T]-?: DeepRequired<T[P]>;
+    }
+  : T;
 
 export type DefaultNamingContextConfig = DeepRequired<NamingContextConfig>;
 
@@ -35,5 +37,5 @@ export const tailwind4NamingConfig = {
     afterComponentName: '.',
     variantEqualSign: '_',
     betweenVariants: '.',
-  }
+  },
 } as const satisfies NamingContextConfig;

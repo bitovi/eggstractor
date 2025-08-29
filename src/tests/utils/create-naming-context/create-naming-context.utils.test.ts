@@ -1,5 +1,5 @@
-import { BaseToken } from "../../../types";
-import { createNamingContext, NamingContextConfig } from "../../../utils";
+import { BaseToken } from '../../../types';
+import { createNamingContext, NamingContextConfig } from '../../../utils';
 
 describe('createNamingContext', () => {
   describe('with default context', () => {
