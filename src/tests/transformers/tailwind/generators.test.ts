@@ -1,4 +1,4 @@
-jest.mock('../../theme-tokens', () => ({
+jest.mock('../../../theme-tokens', () => ({
   themeTokens: {
     colors: {
       '#ffffff': 'white',
@@ -68,8 +68,8 @@ import {
   generateTailwindPaddingClass,
   generateTailwindBoxShadowClass,
   createContextAwareColorGenerator,
-} from './generators';
-import { NonNullableStyleToken } from '../../types';
+} from '../../../transformers/tailwind/generators';
+import { NonNullableStyleToken } from '../../../types';
 
 const basicToken: NonNullableStyleToken = {
   type: 'style',

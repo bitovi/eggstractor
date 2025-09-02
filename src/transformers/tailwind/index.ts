@@ -4,7 +4,7 @@ import { backToStyleTokens, convertVariantGroupBy } from '../variants-middleware
 import { filterStyleTokens } from './filters';
 import { createTailwindClasses } from './generators';
 import { getStylePropertyAndValue } from '../utils';
-import { createNamingConvention, tailwind4NamingConvention } from '../../utils';
+import { createNamingContext, tailwind4NamingConfig } from '../../utils';
 
 export function transformToTailwindSassClass(
   collection: TokenCollection,
@@ -12,12 +12,12 @@ export function transformToTailwindSassClass(
 ) {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token: NonNullableStyleToken) => token.name);
-  const namingFunctions = createNamingConvention();
+  const namingContext = createNamingContext();
   const parsedStyleTokens = convertVariantGroupBy(
     collection,
     groupedTokens,
     getStylePropertyAndValue,
-    namingFunctions,
+    namingContext,
     useCombinatorialParsing,
   );
 
@@ -52,13 +52,13 @@ export function transformToTailwindLayerUtilityClassV4(
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
 
-  const namingFunctions = createNamingConvention(tailwind4NamingConvention);
+  const namingContext = createNamingContext(tailwind4NamingConfig);
 
   const parsedStyleTokens = convertVariantGroupBy(
     collection,
     groupedTokens,
     getStylePropertyAndValue,
-    namingFunctions,
+    namingContext,
     useCombinatorialParsing,
   );
 

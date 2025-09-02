@@ -1,6 +1,6 @@
 import { StyleToken, TokenCollection, TransformerResult } from '../types';
 import { deduplicateMessages, groupBy } from './utils';
-import { createNamingConvention, rem } from '../utils';
+import { createNamingContext, rem } from '../utils';
 import { convertVariantGroupBy } from './variants-middleware';
 
 const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {
@@ -59,12 +59,12 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
     {} as Record<string, StyleToken[]>,
   );
 
-  const namingFunctions = createNamingConvention();
+  const namingContext = createNamingContext();
   const classNames = convertVariantGroupBy(
     tokens,
     variantGroups,
     getClassNamePropertyAndValue,
-    namingFunctions,
+    namingContext,
   );
 
   for (const classNameDefinition of classNames) {

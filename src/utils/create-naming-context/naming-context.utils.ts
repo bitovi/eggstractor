@@ -1,6 +1,5 @@
-export interface NamingContext {
+export interface NamingContextConfig {
   env: 'css' | 'scss ' | 'tailwind-v4' | 'tailwind-v3-sass';
-  prefix?: string;
   includePageInPath?: boolean;
   delimiters: {
     pathSeparator: string;
@@ -11,7 +10,15 @@ export interface NamingContext {
   duplicate?: (name: string, count: number) => string;
 }
 
-export const defaultContext: NamingContext = {
+type DeepRequired<T> = T extends object
+  ? {
+      [P in keyof T]-?: DeepRequired<T[P]>;
+    }
+  : T;
+
+export type DefaultNamingContextConfig = DeepRequired<NamingContextConfig>;
+
+export const defaultContextConfig = {
   env: 'css',
   includePageInPath: true,
   delimiters: {
@@ -20,10 +27,10 @@ export const defaultContext: NamingContext = {
     variantEqualSign: '_',
     betweenVariants: '-',
   },
-  duplicate: (name, count) => `${name}${count}`,
-};
+  duplicate: (name: string, count: number) => `${name}${count}`,
+} as const satisfies DefaultNamingContextConfig;
 
-export const tailwind4NamingConvention: NamingContext = {
+export const tailwind4NamingConfig = {
   env: 'tailwind-v4',
   delimiters: {
     pathSeparator: '/',
@@ -31,5 +38,4 @@ export const tailwind4NamingConvention: NamingContext = {
     variantEqualSign: '_',
     betweenVariants: '.',
   },
-  duplicate: (name, count) => `${name}${count}`,
-};
+} as const satisfies NamingContextConfig;
