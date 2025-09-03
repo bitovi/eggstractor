@@ -68,6 +68,7 @@ import {
   generateTailwindPaddingClass,
   generateTailwindBoxShadowClass,
   createContextAwareColorGenerator,
+  generateTailwindOpacityClass,
 } from '../../../transformers/tailwind/generators';
 import { NonNullableStyleToken } from '../../../types';
 
@@ -450,5 +451,63 @@ describe('createContextAwareColorGenerator', () => {
 
     const result = generator(tokenWithoutPath);
     expect(result).toBe('bg-white');
+  });
+});
+
+describe('generateTailwindOpacityClass', () => {
+  const opacityToken = {
+    ...basicToken,
+    property: 'opacity',
+    rawValue: '0.5',
+  };
+
+  it('should convert decimal opacity to percentage (0.5 -> opacity-50)', () => {
+    const result = generateTailwindOpacityClass(opacityToken);
+    expect(result).toBe('opacity-50');
+  });
+
+  it('should handle percentage opacity (75% -> opacity-75)', () => {
+    const percentageToken = {
+      ...opacityToken,
+      rawValue: '75%',
+    };
+    const result = generateTailwindOpacityClass(percentageToken);
+    expect(result).toBe('opacity-75');
+  });
+
+  it('should handle full opacity (1.0 -> opacity-100)', () => {
+    const fullOpacityToken = {
+      ...opacityToken,
+      rawValue: '1.0',
+    };
+    const result = generateTailwindOpacityClass(fullOpacityToken);
+    expect(result).toBe('opacity-100');
+  });
+
+  it('should handle zero opacity (0 -> opacity-0)', () => {
+    const zeroOpacityToken = {
+      ...opacityToken,
+      rawValue: '0',
+    };
+    const result = generateTailwindOpacityClass(zeroOpacityToken);
+    expect(result).toBe('opacity-0');
+  });
+
+  it('should handle values already in 0-100 range (25 -> opacity-25)', () => {
+    const directValueToken = {
+      ...opacityToken,
+      rawValue: '25',
+    };
+    const result = generateTailwindOpacityClass(directValueToken);
+    expect(result).toBe('opacity-25');
+  });
+
+  it('should round decimal values (0.333 -> opacity-33)', () => {
+    const decimalToken = {
+      ...opacityToken,
+      rawValue: '0.333',
+    };
+    const result = generateTailwindOpacityClass(decimalToken);
+    expect(result).toBe('opacity-33');
   });
 });
