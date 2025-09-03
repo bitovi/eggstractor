@@ -4,7 +4,6 @@ import { defaultContextConfig, NamingContextConfig } from './naming-context.util
 export interface NamingContext {
   createName: (
     path: BaseToken['path'],
-    variantsCombination: string,
     propertyNameConflicts?: Record<string, string[]>,
     variants?: Record<string, string>,
   ) => string;
@@ -33,23 +32,26 @@ export const createNamingContext = (
 
   // Extract variant standardization
   const standardizeVariantCombination = (
-    variantsCombination: string,
     path: Array<{ name: string; type: string }>,
     variants: Record<string, string> = {},
   ) => {
-    if (!variantsCombination || variantsCombination === 'ROOT') {
-      return '';
-    }
+    // TODO: handle ROOT
+    // if (!variantsCombination || variantsCombination === 'ROOT') {
+    //   return '';
+    // }
 
     // NEW: If we have variants object, reconstruct as property=value format
-    if (variants && Object.keys(variants).length > 0) {
-      const reconstructed = Object.entries(variants)
+    // if (Object.keys(variants).length) {
+    //   const reconstructed = Object.entries(variants)
+    //     .map(([prop, val]) => `${prop}=${val}`)
+    //     .join('--');
+
+    //   // Use reconstructed format instead of raw variantsCombination
+    //   variantsCombination = reconstructed;
+    // }
+    const variantsCombination = Object.entries(variants)
         .map(([prop, val]) => `${prop}=${val}`)
         .join('--');
-
-      // Use reconstructed format instead of raw variantsCombination
-      variantsCombination = reconstructed;
-    }
 
     // Convert spaces to dashes in all variant parts
     let cleaned = variantsCombination
@@ -93,9 +95,8 @@ export const createNamingContext = (
   };
 
   return {
-    createName(path, variantsCombination, propertyNameConflicts = {}, variants = {}): string {
+    createName(path, propertyNameConflicts = {}, variants = {}): string {
       const standardizedVariants = standardizeVariantCombination(
-        variantsCombination,
         path,
         variants,
       );

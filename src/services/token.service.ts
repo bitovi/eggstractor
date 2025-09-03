@@ -150,6 +150,7 @@ export async function extractNodeToken(
   if (processedValue) {
     const styleToken: StyleToken = {
       type: 'style',
+      // TODO: use name convention function here
       name: path.map(({ name }) => name).join('_'),
       value: processedValue.value,
       rawValue: processedValue.rawValue,
@@ -169,6 +170,7 @@ export async function extractNodeToken(
     };
     tokens.push(styleToken);
   }
+  console.log(tokens);
 
   return tokens;
 }

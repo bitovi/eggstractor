@@ -1,4 +1,5 @@
 export type Input = {
+  key: string;
   variants: Record<string, string>;
   css: Record<string, string>;
 }[];
@@ -193,30 +194,43 @@ export const createChildStyleNodes = (styles: StyleNode[]): StyleNode[] => {
   return [...uniques, ...createChildStyleNodes(cleanedNestedChildStyleNodes)];
 };
 
+type ConvertStyleNodesToCssStylesheetReturnType = Record<string, {
+    styles: Record<string, string>;
+    variants: Record<string, string>;
+}>
+
 export const convertStyleNodesToCssStylesheet = (
   styleNodes: StyleNode[],
-): Record<string, Record<string, string>> => {
-  const styleTags: Record<string, Record<string, string>> = {};
+): ConvertStyleNodesToCssStylesheetReturnType => {
+  const styleTags: Record<string, {
+    styles: Record<string, string>;
+    variants: Record<string, string>;
+  }> = {};
 
   // Group all styles by "className/mixin/utility"
   for (const style of styleNodes) {
+    // TODO: use naming context to generate className/mixin/utility name
     const key =
       Object.entries(style.variants)
         .map(([variantProperty, variantValue]) => `${variantProperty}=${variantValue}`)
         .join('--') || 'ROOT';
 
-    styleTags[key] ??= {};
-    if (styleTags[key][style.cssProperty] && styleTags[key][style.cssProperty] !== style.cssValue) {
+    styleTags[key] ??= {
+      styles: {},
+      variants: style.variants,
+    };
+
+    if (styleTags[key].styles[style.cssProperty] && styleTags[key].styles[style.cssProperty] !== style.cssValue) {
       console.error(
         styleTags,
         key,
         styleTags[key],
-        styleTags[key][style.cssProperty],
+        styleTags[key].styles[style.cssProperty],
         style.cssValue,
       );
       throw new Error('Unexpected style exists for combination of variant');
     }
-    styleTags[key][style.cssProperty] = style.cssValue;
+    styleTags[key].styles[style.cssProperty] = style.cssValue;
   }
 
   return styleTags;

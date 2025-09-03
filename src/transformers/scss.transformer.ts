@@ -110,7 +110,7 @@ export function transformToScss(
 
   for (const mixin of mixins) {
     output += `@mixin ${mixin.variantCombinationName} {\n`;
-    Object.entries(mixin.css).forEach(([property, value]) => {
+    Object.entries(mixin.css.styles).forEach(([property, value]) => {
       output += `  ${property}: ${value};\n`;
     });
     output += '}\n';

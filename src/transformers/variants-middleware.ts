@@ -79,14 +79,14 @@ export const convertVariantGroupBy = (
   if (!useCombinatorialParsing) {
     return instanceGroupedByVariants.map((variantGroup) => {
       // FIX: Reconstruct property=value format for templated
-      const propertyValueFormat =
-        Object.entries(variantGroup.variants || {})
-          .map(([prop, val]) => `${prop}=${val}`)
-          .join('--') || variantGroup.variantCombinationName;
+      // const propertyValueFormat =
+      //   Object.entries(variantGroup.variants || {})
+      //     .map(([prop, val]) => `${prop}=${val}`)
+      //     .join('--') || variantGroup.variantCombinationName;
 
       const finalName = namingContext.createName(
         variantGroup.path,
-        propertyValueFormat,
+        // propertyValueFormat,
         conflictMap,
         variantGroup.variants,
       );
@@ -110,7 +110,7 @@ export const convertVariantGroupBy = (
 
   for (const variantGroup of instanceGroupedByVariants) {
     if (variantGroup.componentSetId && variantGroup.componentSetId) {
-      instancesWithVariant.push(variantGroup as any);
+      instancesWithVariant.push(variantGroup);
       continue;
     }
 
@@ -134,11 +134,12 @@ export const convertVariantGroupBy = (
   const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(([_, mixins]) => {
     const cssByVariantCombinations = generateStyles(mixins);
 
-    return Object.entries(cssByVariantCombinations).map(([variantsCombination, css]) => {
+    return Object.entries(cssByVariantCombinations).map(([_key, css]) => {
       const variantCombinationName = namingContext.createName(
         mixins[0].path,
-        variantsCombination,
+        // variantsCombination,
         conflictMap,
+        css.variants,
       );
 
       return {
@@ -159,7 +160,7 @@ export const convertVariantGroupBy = (
  */
 export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {
   return parsedStyleTokens.map((parsedStyleToken) => {
-    const tokens = Object.entries(parsedStyleToken.css).map(
+    const tokens = Object.entries(parsedStyleToken.css.styles).map(
       ([property, rawValue]) =>
         // Casting here since tailwind only needs these 2 properties
         ({
