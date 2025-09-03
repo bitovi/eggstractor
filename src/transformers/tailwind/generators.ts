@@ -236,6 +236,23 @@ export const createContextAwareColorGenerator = (
   };
 };
 
+/*
+  Handles rawValue examples for opacity:
+    - "0.5"     → opacity-50
+    - "0.75"    → opacity-75
+    - "50%"     → opacity-50
+*/
+export const generateTailwindOpacityClass: Generator = ({ rawValue }) => {
+  const opacity = parseFloat(rawValue.replace('%', ''));
+  // Handle 0-1 range (0.5) or 0-100 range (50%)
+  const normalizedOpacity = rawValue.includes('%')
+    ? Math.round(opacity)
+    : opacity <= 1
+      ? Math.round(opacity * 100)
+      : Math.round(opacity);
+  return `opacity-${normalizedOpacity}`;
+};
+
 type Generator = (token: NonNullableStyleToken) => string;
 
 const tailwindClassGenerators: Record<string, Generator> = {
@@ -260,6 +277,11 @@ const tailwindClassGenerators: Record<string, Generator> = {
   'justify-content': ({ rawValue }) => justifyContent[rawValue],
   height: ({ rawValue }) => `h-${normalizeTailwindToken(spacing, rawValue)}`,
   width: ({ rawValue }) => `w-${normalizeTailwindToken(spacing, rawValue)}`,
+  'max-height': ({ rawValue }) => `max-h-${normalizeTailwindToken(spacing, rawValue)}`,
+  'max-width': ({ rawValue }) => `max-w-${normalizeTailwindToken(spacing, rawValue)}`,
+  'min-height': ({ rawValue }) => `min-h-${normalizeTailwindToken(spacing, rawValue)}`,
+  'min-width': ({ rawValue }) => `min-w-${normalizeTailwindToken(spacing, rawValue)}`,
+  opacity: (token) => generateTailwindOpacityClass(token),
 };
 
 export function createTailwindClasses(tokens: NonNullableStyleToken[]): string[] {
