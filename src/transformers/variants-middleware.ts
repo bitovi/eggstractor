@@ -81,17 +81,10 @@ export const convertVariantGroupBy = (
 
   if (!useCombinatorialParsing) {
     return instanceGroupedByVariants.map((variantGroup) => {
-      // FIX: Reconstruct property=value format for templated
-      // const propertyValueFormat =
-      //   Object.entries(variantGroup.variants || {})
-      //     .map(([prop, val]) => `${prop}=${val}`)
-      //     .join('--') || variantGroup.key;
-
       return {
         ...variantGroup,
         key: namingContext.createName(
           variantGroup.path,
-          // propertyValueFormat,
           conflictMap,
           variantGroup.variants,
         ),
@@ -143,7 +136,6 @@ export const convertVariantGroupBy = (
     return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
       const key = namingContext.createName(
         mixins[0].path,
-        // variantsCombination,
         conflictMap,
         cssByVariantCombination.variants,
       );
