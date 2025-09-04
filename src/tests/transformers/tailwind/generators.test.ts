@@ -82,11 +82,11 @@ const basicToken: NonNullableStyleToken = {
     {
       type: 'FRAME', // Just a random type
       name: 'basic',
-    },
+    } as SceneNode,
     {
       type: 'FRAME', // Just a random type
       name: 'gap',
-    },
+    } as SceneNode,
   ],
   metadata: {
     figmaId: 'notapplicable',
@@ -371,9 +371,9 @@ describe('createContextAwareColorGenerator', () => {
     property: 'background',
     rawValue: '#507e15',
     path: [
-      { type: 'FRAME', name: 'modal-dialog' },
-      { type: 'INSTANCE', name: 'icon' },
-      { type: 'VECTOR', name: 'vector' },
+      { type: 'FRAME', name: 'modal-dialog' } as SceneNode,
+      { type: 'INSTANCE', name: 'icon' } as SceneNode,
+      { type: 'VECTOR', name: 'vector' } as SceneNode,
     ],
   };
 
@@ -382,8 +382,8 @@ describe('createContextAwareColorGenerator', () => {
     property: 'background',
     rawValue: '#ffffff',
     path: [
-      { type: 'FRAME', name: 'modal-dialog' },
-      { type: 'FRAME', name: 'header' },
+      { type: 'FRAME', name: 'modal-dialog' } as SceneNode,
+      { type: 'FRAME', name: 'header' } as SceneNode,
     ],
   };
 

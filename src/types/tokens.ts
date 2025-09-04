@@ -5,11 +5,11 @@ export interface BaseToken {
   name: string;
   /** CSS property name (e.g., 'background-color', 'font-size'). */
   property: string;
-  /** Hierarchical path from root to node with type and name. */
-  path: {
-    type: SceneNode['type'];
-    name: string;
-  }[];
+  /**
+   * Hierarchical path from root to node with type and name. These Nodes are
+   * type asserted as SceneNodes but that isn't always true
+   * */
+  path: SceneNode[];
   /** Data type classification for the value. */
   valueType?: string | null;
   /** Figma-specific identifiers and references. */

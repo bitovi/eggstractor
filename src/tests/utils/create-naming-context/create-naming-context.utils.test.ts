@@ -15,8 +15,8 @@ describe('createNamingContext', () => {
 
     describe('createName', () => {
       const path: BaseToken['path'] = [
-        { name: 'button page', type: 'SECTION' },
-        { name: 'button', type: 'COMPONENT_SET' },
+        { name: 'button page', type: 'SECTION' } as SceneNode,
+        { name: 'button', type: 'COMPONENT_SET' } as SceneNode,
       ];
       it('should handle ROOT variant', () => {
         // const result = namingContext.createName(path, 'ROOT');
@@ -67,8 +67,8 @@ describe('createNamingContext', () => {
       it('should filter out COMPONENT type from path', () => {
         const componentPath: BaseToken['path'] = [
           ...path,
-          { name: 'large--and--link--and--default', type: 'COMPONENT' },
-          { name: 'text', type: 'TEXT' },
+          { name: 'large--and--link--and--default', type: 'COMPONENT' } as SceneNode,
+          { name: 'text', type: 'TEXT' } as SceneNode,
         ];
         // const result = namingContext.createName(componentPath, 'Size=Large');
         const result = namingContext.createName(componentPath, {}, { Size: 'Large' });
@@ -89,8 +89,8 @@ describe('createNamingContext', () => {
 
       it('should handle spaces in path names', () => {
         const pathSet: BaseToken['path'] = [
-          { name: 'button page', type: 'SECTION' },
-          { name: 'button set', type: 'COMPONENT_SET' },
+          { name: 'button page', type: 'SECTION' } as SceneNode,
+          { name: 'button set', type: 'COMPONENT_SET' } as SceneNode,
         ];
         // const result = namingContext.createName(pathSet, 'Size=Large');
         const result = namingContext.createName(pathSet, {}, { Size: 'Large' });
@@ -99,8 +99,8 @@ describe('createNamingContext', () => {
 
       it('should convert everything to lowercase', () => {
         const pathUpperCase: BaseToken['path'] = [
-          { name: 'BUTTON PAGE', type: 'SECTION' },
-          { name: 'Button', type: 'COMPONENT_SET' },
+          { name: 'BUTTON PAGE', type: 'SECTION' } as SceneNode,
+          { name: 'Button', type: 'COMPONENT_SET' } as SceneNode,
         ];
         // const result = namingContext.createName(pathUpperCase, 'Size=LARGE');
         const result = namingContext.createName(pathUpperCase, {}, { Size: 'LARGE' });
@@ -170,9 +170,9 @@ describe('createNamingContext', () => {
     describe('createName', () => {
       it('should use all custom delimiters and exclude page from path', () => {
         const path: BaseToken['path'] = [
-          { name: 'button page', type: 'SECTION' },
-          { name: 'button', type: 'COMPONENT_SET' },
-          { name: 'text', type: 'TEXT' },
+          { name: 'button page', type: 'SECTION' } as SceneNode,
+          { name: 'button', type: 'COMPONENT_SET' } as SceneNode,
+          { name: 'text', type: 'TEXT' } as SceneNode,
         ];
         const conflicts = { default: ['size'] };
 
