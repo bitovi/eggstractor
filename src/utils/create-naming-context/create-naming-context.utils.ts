@@ -31,16 +31,21 @@ export const createNamingContext = (
   };
 
   // Extract variant standardization
+  // TODO: path shouldn't be involved when doing anything with variants
   const standardizeVariantCombination = (
+    /**
+     * @deprecated We should not use the path to determine variant properties and values.
+     * We should always reference the variants object directly instead.
+     */
     path: Array<{ name: string; type: string }>,
-    variants: Record<string, string> = {},
+    variants: Record<string, string>,
   ) => {
     // TODO: handle ROOT
     // if (!variantsCombination || variantsCombination === 'ROOT') {
     //   return '';
     // }
 
-    // NEW: If we have variants object, reconstruct as property=value format
+    // If we have variants object, reconstruct as property=value format
     // if (Object.keys(variants).length) {
     //   const reconstructed = Object.entries(variants)
     //     .map(([prop, val]) => `${prop}=${val}`)
@@ -55,34 +60,29 @@ export const createNamingContext = (
 
     // Convert spaces to dashes in all variant parts
     let cleaned = variantsCombination
-      .replace(/--and--/g, '--') // Convert --and-- to --
-      .replace(/^and--/, '') // Remove leading and--
-      .replace(/--and$/, '') // Remove trailing --and
-      .replace(/\band\b/g, '') // Remove standalone and
       .replace(/[\s._]/g, '-'); // Handle spaces, dots, underscores
 
-    // Remove path components if provided
-    if (path) {
-      const pathNames = path
-        .filter((part) => part.type !== 'COMPONENT')
-        .map((part) => part.name.replace(/\s+/g, '-'));
+    // Remove path components
+    const pathNames = path
+      .filter((part) => part.type !== 'COMPONENT')
+      .map((part) => part.name.replace(/\s+/g, '-'));
 
-      pathNames.forEach((pathName) => {
-        const regex = new RegExp(
-          `\\b${pathName.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`,
-          'g',
-        );
-        cleaned = cleaned
-          .replace(regex, '')
-          .replace(/^--+|--+$/g, '')
-          .replace(/--+/g, '--');
-      });
-    }
+    pathNames.forEach((pathName) => {
+      const regex = new RegExp(`\\b${pathName.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'g');
+      cleaned = cleaned
+        .replace(regex, '')
+        .replace(/^--+|--+$/g, '')
+        .replace(/--+/g, '--');
+    });
 
     return cleaned;
   };
 
   // Extract variant parsing
+  /**
+   * @deprecated We should not use the path to determine variant properties and values.
+   * We should always reference the variants object directly instead.
+   */
   const parseVariantParts = (parts: string[]) => {
     return parts.map((part) => {
       if (part.includes('=')) {
@@ -115,7 +115,7 @@ export const createNamingContext = (
               )
             : false;
 
-          // NEW: Special handling for boolean-like values
+          // Special handling for boolean-like values
           const isFalsyBoolean = ['false', 'no'].includes(cleanValue);
           const isTruthyBoolean = ['true', 'yes'].includes(cleanValue);
 
