@@ -3,10 +3,7 @@ import { rgbaToString, sanitizeName, normalizeValue } from '../utils';
 
 const variableCache = new Map<string, Variable>();
 
-async function getVariableFallback(
-  variable: Variable,
-  propertyName: string,
-): Promise<string> {
+async function getVariableFallback(variable: Variable, propertyName: string): Promise<string> {
   const modeId = Object.keys(variable.valuesByMode)[0];
   const value = variable.valuesByMode[modeId];
 

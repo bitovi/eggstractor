@@ -50,8 +50,8 @@ export const createNamingContext = (
     //   variantsCombination = reconstructed;
     // }
     const variantsCombination = Object.entries(variants)
-        .map(([prop, val]) => `${prop}=${val}`)
-        .join('--');
+      .map(([prop, val]) => `${prop}=${val}`)
+      .join('--');
 
     // Convert spaces to dashes in all variant parts
     let cleaned = variantsCombination
@@ -96,10 +96,7 @@ export const createNamingContext = (
 
   return {
     createName(path, propertyNameConflicts = {}, variants = {}): string {
-      const standardizedVariants = standardizeVariantCombination(
-        path,
-        variants,
-      );
+      const standardizedVariants = standardizeVariantCombination(path, variants);
       const basePath = buildBasePath(path);
 
       const variantParts = standardizedVariants.split('--').filter(Boolean) || [];
@@ -156,7 +153,7 @@ export const createNamingContext = (
 
       // Handle duplicates
       const baseNewName = newName;
-      let counter = nameCountMap.get(baseNewName) ?? 0;
+      const counter = nameCountMap.get(baseNewName) ?? 0;
       if (counter) {
         newName = config.duplicate(baseNewName, counter + 1);
       }

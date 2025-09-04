@@ -50,7 +50,7 @@ export default {
   getGithubConfig: async function getGithubConfig() {
     try {
       const savedConfig = figma.root.getPluginData('githubConfig');
-      const config = savedConfig ? JSON.parse(savedConfig) as GithubConfig : null;
+      const config = savedConfig ? (JSON.parse(savedConfig) as GithubConfig) : null;
       return config;
     } catch (error) {
       console.error('Error reading config:', error);

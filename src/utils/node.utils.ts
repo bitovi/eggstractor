@@ -7,15 +7,18 @@ interface NodePathName {
 
 function parseVariantWithoutKey(variant: string): string {
   // TODO: create using componentSet token and component token instead?
-  const segment = variant.split(', ').map(part => {
-    const [_, valueRaw] = part.split('=')
+  const segment = variant
+    .split(', ')
+    .map((part) => {
+      const [, valueRaw] = part.split('=');
 
-    if (valueRaw) {
-      return valueRaw;
-    }
+      if (valueRaw) {
+        return valueRaw;
+      }
 
-    return part;
-  }).join('__and__');
+      return part;
+    })
+    .join('__and__');
 
   return sanitizeSegment(segment);
 }

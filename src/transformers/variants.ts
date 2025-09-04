@@ -1,8 +1,7 @@
-export type Input = {
-  key: string;
+export type StylesForVariantsCombination = {
+  styles: Record<string, string>;
   variants: Record<string, string>;
-  css: Record<string, string>;
-}[];
+};
 
 type StyleNode = {
   cssProperty: string;
@@ -24,7 +23,7 @@ const getId = () => {
 /**
  * Check if objects match all property and value pairs
  */
-function shallowEqual<T extends Record<string, any>>(a: T, b: T): boolean {
+function shallowEqual<T extends Record<string, unknown>>(a: T, b: T): boolean {
   const keysA = Object.keys(a);
   const keysB = Object.keys(b);
 
@@ -104,11 +103,11 @@ function removeByComparison<T>(items: T[], comparison: (a: T, b: T) => boolean):
 }
 
 // TODO: consideration, we already have "Style" token, so maybe the shape of the input should match the existing style tokens
-export const getInitialStyleNodes = (source: Input): StyleNode[] => {
+export const getInitialStyleNodes = (source: StylesForVariantsCombination[]): StyleNode[] => {
   const styleNodes: StyleNode[] = [];
 
   for (const instance of source) {
-    Object.entries(instance.css).map(([cssProperty, cssValue]) => {
+    Object.entries(instance.styles).map(([cssProperty, cssValue]) => {
       // Each node requires referring its "origin" node
       // The "origin" nodes are created in this loop for a single style's variants
       const id = getId();
@@ -194,18 +193,16 @@ export const createChildStyleNodes = (styles: StyleNode[]): StyleNode[] => {
   return [...uniques, ...createChildStyleNodes(cleanedNestedChildStyleNodes)];
 };
 
-type ConvertStyleNodesToCssStylesheetReturnType = Record<string, {
-    styles: Record<string, string>;
-    variants: Record<string, string>;
-}>
-
 export const convertStyleNodesToCssStylesheet = (
   styleNodes: StyleNode[],
-): ConvertStyleNodesToCssStylesheetReturnType => {
-  const styleTags: Record<string, {
-    styles: Record<string, string>;
-    variants: Record<string, string>;
-  }> = {};
+): Record<string, StylesForVariantsCombination> => {
+  const styleTags: Record<
+    string,
+    {
+      styles: Record<string, string>;
+      variants: Record<string, string>;
+    }
+  > = {};
 
   // Group all styles by "className/mixin/utility"
   for (const style of styleNodes) {
@@ -220,7 +217,10 @@ export const convertStyleNodesToCssStylesheet = (
       variants: style.variants,
     };
 
-    if (styleTags[key].styles[style.cssProperty] && styleTags[key].styles[style.cssProperty] !== style.cssValue) {
+    if (
+      styleTags[key].styles[style.cssProperty] &&
+      styleTags[key].styles[style.cssProperty] !== style.cssValue
+    ) {
       console.error(
         styleTags,
         key,
@@ -236,7 +236,9 @@ export const convertStyleNodesToCssStylesheet = (
   return styleTags;
 };
 
-export const generateStyles = (source: Input) => {
+export const generateCombinatorialStyles = (
+  source: StylesForVariantsCombination[],
+): Record<string, StylesForVariantsCombination> => {
   const initialStyleNodes = getInitialStyleNodes(source);
   const styleNodes = createChildStyleNodes(initialStyleNodes);
   const stylesheet = convertStyleNodesToCssStylesheet(styleNodes);

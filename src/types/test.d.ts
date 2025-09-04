@@ -10,4 +10,4 @@ declare namespace NodeJS {
 }
 
 // For TypeScript 3.4+
-declare var global: NodeJS.Global;
+declare let global: NodeJS.Global;

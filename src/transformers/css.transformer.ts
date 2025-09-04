@@ -68,8 +68,8 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
   );
 
   for (const classNameDefinition of classNames) {
-    output += `\n.${classNameDefinition.variantCombinationName} {\n`;
-    Object.entries(classNameDefinition.css).forEach(([property, value]) => {
+    output += `\n.${classNameDefinition.key} {\n`;
+    Object.entries(classNameDefinition.styles).forEach(([property, value]) => {
       output += `  ${property}: ${value};\n`;
     });
     output += '}\n';

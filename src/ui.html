@@ -29,16 +29,16 @@
           <option value="tailwind-scss">(v3) Tailwind-SCSS</option>
           <option value="tailwind-v4">(v4) Tailwind Layer Utilities</option>
         </select>
-        
+
         <div class="parsing-mode-group">
           <label class="parsing-mode-label">Eggstractor Output:</label>
           <div class="radio-group">
             <label class="radio-option">
-              <input type="radio" name="parsingMode" value="combinatorial" checked>
+              <input type="radio" name="parsingMode" value="combinatorial" checked />
               <span>Combinatorial</span>
             </label>
             <label class="radio-option">
-              <input type="radio" name="parsingMode" value="templated">
+              <input type="radio" name="parsingMode" value="templated" />
               <span>Templated</span>
             </label>
           </div>
@@ -49,15 +49,23 @@
           <button id="generateBtn" class="button">Generate Styles</button>
           <div id="spinner" class="spinner hidden"></div>
         </div>
-        <button id="exportTestDataBtn" class="button" style="display: none;">Export Test Data</button>
+        <button id="exportTestDataBtn" class="button" style="display: none">
+          Export Test Data
+        </button>
         <button id="createPRBtn" class="button">Create PR</button>
         <span id="status"></span>
       </div>
-      <div id="progressContainer" style="display: none;">
-        <div id="progressBar" style="width: 100%; background: #f0f0f0; border-radius: 4px; overflow: hidden;">
-          <div id="progressFill" style="width: 0%; height: 20px; background: #007cba; transition: width 0.3s;"></div>
+      <div id="progressContainer" style="display: none">
+        <div
+          id="progressBar"
+          style="width: 100%; background: #f0f0f0; border-radius: 4px; overflow: hidden"
+        >
+          <div
+            id="progressFill"
+            style="width: 0%; height: 20px; background: #007cba; transition: width 0.3s"
+          ></div>
         </div>
-        <div id="progressText" style="color: #999999;">Starting...</div>
+        <div id="progressText" style="color: #999999">Starting...</div>
       </div>
       <div id="warnings"></div>
       <div class="output">

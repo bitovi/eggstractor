@@ -170,7 +170,6 @@ export async function extractNodeToken(
     };
     tokens.push(styleToken);
   }
-  console.log(tokens);
 
   return tokens;
 }

@@ -56,11 +56,11 @@ describe('createNamingContext', () => {
         //   'Size=Default--Theme=Primary--State=Hover',
         //   conflicts,
         // );
-        const result = namingContext.createName(
-          path,
-          conflicts,
-          { Size: 'Default', Theme: 'Primary', State: 'Hover' },
-        );
+        const result = namingContext.createName(path, conflicts, {
+          Size: 'Default',
+          Theme: 'Primary',
+          State: 'Hover',
+        });
         expect(result).toBe('button-page-button-size_default-theme_primary-hover');
       });
 
@@ -181,11 +181,11 @@ describe('createNamingContext', () => {
         //   'Size=Default--Theme=Primary--State=Hover',
         //   conflicts,
         // );
-        const result = namingContext.createName(
-          path,
-          conflicts,
-          { Size: 'Default', Theme: 'Primary', State: 'Hover' },
-        );
+        const result = namingContext.createName(path, conflicts, {
+          Size: 'Default',
+          Theme: 'Primary',
+          State: 'Hover',
+        });
 
         expect(result).toBe('button/text.size_default---primary---hover');
       });

@@ -8,9 +8,6 @@ export function rgbaToString(r: number, g: number, b: number, a: number): string
   const bHex = Math.round(b * 255)
     .toString(16)
     .padStart(2, '0');
-  const aHex = Math.round(a * 255)
-    .toString(16)
-    .padStart(2, '0');
 
   return a === 1
     ? '#' + rHex + gHex + bHex

@@ -1,4 +1,4 @@
-export async function serializeFigmaData(node: BaseNode): Promise<any> {
+export async function serializeFigmaData(node: BaseNode): Promise<unknown> {
   // Properties to exclude from serialization
   const excludedProps = new Set([
     'inferredVariables',
@@ -7,7 +7,7 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
   ]);
 
   // Create base data with all enumerable properties
-  const baseData: any = {};
+  const baseData: Record<string, unknown> = {};
 
   // Get all properties from the node
   for (const key in node) {
@@ -17,7 +17,7 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
         continue;
       }
 
-      const value = (node as any)[key];
+      const value = node[key as keyof BaseNode];
       // Skip functions and undefined values
       if (typeof value === 'function' || value === undefined) {
         continue;
@@ -35,7 +35,7 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
   }
 
   // Add variables collection
-  const variables: Record<string, any> = {};
+  const variables: Record<string, unknown> = {};
 
   // Helper to collect variables from node
   const collectVariables = async (node: SceneNode) => {
@@ -59,7 +59,7 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
     }
   };
 
-  async function collectVariableAndAliases(variableId: string, variables: Record<string, any>) {
+  async function collectVariableAndAliases(variableId: string, variables: Record<string, unknown>) {
     const variable = await figma.variables.getVariableByIdAsync(variableId);
     if (!variable) return;
 
@@ -91,25 +91,28 @@ export async function serializeFigmaData(node: BaseNode): Promise<any> {
   };
 }
 
-function isVariableAlias(value: any): value is { type: 'VARIABLE_ALIAS'; id: string } {
-  return value && typeof value === 'object' && value.type === 'VARIABLE_ALIAS' && 'id' in value;
+function isVariableAlias(value: unknown): value is { type: 'VARIABLE_ALIAS'; id: string } {
+  if (!value) return false;
+  return (
+    typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS' && 'id' in value
+  );
 }
 
-export async function createTestVariableResolver(testData: any) {
+export async function createTestVariableResolver(testData: { variables: Record<string, unknown> }) {
   // Helper to collect and flatten all variables including aliases
-  const collectAllVariables = (variables: Record<string, any>) => {
-    const allVariables = new Map<string, any>();
+  const collectAllVariables = (variables: Record<string, unknown>) => {
+    const allVariables = new Map<string, unknown>();
 
     const addVariable = (varId: string) => {
       if (allVariables.has(varId)) return;
 
-      const variable = variables[varId];
+      const variable = variables[varId] as Variable | undefined;
       if (!variable) return;
 
       allVariables.set(varId, variable);
 
       // Recursively collect any alias references
-      Object.values(variable.valuesByMode).forEach((value: any) => {
+      Object.values(variable.valuesByMode).forEach((value: unknown) => {
         if (isVariableAlias(value)) {
           addVariable(value.id);
         }
@@ -128,23 +131,23 @@ export async function createTestVariableResolver(testData: any) {
     if (!variable) return null;
 
     // Helper to resolve any alias values
-    const resolveValue = async (value: any): Promise<any> => {
+    const resolveValue = async (value: unknown): Promise<unknown> => {
       if (isVariableAlias(value)) {
         const aliasVar = variableMap.get(value.id);
         if (!aliasVar) return null;
 
-        const modeId = Object.keys(aliasVar.valuesByMode)[0];
-        return resolveValue(aliasVar.valuesByMode[modeId]);
+        const modeId = Object.keys((aliasVar as Variable).valuesByMode)[0];
+        return resolveValue((aliasVar as Variable).valuesByMode[modeId]);
       }
       return value;
     };
 
-    const modeId = Object.keys(variable.valuesByMode).sort()[0];
-    const resolvedValue = await resolveValue(variable.valuesByMode[modeId]);
+    const modeId = Object.keys((variable as Variable).valuesByMode).sort()[0];
+    const resolvedValue = await resolveValue((variable as Variable).valuesByMode[modeId]);
 
     return {
       ...variable,
-      resolvedType: variable.resolvedType,
+      resolvedType: (variable as Variable).resolvedType,
       valuesByMode: {
         [modeId]: resolvedValue,
       },
@@ -152,6 +155,8 @@ export async function createTestVariableResolver(testData: any) {
   };
 }
 
+// TODO: the types are terrible here, improve them
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createTestData(jsonData: any) {
   const processNode = (node: BaseNode, parentNode: BaseNode | null) => {
     if (node.type === 'TEXT') {
@@ -159,9 +164,9 @@ export function createTestData(jsonData: any) {
         ...node,
         parent: parentNode,
         name: node.name,
-        width: (node as any).width || 100,
-        height: (node as any).height || 20,
-        textAutoResize: (node as any).textAutoResize || 'NONE',
+        width: node.width || 100,
+        height: node.height || 20,
+        textAutoResize: node.textAutoResize || 'NONE',
       } as TextNode;
     }
 
@@ -174,9 +179,10 @@ export function createTestData(jsonData: any) {
     } as unknown as FrameNode;
 
     if ('children' in node) {
-      (frameNode as any).children = (node.children as BaseNode[]).map((child) =>
-        processNode(child, frameNode),
-      );
+      // Avoid that FrameNode children is readonly with a type assertion
+      (frameNode as { children: FrameNode['children'] }).children = (
+        node.children as BaseNode[]
+      ).map((child) => processNode(child, frameNode));
     }
 
     return frameNode;
@@ -186,15 +192,19 @@ export function createTestData(jsonData: any) {
     ...jsonData,
     type: 'PAGE',
     parent: null,
-    children: jsonData.children.map((child: BaseNode) => processNode(child, null)),
-  } as PageNode;
+    children: (jsonData.children as PageNode['children']).map((child) => processNode(child, null)),
+  } as unknown as PageNode;
 
-  pageNode.children.forEach((child) => ((child as any).parent = pageNode));
+  pageNode.children.forEach(
+    (child) => ((child as unknown as { parent: PageNode | null }).parent = pageNode),
+  );
 
   return {
     pageNode,
     async setupTest() {
-      const getVariableByIdAsync = await createTestVariableResolver(jsonData);
+      const getVariableByIdAsync = await createTestVariableResolver(
+        jsonData as Parameters<typeof createTestVariableResolver>[0],
+      );
       return {
         figma: {
           currentPage: pageNode,
