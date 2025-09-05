@@ -133,7 +133,6 @@ export const convertVariantGroupBy = (
   const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(([, mixins]) => {
     const path = mixins[0].path;
 
-    console.log(mixins);
     const cssByVariantCombinations = generateCombinatorialStyles(mixins);
 
     return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
@@ -142,10 +141,6 @@ export const convertVariantGroupBy = (
         conflictMap,
         cssByVariantCombination.variants,
       );
-
-      
-
-      console.log(key, path, cssByVariantCombination.variants);
 
       return {
         key,
