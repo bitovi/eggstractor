@@ -293,7 +293,7 @@ summary:hover {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #ffffff;
+  color: #999999;
   font-size: 13px;
   cursor: pointer;
 }
