@@ -36,8 +36,6 @@ export const extractComponentToken = (
 };
 
 export const extractComponentSetToken = (node: ComponentSetNode): ComponentSetToken => {
-  node.componentPropertyDefinitions;
-
   const variantPropertyDefinitions: Record<string, string[]> = {};
 
   for (const [key, value] of Object.entries(node.componentPropertyDefinitions)) {

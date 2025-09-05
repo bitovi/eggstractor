@@ -40,27 +40,12 @@ export const createNamingContext = (
     path: Array<{ name: string; type: string }>,
     variants: Record<string, string>,
   ) => {
-    // TODO: handle ROOT
-    // if (!variantsCombination || variantsCombination === 'ROOT') {
-    //   return '';
-    // }
-
-    // If we have variants object, reconstruct as property=value format
-    // if (Object.keys(variants).length) {
-    //   const reconstructed = Object.entries(variants)
-    //     .map(([prop, val]) => `${prop}=${val}`)
-    //     .join('--');
-
-    //   // Use reconstructed format instead of raw variantsCombination
-    //   variantsCombination = reconstructed;
-    // }
     const variantsCombination = Object.entries(variants)
       .map(([prop, val]) => `${prop}=${val}`)
       .join('--');
 
     // Convert spaces to dashes in all variant parts
-    let cleaned = variantsCombination
-      .replace(/[\s._]/g, '-'); // Handle spaces, dots, underscores
+    let cleaned = variantsCombination.replace(/[\s._]/g, '-'); // Handle spaces, dots, underscores
 
     // Remove path components
     const pathNames = path
@@ -68,7 +53,7 @@ export const createNamingContext = (
       .map((part) => part.name.replace(/\s+/g, '-'));
 
     pathNames.forEach((pathName) => {
-      const regex = new RegExp(`\\b${pathName.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'g');
+      const regex = new RegExp(`\\b${pathName.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'g');
       cleaned = cleaned
         .replace(regex, '')
         .replace(/^--+|--+$/g, '')

@@ -83,11 +83,7 @@ export const convertVariantGroupBy = (
     return instanceGroupedByVariants.map((variantGroup) => {
       return {
         ...variantGroup,
-        key: namingContext.createName(
-          variantGroup.path,
-          conflictMap,
-          variantGroup.variants,
-        ),
+        key: namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants),
       };
     });
   }
@@ -129,18 +125,14 @@ export const convertVariantGroupBy = (
     },
     {} as Record<string, typeof instancesWithVariant>,
   );
-  
+
   const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(([, mixins]) => {
     const path = mixins[0].path;
 
     const cssByVariantCombinations = generateCombinatorialStyles(mixins);
 
     return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
-      const key = namingContext.createName(
-        path,
-        conflictMap,
-        cssByVariantCombination.variants,
-      );
+      const key = namingContext.createName(path, conflictMap, cssByVariantCombination.variants);
 
       return {
         key,

@@ -23,7 +23,7 @@ export async function serializeFigmaData(node: BaseNode): Promise<unknown> {
         continue;
       }
       baseData[key] = value;
-    } catch (error) {
+    } catch {
       // Some properties might throw when accessed, skip those
       continue;
     }

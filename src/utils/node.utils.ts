@@ -16,6 +16,6 @@ export function getParentSceneNodes(node: SceneNode): PathNode[] {
 
   return nodes.map((node) => ({
     name: sanitizeSegment(node.name),
-    type: node.type
+    type: node.type,
   }));
 }
