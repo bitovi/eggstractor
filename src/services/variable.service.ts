@@ -1,4 +1,4 @@
-import { VariableToken } from '../types';
+import { PathNode, VariableToken } from '../types';
 import { rgbaToString, sanitizeName, normalizeValue } from '../utils';
 
 const variableCache = new Map<string, Variable>();
@@ -56,7 +56,7 @@ async function getVariableFallback(variable: Variable, propertyName: string): Pr
 export async function collectBoundVariable(
   varId: string,
   property: string,
-  path: SceneNode[],
+  pathNodes: PathNode[],
   node: SceneNode,
 ): Promise<VariableToken | null> {
   // Check cache first
@@ -76,7 +76,7 @@ export async function collectBoundVariable(
 
   return {
     type: 'variable',
-    path,
+    path: pathNodes,
     property,
     name: sanitizeName(variable.name),
     value: `$${sanitizeName(variable.name)}`,

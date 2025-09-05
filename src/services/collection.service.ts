@@ -250,6 +250,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
           componentSetToken,
         );
         collection.tokens.push(...tokens);
+        console.log('tokens', tokens);
       }
     }
   }

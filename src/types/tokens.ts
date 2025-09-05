@@ -1,3 +1,8 @@
+export interface PathNode {
+  name: string;
+  type: SceneNode['type'];
+}
+
 export interface BaseToken {
   /** Distinguishes between variable references and style declarations. */
   type: 'variable' | 'style';
@@ -9,7 +14,7 @@ export interface BaseToken {
    * Hierarchical path from root to node with type and name. These Nodes are
    * type asserted as SceneNodes but that isn't always true
    * */
-  path: SceneNode[];
+  path: PathNode[];
   /** Data type classification for the value. */
   valueType?: string | null;
   /** Figma-specific identifiers and references. */

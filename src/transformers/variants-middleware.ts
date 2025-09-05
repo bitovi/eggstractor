@@ -129,23 +129,30 @@ export const convertVariantGroupBy = (
     },
     {} as Record<string, typeof instancesWithVariant>,
   );
-
+  
   const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(([, mixins]) => {
+    const path = mixins[0].path;
+
+    console.log(mixins);
     const cssByVariantCombinations = generateCombinatorialStyles(mixins);
 
     return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
       const key = namingContext.createName(
-        mixins[0].path,
+        path,
         conflictMap,
         cssByVariantCombination.variants,
       );
+
+      
+
+      console.log(key, path, cssByVariantCombination.variants);
 
       return {
         key,
         styles: cssByVariantCombination.styles,
         variants: cssByVariantCombination.variants,
         // Preserve the path for context-aware generators
-        path: mixins[0].path,
+        path,
       };
     });
   });
@@ -155,6 +162,7 @@ export const convertVariantGroupBy = (
 };
 
 /**
+ * @deprecated shouldn't be required, only here for backwards compatibility
  * Used specifically for tailwind styles
  */
 export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {

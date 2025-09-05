@@ -1,6 +1,7 @@
+import { PathNode } from '../types';
 import { sanitizeSegment } from './string.utils';
 
-export function getParentSceneNodes(node: SceneNode): SceneNode[] {
+export function getParentSceneNodes(node: SceneNode): PathNode[] {
   const nodes: SceneNode[] = [];
   let current: SceneNode | null = node;
 
@@ -13,5 +14,8 @@ export function getParentSceneNodes(node: SceneNode): SceneNode[] {
     current = current.parent as SceneNode;
   }
 
-  return nodes.map((node) => ({ ...node, name: sanitizeSegment(node.name) }));
+  return nodes.map((node) => ({
+    name: sanitizeSegment(node.name),
+    type: node.type
+  }));
 }
