@@ -65,7 +65,7 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
     variantGroups,
     getClassNamePropertyAndValue,
     namingContext,
-  ).sort((a, b) => a.key.localeCompare(b.key));
+  );
 
   for (const classNameDefinition of classNames) {
     output += `\n.${classNameDefinition.key} {\n`;

@@ -106,7 +106,7 @@ export function transformToScss(
     getMixinPropertyAndValue,
     namingContext,
     useCombinatorialParsing,
-  ).sort((a, b) => a.key.localeCompare(b.key));
+  );
 
   for (const mixin of mixins) {
     output += `@mixin ${mixin.key} {\n`;
