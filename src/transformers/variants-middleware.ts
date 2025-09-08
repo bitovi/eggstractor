@@ -153,21 +153,23 @@ export const convertVariantGroupBy = (
  * Used specifically for tailwind styles
  */
 export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {
-  return parsedStyleTokens.map((parsedStyleToken) => {
-    const tokens = Object.entries(parsedStyleToken.styles).map(
-      ([property, rawValue]) =>
-        // Casting here since tailwind only needs these 2 properties
-        ({
-          property,
-          rawValue,
-          // Preserve the path for context-aware generators
-          path: parsedStyleToken.path,
-        }) as NonNullableStyleToken,
-    );
+  return parsedStyleTokens
+    .map((parsedStyleToken) => {
+      const tokens = Object.entries(parsedStyleToken.styles).map(
+        ([property, rawValue]) =>
+          // Casting here since tailwind only needs these 2 properties
+          ({
+            property,
+            rawValue,
+            // Preserve the path for context-aware generators
+            path: parsedStyleToken.path,
+          }) as NonNullableStyleToken,
+      );
 
-    return {
-      variantPath: parsedStyleToken.key,
-      tokens,
-    };
-  });
+      return {
+        variantPath: parsedStyleToken.key,
+        tokens,
+      };
+    })
+    .sort((a, b) => a.variantPath.localeCompare(b.variantPath));
 };
