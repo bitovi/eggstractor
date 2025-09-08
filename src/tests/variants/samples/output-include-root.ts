@@ -1,40 +1,96 @@
-export const output = {
+import { StylesForVariantsCombination } from '../../../transformers/variants';
+
+export const output: Record<string, StylesForVariantsCombination> = {
   'theme=green-theme': {
-    color: 'green',
+    styles: {
+      color: 'green',
+    },
+    variants: { theme: 'green-theme' },
   },
   'theme=pink-theme': {
-    color: 'pink',
-    height: '8px',
+    styles: {
+      color: 'pink',
+      height: '8px',
+    },
+    variants: { theme: 'pink-theme' },
   },
   'theme=purple-theme': {
-    color: 'purple',
-    height: '32px',
+    styles: {
+      color: 'purple',
+      height: '32px',
+    },
+    variants: { theme: 'purple-theme' },
   },
   'theme=red-theme': {
-    color: 'red',
+    styles: {
+      color: 'red',
+    },
+    variants: { theme: 'red-theme' },
   },
   'theme=yellow-theme': {
-    color: 'yellow',
+    styles: {
+      color: 'yellow',
+    },
+    variants: { theme: 'yellow-theme' },
   },
   ROOT: {
-    display: 'block',
+    styles: {
+      display: 'block',
+    },
+    variants: {},
   },
   'size=small--icon=false': {
-    height: '10px',
+    styles: {
+      height: '10px',
+    },
+    variants: {
+      size: 'small',
+      icon: 'false',
+    },
   },
   'size=medium--icon=true': {
-    height: '16px',
+    styles: {
+      height: '16px',
+    },
+    variants: {
+      size: 'medium',
+      icon: 'true',
+    },
   },
   'size=medium--icon=false': {
-    height: '20px',
+    styles: {
+      height: '20px',
+    },
+    variants: {
+      size: 'medium',
+      icon: 'false',
+    },
   },
   'size=large--icon=false': {
-    height: '30px',
+    styles: {
+      height: '30px',
+    },
+    variants: {
+      size: 'large',
+      icon: 'false',
+    },
   },
   'size=large--icon=true': {
-    height: '32px',
+    styles: {
+      height: '32px',
+    },
+    variants: {
+      size: 'large',
+      icon: 'true',
+    },
   },
   'size=small--icon=true': {
-    height: '8px',
+    styles: {
+      height: '8px',
+    },
+    variants: {
+      size: 'small',
+      icon: 'true',
+    },
   },
 };

@@ -1,6 +1,11 @@
 import { NonNullableStyleToken, StyleToken, TokenCollection } from '../types';
 import { NamingContext } from '../utils';
-import { generateStyles } from './variants';
+import { generateCombinatorialStyles, StylesForVariantsCombination } from './variants';
+
+type PartialStyleToken = Omit<
+  StyleToken,
+  'name' | 'property' | 'type' | 'value' | 'rawValue' | 'variableTokenMapByProperty'
+>;
 
 export const convertVariantGroupBy = (
   tokens: TokenCollection,
@@ -8,7 +13,7 @@ export const convertVariantGroupBy = (
   transform: (token: StyleToken) => Record<string, string>,
   namingContext: NamingContext,
   useCombinatorialParsing: boolean = true,
-) => {
+): (PartialStyleToken & { key: string } & StylesForVariantsCombination)[] => {
   const globalValueConflicts = new Map<string, Set<string>>();
 
   Object.values(styleTokensGroupedByVariantCombination).forEach((groupTokens) => {
@@ -33,7 +38,7 @@ export const convertVariantGroupBy = (
   });
 
   const instanceGroupedByVariants = Object.entries(styleTokensGroupedByVariantCombination)
-    .map(([variantCombinationName, groupTokens]) => {
+    .map(([key, groupTokens]) => {
       const componentId = groupTokens[0].componentId
         ? groupTokens.every((token) => token.componentId === groupTokens[0].componentId)
           ? groupTokens[0].componentId
@@ -50,7 +55,7 @@ export const convertVariantGroupBy = (
             })()
         : undefined;
 
-      const css = groupTokens.reduce(
+      const styles = groupTokens.reduce(
         (styles, token) => {
           const singleStyle = transform(token);
           return { ...styles, ...singleStyle };
@@ -58,9 +63,9 @@ export const convertVariantGroupBy = (
         {} as Record<string, string>,
       );
 
-      const _ = {
+      return {
         // Used for grouping
-        variantCombinationName,
+        key,
         // Used for naming
         path: groupTokens[0].path,
         // Used for finding variants
@@ -69,31 +74,16 @@ export const convertVariantGroupBy = (
         componentSetId,
         // Variants
         variants: componentId ? tokens.components[componentId].variantProperties : {},
-        css,
+        styles,
       };
-
-      return _;
     })
-    .filter((variantGroup) => Object.keys(variantGroup.css).length > 0);
+    .filter((variantGroup) => Object.keys(variantGroup.styles).length > 0);
 
   if (!useCombinatorialParsing) {
     return instanceGroupedByVariants.map((variantGroup) => {
-      // FIX: Reconstruct property=value format for templated
-      const propertyValueFormat =
-        Object.entries(variantGroup.variants || {})
-          .map(([prop, val]) => `${prop}=${val}`)
-          .join('--') || variantGroup.variantCombinationName;
-
-      const finalName = namingContext.createName(
-        variantGroup.path,
-        propertyValueFormat,
-        conflictMap,
-        variantGroup.variants,
-      );
-
       return {
         ...variantGroup,
-        variantCombinationName: finalName,
+        key: namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants),
       };
     });
   }
@@ -109,8 +99,13 @@ export const convertVariantGroupBy = (
   const instancesWithoutVariant: typeof instanceGroupedByVariants = [];
 
   for (const variantGroup of instanceGroupedByVariants) {
-    if (variantGroup.componentSetId && variantGroup.componentSetId) {
-      instancesWithVariant.push(variantGroup as any);
+    if (variantGroup.componentId && variantGroup.componentSetId) {
+      instancesWithVariant.push(
+        variantGroup as typeof variantGroup & {
+          componentId: string;
+          componentSetId: string;
+        },
+      );
       continue;
     }
 
@@ -131,21 +126,20 @@ export const convertVariantGroupBy = (
     {} as Record<string, typeof instancesWithVariant>,
   );
 
-  const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(([_, mixins]) => {
-    const cssByVariantCombinations = generateStyles(mixins);
+  const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(([, mixins]) => {
+    const path = mixins[0].path;
 
-    return Object.entries(cssByVariantCombinations).map(([variantsCombination, css]) => {
-      const variantCombinationName = namingContext.createName(
-        mixins[0].path,
-        variantsCombination,
-        conflictMap,
-      );
+    const cssByVariantCombinations = generateCombinatorialStyles(mixins);
+
+    return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
+      const key = namingContext.createName(path, conflictMap, cssByVariantCombination.variants);
 
       return {
-        variantCombinationName,
-        css,
+        key,
+        styles: cssByVariantCombination.styles,
+        variants: cssByVariantCombination.variants,
         // Preserve the path for context-aware generators
-        path: mixins[0].path,
+        path,
       };
     });
   });
@@ -155,11 +149,12 @@ export const convertVariantGroupBy = (
 };
 
 /**
+ * @deprecated shouldn't be required, only here for backwards compatibility
  * Used specifically for tailwind styles
  */
 export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {
   return parsedStyleTokens.map((parsedStyleToken) => {
-    const tokens = Object.entries(parsedStyleToken.css).map(
+    const tokens = Object.entries(parsedStyleToken.styles).map(
       ([property, rawValue]) =>
         // Casting here since tailwind only needs these 2 properties
         ({
@@ -171,7 +166,7 @@ export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVa
     );
 
     return {
-      variantPath: parsedStyleToken.variantCombinationName,
+      variantPath: parsedStyleToken.key,
       tokens,
     };
   });

@@ -1,50 +1,125 @@
-export const output = {
+import { StylesForVariantsCombination } from '../../../transformers/variants';
+
+export const output: Record<string, StylesForVariantsCombination> = {
   'theme=green-theme': {
-    color: 'green',
+    styles: {
+      color: 'green',
+    },
+    variants: {
+      theme: 'green-theme',
+    },
   },
   'theme=pink-theme': {
-    color: 'pink',
-    height: '8px',
-    'line-height': '1px',
+    styles: {
+      color: 'pink',
+      height: '8px',
+      'line-height': '1px',
+    },
+    variants: {
+      theme: 'pink-theme',
+    },
   },
   'theme=purple-theme': {
-    color: 'purple',
-    height: '32px',
-    'line-height': '15px',
+    styles: {
+      color: 'purple',
+      height: '32px',
+      'line-height': '15px',
+    },
+    variants: {
+      theme: 'purple-theme',
+    },
   },
   'theme=red-theme': {
-    color: 'red',
+    styles: {
+      color: 'red',
+    },
+    variants: {
+      theme: 'red-theme',
+    },
   },
   'theme=yellow-theme': {
-    color: 'yellow',
+    styles: {
+      color: 'yellow',
+    },
+    variants: {
+      theme: 'yellow-theme',
+    },
   },
   'size=small--icon=false': {
-    height: '10px',
-    'line-height': '5px',
+    styles: {
+      height: '10px',
+      'line-height': '5px',
+    },
+    variants: {
+      size: 'small',
+      icon: 'false',
+    },
   },
   'size=medium--icon=true': {
-    height: '16px',
-    'line-height': '5px',
+    styles: {
+      height: '16px',
+      'line-height': '5px',
+    },
+    variants: {
+      size: 'medium',
+      icon: 'true',
+    },
   },
   'size=medium--icon=false': {
-    height: '20px',
-    'line-height': '10px',
+    styles: {
+      height: '20px',
+      'line-height': '10px',
+    },
+    variants: {
+      size: 'medium',
+      icon: 'false',
+    },
   },
   'size=large--icon=false': {
-    height: '30px',
+    styles: {
+      height: '30px',
+    },
+    variants: {
+      size: 'large',
+      icon: 'false',
+    },
   },
   'size=large--icon=true': {
-    height: '32px',
+    styles: {
+      height: '32px',
+    },
+    variants: {
+      size: 'large',
+      icon: 'true',
+    },
   },
   'theme=red-theme--size=medium--icon=false': {
-    height: '40px',
-    'line-height': '20px',
+    styles: {
+      height: '40px',
+      'line-height': '20px',
+    },
+    variants: {
+      theme: 'red-theme',
+      size: 'medium',
+      icon: 'false',
+    },
   },
   'size=small--icon=true': {
-    height: '8px',
-    'line-height': '1px',
+    styles: {
+      height: '8px',
+      'line-height': '1px',
+    },
+    variants: {
+      size: 'small',
+      icon: 'true',
+    },
   },
   'size=large': {
-    'line-height': '15px',
+    styles: {
+      'line-height': '15px',
+    },
+    variants: {
+      size: 'large',
+    },
   },
 };

@@ -83,12 +83,12 @@ When using `@apply` with custom `@utility` blocks, Tailwind uses **alphabetical 
 
 ```css
 .test-custom {
-  padding: calc(var(--spacing) * 5);  /* bap */
-  padding: calc(var(--spacing) * 2);  /* bar */
-  padding: calc(var(--spacing) * 3);  /* baz */
-  padding: calc(var(--spacing) * 4);  /* boom */
-  padding: calc(var(--spacing) * 6);  /* bow */
-  padding: calc(var(--spacing) * 1);  /* foo */
+  padding: calc(var(--spacing) * 5); /* bap */
+  padding: calc(var(--spacing) * 2); /* bar */
+  padding: calc(var(--spacing) * 3); /* baz */
+  padding: calc(var(--spacing) * 4); /* boom */
+  padding: calc(var(--spacing) * 6); /* bow */
+  padding: calc(var(--spacing) * 1); /* foo */
 }
 ```
 

@@ -1,8 +1,8 @@
 import {
-  BaseToken,
   ComponentSetToken,
   ComponentToken,
   InstanceToken,
+  PathNode,
   StyleToken,
   VariableToken,
 } from '../types';
@@ -36,8 +36,6 @@ export const extractComponentToken = (
 };
 
 export const extractComponentSetToken = (node: ComponentSetNode): ComponentSetToken => {
-  node.componentPropertyDefinitions;
-
   const variantPropertyDefinitions: Record<string, string[]> = {};
 
   for (const [key, value] of Object.entries(node.componentPropertyDefinitions)) {
@@ -61,7 +59,7 @@ const variableTokensCache = new Map<string, VariableToken>();
 export async function extractNodeToken(
   node: SceneNode,
   processor: StyleProcessor,
-  path: BaseToken['path'],
+  pathNodes: PathNode[],
   componentToken?: ComponentToken | null,
   componentSetToken?: ComponentSetToken | null,
 ): Promise<(StyleToken | VariableToken)[]> {
@@ -82,7 +80,7 @@ export async function extractNodeToken(
     // All variable tokens of a property should already be unique and varId
     // shouldn't have to be included. This is because any style token should
     // only attempt to set one css property.
-    token ??= await collectBoundVariable(varId, property, path, node);
+    token ??= await collectBoundVariable(varId, property, pathNodes, node);
 
     if (!token) {
       throw new Error('Unexpected null token for variable');
@@ -150,12 +148,12 @@ export async function extractNodeToken(
   if (processedValue) {
     const styleToken: StyleToken = {
       type: 'style',
-      name: path.map(({ name }) => name).join('_'),
+      name: pathNodes.map(({ name }) => name).join('_'),
       value: processedValue.value,
       rawValue: processedValue.rawValue,
       valueType: processedValue.valueType,
       property: processor.property,
-      path, //: path.length > 1 ? path.slice(1) : path,
+      path: pathNodes,
       // Deprecated and will be removed in the future
       variables: variableTokensMap.size > 0 ? [...variableTokensMap.values()] : undefined,
       variableTokenMapByProperty,

@@ -52,9 +52,11 @@ export const convert = (
   });
 };
 
-export const rem = (value: number | string | object, options?: any) => convert(value, 'rem', options);
+export const rem = (value: number | string | object, options?: ConvertOptions) =>
+  convert(value, 'rem', options);
 
-export const em = (value: number | string | object, baseline: number, options?: any) =>
+export const em = (value: number | string | object, baseline: number, options?: ConvertOptions) =>
   convert(value, 'em', { baseline, ...options });
 
-export const px = (value: number | string | object, options?: any) => convert(value, 'px', options);
+export const px = (value: number | string | object, options?: ConvertOptions) =>
+  convert(value, 'px', options);

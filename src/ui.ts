@@ -48,7 +48,7 @@ window.onload = () => {
     //  alphanumeric and ._-/ are valid, but:
     //  no initial dot
     //  no final slash
-    const processedValue = branchNameInput.value.replace(/^\.|[^-\/.\w]|\/$/g, '-');
+    const processedValue = branchNameInput.value.replace(/^\.|[^-/.\w]|\/$/g, '-');
     branchNameInput.value = processedValue;
     saveConfig();
   };
@@ -144,7 +144,7 @@ window.onload = () => {
     const msg = event.data.pluginMessage as MessageToUIPayload;
 
     switch (msg.type) {
-      case 'output-styles':
+      case 'output-styles': {
         generatedScss = true;
         const warnings = document.getElementById('warnings') as HTMLDivElement;
         const output = document.getElementById('output') as HTMLDivElement;
@@ -226,7 +226,8 @@ window.onload = () => {
           };
         }
         break;
-      case 'config-loaded':
+      }
+      case 'config-loaded': {
         repoPathInput.value = msg.config.repoPath || '';
         filePathInput.value = msg.config.filePath || '';
         branchNameInput.value = msg.config.branchName || '';
@@ -241,16 +242,18 @@ window.onload = () => {
         if (targetRadio) targetRadio.checked = true;
 
         break;
-      case 'pr-created':
+      }
+      case 'pr-created': {
         const statusEl = document.getElementById('status') as HTMLSpanElement;
         statusEl.innerHTML = `PR created! <a href="${msg.prUrl}" target="_blank">View PR</a>`;
         createPRBtn.disabled = false;
         break;
+      }
       case 'error':
         createPRBtn.disabled = false;
         alert(`Error: ${msg.message}`);
         break;
-      case 'test-data-exported':
+      case 'test-data-exported': {
         // Create and trigger download
         const blob = new Blob([msg.data], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -262,7 +265,8 @@ window.onload = () => {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         break;
-      case 'progress-start':
+      }
+      case 'progress-start': {
         progressContainer.style.display = 'block';
         progressFill.style.width = '0%';
         progressText.textContent = 'Starting...';
@@ -270,7 +274,8 @@ window.onload = () => {
         spinner.classList.add('active');
 
         break;
-      case 'progress-update':
+      }
+      case 'progress-update': {
         const { progress, message, id } = msg;
 
         progressFill.style.width = `${progress}%`;
@@ -280,6 +285,7 @@ window.onload = () => {
         messageMainThread({ type: 'progress-updated', id });
 
         break;
+      }
       case 'progress-end':
         progressFill.style.width = `100%`;
         progressText.textContent = 'Complete!';

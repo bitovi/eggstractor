@@ -11,13 +11,13 @@ interface BorderWeights {
 interface BorderColor {
   value: string;
   rawValue: string;
-  variable?: any;
+  variable?: VariableToken;
 }
 
 interface BorderWidth {
   value: string;
   rawValue: string;
-  variable?: any;
+  variable?: VariableToken;
 }
 
 interface BorderSideConfig {

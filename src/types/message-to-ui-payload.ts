@@ -1,4 +1,4 @@
-import { GithubConfig } from "./github-config";
+import { GithubConfig } from './github-config';
 
 export interface BaseMessageToUIPayload {
   type: string;

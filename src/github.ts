@@ -50,7 +50,7 @@ export default {
   getGithubConfig: async function getGithubConfig() {
     try {
       const savedConfig = figma.root.getPluginData('githubConfig');
-      const config = savedConfig ? JSON.parse(savedConfig) as GithubConfig : null;
+      const config = savedConfig ? (JSON.parse(savedConfig) as GithubConfig) : null;
       return config;
     } catch (error) {
       console.error('Error reading config:', error);
@@ -76,7 +76,7 @@ export default {
       if (!repoResponse.ok) {
         throw new Error(`Repository not found: ${repoPath}`);
       }
-      const repoData = await repoResponse.json();
+      const repoData = (await repoResponse.json()) as { default_branch: string };
       const defaultBranch = repoData.default_branch;
 
       // Try to create branch, but don't fail if it exists
@@ -88,7 +88,7 @@ export default {
         if (!refResponse.ok) {
           throw new Error(`Default branch "${defaultBranch}" not found`);
         }
-        const refData = await refResponse.json();
+        const refData = (await refResponse.json()) as { object: { sha: string } };
         const sha = refData.object.sha;
 
         await fetch(`${baseUrl}/repos/${repoPath}/git/refs`, {
@@ -122,10 +122,10 @@ export default {
           { headers },
         );
         if (fileResponse.ok) {
-          const fileData = await fileResponse.json();
+          const fileData = (await fileResponse.json()) as { sha: string };
           fileSha = fileData.sha;
         }
-      } catch (error) {
+      } catch {
         // File doesn't exist yet, which is fine
       }
 
@@ -142,7 +142,7 @@ export default {
       });
 
       if (!createFileResponse.ok) {
-        const error = await createFileResponse.json();
+        const error = (await createFileResponse.json()) as { message: string };
         throw new Error(`Failed to update file: ${error.message}`);
       }
 
@@ -151,7 +151,7 @@ export default {
         `${baseUrl}/repos/${repoPath}/pulls?head=${repoPath.split('/')[0]}:${branchName}&state=open`,
         { headers },
       );
-      const existingPRs = await existingPRsResponse.json();
+      const existingPRs = (await existingPRsResponse.json()) as { html_url: string }[];
 
       let prUrl: string;
       if (existingPRs.length > 0) {
@@ -171,10 +171,10 @@ export default {
         });
 
         if (!prResponse.ok) {
-          const error = await prResponse.json();
+          const error = (await prResponse.json()) as { message: string };
           throw new Error(`Failed to create PR: ${error.message}`);
         }
-        const prData = await prResponse.json();
+        const prData = (await prResponse.json()) as { html_url: string };
         prUrl = prData.html_url;
       }
 

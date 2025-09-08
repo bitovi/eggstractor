@@ -1,3 +1,6 @@
+/**
+ * Converts RGBA color components to a hex string or rgba() string.
+ */
 export function rgbaToString(r: number, g: number, b: number, a: number): string {
   const rHex = Math.round(r * 255)
     .toString(16)
@@ -6,9 +9,6 @@ export function rgbaToString(r: number, g: number, b: number, a: number): string
     .toString(16)
     .padStart(2, '0');
   const bHex = Math.round(b * 255)
-    .toString(16)
-    .padStart(2, '0');
-  const aHex = Math.round(a * 255)
     .toString(16)
     .padStart(2, '0');
 

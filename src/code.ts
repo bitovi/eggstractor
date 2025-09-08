@@ -50,10 +50,9 @@ function updateProgress(progress: number, message: string): Promise<void> {
   const id = ++progressUpdateIdCount;
 
   // Allow promise to resolve once UI has received the update
-  let resolve: () => void, reject: () => void;
-  const progressUpdated = new Promise<void>((res, rej) => {
+  let resolve: () => void;
+  const progressUpdated = new Promise<void>((res) => {
     resolve = res;
-    reject = rej;
   });
   progressUpdateTasks[id] = () => {
     resolve();

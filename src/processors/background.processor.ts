@@ -6,7 +6,7 @@ export const backgroundProcessors: StyleProcessor[] = [
     property: 'background',
     bindingKey: 'fills',
     process: async (
-      variableTokenMapByProperty: Map<string, VariableToken>, 
+      variableTokenMapByProperty: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
       if (node && 'fills' in node && Array.isArray(node.fills)) {
@@ -59,7 +59,7 @@ export const backgroundProcessors: StyleProcessor[] = [
     property: 'opacity',
     bindingKey: 'opacity',
     process: async (
-      variableTokenMapByProperty: Map<string, VariableToken>, 
+      variableTokenMapByProperty: Map<string, VariableToken>,
       node?: SceneNode,
     ): Promise<ProcessedValue | null> => {
       if (node && 'opacity' in node && node.opacity !== 1) {

@@ -12,7 +12,7 @@ import {
   extractInstanceSetToken,
   extractNodeToken,
 } from '../services';
-import { getNodePathNames, MAX_PROGRESS_PERCENTAGE, delay } from '../utils';
+import { MAX_PROGRESS_PERCENTAGE, delay, getParentSceneNodes } from '../utils';
 
 /**
  * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
@@ -24,7 +24,7 @@ function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]
     type: 'style',
     value: null,
     rawValue: null,
-    path: [{ name: componentSetNode.name || 'unnamed', type: 'COMPONENT_SET' }],
+    path: [{ name: componentSetNode.name || 'unnamed', type: 'COMPONENT_SET' } as SceneNode],
     warnings: [
       `Component set "${componentSetNode.name}" contains duplicate variants: ${duplicateNames.join(', ')}. ` +
         `Remove duplicate components in Figma to fix this issue.`,
@@ -238,14 +238,14 @@ export async function collectTokens(onProgress: (progress: number, message: stri
         }
       }
 
-      const nodePathNames = getNodePathNames(node);
+      const parentSceneNodes = getParentSceneNodes(node);
       const processors = getProcessorsForNode(node);
 
       for (const processor of processors) {
         const tokens = await extractNodeToken(
           node,
           processor,
-          nodePathNames,
+          parentSceneNodes,
           componentToken,
           componentSetToken,
         );
