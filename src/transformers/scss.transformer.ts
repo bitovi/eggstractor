@@ -3,24 +3,41 @@ import { sanitizeName, rem, createNamingContext } from '../utils';
 import { deduplicateMessages, groupBy } from './utils';
 import { convertVariantGroupBy } from './variants-middleware';
 
+const getSCSSVariableName = (variableName: string): string => {
+  let scssVariableName = variableName;
+
+  if (!/^[a-zA-Z]/.test(scssVariableName)) {
+    scssVariableName = 'v' + scssVariableName;
+  }
+
+  return `$${scssVariableName}`;
+};
+
 const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
     // Only use CSS variables if the token has associated variables
     if (token.variables && token.variables.length > 0) {
       const gradientName = `gradient-${sanitizeName(token.name)}`;
-      return { [token.property]: `$var(--${gradientName}, #{$${gradientName}})` };
+      return {
+        [token.property]: `$var(--${gradientName}, #{${getSCSSVariableName(gradientName)}})`,
+      };
     }
 
     // Use the raw value directly if no variables are involved
     const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+
     // output += ` ${token.property}: ${value};\n`;
     return { [token.property]: value };
   }
 
   const baseValue = token.valueType === 'px' ? rem(token.value!) : token.value;
   // in SCSS negated variables are a parsing warning unless parenthesized
-  const processedValue = baseValue?.replace(/-\$(\w|-)+/g, (match) => `(${match})`);
-
+  const processedValue = baseValue
+    ?.replace(/-\$(\w|-)+/g, (match) => `(${match})`)
+    ?.replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
+  if (processedValue?.startsWith('$')) {
+    console.log(processedValue);
+  }
   return { [token.property]: processedValue! };
 };
 
@@ -50,7 +67,7 @@ export function transformToScss(
 
   // Output color variables
   colorVariables.forEach((value, name) => {
-    output += `$${name}: ${value};\n`;
+    output += `${getSCSSVariableName(name)}: ${value};\n`;
   });
 
   // Then collect and output gradient variables
@@ -75,10 +92,10 @@ export function transformToScss(
     // Replace color values with variable references if they exist
     let gradientValue = token.rawValue ?? '';
     colorVariables.forEach((value, colorName) => {
-      gradientValue = gradientValue.replace(value, `$${colorName}`);
+      gradientValue = gradientValue.replace(value, `${getSCSSVariableName(colorName)}`);
     });
     if (gradientValue) {
-      output += `$${name}: ${gradientValue};\n`;
+      output += `#{${getSCSSVariableName(name)}}: ${gradientValue};\n`;
     }
   });
 

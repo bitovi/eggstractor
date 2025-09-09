@@ -56,13 +56,19 @@ export const extractComponentSetToken = (node: ComponentSetNode): ComponentSetTo
 
 const variableTokensCache = new Map<string, VariableToken>();
 
+interface Issue {
+  message: string;
+  error: string;
+}
+
 export async function extractNodeToken(
   node: SceneNode,
   processor: StyleProcessor,
   pathNodes: PathNode[],
   componentToken?: ComponentToken | null,
   componentSetToken?: ComponentSetToken | null,
-): Promise<(StyleToken | VariableToken)[]> {
+): Promise<{ tokens: (StyleToken | VariableToken)[]; issues: Issue[] }> {
+  const issues: Issue[] = [];
   const tokens: (StyleToken | VariableToken)[] = [];
   const variableTokensMap = new Map<string, VariableToken>();
 
@@ -136,9 +142,13 @@ export async function extractNodeToken(
       // All VariableTokens for a single StyleToken should be unique by property
       // This is because we currently are not supporting multiple variable
       // tokens for the same property.
-      throw new Error(
-        `Variable token for property "${token.property}" already exists in the map. Key: ${key}`,
-      );
+      // throw new Error(
+      //   `Variable token for property "${token.property}" already exists in the map. Key: ${key}`,
+      // );
+      issues.push({
+        message: `Duplicate variable token for property "${token.property}" found. Only one variable token per property is allowed. ${token.metadata?.figmaId ?? 'UNKNOWN_ID'}`,
+        error: `DUPLICATE_VARIABLE_TOKEN_PROPERTY: ${key} ${token.property} ${token.metadata?.figmaId ?? 'UNKNOWN_ID'}`,
+      });
     }
   });
 
@@ -168,5 +178,5 @@ export async function extractNodeToken(
     tokens.push(styleToken);
   }
 
-  return tokens;
+  return { tokens, issues };
 }
