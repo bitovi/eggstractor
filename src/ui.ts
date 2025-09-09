@@ -14,7 +14,6 @@ window.onload = () => {
   const filePathInput = document.getElementById('filePath') as HTMLInputElement;
   const branchNameInput = document.getElementById('branchName') as HTMLInputElement;
   const githubTokenInput = document.getElementById('githubToken') as HTMLInputElement;
-  const devControls = document.getElementById('devControls') as HTMLDivElement;
   const formatSelect = document.getElementById('formatSelect') as HTMLSelectElement;
   const progressContainer = document.getElementById('progressContainer') as HTMLDivElement;
   const progressFill = document.getElementById('progressFill') as HTMLDivElement;
@@ -31,7 +30,6 @@ window.onload = () => {
   // Check if we're in development mode
   const isDevelopment = process.env.NODE_ENV === 'development';
   if (isDevelopment) {
-    devControls.style.display = 'block';
     const exportBtn = document.getElementById('exportTestDataBtn');
     if (exportBtn) {
       exportBtn.style.display = 'inline-block';
