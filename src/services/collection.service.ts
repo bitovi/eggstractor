@@ -4,6 +4,7 @@ import {
   InstanceToken,
   StyleToken,
   TokenCollection,
+  VariableToken,
 } from '../types';
 import { getProcessorsForNode } from '../processors';
 import {
@@ -12,7 +13,14 @@ import {
   extractInstanceSetToken,
   extractNodeToken,
 } from '../services';
-import { MAX_PROGRESS_PERCENTAGE, delay, getParentSceneNodes } from '../utils';
+import {
+  MAX_PROGRESS_PERCENTAGE,
+  delay,
+  getParentSceneNodes,
+  normalizeValue,
+  rgbaToString,
+  sanitizeName,
+} from '../utils';
 
 /**
  * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
@@ -163,6 +171,76 @@ export function getFlattenedValidNodes(node: BaseNode): {
   return { validNodes: result, warningTokens };
 }
 
+export async function createPrimitiveVariableToken(
+  variable: Variable,
+): Promise<VariableToken | null> {
+  try {
+    // Check ALL modes for aliases, not just the first one
+    const allModeValues = Object.values(variable.valuesByMode);
+    const hasAnyAlias = allModeValues.some(
+      (value) =>
+        value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS',
+    );
+
+    if (hasAnyAlias) {
+      console.log(`🚫 Skipping alias variable: ${variable.name}`);
+      return null;
+    }
+
+    // Get first mode value for processing
+    const modeId = Object.keys(variable.valuesByMode)[0];
+    const value = variable.valuesByMode[modeId];
+
+    // Only collect primitive variables with direct values
+    let rawValue: string;
+    let property: string;
+
+    switch (variable.resolvedType) {
+      case 'COLOR':
+        if (typeof value === 'object' && 'r' in value) {
+          const color = value as RGB | RGBA;
+          const opacity = 'a' in color ? color.a : 1;
+          rawValue = rgbaToString(color.r, color.g, color.b, opacity);
+          property = 'color';
+        } else {
+          return null;
+        }
+        break;
+      case 'FLOAT':
+        rawValue = normalizeValue({
+          propertyName: 'spacing',
+          value: value as number,
+        });
+        property = 'spacing';
+        break;
+      case 'STRING':
+        rawValue = value as string;
+        property = variable.name.toLowerCase().includes('font') ? 'font-family' : 'string';
+        break;
+      default:
+        return null;
+    }
+
+    return {
+      type: 'variable',
+      path: [{ name: variable.name, type: 'VARIABLE' as any }],
+      property,
+      name: sanitizeName(variable.name),
+      value: `$${sanitizeName(variable.name)}`,
+      rawValue: rawValue.toLowerCase(),
+      valueType: rawValue.includes('px') ? 'px' : null,
+      metadata: {
+        variableId: variable.id,
+        variableName: variable.name,
+        variableTokenType: 'primitive',
+      },
+    };
+  } catch (error) {
+    console.warn(`Failed to create token for variable ${variable.name}:`, error);
+    return null;
+  }
+}
+
 export async function collectTokens(onProgress: (progress: number, message: string) => void) {
   const collection: TokenCollection = {
     tokens: [],
@@ -276,6 +354,10 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
   onProgress(0, 'Loading pages...');
   await figma.loadAllPagesAsync();
+
+  // Collect standalone Figma Variables (primitive tokens)
+  await collectAllFigmaVariables(collection, onProgress);
+
   onProgress(5, 'Counting nodes...');
 
   const allPageResults = figma.root.children.map((page) => getFlattenedValidNodes(page));
@@ -291,4 +373,42 @@ export async function collectTokens(onProgress: (progress: number, message: stri
   }
 
   return collection as Readonly<TokenCollection>;
+}
+
+/**
+ * Collect primitive Figma Variables (non-alias variables with direct values)
+ */
+async function collectAllFigmaVariables(
+  collection: TokenCollection,
+  onProgress: (progress: number, message: string) => void,
+) {
+  try {
+    onProgress(5, 'Collecting Figma Variables...');
+    const primitiveTokens: VariableToken[] = [];
+
+    // Get all variable collections
+    const variableCollections = await figma.variables.getLocalVariableCollectionsAsync();
+
+    for (const varCollection of variableCollections) {
+      onProgress(7, `Processing variable collection: ${varCollection.name}`);
+
+      // Get all variables in this collection
+      for (const variableId of varCollection.variableIds) {
+        const variable = await figma.variables.getVariableByIdAsync(variableId);
+
+        if (variable) {
+          // Create VariableToken for each primitive variable
+          const token = await createPrimitiveVariableToken(variable);
+          if (token) {
+            primitiveTokens.push(token);
+          }
+        }
+      }
+    }
+
+    console.log(`✨ Collected ${primitiveTokens.length} primitive variable tokens`);
+    collection.tokens.push(...primitiveTokens);
+  } catch (error) {
+    console.warn('Failed to collect Figma Variables:', error);
+  }
 }
