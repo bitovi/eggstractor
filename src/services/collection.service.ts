@@ -17,6 +17,25 @@ import { MAX_PROGRESS_PERCENTAGE, delay, getParentSceneNodes } from '../utils';
 /**
  * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
  */
+function createErrorToken(
+  issue: Awaited<ReturnType<typeof extractNodeToken>>['issues'][0],
+): StyleToken {
+  return {
+    property: issue.error,
+    name: `duplicate-variable-token-error`,
+    type: 'style',
+    value: null,
+    rawValue: null,
+    path: [{ name: 'NONE', type: 'COMPONENT_SET' } as SceneNode],
+    warnings: [issue.message],
+    // STUB
+    variableTokenMapByProperty: new Map(),
+  };
+}
+
+/**
+ * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
+ */
 function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]): StyleToken {
   return {
     property: `warning-${componentSetNode.id}`,
@@ -242,7 +261,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
       const processors = getProcessorsForNode(node);
 
       for (const processor of processors) {
-        const tokens = await extractNodeToken(
+        const { tokens, issues } = await extractNodeToken(
           node,
           processor,
           parentSceneNodes,
@@ -250,6 +269,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
           componentSetToken,
         );
         collection.tokens.push(...tokens);
+        collection.tokens.push(...issues.map((issue) => createErrorToken(issue)));
       }
     }
   }

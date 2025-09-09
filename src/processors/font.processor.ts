@@ -20,6 +20,13 @@ function hasTextAlign(node: SceneNode): node is SceneNode & NodeWithTextAlign {
   return 'textAlignHorizontal' in node;
 }
 
+function isSymbol(value: unknown): value is symbol {
+  return (
+    typeof value === 'symbol' ||
+    (typeof value === 'object' && Object.prototype.toString.call(value) === '[object Symbol]')
+  );
+}
+
 export const fontProcessors: StyleProcessor[] = [
   {
     property: 'color',
@@ -105,6 +112,17 @@ export const fontProcessors: StyleProcessor[] = [
       if (!node || !hasFont(node)) return null;
 
       if (node.fontWeight) {
+        if (isSymbol(node.fontWeight)) {
+          console.error(node);
+          return {
+            warnings: [
+              `Unexpected fontWeight symbol value on node ${node.id}. Likely a node with mixed font weight.`,
+            ],
+            errors: [],
+            value: null,
+            rawValue: null,
+          };
+        }
         return {
           value: String(node.fontWeight),
           rawValue: String(node.fontWeight),
@@ -133,6 +151,7 @@ export const fontProcessors: StyleProcessor[] = [
         };
 
         const style = node.fontName.style;
+        // TODO warning if unexpected font-weight was found?
         const weight = weightMap[style] || '400';
 
         return {
