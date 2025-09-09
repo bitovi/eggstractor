@@ -3,6 +3,7 @@ import {
   detectComponentSetDuplicates,
   shouldSkipInstanceTokenGeneration,
 } from '../../services/collection.service';
+import { createPrimitiveVariableToken } from '../../services/variable.service';
 import { InstanceToken, TokenCollection } from '../../types';
 
 beforeEach(() => {
@@ -173,5 +174,98 @@ describe('shouldSkipInstanceTokenGeneration', () => {
     );
 
     expect(result).toBe(false);
+  });
+});
+
+describe('createPrimitiveVariableToken', () => {
+  let createPrimitiveVariableTokenSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    // Spy on the actual function
+    createPrimitiveVariableTokenSpy = jest.spyOn(
+      require('../../services/variable.service'),
+      'createPrimitiveVariableToken',
+    );
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  const mockColorVariable = {
+    id: 'var-123',
+    name: 'Color/Blue/500',
+    resolvedType: 'COLOR',
+    valuesByMode: {
+      'mode-1': { r: 0, g: 0.5, b: 1 },
+    },
+  } as any;
+
+  it('should be called with correct parameters for color variables', async () => {
+    // Mock the implementation to return a known result
+    createPrimitiveVariableTokenSpy.mockResolvedValue({
+      type: 'variable',
+      property: 'color',
+      name: 'color-blue-500',
+      value: '$color-blue-500',
+      metadata: {
+        variableId: 'var-123',
+        variableName: 'Color/Blue/500',
+        variableTokenType: 'primitive',
+      },
+    });
+
+    const { createPrimitiveVariableToken } = require('../../services/variable.service');
+    const result = await createPrimitiveVariableToken(mockColorVariable);
+
+    expect(createPrimitiveVariableTokenSpy).toHaveBeenCalledWith(mockColorVariable);
+    expect(result).toEqual({
+      type: 'variable',
+      property: 'color',
+      name: 'color-blue-500',
+      value: '$color-blue-500',
+      metadata: {
+        variableId: 'var-123',
+        variableName: 'Color/Blue/500',
+        variableTokenType: 'primitive',
+      },
+    });
+  });
+
+  it('should return null for alias variables', async () => {
+    const aliasVariable = {
+      id: 'var-alias',
+      name: 'Color/Alias',
+      resolvedType: 'COLOR',
+      valuesByMode: {
+        'mode-1': { type: 'VARIABLE_ALIAS', id: 'other-var' },
+      },
+    } as any;
+
+    createPrimitiveVariableTokenSpy.mockResolvedValue(null);
+
+    const { createPrimitiveVariableToken } = require('../../services/variable.service');
+    const result = await createPrimitiveVariableToken(aliasVariable);
+
+    expect(result).toBeNull();
+  });
+
+  it('should return null for unsupported variable types', async () => {
+    const unsupportedVariable = {
+      id: 'var-unsupported',
+      name: 'Unsupported/Variable',
+      resolvedType: 'BOOLEAN',
+      valuesByMode: {
+        'mode-1': true,
+      },
+    } as any;
+
+    createPrimitiveVariableTokenSpy.mockResolvedValue(null);
+
+    const { createPrimitiveVariableToken } = require('../../services/variable.service');
+    const result = await createPrimitiveVariableToken(unsupportedVariable);
+
+    expect(result).toBeNull();
   });
 });
