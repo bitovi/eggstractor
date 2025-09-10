@@ -35,9 +35,6 @@ const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => 
   const processedValue = baseValue
     ?.replace(/-\$(\w|-)+/g, (match) => `(${match})`)
     ?.replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
-  if (processedValue?.startsWith('$')) {
-    console.log(processedValue);
-  }
   return { [token.property]: processedValue! };
 };
 

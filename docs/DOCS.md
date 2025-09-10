@@ -130,7 +130,7 @@ interface StyleProcessor {
   bindingKey?: string;
   process: (
     variableTokenMapByProperty: Map<string, VariableToken>,
-    node?: SceneNode,
+    node: SceneNode,
   ) => Promise<ProcessedValue | null>;
 }
 ```

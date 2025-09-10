@@ -7,9 +7,9 @@ export const backgroundProcessors: StyleProcessor[] = [
     bindingKey: 'fills',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      if (node && 'fills' in node && Array.isArray(node.fills)) {
+      if ('fills' in node && Array.isArray(node.fills)) {
         const visibleFills = node.fills.filter((fill) => fill.visible);
         if (!visibleFills.length) return null;
 
@@ -60,9 +60,9 @@ export const backgroundProcessors: StyleProcessor[] = [
     bindingKey: 'opacity',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      if (node && 'opacity' in node && node.opacity !== 1) {
+      if ('opacity' in node && node.opacity !== 1) {
         const opacityVariable = variableTokenMapByProperty.get('opacity');
         if (opacityVariable) {
           return {

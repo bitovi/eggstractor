@@ -29,7 +29,7 @@ export interface StyleProcessor {
   bindingKey: keyof VariableBindings | undefined;
   process: (
     variableTokenMapByProperty: Map<string, VariableToken>,
-    node?: SceneNode,
+    node: SceneNode,
   ) => Promise<ProcessedValue | null>;
 }
 

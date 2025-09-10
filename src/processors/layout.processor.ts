@@ -23,8 +23,8 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'display',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && 'layoutMode' in node && node.layoutMode !== 'NONE') {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
+      if ('layoutMode' in node && node.layoutMode !== 'NONE') {
         const value = 'flex';
         return { value, rawValue: value };
       }
@@ -35,8 +35,8 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'flex-direction',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && 'layoutMode' in node && node.layoutMode !== 'NONE') {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
+      if ('layoutMode' in node && node.layoutMode !== 'NONE') {
         const value = node.layoutMode === 'VERTICAL' ? 'column' : 'row';
         return { value, rawValue: value };
       }
@@ -46,9 +46,8 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'justify-content',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       if (
-        node &&
         'layoutMode' in node &&
         node.layoutMode !== 'NONE' &&
         'primaryAxisAlignItems' in node &&
@@ -68,13 +67,8 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'align-items',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (
-        node &&
-        'layoutMode' in node &&
-        node.layoutMode !== 'NONE' &&
-        'counterAxisAlignItems' in node
-      ) {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
+      if ('layoutMode' in node && node.layoutMode !== 'NONE' && 'counterAxisAlignItems' in node) {
         const alignMap = {
           MIN: 'flex-start',
           CENTER: 'center',
@@ -100,7 +94,7 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && 'itemSpacing' in node && node.itemSpacing > 0) {
+      if ('itemSpacing' in node && node.itemSpacing > 0) {
         const value = `${node.itemSpacing}px`;
         return { value, rawValue: value, valueType: 'px' };
       }
@@ -112,7 +106,7 @@ export const layoutProcessors: StyleProcessor[] = [
     bindingKey: 'minWidth',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
       const minWidthVariable = variableTokenMapByProperty.get('minWidth');
       if (minWidthVariable) {
@@ -123,7 +117,7 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && hasLayout(node) && node.minWidth) {
+      if (hasLayout(node) && node.minWidth) {
         return {
           value: `${node.minWidth}px`,
           rawValue: `${node.minWidth}px`,
@@ -138,7 +132,7 @@ export const layoutProcessors: StyleProcessor[] = [
     bindingKey: 'maxWidth',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
       const maxWidthVariable = variableTokenMapByProperty.get('maxWidth');
       if (maxWidthVariable) {
@@ -149,7 +143,7 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && hasLayout(node) && node.maxWidth) {
+      if (hasLayout(node) && node.maxWidth) {
         return {
           value: `${node.maxWidth}px`,
           rawValue: `${node.maxWidth}px`,
@@ -164,7 +158,7 @@ export const layoutProcessors: StyleProcessor[] = [
     bindingKey: 'minHeight',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
       const minHeightVariable = variableTokenMapByProperty.get('minHeight');
       if (minHeightVariable) {
@@ -175,7 +169,7 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && hasLayout(node) && node.minHeight) {
+      if (hasLayout(node) && node.minHeight) {
         return {
           value: `${node.minHeight}px`,
           rawValue: `${node.minHeight}px`,
@@ -190,7 +184,7 @@ export const layoutProcessors: StyleProcessor[] = [
     bindingKey: 'maxHeight',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
       const maxHeightVariable = variableTokenMapByProperty.get('maxHeight');
       if (maxHeightVariable) {
@@ -201,7 +195,7 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node && hasLayout(node) && node.maxHeight) {
+      if (hasLayout(node) && node.maxHeight) {
         return {
           value: `${node.maxHeight}px`,
           rawValue: `${node.maxHeight}px`,
@@ -214,8 +208,8 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'width',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (!node || !hasLayout(node)) return null;
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
+      if (!hasLayout(node)) return null;
 
       // Handle text nodes
       if (node.type === 'TEXT') {
@@ -249,8 +243,8 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'height',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (!node || !hasLayout(node)) return null;
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
+      if (!hasLayout(node)) return null;
 
       // Handle text nodes - height is usually determined by content
       if (node.type === 'TEXT') {
@@ -284,8 +278,8 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'flex-wrap',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (node && 'layoutMode' in node && node.layoutMode !== 'NONE' && 'layoutWrap' in node) {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
+      if ('layoutMode' in node && node.layoutMode !== 'NONE' && 'layoutWrap' in node) {
         const value = node.layoutWrap === 'WRAP' ? 'wrap' : '';
         return { value, rawValue: value };
       }
