@@ -71,6 +71,14 @@ export async function collectBoundVariable(
 
   if (!variable) return null;
 
+  // Detect if this is a semantic token
+  const isSemanticToken = variable.name.toLowerCase().includes('text') ||
+                         variable.name.toLowerCase().includes('brand') ||
+                         variable.name.toLowerCase().includes('primary') ||
+                         variable.name.toLowerCase().includes('secondary') ||
+                         variable.name.toLowerCase().includes('surface') ||
+                         variable.name.toLowerCase().includes('border');
+
   const rawValue = await getVariableFallback(variable, property);
   const valueType = rawValue.includes('px') ? 'px' : null;
 
@@ -86,6 +94,7 @@ export async function collectBoundVariable(
       figmaId: node.id,
       variableId: variable.id,
       variableName: variable.name,
+      variableTokenType: isSemanticToken ? 'semantic' : 'primitive', // Mark bound variables as semantic or primitive
     },
   };
 }

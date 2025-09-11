@@ -6,5 +6,6 @@ export * from './get-valid-stylesheet-format.utils';
 export * from './node.utils';
 export * from './string.utils';
 export * from './test.utils';
+export * from './theme-tokens.utils';
 export * from './units.utils';
 export * from './value.utils';
