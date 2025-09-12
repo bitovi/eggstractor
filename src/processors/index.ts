@@ -10,7 +10,6 @@ const LAYOUT_PROCESSORS = [
   ...backgroundProcessors,
   ...layoutProcessors,
   ...borderProcessors,
-  // spacingProcessors depend on borderProcessors being run first
   ...spacingProcessors,
 ];
 

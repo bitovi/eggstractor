@@ -39,14 +39,6 @@ export const transformToTailwindSassClass: Transformer = (
     }
   }
 
-  for (const { variantPath, tokens } of formattedStyleTokens) {
-    const classesToApply = createTailwindClasses(tokens);
-
-    if (classesToApply.length) {
-      output += `\n@mixin ${variantPath} {\n  @apply ${classesToApply.join(' ')}; \n}\n`;
-    }
-  }
-
   return {
     result: output,
     warnings,

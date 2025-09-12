@@ -11,6 +11,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '10px',
     },
+    path: [],
   },
   {
     variants: {
@@ -22,6 +23,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '20px',
     },
+    path: [],
   },
   {
     variants: {
@@ -33,6 +35,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '30px',
     },
+    path: [],
   },
 
   {
@@ -45,6 +48,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '8px',
     },
+    path: [],
   },
   {
     variants: {
@@ -56,6 +60,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '16px',
     },
+    path: [],
   },
   {
     variants: {
@@ -67,6 +72,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '32px',
     },
+    path: [],
   },
 
   // Green
@@ -81,6 +87,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '10px',
     },
+    path: [],
   },
   {
     variants: {
@@ -92,6 +99,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '20px',
     },
+    path: [],
   },
   {
     variants: {
@@ -103,6 +111,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '30px',
     },
+    path: [],
   },
 
   {
@@ -115,6 +124,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '8px',
     },
+    path: [],
   },
   {
     variants: {
@@ -126,6 +136,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '16px',
     },
+    path: [],
   },
   {
     variants: {
@@ -137,6 +148,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '32px',
     },
+    path: [],
   },
 
   // Yellow
@@ -151,6 +163,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '10px',
     },
+    path: [],
   },
   {
     variants: {
@@ -162,6 +175,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '20px',
     },
+    path: [],
   },
   {
     variants: {
@@ -173,6 +187,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '30px',
     },
+    path: [],
   },
 
   {
@@ -185,6 +200,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '8px',
     },
+    path: [],
   },
   {
     variants: {
@@ -196,6 +212,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '16px',
     },
+    path: [],
   },
   {
     variants: {
@@ -207,5 +224,6 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '32px',
     },
+    path: [],
   },
 ];

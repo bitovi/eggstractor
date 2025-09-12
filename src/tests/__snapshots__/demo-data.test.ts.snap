@@ -11,7 +11,7 @@ $base-font-weight-semibold: 31.25rem;
 $base-colour-static-white: #ffffff;
 $base-size-lg: 0.75rem;
 $base-radius-sm: 0.25rem;
-$global-size-border-width: 0.062rem;
+$global-size-border-width: 0.0625rem;
 $base-colour-grey-100: #d9d9d9;
 $global-colour-textonlight: #282828;
 $base-font-weight-regular: 25rem;
@@ -25,7 +25,7 @@ $base-colour-blue-300: #0177cc;
   align-items: flex-start;
   gap: $base-size-xs;
   padding: 0rem;
-  width: 15.937rem;
+  width: 15.9375rem;
 }
 @mixin input-label-resting {
   display: flex;
@@ -36,16 +36,16 @@ $base-colour-blue-300: #0177cc;
   font-weight: 500;
   font-style: normal;
   line-height: $base-font-linespacing-lg;
-  width: 15.937rem;
+  width: 15.9375rem;
 }
 @mixin input-input-box-resting {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: $base-size-lg;
-  padding: 0.687rem $base-size-lg;
+  padding: calc(0.6875rem - #{$global-size-border-width}) calc(#{$base-size-lg} - #{$global-size-border-width});
   background: $base-colour-static-white;
-  width: 15.937rem;
+  width: 15.9375rem;
   border: $global-size-border-width solid $base-colour-grey-100;
   box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-100, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-100, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-100, inset $global-size-border-width 0 0 0 $base-colour-grey-100;
   border-radius: $base-radius-sm;
@@ -59,7 +59,7 @@ $base-colour-blue-300: #0177cc;
   font-weight: 400;
   font-style: normal;
   line-height: 20px;
-  width: 14.437rem;
+  width: 14.4375rem;
 }
 @mixin input-hover {
   display: flex;
@@ -67,7 +67,7 @@ $base-colour-blue-300: #0177cc;
   align-items: flex-start;
   gap: $base-size-xs;
   padding: 0rem;
-  width: 15.937rem;
+  width: 15.9375rem;
 }
 @mixin input-label-hover {
   display: flex;
@@ -78,16 +78,16 @@ $base-colour-blue-300: #0177cc;
   font-weight: 500;
   font-style: normal;
   line-height: $base-font-linespacing-lg;
-  width: 15.937rem;
+  width: 15.9375rem;
 }
 @mixin input-input-box-hover {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: $base-size-lg;
-  padding: 0.687rem $base-size-lg;
+  padding: calc(0.6875rem - #{$global-size-border-width}) calc(#{$base-size-lg} - #{$global-size-border-width});
   background: $base-colour-static-white;
-  width: 15.937rem;
+  width: 15.9375rem;
   border: $global-size-border-width solid $base-colour-grey-300;
   box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-300, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-300, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-300, inset $global-size-border-width 0 0 0 $base-colour-grey-300;
   border-radius: $base-radius-sm;
@@ -101,7 +101,7 @@ $base-colour-blue-300: #0177cc;
   font-weight: 400;
   font-style: normal;
   line-height: 20px;
-  width: 14.437rem;
+  width: 14.4375rem;
 }
 @mixin input-active {
   display: flex;
@@ -109,7 +109,7 @@ $base-colour-blue-300: #0177cc;
   align-items: flex-start;
   gap: $base-size-xs;
   padding: 0rem;
-  width: 15.937rem;
+  width: 15.9375rem;
 }
 @mixin input-label-active {
   display: flex;
@@ -120,16 +120,16 @@ $base-colour-blue-300: #0177cc;
   font-weight: 500;
   font-style: normal;
   line-height: $base-font-linespacing-lg;
-  width: 15.937rem;
+  width: 15.9375rem;
 }
 @mixin input-input-box-active {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: $base-size-lg;
-  padding: 0.687rem $base-size-lg;
+  padding: 0.5625rem calc(#{$base-size-lg} - 0.125rem);
   background: $base-colour-static-white;
-  width: 15.937rem;
+  width: 15.9375rem;
   border: 0.125rem solid $base-colour-blue-300;
   box-shadow: inset 0 0.125rem 0 0 $base-colour-blue-300, inset -0.125rem 0 0 0 $base-colour-blue-300, inset 0 -0.125rem 0 0 $base-colour-blue-300, inset 0.125rem 0 0 0 $base-colour-blue-300;
   border-radius: $base-radius-sm;
@@ -143,7 +143,7 @@ $base-colour-blue-300: #0177cc;
   font-weight: 400;
   font-style: normal;
   line-height: 20px;
-  width: 14.437rem;
+  width: 14.4375rem;
 }
 "
 `;

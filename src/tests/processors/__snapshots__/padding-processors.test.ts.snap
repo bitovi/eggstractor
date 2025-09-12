@@ -15,13 +15,13 @@ $border-size-primary: 0.25rem;
   padding: 0rem 1rem;
   background: #ffffff;
 }
-@mixin padding-left-right_padding-1 {
+@mixin padding-left-right-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-left-right_padding-2 {
+@mixin padding-left-right-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-left-right_padding-3 {
+@mixin padding-left-right-padding-3 {
   background: $brand-primary;
 }
 @mixin padding-top-bottom {
@@ -31,13 +31,13 @@ $border-size-primary: 0.25rem;
   padding: 1.5rem 0rem;
   background: #ffffff;
 }
-@mixin padding-top-bottom_padding-1 {
+@mixin padding-top-bottom-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-top-bottom_padding-2 {
+@mixin padding-top-bottom-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-top-bottom_padding-3 {
+@mixin padding-top-bottom-padding-3 {
   background: $brand-primary;
 }
 @mixin padding-top-bottom-left-right {
@@ -47,13 +47,13 @@ $border-size-primary: 0.25rem;
   padding: 1rem;
   background: #ffffff;
 }
-@mixin padding-top-bottom-left-right_padding-1 {
+@mixin padding-top-bottom-left-right-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-top-bottom-left-right_padding-2 {
+@mixin padding-top-bottom-left-right-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-top-bottom-left-right_padding-3 {
+@mixin padding-top-bottom-left-right-padding-3 {
   background: $brand-primary;
 }
 @mixin padding-topright-bottomleft {
@@ -63,13 +63,13 @@ $border-size-primary: 0.25rem;
   padding: 1rem 1rem 1.5rem 1.5rem;
   background: #ffffff;
 }
-@mixin padding-topright-bottomleft_padding-1 {
+@mixin padding-topright-bottomleft-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-topright-bottomleft_padding-2 {
+@mixin padding-topright-bottomleft-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-topright-bottomleft_padding-3 {
+@mixin padding-topright-bottomleft-padding-3 {
   background: $brand-primary;
 }
 @mixin padding-topbottom-leftright {
@@ -79,13 +79,13 @@ $border-size-primary: 0.25rem;
   padding: 1.5rem 1rem;
   background: #ffffff;
 }
-@mixin padding-topbottom-leftright_padding-1 {
+@mixin padding-topbottom-leftright-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-topbottom-leftright_padding-2 {
+@mixin padding-topbottom-leftright-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-topbottom-leftright_padding-3 {
+@mixin padding-topbottom-leftright-padding-3 {
   background: $brand-primary;
 }
 @mixin padding-left-right-variable {
@@ -95,13 +95,13 @@ $border-size-primary: 0.25rem;
   padding: $size-null $corner-radius-primary;
   background: #ffffff;
 }
-@mixin padding-left-right-variable_padding-1 {
+@mixin padding-left-right-variable-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-left-right-variable_padding-2 {
+@mixin padding-left-right-variable-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-left-right-variable_padding-3 {
+@mixin padding-left-right-variable-padding-3 {
   background: $brand-primary;
 }
 @mixin padding-top-bottom-variable {
@@ -111,13 +111,13 @@ $border-size-primary: 0.25rem;
   padding: $corner-radius-primary $size-null;
   background: #ffffff;
 }
-@mixin padding-top-bottom-variable_padding-1 {
+@mixin padding-top-bottom-variable-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-top-bottom-variable_padding-2 {
+@mixin padding-top-bottom-variable-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-top-bottom-variable_padding-3 {
+@mixin padding-top-bottom-variable-padding-3 {
   background: $brand-primary;
 }
 @mixin padding-top-bottom-left-right-variable {
@@ -127,13 +127,13 @@ $border-size-primary: 0.25rem;
   padding: $corner-radius-primary;
   background: #ffffff;
 }
-@mixin padding-top-bottom-left-right-variable_padding-1 {
+@mixin padding-top-bottom-left-right-variable-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-top-bottom-left-right-variable_padding-2 {
+@mixin padding-top-bottom-left-right-variable-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-top-bottom-left-right-variable_padding-3 {
+@mixin padding-top-bottom-left-right-variable-padding-3 {
   background: $brand-primary;
 }
 @mixin padding-topright-bottomleft-variable {
@@ -143,13 +143,13 @@ $border-size-primary: 0.25rem;
   padding: $corner-radius-primary $corner-radius-primary $border-size-primary $border-size-primary;
   background: #ffffff;
 }
-@mixin padding-topright-bottomleft-variable_padding-1 {
+@mixin padding-topright-bottomleft-variable-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-topright-bottomleft-variable_padding-2 {
+@mixin padding-topright-bottomleft-variable-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-topright-bottomleft-variable_padding-3 {
+@mixin padding-topright-bottomleft-variable-padding-3 {
   background: $brand-primary;
 }
 @mixin padding-topbottom-leftright-variable {
@@ -159,13 +159,13 @@ $border-size-primary: 0.25rem;
   padding: $border-size-primary $corner-radius-primary;
   background: #ffffff;
 }
-@mixin padding-topbottom-leftright-variable_padding-1 {
+@mixin padding-topbottom-leftright-variable-padding-1 {
   background: $brand-primary;
 }
-@mixin padding-topbottom-leftright-variable_padding-2 {
+@mixin padding-topbottom-leftright-variable-padding-2 {
   background: $brand-primary;
 }
-@mixin padding-topbottom-leftright-variable_padding-3 {
+@mixin padding-topbottom-leftright-variable-padding-3 {
   background: $brand-primary;
 }
 "

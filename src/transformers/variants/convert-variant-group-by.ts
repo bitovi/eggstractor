@@ -67,10 +67,10 @@ export const convertVariantGroupBy = (
       );
 
       return {
-        // Used for grouping
+        // Used temporarily for grouping and should not be used outside of this
+        // function
         key,
         // Used for naming
-        // TODO:
         path: groupTokens[0].path,
         // Used for finding variants
         componentId,
@@ -85,9 +85,10 @@ export const convertVariantGroupBy = (
 
   if (!useCombinatorialParsing) {
     return instanceGroupedByVariants.map((variantGroup) => {
+      const key = namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants);
       return updatePaddingStylesBasedOnBorder({
         ...variantGroup,
-        key: namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants),
+        key,
       });
     });
   }
@@ -104,6 +105,8 @@ export const convertVariantGroupBy = (
 
   for (const variantGroup of instanceGroupedByVariants) {
     if (variantGroup.componentId && variantGroup.componentSetId) {
+      // Do not generate key yet for instances with variants since we need to
+      // calculate combinatorial styles first
       instancesWithVariant.push(
         variantGroup as typeof variantGroup & {
           componentId: string;
@@ -113,11 +116,15 @@ export const convertVariantGroupBy = (
       continue;
     }
 
-    instancesWithoutVariant.push(variantGroup);
+    // No variants so we can generate the key now
+    const key = namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants);
+    instancesWithoutVariant.push({ ...variantGroup, key });
   }
 
   const instancesWithVariantMap = instancesWithVariant.reduce(
     (acc, variantGroup) => {
+      // This key isn't used outside of organizing components within a component
+      // set. It should not be used outside of this temporary grouping.
       const key = variantGroup.path
         .filter((part) => part.type !== 'COMPONENT')
         .map(({ name }) => name.replace(/\s+/g, '-'))
@@ -131,13 +138,14 @@ export const convertVariantGroupBy = (
   );
 
   const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(
+    // We should not use the key from Object.entries since it's for temporary
+    // grouping only. Instead, use namingContext to generate the final key.
     ([, instances]) => {
       const cssByVariantCombinations = generateCombinatorialStyles(instances);
 
       return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
         const path = cssByVariantCombination.path;
         const key = namingContext.createName(path, conflictMap, cssByVariantCombination.variants);
-
         return {
           key,
           styles: cssByVariantCombination.styles,

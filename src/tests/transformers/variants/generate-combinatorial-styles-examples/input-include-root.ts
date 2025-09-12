@@ -25,6 +25,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '20px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -37,6 +38,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '30px',
       display: 'block',
     },
+    path: [],
   },
 
   {
@@ -50,6 +52,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '8px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -62,6 +65,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '16px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -74,6 +78,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '32px',
       display: 'block',
     },
+    path: [],
   },
 
   // Green
@@ -89,6 +94,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '10px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -101,6 +107,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '20px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -113,6 +120,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '30px',
       display: 'block',
     },
+    path: [],
   },
 
   {
@@ -126,6 +134,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '8px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -138,6 +147,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '16px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -150,6 +160,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '32px',
       display: 'block',
     },
+    path: [],
   },
 
   // Yellow
@@ -165,6 +176,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '10px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -177,6 +189,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '20px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -189,6 +202,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '30px',
       display: 'block',
     },
+    path: [],
   },
 
   {
@@ -202,6 +216,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '8px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -214,6 +229,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '16px',
       display: 'block',
     },
+    path: [],
   },
   {
     variants: {
@@ -226,6 +242,7 @@ export const input: StylesForVariantsCombination[] = [
       height: '32px',
       display: 'block',
     },
+    path: [],
   },
 
   // Special purple
@@ -239,6 +256,7 @@ export const input: StylesForVariantsCombination[] = [
       color: 'purple',
       height: '32px',
     },
+    path: [],
   },
 
   // Special pink
@@ -252,5 +270,6 @@ export const input: StylesForVariantsCombination[] = [
       color: 'pink',
       height: '8px',
     },
+    path: [],
   },
 ];
