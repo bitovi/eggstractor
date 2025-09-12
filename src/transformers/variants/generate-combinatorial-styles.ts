@@ -1,6 +1,9 @@
+import { PathNode } from '../../types';
+
 export type StylesForVariantsCombination = {
   styles: Record<string, string>;
   variants: Record<string, string>;
+  path: PathNode[];
 };
 
 type StyleNode = {
@@ -9,6 +12,8 @@ type StyleNode = {
   variants: Record<string, string>;
   possibleVariants: Record<string, string>;
   id: number;
+  // Preserve for naming context
+  path: PathNode[];
 };
 
 let i = 0;
@@ -103,7 +108,7 @@ function removeByComparison<T>(items: T[], comparison: (a: T, b: T) => boolean):
 }
 
 // TODO: consideration, we already have "Style" token, so maybe the shape of the input should match the existing style tokens
-export const getInitialStyleNodes = (source: StylesForVariantsCombination[]): StyleNode[] => {
+const getInitialStyleNodes = (source: StylesForVariantsCombination[]): StyleNode[] => {
   const styleNodes: StyleNode[] = [];
 
   for (const instance of source) {
@@ -126,6 +131,7 @@ export const getInitialStyleNodes = (source: StylesForVariantsCombination[]): St
           possibleVariants: { ...instance.variants },
           // TODO: StyleToken Component ID
           id,
+          path: instance.path,
         });
       }
     });
@@ -146,7 +152,7 @@ const getFinalizedStyleNodes = (styles: StyleNode[]): [StyleNode[], StyleNode[]]
   return [uniques, cleanedDuplicates];
 };
 
-export const createChildStyleNodes = (styles: StyleNode[]): StyleNode[] => {
+const createChildStyleNodes = (styles: StyleNode[]): StyleNode[] => {
   if (!styles.length) {
     return [];
   }
@@ -167,6 +173,7 @@ export const createChildStyleNodes = (styles: StyleNode[]): StyleNode[] => {
         },
         possibleVariants,
         id: instance.id,
+        path: instance.path,
       };
 
       return styleNode;
@@ -193,16 +200,10 @@ export const createChildStyleNodes = (styles: StyleNode[]): StyleNode[] => {
   return [...uniques, ...createChildStyleNodes(cleanedNestedChildStyleNodes)];
 };
 
-export const convertStyleNodesToCssStylesheet = (
+const convertStyleNodesToCssStylesheet = (
   styleNodes: StyleNode[],
 ): Record<string, StylesForVariantsCombination> => {
-  const styleTags: Record<
-    string,
-    {
-      styles: Record<string, string>;
-      variants: Record<string, string>;
-    }
-  > = {};
+  const styleTags: Record<string, StylesForVariantsCombination> = {};
 
   // Group all styles by "className/mixin/utility"
   for (const style of styleNodes) {
@@ -215,6 +216,7 @@ export const convertStyleNodesToCssStylesheet = (
     styleTags[key] ??= {
       styles: {},
       variants: style.variants,
+      path: style.path,
     };
 
     if (
@@ -231,6 +233,7 @@ export const convertStyleNodesToCssStylesheet = (
       throw new Error('Unexpected style exists for combination of variant');
     }
     styleTags[key].styles[style.cssProperty] = style.cssValue;
+    styleTags[key].path = style.path;
   }
 
   return styleTags;

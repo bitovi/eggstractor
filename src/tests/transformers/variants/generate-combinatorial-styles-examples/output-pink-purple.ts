@@ -1,43 +1,47 @@
-import { StylesForVariantsCombination } from '../../../transformers/variants';
+import { StylesForVariantsCombination } from '../../../../transformers/variants';
 
 export const output: Record<string, StylesForVariantsCombination> = {
   'theme=green-theme': {
     styles: {
       color: 'green',
     },
-    variants: { theme: 'green-theme' },
+    variants: {
+      theme: 'green-theme',
+    },
   },
   'theme=pink-theme': {
     styles: {
       color: 'pink',
       height: '8px',
     },
-    variants: { theme: 'pink-theme' },
+    variants: {
+      theme: 'pink-theme',
+    },
   },
   'theme=purple-theme': {
     styles: {
       color: 'purple',
       height: '32px',
     },
-    variants: { theme: 'purple-theme' },
+    variants: {
+      theme: 'purple-theme',
+    },
   },
   'theme=red-theme': {
     styles: {
       color: 'red',
     },
-    variants: { theme: 'red-theme' },
+    variants: {
+      theme: 'red-theme',
+    },
   },
   'theme=yellow-theme': {
     styles: {
       color: 'yellow',
     },
-    variants: { theme: 'yellow-theme' },
-  },
-  ROOT: {
-    styles: {
-      display: 'block',
+    variants: {
+      theme: 'yellow-theme',
     },
-    variants: {},
   },
   'size=small--icon=false': {
     styles: {

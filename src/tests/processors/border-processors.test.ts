@@ -14,7 +14,7 @@ describe('Border Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
+    const { result } = transformToScss(tokens, false);
 
     expect(result).toMatchSnapshot('border');
   });
@@ -26,7 +26,7 @@ describe('Border Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
+    const { result } = transformToScss(tokens, false);
 
     expect(result).toMatchSnapshot('border-sides');
   });
@@ -38,7 +38,7 @@ describe('Border Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
+    const { result } = transformToScss(tokens, false);
 
     expect(result).toMatchSnapshot('border-shape');
   });
@@ -50,7 +50,7 @@ describe('Border Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
+    const { result } = transformToScss(tokens, false);
 
     expect(result).toMatchSnapshot('border-radius');
   });

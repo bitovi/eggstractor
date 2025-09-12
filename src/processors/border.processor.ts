@@ -30,8 +30,6 @@ export const borderProcessors: StyleProcessor[] = [
     property: 'border',
     bindingKey: 'strokes',
     process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
-      console.log('from borderProcessors border', [...variableTokenMapByProperty]);
-
       // For non-rectangular shapes, we don't care about strokeAlign
       const isRectangular =
         node.type === 'RECTANGLE' || node.type === 'COMPONENT' || node.type === 'INSTANCE';
@@ -120,8 +118,6 @@ export const borderProcessors: StyleProcessor[] = [
     property: 'outline',
     bindingKey: undefined,
     process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
-      console.log('from borderProcessors outline', [...variableTokenMapByProperty]);
-
       if ('strokeAlign' in node && node.strokeAlign !== 'OUTSIDE') {
         return null;
       }
@@ -155,8 +151,6 @@ export const borderProcessors: StyleProcessor[] = [
     property: 'box-shadow',
     bindingKey: undefined,
     process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
-      console.log('from borderProcessors box-shadow', [...variableTokenMapByProperty]);
-
       if ('strokeAlign' in node && node.strokeAlign !== 'INSIDE') {
         return null;
       }

@@ -1,7 +1,8 @@
 import { TokenCollection, StyleToken, TransformerResult } from '../types';
 import { sanitizeName, rem, createNamingContext } from '../utils';
 import { deduplicateMessages, groupBy } from './utils';
-import { convertVariantGroupBy } from './variants-middleware';
+import { convertVariantGroupBy } from './variants';
+import type { Transformer } from './types';
 
 const getSCSSVariableName = (variableName: string): string => {
   let scssVariableName = variableName;
@@ -38,10 +39,10 @@ const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => 
   return { [token.property]: processedValue! };
 };
 
-export function transformToScss(
+export const transformToScss: Transformer = (
   tokens: TokenCollection,
-  useCombinatorialParsing: boolean = true,
-): TransformerResult {
+  useCombinatorialParsing: boolean,
+): TransformerResult => {
   let output = '';
 
   // Deduplicate warnings and errors from style tokens only
@@ -114,7 +115,7 @@ export function transformToScss(
   );
 
   const namingContext = createNamingContext();
-  const mixins = convertVariantGroupBy(
+  const selectors = convertVariantGroupBy(
     tokens,
     variantGroups,
     getMixinPropertyAndValue,
@@ -122,9 +123,9 @@ export function transformToScss(
     useCombinatorialParsing,
   );
 
-  for (const mixin of mixins) {
-    output += `@mixin ${mixin.key} {\n`;
-    Object.entries(mixin.styles).forEach(([property, value]) => {
+  for (const selector of selectors) {
+    output += `@mixin ${selector.key} {\n`;
+    Object.entries(selector.styles).forEach(([property, value]) => {
       output += `  ${property}: ${value};\n`;
     });
     output += '}\n';
@@ -135,7 +136,7 @@ export function transformToScss(
     warnings,
     errors,
   };
-}
+};
 
 // Helper function to sort and dedupe tokens
 function sortAndDedupeTokens(tokens: StyleToken[]): StyleToken[] {

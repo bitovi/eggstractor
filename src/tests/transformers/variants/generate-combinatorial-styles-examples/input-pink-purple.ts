@@ -1,4 +1,4 @@
-import { StylesForVariantsCombination } from '../../../transformers/variants';
+import { StylesForVariantsCombination } from '../../../../transformers/variants';
 
 export const input: StylesForVariantsCombination[] = [
   {

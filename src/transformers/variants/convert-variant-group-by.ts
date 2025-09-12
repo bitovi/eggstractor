@@ -1,26 +1,29 @@
-import { NonNullableStyleToken, StyleToken, TokenCollection } from '../types';
-import { NamingContext } from '../utils';
-import { generateCombinatorialStyles, StylesForVariantsCombination } from './variants';
-
-type PartialStyleToken = Omit<
-  StyleToken,
-  'name' | 'property' | 'type' | 'value' | 'rawValue' | 'variableTokenMapByProperty'
->;
+import { StyleToken, TokenCollection } from '../../types';
+import { NamingContext } from '../../utils';
+import { updatePaddingStylesBasedOnBorder } from '../utils';
+import {
+  generateCombinatorialStyles,
+  StylesForVariantsCombination,
+} from './generate-combinatorial-styles';
 
 export const convertVariantGroupBy = (
-  tokens: TokenCollection,
+  tokenCollection: TokenCollection,
   styleTokensGroupedByVariantCombination: Record<string, StyleToken[]>,
+  /**
+   * @deprecated The input for this function should already be formatted
+   * correctly. This is basically only different for scss support.
+   */
   transform: (token: StyleToken) => Record<string, string>,
   namingContext: NamingContext,
-  useCombinatorialParsing: boolean = true,
-): (PartialStyleToken & { key: string } & StylesForVariantsCombination)[] => {
+  useCombinatorialParsing: boolean,
+): ({ key: string } & StylesForVariantsCombination)[] => {
   const globalValueConflicts = new Map<string, Set<string>>();
 
   Object.values(styleTokensGroupedByVariantCombination).forEach((groupTokens) => {
     const componentId = groupTokens[0].componentId;
     if (!componentId) return;
 
-    const variants = tokens.components[componentId]?.variantProperties || {};
+    const variants = tokenCollection.components[componentId]?.variantProperties || {};
 
     Object.entries(variants).forEach(([property, value]) => {
       if (!globalValueConflicts.has(value)) {
@@ -67,13 +70,14 @@ export const convertVariantGroupBy = (
         // Used for grouping
         key,
         // Used for naming
+        // TODO:
         path: groupTokens[0].path,
         // Used for finding variants
         componentId,
         // Used for finding all possible variants
         componentSetId,
         // Variants
-        variants: componentId ? tokens.components[componentId].variantProperties : {},
+        variants: componentId ? tokenCollection.components[componentId].variantProperties : {},
         styles,
       };
     })
@@ -81,10 +85,10 @@ export const convertVariantGroupBy = (
 
   if (!useCombinatorialParsing) {
     return instanceGroupedByVariants.map((variantGroup) => {
-      return {
+      return updatePaddingStylesBasedOnBorder({
         ...variantGroup,
         key: namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants),
-      };
+      });
     });
   }
 
@@ -126,48 +130,27 @@ export const convertVariantGroupBy = (
     {} as Record<string, typeof instancesWithVariant>,
   );
 
-  const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(([, mixins]) => {
-    const path = mixins[0].path;
+  const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(
+    ([, instances]) => {
+      const cssByVariantCombinations = generateCombinatorialStyles(instances);
 
-    const cssByVariantCombinations = generateCombinatorialStyles(mixins);
+      return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
+        const path = cssByVariantCombination.path;
+        const key = namingContext.createName(path, conflictMap, cssByVariantCombination.variants);
 
-    return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
-      const key = namingContext.createName(path, conflictMap, cssByVariantCombination.variants);
-
-      return {
-        key,
-        styles: cssByVariantCombination.styles,
-        variants: cssByVariantCombination.variants,
-        // Preserve the path for context-aware generators
-        path,
-      };
-    });
-  });
+        return {
+          key,
+          styles: cssByVariantCombination.styles,
+          variants: cssByVariantCombination.variants,
+          // Preserve the path for context-aware generators
+          path,
+        };
+      });
+    },
+  );
 
   // With combination parsing: new behavior
-  return [...instancesWithoutVariant, ...parsedVariantInstances];
-};
-
-/**
- * @deprecated shouldn't be required, only here for backwards compatibility
- * Used specifically for tailwind styles
- */
-export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {
-  return parsedStyleTokens.map((parsedStyleToken) => {
-    const tokens = Object.entries(parsedStyleToken.styles).map(
-      ([property, rawValue]) =>
-        // Casting here since tailwind only needs these 2 properties
-        ({
-          property,
-          rawValue,
-          // Preserve the path for context-aware generators
-          path: parsedStyleToken.path,
-        }) as NonNullableStyleToken,
-    );
-
-    return {
-      variantPath: parsedStyleToken.key,
-      tokens,
-    };
-  });
+  return [...instancesWithoutVariant, ...parsedVariantInstances].map((instance) =>
+    updatePaddingStylesBasedOnBorder(instance),
+  );
 };

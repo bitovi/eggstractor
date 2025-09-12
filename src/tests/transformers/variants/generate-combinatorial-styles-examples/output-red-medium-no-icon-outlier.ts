@@ -1,4 +1,4 @@
-import { StylesForVariantsCombination } from '../../../transformers/variants';
+import { StylesForVariantsCombination } from '../../../../transformers/variants';
 
 export const output: Record<string, StylesForVariantsCombination> = {
   'theme=green-theme': {
@@ -7,26 +7,6 @@ export const output: Record<string, StylesForVariantsCombination> = {
     },
     variants: {
       theme: 'green-theme',
-    },
-  },
-  'theme=pink-theme': {
-    styles: {
-      color: 'pink',
-      height: '8px',
-      'line-height': '1px',
-    },
-    variants: {
-      theme: 'pink-theme',
-    },
-  },
-  'theme=purple-theme': {
-    styles: {
-      color: 'purple',
-      height: '32px',
-      'line-height': '15px',
-    },
-    variants: {
-      theme: 'purple-theme',
     },
   },
   'theme=red-theme': {
@@ -48,7 +28,6 @@ export const output: Record<string, StylesForVariantsCombination> = {
   'size=small--icon=false': {
     styles: {
       height: '10px',
-      'line-height': '5px',
     },
     variants: {
       size: 'small',
@@ -58,7 +37,6 @@ export const output: Record<string, StylesForVariantsCombination> = {
   'size=medium--icon=true': {
     styles: {
       height: '16px',
-      'line-height': '5px',
     },
     variants: {
       size: 'medium',
@@ -68,7 +46,6 @@ export const output: Record<string, StylesForVariantsCombination> = {
   'size=medium--icon=false': {
     styles: {
       height: '20px',
-      'line-height': '10px',
     },
     variants: {
       size: 'medium',
@@ -96,7 +73,6 @@ export const output: Record<string, StylesForVariantsCombination> = {
   'theme=red-theme--size=medium--icon=false': {
     styles: {
       height: '40px',
-      'line-height': '20px',
     },
     variants: {
       theme: 'red-theme',
@@ -107,19 +83,10 @@ export const output: Record<string, StylesForVariantsCombination> = {
   'size=small--icon=true': {
     styles: {
       height: '8px',
-      'line-height': '1px',
     },
     variants: {
       size: 'small',
       icon: 'true',
-    },
-  },
-  'size=large': {
-    styles: {
-      'line-height': '15px',
-    },
-    variants: {
-      size: 'large',
     },
   },
 };

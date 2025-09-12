@@ -1,4 +1,4 @@
-import { StylesForVariantsCombination } from '../../../transformers/variants';
+import { StylesForVariantsCombination } from '../../../../transformers/variants';
 
 export const output: Record<string, StylesForVariantsCombination> = {
   'theme=green-theme': {
@@ -7,24 +7,6 @@ export const output: Record<string, StylesForVariantsCombination> = {
     },
     variants: {
       theme: 'green-theme',
-    },
-  },
-  'theme=pink-theme': {
-    styles: {
-      color: 'pink',
-      height: '8px',
-    },
-    variants: {
-      theme: 'pink-theme',
-    },
-  },
-  'theme=purple-theme': {
-    styles: {
-      color: 'purple',
-      height: '32px',
-    },
-    variants: {
-      theme: 'purple-theme',
     },
   },
   'theme=red-theme': {

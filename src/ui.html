@@ -24,7 +24,7 @@
       </div>
       <div style="margin-bottom: 10px">
         <select id="formatSelect">
-          <!-- <option value="css">CSS</option> -->
+          <option class="dev-only" value="css">CSS</option>
           <option value="scss">SCSS</option>
           <option value="tailwind-scss">(v3) Tailwind-SCSS</option>
           <option value="tailwind-v4">(v4) Tailwind Layer Utilities</option>
@@ -49,9 +49,7 @@
           <button id="generateBtn" class="button">Generate Styles</button>
           <div id="spinner" class="spinner hidden"></div>
         </div>
-        <button id="exportTestDataBtn" class="button" style="display: none">
-          Export Test Data
-        </button>
+        <button class="dev-only button">Export Test Data</button>
         <button id="createPRBtn" class="button">Create PR</button>
         <span id="status"></span>
       </div>

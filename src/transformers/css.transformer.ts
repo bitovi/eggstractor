@@ -1,7 +1,8 @@
 import { StyleToken, TokenCollection, TransformerResult } from '../types';
 import { deduplicateMessages, groupBy } from './utils';
 import { createNamingContext, rem } from '../utils';
-import { convertVariantGroupBy } from './variants-middleware';
+import { convertVariantGroupBy } from './variants';
+import { Transformer } from './types';
 
 const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {
   const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue!;
@@ -11,7 +12,10 @@ const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string>
   };
 };
 
-export function transformToCss(tokens: TokenCollection): TransformerResult {
+export const transformToCss: Transformer = (
+  tokens: TokenCollection,
+  useCombinatorialParsing: boolean,
+): TransformerResult => {
   let output = '/* Generated CSS */';
 
   // Deduplicate warnings and errors
@@ -60,16 +64,17 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
   );
 
   const namingContext = createNamingContext();
-  const classNames = convertVariantGroupBy(
+  const selectors = convertVariantGroupBy(
     tokens,
     variantGroups,
     getClassNamePropertyAndValue,
     namingContext,
+    useCombinatorialParsing,
   );
 
-  for (const classNameDefinition of classNames) {
-    output += `\n.${classNameDefinition.key} {\n`;
-    Object.entries(classNameDefinition.styles).forEach(([property, value]) => {
+  for (const selector of selectors) {
+    output += `\n.${selector.key} {\n`;
+    Object.entries(selector.styles).forEach(([property, value]) => {
       output += `  ${property}: ${value};\n`;
     });
     output += '}\n';
@@ -80,4 +85,4 @@ export function transformToCss(tokens: TokenCollection): TransformerResult {
     warnings,
     errors,
   };
-}
+};

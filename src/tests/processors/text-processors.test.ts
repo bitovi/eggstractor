@@ -70,7 +70,7 @@ describe('Text Processors', () => {
       global.figma = testSetup.figma;
 
       const tokens = await collectTokens(jest.fn());
-      const { result } = transformToScss(tokens);
+      const { result } = transformToScss(tokens, false);
 
       expect(result).toMatchSnapshot('text-alignment');
     });
@@ -82,7 +82,7 @@ describe('Text Processors', () => {
       global.figma = testSetup.figma;
 
       const tokens = await collectTokens(jest.fn());
-      const { result } = transformToScss(tokens);
+      const { result } = transformToScss(tokens, false);
 
       expect(result).toMatchSnapshot('paragraph-alignment');
     });
@@ -94,7 +94,7 @@ describe('Text Processors', () => {
       global.figma = testSetup.figma;
 
       const tokens = await collectTokens(jest.fn());
-      const { result } = transformToScss(tokens);
+      const { result } = transformToScss(tokens, false);
 
       expect(result).toMatchSnapshot('font-style');
     });

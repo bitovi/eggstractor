@@ -6,11 +6,13 @@ export function getParentSceneNodes(node: SceneNode): PathNode[] {
   let current: SceneNode | null = node;
 
   while (current && current.parent) {
-    // TODO: remove this check
-    // Seems like a temporary fix to something very specific at some point
+    // TODO: This is to skip the "Components" page that Figma adds automatically
+    // This needs to be improved since it can be renamed
     if (current.name.toLowerCase() !== 'components') {
       nodes.unshift(current);
     }
+    // TODO This doesn't properly verify that it's a SceneNode
+    // we should stick to BaseNode | (BaseNode & ChildrenMixin)
     current = current.parent as SceneNode;
   }
 

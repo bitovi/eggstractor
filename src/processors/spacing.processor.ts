@@ -31,7 +31,6 @@ export const spacingProcessors: StyleProcessor[] = [
       variableTokenMapByProperty: Map<string, VariableToken>,
       node: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      console.log('from spacing', [...variableTokenMapByProperty]);
       if (!hasNodePadding(node)) return null;
 
       // Get pixel values
