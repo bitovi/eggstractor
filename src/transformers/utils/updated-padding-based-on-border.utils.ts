@@ -1,5 +1,9 @@
 const BORDER_PROPERTIES = [
   'border',
+  'border-left',
+  'border-right',
+  'border-top',
+  'border-bottom',
   'border-width',
   'border-left-width',
   'border-right-width',
@@ -83,47 +87,54 @@ function subtract(padding: string, border: string): string {
   return `calc(${a.text} - ${b.text})`;
 }
 
-interface Padding {
-  'padding-top': string;
-  'padding-right': string;
-  'padding-bottom': string;
-  'padding-left': string;
+interface Padding<T = string> {
+  'padding-top': T;
+  'padding-right': T;
+  'padding-bottom': T;
+  'padding-left': T;
 }
 
-const parsePadding = (padding: string): Padding => {
-  const parts = padding.trim().split(/\s+/);
+interface ParsedShorthand {
+  top: string;
+  right: string;
+  bottom: string;
+  left: string;
+}
+
+const parseShorthand = (value: string): ParsedShorthand => {
+  const parts = value.trim().split(/\s+/);
 
   switch (parts.length) {
     case 1:
       return {
-        'padding-top': parts[0],
-        'padding-right': parts[0],
-        'padding-bottom': parts[0],
-        'padding-left': parts[0],
+        top: parts[0],
+        right: parts[0],
+        bottom: parts[0],
+        left: parts[0],
       };
     case 2:
       return {
-        'padding-top': parts[0],
-        'padding-right': parts[1],
-        'padding-bottom': parts[0],
-        'padding-left': parts[1],
+        top: parts[0],
+        right: parts[1],
+        bottom: parts[0],
+        left: parts[1],
       };
     case 3:
       return {
-        'padding-top': parts[0],
-        'padding-right': parts[1],
-        'padding-bottom': parts[2],
-        'padding-left': parts[1],
+        top: parts[0],
+        right: parts[1],
+        bottom: parts[2],
+        left: parts[1],
       };
     case 4:
       return {
-        'padding-top': parts[0],
-        'padding-right': parts[1],
-        'padding-bottom': parts[2],
-        'padding-left': parts[3],
+        top: parts[0],
+        right: parts[1],
+        bottom: parts[2],
+        left: parts[3],
       };
     default:
-      throw new Error('Invalid padding shorthand');
+      throw new Error('Invalid shorthand');
   }
 };
 
@@ -165,8 +176,9 @@ const hasBorderAndPaddingStyles = <T extends { styles: Record<string, string> }>
   return BORDER_PROPERTIES.some((prop) => prop in instance.styles);
 };
 
-const parseBorderWidth = (borderStyleValue: string): string => {
-  return borderStyleValue.split(' ')[0] ?? null;
+const parseBorder = (borderStyleValue: string): string => {
+  if (borderStyleValue === 'none') return '0';
+  return borderStyleValue.split(' ')[0];
 };
 
 export const updatePaddingStylesBasedOnBorder = <
@@ -182,88 +194,126 @@ export const updatePaddingStylesBasedOnBorder = <
     return instance;
   }
 
-  const borderStyle = instance.styles['border']
-    ? parseBorderWidth(instance.styles['border'])
+  const borderStyle = instance.styles['border'] ? parseBorder(instance.styles['border']) : null;
+  const borderTopStyle = instance.styles['border-top']
+    ? parseBorder(instance.styles['border-top'])
+    : null;
+  const borderRightStyle = instance.styles['border-right']
+    ? parseBorder(instance.styles['border-right'])
+    : null;
+  const borderBottomStyle = instance.styles['border-bottom']
+    ? parseBorder(instance.styles['border-bottom'])
+    : null;
+  const borderLeftStyle = instance.styles['border-left']
+    ? parseBorder(instance.styles['border-left'])
+    : null;
+
+  const borderWidth = instance.styles['border-width']
+    ? parseShorthand(instance.styles['border-width'])
     : null;
 
   const borders = {
-    top: instance.styles['border-top-width'] || instance.styles['border-width'] || borderStyle,
-    right: instance.styles['border-right-width'] || instance.styles['border-width'] || borderStyle,
+    top:
+      instance.styles['border-top-width'] || borderWidth?.['top'] || borderTopStyle || borderStyle,
+    right:
+      instance.styles['border-right-width'] ||
+      borderWidth?.['right'] ||
+      borderRightStyle ||
+      borderStyle,
     bottom:
-      instance.styles['border-bottom-width'] || instance.styles['border-width'] || borderStyle,
-    left: instance.styles['border-left-width'] || instance.styles['border-width'] || borderStyle,
+      instance.styles['border-bottom-width'] ||
+      borderWidth?.['bottom'] ||
+      borderBottomStyle ||
+      borderStyle,
+    left:
+      instance.styles['border-left-width'] ||
+      borderWidth?.['left'] ||
+      borderLeftStyle ||
+      borderStyle,
   };
 
   const paddingStyles = instance.styles['padding']
-    ? parsePadding(instance.styles['padding'])
+    ? parseShorthand(instance.styles['padding'])
     : null;
 
-  const paddings = {
-    'padding-top': instance.styles['padding-top'] || paddingStyles?.['padding-top'] || null,
-    'padding-right': instance.styles['padding-right'] || paddingStyles?.['padding-right'] || null,
-    'padding-bottom':
-      instance.styles['padding-bottom'] || paddingStyles?.['padding-bottom'] || null,
-    'padding-left': instance.styles['padding-left'] || paddingStyles?.['padding-left'] || null,
+  const paddings: Padding<string | null> = {
+    'padding-top': instance.styles['padding-top'] || paddingStyles?.['top'] || null,
+    'padding-right': instance.styles['padding-right'] || paddingStyles?.['right'] || null,
+    'padding-bottom': instance.styles['padding-bottom'] || paddingStyles?.['bottom'] || null,
+    'padding-left': instance.styles['padding-left'] || paddingStyles?.['left'] || null,
   };
 
   // Only add padding properties if they exist
-  const newPaddingIndividualValues: { [K in (typeof PADDING_PROPERTIES)[number]]?: string } = {};
+  const newPaddings: { [K in (typeof PADDING_PROPERTIES)[number]]?: string } = {};
 
   if (paddings['padding-top']) {
-    newPaddingIndividualValues['padding-top'] = borders.top
+    newPaddings['padding-top'] = borders.top
       ? subtract(paddings['padding-top'], borders.top)
       : paddings['padding-top'];
   }
 
   if (paddings['padding-right']) {
-    newPaddingIndividualValues['padding-right'] = borders.right
+    newPaddings['padding-right'] = borders.right
       ? subtract(paddings['padding-right'], borders.right)
       : paddings['padding-right'];
   }
 
   if (paddings['padding-bottom']) {
-    newPaddingIndividualValues['padding-bottom'] = borders.bottom
+    newPaddings['padding-bottom'] = borders.bottom
       ? subtract(paddings['padding-bottom'], borders.bottom)
       : paddings['padding-bottom'];
   }
 
   if (paddings['padding-left']) {
-    newPaddingIndividualValues['padding-left'] = borders.left
+    newPaddings['padding-left'] = borders.left
       ? subtract(paddings['padding-left'], borders.left)
       : paddings['padding-left'];
   }
 
-  // If there was padding shorthand, set it as well
-  const newPaddingShorthand = paddingStyles ? toPaddingShorthand(newPaddingIndividualValues) : null;
+  // If all individual padding properties were used, use padding shorthand as the output
+  const newPaddingValues = Object.values(newPaddings);
+  const allIndividualValuesUsed =
+    newPaddingValues.length === 4 && newPaddingValues.every((value) => !!value);
 
   // Only add individual or shorthand padding properties if they exist
-  const newPaddingStyles: { [K in (typeof PADDING_PROPERTIES)[number]]?: string } = {};
+  const finalizedPaddingStyles: { [K in (typeof PADDING_PROPERTIES)[number]]?: string } = {};
 
-  if (instance.styles['padding'] && newPaddingShorthand) {
-    newPaddingStyles['padding'] = newPaddingShorthand;
+  if (allIndividualValuesUsed) {
+    finalizedPaddingStyles['padding'] = toPaddingShorthand(newPaddings);
+  } else {
+    if (instance.styles['padding-top'] && newPaddings['padding-top']) {
+      finalizedPaddingStyles['padding-top'] = newPaddings['padding-top'];
+    }
+
+    if (instance.styles['padding-right'] && newPaddings['padding-right']) {
+      finalizedPaddingStyles['padding-right'] = newPaddings['padding-right'];
+    }
+
+    if (instance.styles['padding-bottom'] && newPaddings['padding-bottom']) {
+      finalizedPaddingStyles['padding-bottom'] = newPaddings['padding-bottom'];
+    }
+
+    if (instance.styles['padding-left'] && newPaddings['padding-left']) {
+      finalizedPaddingStyles['padding-left'] = newPaddings['padding-left'];
+    }
   }
 
-  if (instance.styles['padding-top'] && newPaddingIndividualValues['padding-top']) {
-    newPaddingStyles['padding-top'] = newPaddingIndividualValues['padding-top'];
-  }
-
-  if (instance.styles['padding-right'] && newPaddingIndividualValues['padding-right']) {
-    newPaddingStyles['padding-right'] = newPaddingIndividualValues['padding-right'];
-  }
-
-  if (instance.styles['padding-bottom'] && newPaddingIndividualValues['padding-bottom']) {
-    newPaddingStyles['padding-bottom'] = newPaddingIndividualValues['padding-bottom'];
-  }
-
-  if (instance.styles['padding-left'] && newPaddingIndividualValues['padding-left']) {
-    newPaddingStyles['padding-left'] = newPaddingIndividualValues['padding-left'];
-  }
+  // Strip out any existing padding properties to avoid conflicts
+  const {
+    padding: _p,
+    ['padding-top']: _pt,
+    ['padding-right']: _pr,
+    ['padding-bottom']: _pb,
+    ['padding-left']: _pl,
+    ...stylesWithoutPadding
+  } = instance.styles;
 
   return {
     ...instance,
     styles: {
-      ...instance.styles,
-      ...newPaddingStyles,
+      ...stylesWithoutPadding,
+      // Merge in the new padding styles
+      ...finalizedPaddingStyles,
     },
   };
 };
