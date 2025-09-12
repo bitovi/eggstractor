@@ -1,4 +1,4 @@
-import { updatePaddingStylesBasedOnBorder } from '../../../transformers/utils/updated-padding-based-on-border.utils';
+import { updatePaddingStylesBasedOnBorder } from '../../../transformers/utils/update-padding-based-on-border.utils';
 
 describe('updatePaddingStylesBasedOnBorder', () => {
   it('updates uniform padding px with uniform border px (keep shorthand)', () => {
