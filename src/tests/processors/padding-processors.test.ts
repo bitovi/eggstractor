@@ -11,8 +11,9 @@ describe('Padding Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens, false);
-
-    expect(result).toMatchSnapshot('padding');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('padding');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('padding');
   });
 });

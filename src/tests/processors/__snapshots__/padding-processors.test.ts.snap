@@ -170,3 +170,174 @@ $border-size-primary: 0.25rem;
 }
 "
 `;
+
+exports[`Padding Processors should process padding correctly: padding 2`] = `
+"// Generated SCSS Variables
+$brand-primary: #00464a;
+$corner-radius-primary: 1rem;
+$size-null: 0rem;
+$border-size-primary: 0.25rem;
+
+// Generated SCSS Mixins
+@mixin padding-left-right {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 0rem 1rem;
+  background: #ffffff;
+}
+@mixin padding-left-right-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-left-right-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-left-right-padding-3 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 1.5rem 0rem;
+  background: #ffffff;
+}
+@mixin padding-top-bottom-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-padding-3 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-left-right {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #ffffff;
+}
+@mixin padding-top-bottom-left-right-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-left-right-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-left-right-padding-3 {
+  background: $brand-primary;
+}
+@mixin padding-topright-bottomleft {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 1rem 1rem 1.5rem 1.5rem;
+  background: #ffffff;
+}
+@mixin padding-topright-bottomleft-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-topright-bottomleft-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-topright-bottomleft-padding-3 {
+  background: $brand-primary;
+}
+@mixin padding-topbottom-leftright {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  background: #ffffff;
+}
+@mixin padding-topbottom-leftright-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-topbottom-leftright-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-topbottom-leftright-padding-3 {
+  background: $brand-primary;
+}
+@mixin padding-left-right-variable {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $size-null $corner-radius-primary;
+  background: #ffffff;
+}
+@mixin padding-left-right-variable-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-left-right-variable-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-left-right-variable-padding-3 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-variable {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $corner-radius-primary $size-null;
+  background: #ffffff;
+}
+@mixin padding-top-bottom-variable-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-variable-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-variable-padding-3 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-left-right-variable {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $corner-radius-primary;
+  background: #ffffff;
+}
+@mixin padding-top-bottom-left-right-variable-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-left-right-variable-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-top-bottom-left-right-variable-padding-3 {
+  background: $brand-primary;
+}
+@mixin padding-topright-bottomleft-variable {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $corner-radius-primary $corner-radius-primary $border-size-primary $border-size-primary;
+  background: #ffffff;
+}
+@mixin padding-topright-bottomleft-variable-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-topright-bottomleft-variable-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-topright-bottomleft-variable-padding-3 {
+  background: $brand-primary;
+}
+@mixin padding-topbottom-leftright-variable {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: $border-size-primary $corner-radius-primary;
+  background: #ffffff;
+}
+@mixin padding-topbottom-leftright-variable-padding-1 {
+  background: $brand-primary;
+}
+@mixin padding-topbottom-leftright-variable-padding-2 {
+  background: $brand-primary;
+}
+@mixin padding-topbottom-leftright-variable-padding-3 {
+  background: $brand-primary;
+}
+"
+`;

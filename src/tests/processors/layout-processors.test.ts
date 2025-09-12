@@ -7,7 +7,7 @@ import testDataWidth from '../fixtures/figma-test-data_width.json';
 import testDataHeight from '../fixtures/figma-test-data_height.json';
 
 describe('Layout Processors', () => {
-  fit('should process layout alignment correctly', async () => {
+  it('should process layout alignment correctly', async () => {
     const { setupTest } = createTestData(testDataAlignment);
     const testSetup = await setupTest();
 
