@@ -12,7 +12,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '10px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -25,7 +27,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '20px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -38,7 +42,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '30px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   {
@@ -52,7 +58,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '8px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -65,7 +73,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '16px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -78,7 +88,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '32px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   // Green
@@ -94,7 +106,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '10px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -107,7 +121,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '20px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -120,7 +136,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '30px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   {
@@ -134,7 +152,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '8px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -147,7 +167,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '16px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -160,7 +182,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '32px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   // Yellow
@@ -176,7 +200,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '10px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -189,7 +215,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '20px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -202,7 +230,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '30px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   {
@@ -216,7 +246,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '8px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -229,7 +261,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '16px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -242,7 +276,9 @@ export const input: StylesForVariantsCombination[] = [
       height: '32px',
       display: 'block',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   // Special purple
@@ -256,7 +292,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'purple',
       height: '32px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   // Special pink
@@ -270,6 +308,8 @@ export const input: StylesForVariantsCombination[] = [
       color: 'pink',
       height: '8px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 ];

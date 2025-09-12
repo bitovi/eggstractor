@@ -6,7 +6,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       color: 'green',
     },
     variants: { theme: 'green-theme' },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'theme=pink-theme': {
     styles: {
@@ -14,7 +16,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       height: '8px',
     },
     variants: { theme: 'pink-theme' },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'theme=purple-theme': {
     styles: {
@@ -22,28 +26,36 @@ export const output: Record<string, StylesForVariantsCombination> = {
       height: '32px',
     },
     variants: { theme: 'purple-theme' },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'theme=red-theme': {
     styles: {
       color: 'red',
     },
     variants: { theme: 'red-theme' },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'theme=yellow-theme': {
     styles: {
       color: 'yellow',
     },
     variants: { theme: 'yellow-theme' },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   ROOT: {
     styles: {
       display: 'block',
     },
     variants: {},
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'size=small--icon=false': {
     styles: {
@@ -53,7 +65,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'small',
       icon: 'false',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'size=medium--icon=true': {
     styles: {
@@ -63,7 +77,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'medium',
       icon: 'true',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'size=medium--icon=false': {
     styles: {
@@ -73,7 +89,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'medium',
       icon: 'false',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'size=large--icon=false': {
     styles: {
@@ -83,7 +101,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'large',
       icon: 'false',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'size=large--icon=true': {
     styles: {
@@ -93,7 +113,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'large',
       icon: 'true',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   'size=small--icon=true': {
     styles: {
@@ -103,6 +125,8 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'small',
       icon: 'true',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 };

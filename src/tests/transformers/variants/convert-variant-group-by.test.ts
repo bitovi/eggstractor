@@ -74,6 +74,8 @@ describe('convertVariantGroupBy', () => {
       ...tokenCollection,
       tokens: tokenCollection.tokens
         .filter((token) => token.type === 'style')
+        // The padding tokens need to be removed or else the combinatorial
+        // styles won't match with template styles
         .filter((token) => token.property !== 'padding'),
     };
   });
@@ -95,6 +97,22 @@ describe('convertVariantGroupBy', () => {
     expect(templateStylesTailwind.length).toBe(4);
 
     expect(combinatorialStylesTailwind).toStrictEqual(templateStylesTailwind);
+
+    const { combinatorialStyles: combinatorialStylesABCD, templateStyles: templateStylesABCD } =
+      getStyles({
+        env: 'css',
+        delimiters: {
+          pathSeparator: '_A_',
+          afterComponentName: '_B_',
+          variantEqualSign: '_C_',
+          betweenVariants: '_D_',
+        },
+      });
+
+    expect(combinatorialStylesABCD.length).toBe(4);
+    expect(templateStylesABCD.length).toBe(4);
+
+    expect(combinatorialStylesABCD).toStrictEqual(templateStylesABCD);
   });
 
   it('should create the same stylesheets for both combinatorial and template output', () => {

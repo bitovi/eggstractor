@@ -11,8 +11,9 @@ describe('Demo Data (real world-ish example)', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens, false);
-
-    expect(result).toMatchSnapshot('demo-data');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('demo-data-template');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('demo-data-combinatorial');
   });
 });

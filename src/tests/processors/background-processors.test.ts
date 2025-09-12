@@ -20,16 +20,27 @@ describe('Background Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result: css } = transformToCss(tokens, false);
+    const { result: template } = transformToCss(tokens, false);
 
-    const styles = {
-      solid: parseCssClass(css, 'background-solid-variable'),
-      alpha: parseCssClass(css, 'background-solid-alpha-variable'),
+    const templateStyles = {
+      solid: parseCssClass(template, 'background-solid-variable'),
+      alpha: parseCssClass(template, 'background-solid-alpha-variable'),
     };
 
-    expect(styles).toMatchSnapshot('solid styles');
-    expect(styles.solid).toBe('background: #00464a;');
-    expect(styles.alpha).toBe('background: rgba(0, 70, 74, 0.5);');
+    expect(templateStyles).toMatchSnapshot('solid styles');
+    expect(templateStyles.solid).toBe('background: #00464a;');
+    expect(templateStyles.alpha).toBe('background: rgba(0, 70, 74, 0.5);');
+
+    const { result: combinatorial } = transformToCss(tokens, true);
+
+    const combinatorialStyles = {
+      solid: parseCssClass(combinatorial, 'background-solid-variable'),
+      alpha: parseCssClass(combinatorial, 'background-solid-alpha-variable'),
+    };
+
+    expect(combinatorialStyles).toMatchSnapshot('solid styles');
+    expect(combinatorialStyles.solid).toBe('background: #00464a;');
+    expect(combinatorialStyles.alpha).toBe('background: rgba(0, 70, 74, 0.5);');
   });
 
   it('should process background solid correctly - sass', async () => {
@@ -39,9 +50,10 @@ describe('Background Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens, false);
-
-    expect(result).toMatchSnapshot('solid styles');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('solid styles');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('solid styles');
   });
 
   it('should process opacity correctly', async () => {

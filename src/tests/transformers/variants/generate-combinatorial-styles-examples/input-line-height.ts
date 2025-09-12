@@ -11,7 +11,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '10px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -23,7 +25,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '40px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -35,7 +39,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '30px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   {
@@ -48,7 +54,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '8px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -60,7 +68,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '16px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -72,7 +82,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'red',
       height: '32px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   // Green
@@ -87,7 +99,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '10px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -99,7 +113,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '20px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -111,7 +127,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '30px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   {
@@ -124,7 +142,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '8px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -136,7 +156,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '16px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -148,7 +170,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'green',
       height: '32px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   // Yellow
@@ -163,7 +187,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '10px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -175,7 +201,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '20px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -187,7 +215,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '30px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   {
@@ -200,7 +230,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '8px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -212,7 +244,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '16px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -224,7 +258,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'yellow',
       height: '32px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   // // Special purple
@@ -238,7 +274,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'purple',
       height: '32px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 
   // Special pink
@@ -252,7 +290,9 @@ export const input: StylesForVariantsCombination[] = [
       color: 'pink',
       height: '8px',
     },
-    path: [],
+    path: [
+      /* stub */
+    ],
   },
 ].map((instance) => ({
   ...instance,
