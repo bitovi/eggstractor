@@ -1,6 +1,10 @@
 import { StyleToken, TokenCollection } from '../../types';
 import { NamingContext } from '../../utils';
-import { updatePaddingStylesBasedOnBorder } from '../utils';
+import {
+  updatePaddingStylesBasedOnBorder,
+  // updateHeightAndWidthStylesBasedOnBorder,
+  // updatePaddingAndHeightAndWidthStylesBasedOnBorder,
+} from '../patches';
 import {
   generateCombinatorialStyles,
   StylesForVariantsCombination,
@@ -90,6 +94,14 @@ export const convertVariantGroupBy = (
         ...variantGroup,
         key,
       });
+      // return updateHeightAndWidthStylesBasedOnBorder({
+      //   ...variantGroup,
+      //   key,
+      // });
+      // return updatePaddingAndHeightAndWidthStylesBasedOnBorder({
+      //   ...variantGroup,
+      //   key,
+      // });
     });
   }
 
@@ -158,7 +170,9 @@ export const convertVariantGroupBy = (
   );
 
   // With combination parsing: new behavior
-  return [...instancesWithoutVariant, ...parsedVariantInstances].map((instance) =>
-    updatePaddingStylesBasedOnBorder(instance),
+  return [...instancesWithoutVariant, ...parsedVariantInstances].map(
+    (instance) => updatePaddingStylesBasedOnBorder(instance),
+    // updateHeightAndWidthStylesBasedOnBorder(instance),
+    // updatePaddingAndHeightAndWidthStylesBasedOnBorder(instance),
   );
 };

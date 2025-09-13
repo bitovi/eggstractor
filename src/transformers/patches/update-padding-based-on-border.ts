@@ -1,4 +1,4 @@
-import { BORDER_PROPERTIES, parseBorder } from './utilities';
+import { BORDER_PROPERTIES, getBorderWidthValues, parseShorthand, subtract } from './utilities';
 
 const PADDING_PROPERTIES = [
   'padding',
@@ -66,43 +66,7 @@ export const updatePaddingStylesBasedOnBorder = <
     return instance;
   }
 
-  const borderStyle = instance.styles['border'] ? parseBorder(instance.styles['border']) : null;
-  const borderTopStyle = instance.styles['border-top']
-    ? parseBorder(instance.styles['border-top'])
-    : null;
-  const borderRightStyle = instance.styles['border-right']
-    ? parseBorder(instance.styles['border-right'])
-    : null;
-  const borderBottomStyle = instance.styles['border-bottom']
-    ? parseBorder(instance.styles['border-bottom'])
-    : null;
-  const borderLeftStyle = instance.styles['border-left']
-    ? parseBorder(instance.styles['border-left'])
-    : null;
-
-  const borderWidth = instance.styles['border-width']
-    ? parseShorthand(instance.styles['border-width'])
-    : null;
-
-  const borders = {
-    top:
-      instance.styles['border-top-width'] || borderWidth?.['top'] || borderTopStyle || borderStyle,
-    right:
-      instance.styles['border-right-width'] ||
-      borderWidth?.['right'] ||
-      borderRightStyle ||
-      borderStyle,
-    bottom:
-      instance.styles['border-bottom-width'] ||
-      borderWidth?.['bottom'] ||
-      borderBottomStyle ||
-      borderStyle,
-    left:
-      instance.styles['border-left-width'] ||
-      borderWidth?.['left'] ||
-      borderLeftStyle ||
-      borderStyle,
-  };
+  const borders = getBorderWidthValues(instance.styles);
 
   const paddingStyles = instance.styles['padding']
     ? parseShorthand(instance.styles['padding'])

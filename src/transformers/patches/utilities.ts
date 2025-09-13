@@ -79,6 +79,76 @@ export function subtract(padding: string, border: string): string {
   return `calc(${a.text} - ${b.text})`;
 }
 
+/**
+ * Add border value to height value or width value, returning a valid CSS
+ * string.
+ */
+export function add(length: string, border: string): string {
+  const a = parseCssValue(length);
+  const b = parseCssValue(border);
+
+  if (a.value === 0) {
+    return a.text;
+  }
+
+  if (b.value === 0) {
+    return a.text;
+  }
+
+  // same known units → numeric subtraction, clamped at 0
+  if (
+    a.format === b.format &&
+    (a.format === 'px' || a.format === 'rem') &&
+    (b.format === 'px' || b.format === 'rem')
+  ) {
+    const result = a.value + b.value;
+    return result === 0 ? '0' : `${result}${a.format}`;
+  }
+
+  // mismatched/unknown units → calc with clamp (no trimming)
+  return `calc(${a.text} + ${b.text})`;
+}
+
+/**
+ * Add `-` in front of the value, unless it's 0.
+ */
+export function negative(value: string): string {
+  const parsedValue = parseCssValue(value);
+
+  if (parsedValue.value === 0) {
+    return parsedValue.text;
+  }
+
+  return `-${parsedValue.text}`;
+}
+
+/**
+ * Divide border value by 2. Node that if using scss, the style sheet must
+ * include:
+ *
+ * ```scss
+ * @use "sass:math";
+ *
+ * $half-border-width: math.div($border-width, 2);
+ * ```
+ */
+export function divide(value: string, by: number): string {
+  const parsedValue = parseCssValue(value);
+
+  if (parsedValue.value === 0) {
+    return parsedValue.text;
+  }
+
+  // same known units → numeric subtraction, clamped at 0
+  if (parsedValue.format === 'px' || parsedValue.format === 'rem') {
+    const result = parsedValue.value / by;
+    return result === 0 ? '0' : `${result}${parsedValue.format}`;
+  }
+
+  // Assume this is scss for now until we support css properties
+  return `math.div(${parsedValue.text}, ${by})`;
+}
+
 interface ParsedShorthand {
   top: string;
   right: string;
@@ -123,7 +193,33 @@ export const parseShorthand = (value: string): ParsedShorthand => {
   }
 };
 
-export const parseBorder = (borderStyleValue: string): string => {
+const parseBorder = (borderStyleValue: string): string => {
   if (borderStyleValue === 'none') return '0';
   return borderStyleValue.split(' ')[0];
+};
+
+export const getBorderWidthValues = (styles: {
+  [K in (typeof BORDER_PROPERTIES)[number]]?: string;
+}): {
+  top: string | null;
+  right: string | null;
+  bottom: string | null;
+  left: string | null;
+} => {
+  const borderStyle = styles['border'] ? parseBorder(styles['border']) : null;
+  const borderTopStyle = styles['border-top'] ? parseBorder(styles['border-top']) : null;
+  const borderRightStyle = styles['border-right'] ? parseBorder(styles['border-right']) : null;
+  const borderBottomStyle = styles['border-bottom'] ? parseBorder(styles['border-bottom']) : null;
+  const borderLeftStyle = styles['border-left'] ? parseBorder(styles['border-left']) : null;
+
+  const borderWidth = styles['border-width'] ? parseShorthand(styles['border-width']) : null;
+
+  return {
+    top: styles['border-top-width'] || borderWidth?.['top'] || borderTopStyle || borderStyle,
+    right:
+      styles['border-right-width'] || borderWidth?.['right'] || borderRightStyle || borderStyle,
+    bottom:
+      styles['border-bottom-width'] || borderWidth?.['bottom'] || borderBottomStyle || borderStyle,
+    left: styles['border-left-width'] || borderWidth?.['left'] || borderLeftStyle || borderStyle,
+  };
 };
