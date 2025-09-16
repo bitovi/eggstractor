@@ -14,8 +14,10 @@ describe('Layout Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-    expect(result).toMatchSnapshot('alignment');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('alignment');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('alignment');
   });
 
   it('should process layout direction correctly', async () => {
@@ -25,8 +27,10 @@ describe('Layout Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-    expect(result).toMatchSnapshot('direction');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('direction');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('direction');
   });
 
   it('should process layout width correctly', async () => {
@@ -36,8 +40,10 @@ describe('Layout Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-    expect(result).toMatchSnapshot('width');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('width');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('width');
   });
 
   it('should process layout height correctly', async () => {
@@ -47,7 +53,9 @@ describe('Layout Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-    expect(result).toMatchSnapshot('height');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('height');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('height');
   });
 });

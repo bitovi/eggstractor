@@ -20,16 +20,27 @@ describe('Background Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result: css } = transformToCss(tokens);
+    const { result: template } = transformToCss(tokens, false);
 
-    const styles = {
-      solid: parseCssClass(css, 'background-solid-variable'),
-      alpha: parseCssClass(css, 'background-solid-alpha-variable'),
+    const templateStyles = {
+      solid: parseCssClass(template, 'background-solid-variable'),
+      alpha: parseCssClass(template, 'background-solid-alpha-variable'),
     };
 
-    expect(styles).toMatchSnapshot('solid styles');
-    expect(styles.solid).toBe('background: #00464a;');
-    expect(styles.alpha).toBe('background: rgba(0, 70, 74, 0.5);');
+    expect(templateStyles).toMatchSnapshot('solid styles');
+    expect(templateStyles.solid).toBe('background: #00464a;');
+    expect(templateStyles.alpha).toBe('background: rgba(0, 70, 74, 0.5);');
+
+    const { result: combinatorial } = transformToCss(tokens, true);
+
+    const combinatorialStyles = {
+      solid: parseCssClass(combinatorial, 'background-solid-variable'),
+      alpha: parseCssClass(combinatorial, 'background-solid-alpha-variable'),
+    };
+
+    expect(combinatorialStyles).toMatchSnapshot('solid styles');
+    expect(combinatorialStyles.solid).toBe('background: #00464a;');
+    expect(combinatorialStyles.alpha).toBe('background: rgba(0, 70, 74, 0.5);');
   });
 
   it('should process background solid correctly - sass', async () => {
@@ -39,9 +50,10 @@ describe('Background Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-
-    expect(result).toMatchSnapshot('solid styles');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('solid styles');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('solid styles');
   });
 
   it('should process opacity correctly', async () => {
@@ -51,9 +63,10 @@ describe('Background Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-
-    expect(result).toMatchSnapshot('opacity styles');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('opacity styles');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('opacity styles');
   });
 
   it('should skip background gradient correctly', async () => {
@@ -63,22 +76,40 @@ describe('Background Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result: css, warnings } = transformToCss(tokens);
+    const { result: template, warnings: templateWarnings } = transformToCss(tokens, false);
 
     // Test specific styles with snapshots
-    const styles = {
-      linear: parseCssClass(css, 'background-gradient-linear-style'),
-      linearAlpha: parseCssClass(css, 'background-gradient-linear-alpha-style'),
+    const templateStyles = {
+      linear: parseCssClass(template, 'background-gradient-linear-style'),
+      linearAlpha: parseCssClass(template, 'background-gradient-linear-alpha-style'),
     };
 
     // Snapshot all styles
-    expect(styles).toMatchSnapshot('gradient styles');
+    expect(templateStyles).toMatchSnapshot('gradient styles');
 
     // We no longer warn on these values since they are skipped in the collection
-    expect(warnings).toHaveLength(0);
+    expect(templateWarnings).toHaveLength(0);
 
     // Keep direct assertions for critical values
-    expect(styles.linear).toBe(null);
-    expect(styles.linearAlpha).toBe(null);
+    expect(templateStyles.linear).toBe(null);
+    expect(templateStyles.linearAlpha).toBe(null);
+
+    const { result: combinatorial, warnings: combinatorialWarnings } = transformToCss(tokens, true);
+
+    // Test specific styles with snapshots
+    const combinatorialStyles = {
+      linear: parseCssClass(combinatorial, 'background-gradient-linear-style'),
+      linearAlpha: parseCssClass(combinatorial, 'background-gradient-linear-alpha-style'),
+    };
+
+    // Snapshot all styles
+    expect(combinatorialStyles).toMatchSnapshot('gradient styles');
+
+    // We no longer warn on these values since they are skipped in the collection
+    expect(combinatorialWarnings).toHaveLength(0);
+
+    // Keep direct assertions for critical values
+    expect(combinatorialStyles.linear).toBe(null);
+    expect(combinatorialStyles.linearAlpha).toBe(null);
   });
 });

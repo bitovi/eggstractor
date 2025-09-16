@@ -1,17 +1,10 @@
 const defaults = {
   baseline: 16,
-  precision: 3,
   unit: true,
-};
-
-const rounded = (value: number, precision: number): number => {
-  precision = Math.pow(10, precision);
-  return Math.floor(value * precision) / precision;
 };
 
 interface ConvertOptions {
   baseline?: number;
-  precision?: number;
   unit?: boolean;
 }
 
@@ -20,13 +13,13 @@ export const convert = (
   to: string = 'rem',
   options: ConvertOptions = {},
 ): string => {
-  const { baseline, precision, unit } = { ...defaults, ...options };
+  const { baseline, unit } = { ...defaults, ...options };
 
   if (typeof value === 'number') {
     if (to === 'px') {
-      return `${rounded(value * baseline, precision)}${unit ? to : ''}`;
+      return `${value * baseline}${unit ? to : ''}`;
     }
-    return `${rounded(value / baseline, precision)}${unit ? to : ''}`;
+    return `${value / baseline}${unit ? to : ''}`;
   }
 
   if (Array.isArray(value)) {

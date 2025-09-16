@@ -30,10 +30,9 @@ window.onload = () => {
   // Check if we're in development mode
   const isDevelopment = process.env.NODE_ENV === 'development';
   if (isDevelopment) {
-    const exportBtn = document.getElementById('exportTestDataBtn');
-    if (exportBtn) {
-      exportBtn.style.display = 'inline-block';
-    }
+    document.querySelectorAll('.dev-only').forEach((el) => {
+      (el as HTMLElement).classList.remove('dev-only');
+    });
   }
 
   // Save config when inputs change

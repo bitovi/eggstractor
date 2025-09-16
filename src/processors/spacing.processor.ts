@@ -29,9 +29,9 @@ export const spacingProcessors: StyleProcessor[] = [
     bindingKey: undefined,
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      if (!node || !hasNodePadding(node)) return null;
+      if (!hasNodePadding(node)) return null;
 
       // Get pixel values
       const pixelValues: PaddingValues = {

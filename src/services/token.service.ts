@@ -158,7 +158,9 @@ export async function extractNodeToken(
   if (processedValue) {
     const styleToken: StyleToken = {
       type: 'style',
-      name: pathNodes.map(({ name }) => name).join('_'),
+      // TODO: this property conflicts with naming context and is too easy to
+      // get mixed up. We should remove it or figure something else out.
+      name: pathNodes.map(({ name }) => name).join('_AND_'),
       value: processedValue.value,
       rawValue: processedValue.rawValue,
       valueType: processedValue.valueType,

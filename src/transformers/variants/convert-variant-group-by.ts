@@ -1,26 +1,29 @@
-import { NonNullableStyleToken, StyleToken, TokenCollection } from '../types';
-import { NamingContext } from '../utils';
-import { generateCombinatorialStyles, StylesForVariantsCombination } from './variants';
-
-type PartialStyleToken = Omit<
-  StyleToken,
-  'name' | 'property' | 'type' | 'value' | 'rawValue' | 'variableTokenMapByProperty'
->;
+import { StyleToken, TokenCollection } from '../../types';
+import { NamingContext } from '../../utils';
+import { updatePaddingStylesBasedOnBorder } from '../utils';
+import {
+  generateCombinatorialStyles,
+  StylesForVariantsCombination,
+} from './generate-combinatorial-styles';
 
 export const convertVariantGroupBy = (
-  tokens: TokenCollection,
+  tokenCollection: TokenCollection,
   styleTokensGroupedByVariantCombination: Record<string, StyleToken[]>,
+  /**
+   * @deprecated The input for this function should already be formatted
+   * correctly. This is basically only different for scss support.
+   */
   transform: (token: StyleToken) => Record<string, string>,
   namingContext: NamingContext,
-  useCombinatorialParsing: boolean = true,
-): (PartialStyleToken & { key: string } & StylesForVariantsCombination)[] => {
+  useCombinatorialParsing: boolean,
+): ({ key: string } & StylesForVariantsCombination)[] => {
   const globalValueConflicts = new Map<string, Set<string>>();
 
   Object.values(styleTokensGroupedByVariantCombination).forEach((groupTokens) => {
     const componentId = groupTokens[0].componentId;
     if (!componentId) return;
 
-    const variants = tokens.components[componentId]?.variantProperties || {};
+    const variants = tokenCollection.components[componentId]?.variantProperties || {};
 
     Object.entries(variants).forEach(([property, value]) => {
       if (!globalValueConflicts.has(value)) {
@@ -64,7 +67,8 @@ export const convertVariantGroupBy = (
       );
 
       return {
-        // Used for grouping
+        // Used temporarily for grouping and should not be used outside of this
+        // function
         key,
         // Used for naming
         path: groupTokens[0].path,
@@ -73,7 +77,7 @@ export const convertVariantGroupBy = (
         // Used for finding all possible variants
         componentSetId,
         // Variants
-        variants: componentId ? tokens.components[componentId].variantProperties : {},
+        variants: componentId ? tokenCollection.components[componentId].variantProperties : {},
         styles,
       };
     })
@@ -81,10 +85,11 @@ export const convertVariantGroupBy = (
 
   if (!useCombinatorialParsing) {
     return instanceGroupedByVariants.map((variantGroup) => {
-      return {
+      const key = namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants);
+      return updatePaddingStylesBasedOnBorder({
         ...variantGroup,
-        key: namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants),
-      };
+        key,
+      });
     });
   }
 
@@ -100,6 +105,8 @@ export const convertVariantGroupBy = (
 
   for (const variantGroup of instanceGroupedByVariants) {
     if (variantGroup.componentId && variantGroup.componentSetId) {
+      // Do not generate key yet for instances with variants since we need to
+      // calculate combinatorial styles first
       instancesWithVariant.push(
         variantGroup as typeof variantGroup & {
           componentId: string;
@@ -109,11 +116,15 @@ export const convertVariantGroupBy = (
       continue;
     }
 
-    instancesWithoutVariant.push(variantGroup);
+    // No variants so we can generate the key now
+    const key = namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants);
+    instancesWithoutVariant.push({ ...variantGroup, key });
   }
 
   const instancesWithVariantMap = instancesWithVariant.reduce(
     (acc, variantGroup) => {
+      // This key isn't used outside of organizing components within a component
+      // set. It should not be used outside of this temporary grouping.
       const key = variantGroup.path
         .filter((part) => part.type !== 'COMPONENT')
         .map(({ name }) => name.replace(/\s+/g, '-'))
@@ -126,48 +137,28 @@ export const convertVariantGroupBy = (
     {} as Record<string, typeof instancesWithVariant>,
   );
 
-  const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(([, mixins]) => {
-    const path = mixins[0].path;
+  const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(
+    // We should not use the key from Object.entries since it's for temporary
+    // grouping only. Instead, use namingContext to generate the final key.
+    ([, instances]) => {
+      const cssByVariantCombinations = generateCombinatorialStyles(instances);
 
-    const cssByVariantCombinations = generateCombinatorialStyles(mixins);
-
-    return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
-      const key = namingContext.createName(path, conflictMap, cssByVariantCombination.variants);
-
-      return {
-        key,
-        styles: cssByVariantCombination.styles,
-        variants: cssByVariantCombination.variants,
-        // Preserve the path for context-aware generators
-        path,
-      };
-    });
-  });
+      return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
+        const path = cssByVariantCombination.path;
+        const key = namingContext.createName(path, conflictMap, cssByVariantCombination.variants);
+        return {
+          key,
+          styles: cssByVariantCombination.styles,
+          variants: cssByVariantCombination.variants,
+          // Preserve the path for context-aware generators
+          path,
+        };
+      });
+    },
+  );
 
   // With combination parsing: new behavior
-  return [...instancesWithoutVariant, ...parsedVariantInstances];
-};
-
-/**
- * @deprecated shouldn't be required, only here for backwards compatibility
- * Used specifically for tailwind styles
- */
-export const backToStyleTokens = (parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>) => {
-  return parsedStyleTokens.map((parsedStyleToken) => {
-    const tokens = Object.entries(parsedStyleToken.styles).map(
-      ([property, rawValue]) =>
-        // Casting here since tailwind only needs these 2 properties
-        ({
-          property,
-          rawValue,
-          // Preserve the path for context-aware generators
-          path: parsedStyleToken.path,
-        }) as NonNullableStyleToken,
-    );
-
-    return {
-      variantPath: parsedStyleToken.key,
-      tokens,
-    };
-  });
+  return [...instancesWithoutVariant, ...parsedVariantInstances].map((instance) =>
+    updatePaddingStylesBasedOnBorder(instance),
+  );
 };

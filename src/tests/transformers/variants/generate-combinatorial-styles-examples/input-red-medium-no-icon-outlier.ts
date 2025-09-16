@@ -1,4 +1,4 @@
-import { StylesForVariantsCombination } from '../../../transformers/variants';
+import { StylesForVariantsCombination } from '../../../../transformers/variants';
 
 export const input: StylesForVariantsCombination[] = [
   {
@@ -10,8 +10,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'red',
       height: '10px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -21,9 +23,11 @@ export const input: StylesForVariantsCombination[] = [
     },
     styles: {
       color: 'red',
-      height: '20px',
-      display: 'block',
+      height: '40px',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -34,8 +38,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'red',
       height: '30px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
 
   {
@@ -47,8 +53,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'red',
       height: '8px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -59,8 +67,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'red',
       height: '16px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -71,8 +81,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'red',
       height: '32px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
 
   // Green
@@ -86,8 +98,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'green',
       height: '10px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -98,8 +112,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'green',
       height: '20px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -110,8 +126,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'green',
       height: '30px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
 
   {
@@ -123,8 +141,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'green',
       height: '8px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -135,8 +155,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'green',
       height: '16px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -147,8 +169,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'green',
       height: '32px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
 
   // Yellow
@@ -162,8 +186,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'yellow',
       height: '10px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -174,8 +200,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'yellow',
       height: '20px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -186,8 +214,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'yellow',
       height: '30px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
 
   {
@@ -199,8 +229,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'yellow',
       height: '8px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -211,8 +243,10 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'yellow',
       height: '16px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
   {
     variants: {
@@ -223,33 +257,35 @@ export const input: StylesForVariantsCombination[] = [
     styles: {
       color: 'yellow',
       height: '32px',
-      display: 'block',
     },
+    path: [
+      /* stub */
+    ],
   },
 
-  // Special purple
-  {
-    variants: {
-      theme: 'purple-theme',
-      size: 'small',
-      icon: 'true',
-    },
-    styles: {
-      color: 'purple',
-      height: '32px',
-    },
-  },
+  // // Special purple
+  // {
+  //     variants: {
+  //         theme: "purple-theme",
+  //         size: "small",
+  //         icon: "true",
+  //     },
+  //     styles: {
+  //         color: "purple",
+  //         height: "32px",
+  //     },
+  // },
 
-  // Special pink
-  {
-    variants: {
-      theme: 'pink-theme',
-      size: 'medium',
-      icon: 'true',
-    },
-    styles: {
-      color: 'pink',
-      height: '8px',
-    },
-  },
+  // // Special pink
+  // {
+  //     variants: {
+  //         theme: "pink-theme",
+  //         size: "medium",
+  //         icon: "true",
+  //     },
+  //     styles: {
+  //         color: "pink",
+  //         height: "8px",
+  //     },
+  // },
 ];

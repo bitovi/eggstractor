@@ -1,5 +1,8 @@
 import { themeTokens } from '../../theme-tokens';
-import { NonNullableStyleToken, StyleToken } from '../../types';
+import { StyleToken } from '../../types';
+
+export type GeneratorToken = { rawValue: string; property: string; path: StyleToken['path'] };
+export type Generator = (token: GeneratorToken) => string;
 
 const { spacing, colors, borderWidths, borderRadius, fontWeight, fontFamily, fontSize } =
   themeTokens;
@@ -253,9 +256,6 @@ export const generateTailwindOpacityClass: Generator = ({ rawValue }) => {
   return `opacity-${normalizedOpacity}`;
 };
 
-type GeneratorToken = { rawValue: string; property: string; path: StyleToken['path'] };
-type Generator = (token: GeneratorToken) => string;
-
 const tailwindClassGenerators: Record<string, Generator> = {
   padding: generateTailwindPaddingClass,
   display: generateTailwindDisplayClass,
@@ -285,7 +285,7 @@ const tailwindClassGenerators: Record<string, Generator> = {
   opacity: (token) => generateTailwindOpacityClass(token),
 };
 
-export function createTailwindClasses(tokens: NonNullableStyleToken[]): string[] {
+export function createTailwindClasses(tokens: GeneratorToken[]): string[] {
   const classOutput: string[] = [];
 
   for (const token of tokens) {

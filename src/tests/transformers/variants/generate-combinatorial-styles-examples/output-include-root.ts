@@ -1,4 +1,4 @@
-import { StylesForVariantsCombination } from '../../../transformers/variants';
+import { StylesForVariantsCombination } from '../../../../transformers/variants';
 
 export const output: Record<string, StylesForVariantsCombination> = {
   'theme=green-theme': {
@@ -6,6 +6,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       color: 'green',
     },
     variants: { theme: 'green-theme' },
+    path: [
+      /* stub */
+    ],
   },
   'theme=pink-theme': {
     styles: {
@@ -13,6 +16,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       height: '8px',
     },
     variants: { theme: 'pink-theme' },
+    path: [
+      /* stub */
+    ],
   },
   'theme=purple-theme': {
     styles: {
@@ -20,24 +26,36 @@ export const output: Record<string, StylesForVariantsCombination> = {
       height: '32px',
     },
     variants: { theme: 'purple-theme' },
+    path: [
+      /* stub */
+    ],
   },
   'theme=red-theme': {
     styles: {
       color: 'red',
     },
     variants: { theme: 'red-theme' },
+    path: [
+      /* stub */
+    ],
   },
   'theme=yellow-theme': {
     styles: {
       color: 'yellow',
     },
     variants: { theme: 'yellow-theme' },
+    path: [
+      /* stub */
+    ],
   },
   ROOT: {
     styles: {
       display: 'block',
     },
     variants: {},
+    path: [
+      /* stub */
+    ],
   },
   'size=small--icon=false': {
     styles: {
@@ -47,6 +65,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'small',
       icon: 'false',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=medium--icon=true': {
     styles: {
@@ -56,6 +77,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'medium',
       icon: 'true',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=medium--icon=false': {
     styles: {
@@ -65,6 +89,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'medium',
       icon: 'false',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=large--icon=false': {
     styles: {
@@ -74,6 +101,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'large',
       icon: 'false',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=large--icon=true': {
     styles: {
@@ -83,6 +113,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'large',
       icon: 'true',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=small--icon=true': {
     styles: {
@@ -92,5 +125,8 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'small',
       icon: 'true',
     },
+    path: [
+      /* stub */
+    ],
   },
 };

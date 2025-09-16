@@ -77,7 +77,7 @@ function transformTokensToStylesheet(
     case 'scss':
       return transformToScss(tokens, useCombinatorialParsing);
     case 'css':
-      return transformToCss(tokens);
+      return transformToCss(tokens, useCombinatorialParsing);
     case 'tailwind-scss':
       return transformToTailwindSassClass(tokens, useCombinatorialParsing);
     case 'tailwind-v4':
@@ -186,6 +186,8 @@ figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
     const node = await figma.getNodeByIdAsync(msg.nodeId);
     if (node && 'type' in node) {
       // This checks if it's a SceneNode
+      // TODO This doesn't properly verify that it's a SceneNode
+      // we should stick to BaseNode | (BaseNode & ChildrenMixin)
       figma.currentPage.selection = [node as SceneNode];
       figma.viewport.scrollAndZoomIntoView([node]);
     }

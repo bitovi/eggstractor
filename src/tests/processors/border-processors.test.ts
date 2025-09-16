@@ -14,9 +14,10 @@ describe('Border Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-
-    expect(result).toMatchSnapshot('border');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('border');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('border');
   });
 
   it('should process border sides correctly', async () => {
@@ -26,9 +27,10 @@ describe('Border Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-
-    expect(result).toMatchSnapshot('border-sides');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('border-sides');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('border-sides');
   });
 
   it('should process border shape correctly', async () => {
@@ -38,9 +40,10 @@ describe('Border Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-
-    expect(result).toMatchSnapshot('border-shape');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('border-shape');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('border-shape');
   });
 
   it('should process border radius correctly', async () => {
@@ -50,8 +53,9 @@ describe('Border Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(jest.fn());
-    const { result } = transformToScss(tokens);
-
-    expect(result).toMatchSnapshot('border-radius');
+    const { result: template } = transformToScss(tokens, false);
+    expect(template).toMatchSnapshot('border-radius');
+    const { result: combinatorial } = transformToScss(tokens, true);
+    expect(combinatorial).toMatchSnapshot('border-radius');
   });
 });

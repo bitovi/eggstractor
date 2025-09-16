@@ -70,9 +70,10 @@ describe('Text Processors', () => {
       global.figma = testSetup.figma;
 
       const tokens = await collectTokens(jest.fn());
-      const { result } = transformToScss(tokens);
-
-      expect(result).toMatchSnapshot('text-alignment');
+      const { result: template } = transformToScss(tokens, false);
+      expect(template).toMatchSnapshot('text-alignment');
+      const { result: combinatorial } = transformToScss(tokens, true);
+      expect(combinatorial).toMatchSnapshot('text-alignment');
     });
 
     it('should process paragraph alignment correctly', async () => {
@@ -82,9 +83,10 @@ describe('Text Processors', () => {
       global.figma = testSetup.figma;
 
       const tokens = await collectTokens(jest.fn());
-      const { result } = transformToScss(tokens);
-
-      expect(result).toMatchSnapshot('paragraph-alignment');
+      const { result: template } = transformToScss(tokens, false);
+      expect(template).toMatchSnapshot('paragraph-alignment');
+      const { result: combinatorial } = transformToScss(tokens, true);
+      expect(combinatorial).toMatchSnapshot('paragraph-alignment');
     });
 
     it('should process font style correctly', async () => {
@@ -94,9 +96,10 @@ describe('Text Processors', () => {
       global.figma = testSetup.figma;
 
       const tokens = await collectTokens(jest.fn());
-      const { result } = transformToScss(tokens);
-
-      expect(result).toMatchSnapshot('font-style');
+      const { result: template } = transformToScss(tokens, false);
+      expect(template).toMatchSnapshot('font-style');
+      const { result: combinatorial } = transformToScss(tokens, true);
+      expect(combinatorial).toMatchSnapshot('font-style');
     });
   });
 });

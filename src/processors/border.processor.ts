@@ -30,8 +30,6 @@ export const borderProcessors: StyleProcessor[] = [
     property: 'border',
     bindingKey: 'strokes',
     process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
-      if (!node) return null;
-
       // For non-rectangular shapes, we don't care about strokeAlign
       const isRectangular =
         node.type === 'RECTANGLE' || node.type === 'COMPONENT' || node.type === 'INSTANCE';
@@ -60,8 +58,7 @@ export const borderProcessors: StyleProcessor[] = [
             )
           : getBorderWidth('strokeTopWeight', weights.top, variableTokenMapByProperty);
 
-      const type =
-        node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
+      const type = 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
 
       const value = `${width.value} ${type} ${color.value}`;
       const rawValue = `${width.rawValue} ${type} ${color.rawValue}`;
@@ -121,7 +118,7 @@ export const borderProcessors: StyleProcessor[] = [
     property: 'outline',
     bindingKey: undefined,
     process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
-      if (node && 'strokeAlign' in node && node.strokeAlign !== 'OUTSIDE') {
+      if ('strokeAlign' in node && node.strokeAlign !== 'OUTSIDE') {
         return null;
       }
 
@@ -138,8 +135,7 @@ export const borderProcessors: StyleProcessor[] = [
         Object.values(weights).find((w) => w > 0) || 0,
         variableTokenMapByProperty,
       );
-      const type =
-        node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
+      const type = 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
 
       const value = `${width.value} ${type} ${color.value}`;
       const rawValue = `${width.rawValue} ${type} ${color.rawValue}`;
@@ -155,7 +151,7 @@ export const borderProcessors: StyleProcessor[] = [
     property: 'box-shadow',
     bindingKey: undefined,
     process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
-      if (node && 'strokeAlign' in node && node.strokeAlign !== 'INSIDE') {
+      if ('strokeAlign' in node && node.strokeAlign !== 'INSIDE') {
         return null;
       }
 
@@ -234,7 +230,6 @@ export const borderProcessors: StyleProcessor[] = [
       }
 
       // Handle nodes with cornerRadius
-      if (!node) return null;
       const radii = getCornerRadii(node, variableTokenMapByProperty);
       if (!radii) return null;
 
@@ -248,9 +243,7 @@ export const borderProcessors: StyleProcessor[] = [
 ];
 
 // Utility functions for border processing
-const getBorderWeights = (node?: SceneNode): BorderWeights => {
-  if (!node) return { top: 0, right: 0, bottom: 0, left: 0 };
-
+const getBorderWeights = (node: SceneNode): BorderWeights => {
   // For lines, vectors, and ellipses, they use a single strokeWeight
   if (node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE') {
     const weight: number = 'strokeWeight' in node ? Number(node.strokeWeight) : 0;
@@ -282,8 +275,8 @@ const areAllBordersEqual = (weights: BorderWeights): boolean => {
   return nonZeroWeights.length > 0 && nonZeroWeights.every((w) => w === nonZeroWeights[0]);
 };
 
-const shouldUseShorthand = (node?: SceneNode, weights?: BorderWeights): boolean => {
-  if (!node || !weights) return false;
+const shouldUseShorthand = (node: SceneNode, weights?: BorderWeights): boolean => {
+  if (!weights) return false;
 
   // For lines, vectors, and ellipses, always use shorthand
   if (node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE') {
@@ -295,7 +288,7 @@ const shouldUseShorthand = (node?: SceneNode, weights?: BorderWeights): boolean 
 };
 
 const getBorderColor = (
-  node?: SceneNode,
+  node: SceneNode,
   variableTokenMapByProperty?: Map<string, VariableToken>,
 ): BorderColor | null => {
   const borderVariable = variableTokenMapByProperty?.get('strokes');
@@ -307,7 +300,7 @@ const getBorderColor = (
     };
   }
 
-  if (node && 'strokes' in node && Array.isArray(node.strokes) && node.strokes.length > 0) {
+  if ('strokes' in node && Array.isArray(node.strokes) && node.strokes.length > 0) {
     const stroke = node.strokes[0] as Paint;
     if (stroke?.type === 'SOLID') {
       const { r, g, b } = stroke.color;
@@ -345,11 +338,11 @@ const getBorderWidth = (
 const processBorderSide = async (
   config: BorderSideConfig,
   variableTokenMapByProperty: Map<string, VariableToken>,
-  node?: SceneNode,
+  node: SceneNode,
   processedProperties?: Set<string>,
 ): Promise<ProcessedValue | null> => {
   // For lines, vectors, and ellipses, don't process individual sides
-  if (node && (node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE')) {
+  if (node.type === 'LINE' || node.type === 'VECTOR' || node.type === 'ELLIPSE') {
     return null;
   }
 
@@ -371,7 +364,7 @@ const processBorderSide = async (
     weights[config.weightKey],
     variableTokenMapByProperty,
   );
-  const type = node && 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
+  const type = 'dashPattern' in node && node.dashPattern.length > 0 ? 'dashed' : 'solid';
 
   const value = `${width.value} ${type} ${color.value}`;
   const rawValue = `${width.rawValue} ${type} ${color.rawValue}`;

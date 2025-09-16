@@ -1,19 +1,20 @@
 import { NonNullableStyleToken, TokenCollection } from '../../types';
 import { groupBy } from '../utils/group-by.utils';
-import { backToStyleTokens, convertVariantGroupBy } from '../variants-middleware';
+import { convertToGeneratorTokens, convertVariantGroupBy } from '../variants';
 import { filterStyleTokens } from './filters';
 import { createTailwindClasses } from './generators';
 import { getStylePropertyAndValue } from '../utils';
 import { createNamingContext, tailwind4NamingConfig } from '../../utils';
+import { Transformer } from '../types';
 
-export function transformToTailwindSassClass(
+export const transformToTailwindSassClass: Transformer = (
   collection: TokenCollection,
-  useCombinatorialParsing: boolean = true,
-) {
+  useCombinatorialParsing: boolean,
+) => {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token: NonNullableStyleToken) => token.name);
   const namingContext = createNamingContext();
-  const parsedStyleTokens = convertVariantGroupBy(
+  const selectors = convertVariantGroupBy(
     collection,
     groupedTokens,
     getStylePropertyAndValue,
@@ -26,7 +27,7 @@ export function transformToTailwindSassClass(
   /**
    * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
    */
-  const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) =>
+  const formattedStyleTokens = convertToGeneratorTokens(selectors).sort((a, b) =>
     a.variantPath.localeCompare(b.variantPath),
   );
 
@@ -43,18 +44,18 @@ export function transformToTailwindSassClass(
     warnings,
     errors,
   };
-}
+};
 
-export function transformToTailwindLayerUtilityClassV4(
+export const transformToTailwindLayerUtilityClassV4: Transformer = (
   collection: TokenCollection,
-  useCombinatorialParsing: boolean = true,
-) {
+  useCombinatorialParsing: boolean,
+) => {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
 
   const namingContext = createNamingContext(tailwind4NamingConfig);
 
-  const parsedStyleTokens = convertVariantGroupBy(
+  const selectors = convertVariantGroupBy(
     collection,
     groupedTokens,
     getStylePropertyAndValue,
@@ -65,7 +66,7 @@ export function transformToTailwindLayerUtilityClassV4(
   /**
    * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
    */
-  const formattedStyleTokens = backToStyleTokens(parsedStyleTokens).sort((a, b) =>
+  const formattedStyleTokens = convertToGeneratorTokens(selectors).sort((a, b) =>
     a.variantPath.localeCompare(b.variantPath),
   );
 
@@ -84,4 +85,4 @@ export function transformToTailwindLayerUtilityClassV4(
     warnings,
     errors,
   };
-}
+};

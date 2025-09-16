@@ -1,6 +1,6 @@
 export interface PathNode {
   name: string;
-  type: SceneNode['type'];
+  type: (BaseNode | (BaseNode & ChildrenMixin))['type'];
 }
 
 export interface BaseToken {

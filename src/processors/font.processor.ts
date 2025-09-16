@@ -62,7 +62,7 @@ export const fontProcessors: StyleProcessor[] = [
     bindingKey: 'fontFamily',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
       const fontVariable = variableTokenMapByProperty.get('fontFamily');
       if (fontVariable) {
@@ -72,7 +72,7 @@ export const fontProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node?.type === 'TEXT' && node.fontName && typeof node.fontName === 'object') {
+      if (node.type === 'TEXT' && node.fontName && typeof node.fontName === 'object') {
         const value = node.fontName.family;
         return { value, rawValue: value };
       }
@@ -84,7 +84,7 @@ export const fontProcessors: StyleProcessor[] = [
     bindingKey: 'fontSize',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
       const sizeVariable = variableTokenMapByProperty.get('fontSize');
       if (sizeVariable) {
@@ -95,7 +95,7 @@ export const fontProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node?.type === 'TEXT') {
+      if (node.type === 'TEXT') {
         const value = `${String(node.fontSize)}px`;
         return { value, rawValue: value, valueType: 'px' };
       }
@@ -107,9 +107,9 @@ export const fontProcessors: StyleProcessor[] = [
     bindingKey: 'fontWeight',
     process: async (
       variableTokenMapByProperty,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
-      if (!node || !hasFont(node)) return null;
+      if (!hasFont(node)) return null;
 
       if (node.fontWeight) {
         if (isSymbol(node.fontWeight)) {
@@ -190,7 +190,7 @@ export const fontProcessors: StyleProcessor[] = [
     bindingKey: 'lineHeight',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
       const heightVariable = variableTokenMapByProperty.get('lineHeight');
       if (heightVariable) {
@@ -200,7 +200,7 @@ export const fontProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node?.type === 'TEXT' && 'lineHeight' in node) {
+      if (node.type === 'TEXT' && 'lineHeight' in node) {
         const lineHeight = node.lineHeight;
         if (typeof lineHeight === 'object') {
           if (lineHeight.unit === 'AUTO') {
@@ -223,7 +223,7 @@ export const fontProcessors: StyleProcessor[] = [
     bindingKey: 'letterSpacing',
     process: async (
       variableTokenMapByProperty: Map<string, VariableToken>,
-      node?: SceneNode,
+      node: SceneNode,
     ): Promise<ProcessedValue | null> => {
       const spacingVariable = variableTokenMapByProperty.get('letterSpacing');
       if (spacingVariable) {
@@ -234,7 +234,7 @@ export const fontProcessors: StyleProcessor[] = [
         };
       }
 
-      if (node?.type === 'TEXT' && 'letterSpacing' in node) {
+      if (node.type === 'TEXT' && 'letterSpacing' in node) {
         const letterSpacing = node.letterSpacing;
         if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
           const type = letterSpacing.unit.toLowerCase() === 'percent' ? '%' : 'px';
@@ -248,10 +248,10 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'display',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       // Only apply flex if text has explicit sizing/alignment
       if (
-        node?.type === 'TEXT' &&
+        node.type === 'TEXT' &&
         (node.textAutoResize !== 'WIDTH_AND_HEIGHT' || node.textAlignVertical !== 'TOP')
       ) {
         return { value: 'flex', rawValue: 'flex' };
@@ -262,10 +262,10 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'flex-direction',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       // Only apply if we're using flex display
       if (
-        node?.type === 'TEXT' &&
+        node.type === 'TEXT' &&
         (node.textAutoResize !== 'WIDTH_AND_HEIGHT' || node.textAlignVertical !== 'TOP')
       ) {
         return { value: 'column', rawValue: 'column' };
@@ -276,9 +276,9 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'justify-content',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       // Only apply if we're using flex display and have vertical alignment
-      if (node?.type === 'TEXT' && node.textAlignVertical !== 'TOP') {
+      if (node.type === 'TEXT' && node.textAlignVertical !== 'TOP') {
         const alignMap = {
           TOP: 'flex-start',
           CENTER: 'center',
@@ -293,10 +293,10 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'text-align',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
-      if (!node || !hasTextAlign(node)) return null;
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
+      if (!hasTextAlign(node)) return null;
 
-      if (node?.type === 'TEXT' && node.textAlignHorizontal !== 'LEFT') {
+      if (node.type === 'TEXT' && node.textAlignHorizontal !== 'LEFT') {
         const alignmentMap: Record<string, string> = {
           LEFT: 'left',
           CENTER: 'center',
@@ -318,9 +318,9 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'width',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       // Only apply width if text doesn't auto-resize width
-      if (node?.type === 'TEXT' && !['WIDTH_AND_HEIGHT', 'WIDTH'].includes(node.textAutoResize)) {
+      if (node.type === 'TEXT' && !['WIDTH_AND_HEIGHT', 'WIDTH'].includes(node.textAutoResize)) {
         return { value: `${node.width}px`, rawValue: `${node.width}px`, valueType: 'px' };
       }
       return null;
@@ -329,9 +329,9 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'height',
     bindingKey: undefined,
-    process: async (_, node?: SceneNode): Promise<ProcessedValue | null> => {
+    process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       // Only apply height if text doesn't auto-resize height
-      if (node?.type === 'TEXT' && !['WIDTH_AND_HEIGHT', 'HEIGHT'].includes(node.textAutoResize)) {
+      if (node.type === 'TEXT' && !['WIDTH_AND_HEIGHT', 'HEIGHT'].includes(node.textAutoResize)) {
         return { value: `${node.height}px`, rawValue: `${node.height}px`, valueType: 'px' };
       }
       return null;

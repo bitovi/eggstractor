@@ -1,4 +1,4 @@
-import { StylesForVariantsCombination } from '../../../transformers/variants';
+import { StylesForVariantsCombination } from '../../../../transformers/variants';
 
 export const output: Record<string, StylesForVariantsCombination> = {
   'theme=green-theme': {
@@ -8,6 +8,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
     variants: {
       theme: 'green-theme',
     },
+    path: [
+      /* stub */
+    ],
   },
   'theme=red-theme': {
     styles: {
@@ -16,6 +19,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
     variants: {
       theme: 'red-theme',
     },
+    path: [
+      /* stub */
+    ],
   },
   'theme=yellow-theme': {
     styles: {
@@ -24,6 +30,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
     variants: {
       theme: 'yellow-theme',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=small--icon=false': {
     styles: {
@@ -33,6 +42,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'small',
       icon: 'false',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=medium--icon=true': {
     styles: {
@@ -42,6 +54,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'medium',
       icon: 'true',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=medium--icon=false': {
     styles: {
@@ -51,6 +66,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'medium',
       icon: 'false',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=large--icon=false': {
     styles: {
@@ -60,6 +78,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'large',
       icon: 'false',
     },
+    path: [
+      /* stub */
+    ],
   },
   'size=large--icon=true': {
     styles: {
@@ -69,16 +90,9 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'large',
       icon: 'true',
     },
-  },
-  'theme=red-theme--size=medium--icon=false': {
-    styles: {
-      height: '40px',
-    },
-    variants: {
-      theme: 'red-theme',
-      size: 'medium',
-      icon: 'false',
-    },
+    path: [
+      /* stub */
+    ],
   },
   'size=small--icon=true': {
     styles: {
@@ -88,5 +102,8 @@ export const output: Record<string, StylesForVariantsCombination> = {
       size: 'small',
       icon: 'true',
     },
+    path: [
+      /* stub */
+    ],
   },
 };

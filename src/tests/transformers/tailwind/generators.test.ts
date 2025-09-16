@@ -439,7 +439,9 @@ describe('createContextAwareColorGenerator', () => {
       ...basicToken,
       property: 'background',
       rawValue: '#ffffff',
-      path: [],
+      path: [
+        /* stub */
+      ],
     };
 
     const generator = createContextAwareColorGenerator('bg', [
