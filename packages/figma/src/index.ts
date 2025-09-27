@@ -25,8 +25,6 @@ const main = async () => {
 
   const route: string = (await figma.clientStorage.getAsync('route')) || '/';
 
-  console.log('Initial route:', route);
-
   // This is a placeholder found in the index.html file of the UI build
   // that we replace with the initial route to load.
   // This is done to avoid async loading of the initial route in the UI.

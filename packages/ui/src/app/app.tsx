@@ -6,7 +6,7 @@ import { messageMainThread } from './utils';
 import { About, Form, StatusProvider } from './routes';
 import { GeneratedStylesProvider, Config, ConfigProvider } from './context';
 import { useOnPluginMessage, useRoutePersistence } from './hooks';
-import { MemoryPersistenceRouter } from './components';
+import { MemoryPersistenceRouter, Nav } from './components';
 
 export const App = () => {
   const initialRoute = useRoutePersistence();
@@ -38,26 +38,7 @@ export const App = () => {
       <GeneratedStylesProvider>
         <StatusProvider>
           <ConfigProvider {...loadedConfig}>
-            <nav className="navigation">
-              <ul>
-                <li>
-                  <NavLink
-                    to="/"
-                    className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}
-                  >
-                    Export
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/about"
-                    className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}
-                  >
-                    About
-                  </NavLink>
-                </li>
-              </ul>
-            </nav>
+            <Nav />
             <Routes>
               <Route path="/" element={<Form />} />
               <Route path="/about" element={<About />} />

@@ -24,7 +24,6 @@ export const StatusProvider: FC<StatusProviderProps> = ({ children }) => {
   const [status, setStatus] = useState<StatusState>({ state: 'idle' });
 
   const setIdle = () => {
-    console.log('setIdle');
     setStatus({ state: 'idle' });
   };
   const setCreatingPR = () => setStatus({ state: 'creating-pr' });

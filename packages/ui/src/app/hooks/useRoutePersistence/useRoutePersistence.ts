@@ -9,8 +9,7 @@ export const useRoutePersistence = () => {
   // Compute the initial route synchronously once
   const initialRoute = useMemo<string>(() => {
     if (isFigmaPluginUI()) {
-      // From code.ts injection
-      console.log('Reading initial route from Figma:', window.__INITIAL_ROUTE__);
+      // From figma injection
       return window.__INITIAL_ROUTE__ || '/';
     } else {
       // Browser build: sync read from localStorage
