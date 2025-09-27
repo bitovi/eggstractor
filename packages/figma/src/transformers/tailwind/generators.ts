@@ -8,15 +8,8 @@ export type GeneratorToken = {
 };
 export type Generator = (token: GeneratorToken) => string;
 
-const {
-  spacing,
-  colors,
-  borderWidths,
-  borderRadius,
-  fontWeight,
-  fontFamily,
-  fontSize,
-} = themeTokens;
+const { spacing, colors, borderWidths, borderRadius, fontWeight, fontFamily, fontSize } =
+  themeTokens;
 
 const borderStyles = new Set([
   'none',
@@ -43,9 +36,7 @@ const borderPropertyToShorthand: Record<string, string> = {
 
 const directions = ['t', 'r', 'b', 'l'] as const;
 
-export function normalizeFourSides(
-  value: string,
-): [string, string, string, string] {
+export function normalizeFourSides(value: string): [string, string, string, string] {
   const [a, b = a, c = a, d = b] = value.trim().split(/\s+/);
 
   return [a, b, c, d];
@@ -81,19 +72,14 @@ export function normalizeTwoSides(value: string): [string, string] {
   return [a, b];
 }
 
-export function normalizeBorderRadius(
-  value: string,
-): [string, string, string, string] {
+export function normalizeBorderRadius(value: string): [string, string, string, string] {
   const parts = value.trim().split(/\s+/);
   const [a, b = a, c = a, d = b] = parts;
 
   return parts.length === 3 ? [a, b, c, b] : [a, b, c, d];
 }
 
-export const normalizeTailwindToken = (
-  themeMapping: Record<string, string>,
-  value: string,
-) => {
+export const normalizeTailwindToken = (themeMapping: Record<string, string>, value: string) => {
   const mapping = themeMapping[value];
   if (mapping === 'DEFAULT') return '';
   return mapping ?? `[${value}]`;
@@ -280,16 +266,13 @@ const tailwindClassGenerators: Record<string, Generator> = {
   'border-radius': generateTailwindBorderRadiusClass,
   border: generateTailwindBorderClass,
   'box-shadow': generateTailwindBoxShadowClass,
-  'font-weight': ({ rawValue }) =>
-    `font-${normalizeTailwindToken(fontWeight, rawValue)}`,
-  'font-size': ({ rawValue }) =>
-    `text-${normalizeTailwindToken(fontSize, rawValue)}`,
+  'font-weight': ({ rawValue }) => `font-${normalizeTailwindToken(fontWeight, rawValue)}`,
+  'font-size': ({ rawValue }) => `text-${normalizeTailwindToken(fontSize, rawValue)}`,
   'font-family': generateTailwindFontFamilyOutput,
   color: ({ rawValue }) => `text-${normalizeTailwindToken(colors, rawValue)}`,
   background: createContextAwareColorGenerator('bg', [
     {
-      condition: (token) =>
-        token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+      condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
       prefix: 'text',
     },
   ]),
@@ -299,14 +282,10 @@ const tailwindClassGenerators: Record<string, Generator> = {
   'justify-content': ({ rawValue }) => justifyContent[rawValue],
   height: ({ rawValue }) => `h-${normalizeTailwindToken(spacing, rawValue)}`,
   width: ({ rawValue }) => `w-${normalizeTailwindToken(spacing, rawValue)}`,
-  'max-height': ({ rawValue }) =>
-    `max-h-${normalizeTailwindToken(spacing, rawValue)}`,
-  'max-width': ({ rawValue }) =>
-    `max-w-${normalizeTailwindToken(spacing, rawValue)}`,
-  'min-height': ({ rawValue }) =>
-    `min-h-${normalizeTailwindToken(spacing, rawValue)}`,
-  'min-width': ({ rawValue }) =>
-    `min-w-${normalizeTailwindToken(spacing, rawValue)}`,
+  'max-height': ({ rawValue }) => `max-h-${normalizeTailwindToken(spacing, rawValue)}`,
+  'max-width': ({ rawValue }) => `max-w-${normalizeTailwindToken(spacing, rawValue)}`,
+  'min-height': ({ rawValue }) => `min-h-${normalizeTailwindToken(spacing, rawValue)}`,
+  'min-width': ({ rawValue }) => `min-w-${normalizeTailwindToken(spacing, rawValue)}`,
   opacity: (token) => generateTailwindOpacityClass(token),
 };
 

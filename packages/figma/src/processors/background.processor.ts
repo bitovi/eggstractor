@@ -44,9 +44,7 @@ export const backgroundProcessors: StyleProcessor[] = [
           rawValue: null,
         };
 
-        const validBackgrounds = backgrounds.filter(
-          (b): b is NonNullable<typeof b> => b !== null,
-        );
+        const validBackgrounds = backgrounds.filter((b): b is NonNullable<typeof b> => b !== null);
         if (validBackgrounds.length > 0) {
           result.value = validBackgrounds.map((b) => b.value).join(', ');
           result.rawValue = validBackgrounds.map((b) => b.rawValue).join(', ');

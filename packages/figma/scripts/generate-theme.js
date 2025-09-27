@@ -25,21 +25,11 @@ const defaultThemeWithColors = {
 // Handle extend properly from custom config
 const fullConfig = merge(
   { theme: defaultThemeWithColors },
-  customConfig.theme?.extend
-    ? { theme: { ...customConfig.theme.extend } }
-    : customConfig,
+  customConfig.theme?.extend ? { theme: { ...customConfig.theme.extend } } : customConfig,
 );
 
-const {
-  spacing,
-  colors,
-  borderRadius,
-  borderWidth,
-  fontWeight,
-  fontSize,
-  fontFamily,
-  fontStyle,
-} = fullConfig.theme;
+const { spacing, colors, borderRadius, borderWidth, fontWeight, fontSize, fontFamily, fontStyle } =
+  fullConfig.theme;
 
 function remToPx(rem) {
   const numeric = parseFloat(rem);

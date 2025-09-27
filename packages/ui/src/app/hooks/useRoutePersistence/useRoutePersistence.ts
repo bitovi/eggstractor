@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { isFigmaPluginUI } from "../../utils";
+import { useMemo } from 'react';
+import { isFigmaPluginUI } from '../../utils';
 
 /**
  * Returns a *synchronous* initialRoute string. Expected to be used with
@@ -19,4 +19,4 @@ export const useRoutePersistence = () => {
   }, []);
 
   return initialRoute;
-}
+};

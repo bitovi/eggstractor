@@ -1,6 +1,6 @@
-import { FC, ReactNode, useEffect } from "react";
-import { MemoryRouter, useLocation } from "react-router-dom";
-import { isFigmaPluginUI } from "../../utils";
+import { FC, ReactNode, useEffect } from 'react';
+import { MemoryRouter, useLocation } from 'react-router-dom';
+import { isFigmaPluginUI } from '../../utils';
 
 // Inner component that persists on route changes (render this inside your Router)
 const RoutePersistence = () => {
@@ -9,17 +9,14 @@ const RoutePersistence = () => {
   useEffect(() => {
     const path = location.pathname;
     if (isFigmaPluginUI()) {
-      window.parent.postMessage(
-        { pluginMessage: { type: 'set-route', path } },
-        '*'
-      );
+      window.parent.postMessage({ pluginMessage: { type: 'set-route', path } }, '*');
     } else {
       window.localStorage.setItem('memoryRouterPath', path);
     }
   }, [location.pathname]);
 
   return null;
-}
+};
 
 interface MemoryPersistenceRouterProps {
   children: ReactNode;
@@ -30,7 +27,10 @@ interface MemoryPersistenceRouterProps {
  * Wrapper around MemoryRouter that persists the current route. Expected to be
  * used with useRoutePersistence.
  */
-export const MemoryPersistenceRouter: FC<MemoryPersistenceRouterProps> = ({ children, initialRoute }) => {
+export const MemoryPersistenceRouter: FC<MemoryPersistenceRouterProps> = ({
+  children,
+  initialRoute,
+}) => {
   return (
     <MemoryRouter initialEntries={[initialRoute]}>
       <RoutePersistence />

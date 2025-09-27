@@ -1,6 +1,6 @@
 export * from './Button';
 export * from './Input';
 export * from './MemoryPersistenceRouter';
-export * from './ProgressBar'
+export * from './ProgressBar';
 export * from './RadioGroup';
 export * from './Select';

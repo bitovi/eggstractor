@@ -75,18 +75,12 @@ describe('Background Processors', () => {
     global.figma = testSetup.figma;
 
     const tokens = await collectTokens(vi.fn());
-    const { result: template, warnings: templateWarnings } = transformToCss(
-      tokens,
-      false,
-    );
+    const { result: template, warnings: templateWarnings } = transformToCss(tokens, false);
 
     // Test specific styles with snapshots
     const templateStyles = {
       linear: parseCssClass(template, 'background-gradient-linear-style'),
-      linearAlpha: parseCssClass(
-        template,
-        'background-gradient-linear-alpha-style',
-      ),
+      linearAlpha: parseCssClass(template, 'background-gradient-linear-alpha-style'),
     };
 
     // Snapshot all styles
@@ -99,16 +93,12 @@ describe('Background Processors', () => {
     expect(templateStyles.linear).toBe(null);
     expect(templateStyles.linearAlpha).toBe(null);
 
-    const { result: combinatorial, warnings: combinatorialWarnings } =
-      transformToCss(tokens, true);
+    const { result: combinatorial, warnings: combinatorialWarnings } = transformToCss(tokens, true);
 
     // Test specific styles with snapshots
     const combinatorialStyles = {
       linear: parseCssClass(combinatorial, 'background-gradient-linear-style'),
-      linearAlpha: parseCssClass(
-        combinatorial,
-        'background-gradient-linear-alpha-style',
-      ),
+      linearAlpha: parseCssClass(combinatorial, 'background-gradient-linear-alpha-style'),
     };
 
     // Snapshot all styles

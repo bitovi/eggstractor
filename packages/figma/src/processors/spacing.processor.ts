@@ -50,18 +50,10 @@ export const spacingProcessors: StyleProcessor[] = [
       };
 
       // Helper to get final value (variable or pixel)
-      const getValue = (key: keyof PaddingValues) =>
-        varValues[key] || pixelValues[key];
+      const getValue = (key: keyof PaddingValues) => varValues[key] || pixelValues[key];
 
       // Determine the most concise padding format
-      if (
-        allEqual([
-          pixelValues.top,
-          pixelValues.right,
-          pixelValues.bottom,
-          pixelValues.left,
-        ])
-      ) {
+      if (allEqual([pixelValues.top, pixelValues.right, pixelValues.bottom, pixelValues.left])) {
         // All sides equal - use single value
         return {
           value: getValue('top'),
@@ -70,10 +62,7 @@ export const spacingProcessors: StyleProcessor[] = [
         };
       }
 
-      if (
-        pixelValues.top === pixelValues.bottom &&
-        pixelValues.left === pixelValues.right
-      ) {
+      if (pixelValues.top === pixelValues.bottom && pixelValues.left === pixelValues.right) {
         // Vertical/horizontal pairs equal - use two values
         return {
           value: `${getValue('top')} ${getValue('left')}`,

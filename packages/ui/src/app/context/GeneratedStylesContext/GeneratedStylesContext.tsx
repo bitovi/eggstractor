@@ -36,13 +36,11 @@ export const GeneratedStylesProvider: FC<GeneratedStylesProviderProps> = ({ chil
       setLoading,
       setGeneratedStyles,
     }),
-    [loading, generatedStyles]
+    [loading, generatedStyles],
   );
 
   return (
-    <GeneratedStylesContext.Provider value={value}>
-      {children}
-    </GeneratedStylesContext.Provider>
+    <GeneratedStylesContext.Provider value={value}>{children}</GeneratedStylesContext.Provider>
   );
 };
 

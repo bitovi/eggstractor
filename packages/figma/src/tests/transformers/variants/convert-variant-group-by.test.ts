@@ -17,8 +17,7 @@ import {
 import { tokenCollection } from './convert-variant-group-by-data';
 
 const transform = (token: StyleToken): Record<string, string> => {
-  const value =
-    token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue!;
+  const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue!;
 
   return {
     [token.property]: value,
@@ -31,8 +30,10 @@ describe('convertVariantGroupBy', () => {
   };
 
   const getStyles = (partialConfig: NamingContextConfig) => {
-    const styleTokensGroupedByVariantCombination: Record<string, StyleToken[]> =
-      groupBy(styleTokenCollection.tokens, (token) => token.name);
+    const styleTokensGroupedByVariantCombination: Record<string, StyleToken[]> = groupBy(
+      styleTokenCollection.tokens,
+      (token) => token.name,
+    );
 
     const templateNamingContext = createNamingContext(partialConfig);
     const combinatorialNamingContext = createNamingContext(partialConfig);
@@ -82,8 +83,7 @@ describe('convertVariantGroupBy', () => {
   });
 
   it('should create the same selectors and meta data for both combinatorial and template output', () => {
-    const { combinatorialStyles, templateStyles } =
-      getStyles(defaultContextConfig);
+    const { combinatorialStyles, templateStyles } = getStyles(defaultContextConfig);
 
     expect(combinatorialStyles.length).toBe(4);
     expect(templateStyles.length).toBe(4);
@@ -100,18 +100,16 @@ describe('convertVariantGroupBy', () => {
 
     expect(combinatorialStylesTailwind).toStrictEqual(templateStylesTailwind);
 
-    const {
-      combinatorialStyles: combinatorialStylesABCD,
-      templateStyles: templateStylesABCD,
-    } = getStyles({
-      env: 'css',
-      delimiters: {
-        pathSeparator: '_A_',
-        afterComponentName: '_B_',
-        variantEqualSign: '_C_',
-        betweenVariants: '_D_',
-      },
-    });
+    const { combinatorialStyles: combinatorialStylesABCD, templateStyles: templateStylesABCD } =
+      getStyles({
+        env: 'css',
+        delimiters: {
+          pathSeparator: '_A_',
+          afterComponentName: '_B_',
+          variantEqualSign: '_C_',
+          betweenVariants: '_D_',
+        },
+      });
 
     expect(combinatorialStylesABCD.length).toBe(4);
     expect(templateStylesABCD.length).toBe(4);
@@ -126,12 +124,10 @@ describe('convertVariantGroupBy', () => {
     expect(transformToScss(styleTokenCollection, false)).toStrictEqual(
       transformToScss(styleTokenCollection, true),
     );
-    expect(
-      transformToTailwindSassClass(styleTokenCollection, false),
-    ).toStrictEqual(transformToTailwindSassClass(styleTokenCollection, true));
-    expect(
-      transformToTailwindLayerUtilityClassV4(styleTokenCollection, false),
-    ).toStrictEqual(
+    expect(transformToTailwindSassClass(styleTokenCollection, false)).toStrictEqual(
+      transformToTailwindSassClass(styleTokenCollection, true),
+    );
+    expect(transformToTailwindLayerUtilityClassV4(styleTokenCollection, false)).toStrictEqual(
       transformToTailwindLayerUtilityClassV4(styleTokenCollection, true),
     );
   });

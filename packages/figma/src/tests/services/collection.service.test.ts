@@ -94,12 +94,8 @@ describe('Component Set Duplicate Detection', () => {
       ],
     } as unknown as BaseNode;
 
-    expect(
-      detectComponentSetDuplicates(mockUniqueComponentSet).hasDuplicates,
-    ).toBe(false);
-    expect(
-      detectComponentSetDuplicates(mockUniqueComponentSet).duplicateNames,
-    ).toEqual([]);
+    expect(detectComponentSetDuplicates(mockUniqueComponentSet).hasDuplicates).toBe(false);
+    expect(detectComponentSetDuplicates(mockUniqueComponentSet).duplicateNames).toEqual([]);
   });
 
   it('should filter out corrupted component sets from node tree', () => {

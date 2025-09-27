@@ -1,9 +1,4 @@
 {
-  "cSpell.words": [
-    "Bitovi",
-    "Eggstractor",
-    "singlefile",
-    "Templatized"
-  ],
+  "cSpell.words": ["Bitovi", "Eggstractor", "singlefile", "Templatized"],
   "eslint.useFlatConfig": true
 }

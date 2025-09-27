@@ -1,4 +1,4 @@
-import hljs from "highlight.js";
+import hljs from 'highlight.js';
 
 export const highlightCode = (code: string, language = 'scss'): string => {
   try {
@@ -9,4 +9,3 @@ export const highlightCode = (code: string, language = 'scss'): string => {
     return code;
   }
 };
-

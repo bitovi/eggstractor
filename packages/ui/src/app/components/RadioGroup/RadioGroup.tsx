@@ -14,10 +14,15 @@ export interface RadioGroupProps<T extends string | number = string> {
 }
 
 export const RadioGroup = <T extends string | number = string>({
-  label, name, value, onChange, options}: RadioGroupProps<T>) => {
+  label,
+  name,
+  value,
+  onChange,
+  options,
+}: RadioGroupProps<T>) => {
   const id = useId();
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const selectedOption = options.find(option => option.value === event.target.value);
+    const selectedOption = options.find((option) => option.value === event.target.value);
     if (selectedOption) {
       onChange(selectedOption.value);
     }
@@ -25,7 +30,9 @@ export const RadioGroup = <T extends string | number = string>({
 
   return (
     <div className="parsing-mode-group">
-      <label className="parsing-mode-label" id={id}>{label}</label>
+      <label className="parsing-mode-label" id={id}>
+        {label}
+      </label>
       <div className="radio-group" aria-labelledby={id}>
         {options.map((option) => (
           <label key={option.value} className="radio-option">

@@ -36,10 +36,7 @@ function createErrorToken(
 /**
  * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
  */
-function createWarningToken(
-  componentSetNode: BaseNode,
-  duplicateNames: string[],
-): StyleToken {
+function createWarningToken(componentSetNode: BaseNode, duplicateNames: string[]): StyleToken {
   return {
     property: `warning-${componentSetNode.id}`,
     name: `duplicate-component-warning`,
@@ -126,10 +123,7 @@ export function getFlattenedValidNodes(node: BaseNode): {
 
   function traverse(currentNode: BaseNode) {
     // Skip . and _ nodes entirely. These are components that are marked as hidden or private by designers.
-    if (
-      'name' in currentNode &&
-      ['.', '_'].some((char) => currentNode.name.startsWith(char))
-    ) {
+    if ('name' in currentNode && ['.', '_'].some((char) => currentNode.name.startsWith(char))) {
       return;
     }
 
@@ -152,13 +146,10 @@ export function getFlattenedValidNodes(node: BaseNode): {
 
     // Check for duplicates and skip if found
     if (currentNode.type === 'COMPONENT_SET') {
-      const { hasDuplicates, duplicateNames } =
-        detectComponentSetDuplicates(currentNode);
+      const { hasDuplicates, duplicateNames } = detectComponentSetDuplicates(currentNode);
 
       if (hasDuplicates) {
-        console.warn(
-          `⏭️ Skipping corrupted component set: ${currentNode.name}`,
-        );
+        console.warn(`⏭️ Skipping corrupted component set: ${currentNode.name}`);
         warningTokens.push(createWarningToken(currentNode, duplicateNames));
         return; // Skip the entire component set and all its children
       }
@@ -177,9 +168,7 @@ export function getFlattenedValidNodes(node: BaseNode): {
   return { validNodes: result, warningTokens };
 }
 
-export async function collectTokens(
-  onProgress: (progress: number, message: string) => void,
-) {
+export async function collectTokens(onProgress: (progress: number, message: string) => void) {
   const collection: TokenCollection = {
     tokens: [],
     components: {},
@@ -197,18 +186,12 @@ export async function collectTokens(
   async function processNode(node: BaseNode) {
     processedNodes++;
     const currentPercentage =
-      Math.floor(
-        (processedNodes / totalNodes) * (MAX_PROGRESS_PERCENTAGE - 10),
-      ) + 10;
-    const shouldUpdate =
-      currentPercentage !== lastPercentage || processedNodes === totalNodes;
+      Math.floor((processedNodes / totalNodes) * (MAX_PROGRESS_PERCENTAGE - 10)) + 10;
+    const shouldUpdate = currentPercentage !== lastPercentage || processedNodes === totalNodes;
 
     if (shouldUpdate) {
       lastPercentage = currentPercentage;
-      onProgress(
-        currentPercentage,
-        `Processing nodes… ${processedNodes}/${totalNodes}`,
-      );
+      onProgress(currentPercentage, `Processing nodes… ${processedNodes}/${totalNodes}`);
       const now = Date.now();
 
       if (now - lastTimestamp >= 200) {
@@ -261,9 +244,7 @@ export async function collectTokens(
           const instanceToken = await extractInstanceSetToken(node);
           collection.instances[node.id] = instanceToken;
 
-          if (
-            shouldSkipInstanceTokenGeneration(node, instanceToken, collection)
-          ) {
+          if (shouldSkipInstanceTokenGeneration(node, instanceToken, collection)) {
             return;
           }
         } catch (error) {
@@ -293,9 +274,7 @@ export async function collectTokens(
           componentSetToken,
         );
         collection.tokens.push(...tokens);
-        collection.tokens.push(
-          ...issues.map((issue) => createErrorToken(issue)),
-        );
+        collection.tokens.push(...issues.map((issue) => createErrorToken(issue)));
       }
     }
   }
@@ -304,13 +283,9 @@ export async function collectTokens(
   await figma.loadAllPagesAsync();
   onProgress(5, 'Counting nodes...');
 
-  const allPageResults = figma.root.children.map((page) =>
-    getFlattenedValidNodes(page),
-  );
+  const allPageResults = figma.root.children.map((page) => getFlattenedValidNodes(page));
   const allValidNodes = allPageResults.flatMap((result) => result.validNodes);
-  const allWarningTokens = allPageResults.flatMap(
-    (result) => result.warningTokens,
-  );
+  const allWarningTokens = allPageResults.flatMap((result) => result.warningTokens);
 
   totalNodes = allValidNodes.length;
   onProgress(10, `Processing ${totalNodes} nodes...`);

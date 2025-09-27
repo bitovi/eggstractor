@@ -3,27 +3,17 @@ import { rgbaToString, sanitizeName, normalizeValue } from '../utils';
 
 const variableCache = new Map<string, Variable>();
 
-async function getVariableFallback(
-  variable: Variable,
-  propertyName: string,
-): Promise<string> {
+async function getVariableFallback(variable: Variable, propertyName: string): Promise<string> {
   const modeId = Object.keys(variable.valuesByMode)[0];
   const value = variable.valuesByMode[modeId];
 
   // Handle variable aliases first
-  if (
-    value &&
-    typeof value === 'object' &&
-    'type' in value &&
-    value.type === 'VARIABLE_ALIAS'
-  ) {
+  if (value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS') {
     // Check cache first!
     let aliasVariable = variableCache.get(value.id);
 
     if (!aliasVariable) {
-      const aliasVariableFromFigma = await figma.variables.getVariableByIdAsync(
-        value.id,
-      );
+      const aliasVariableFromFigma = await figma.variables.getVariableByIdAsync(value.id);
 
       if (!aliasVariableFromFigma) {
         throw new Error('Unexpected missing variable from Figma');

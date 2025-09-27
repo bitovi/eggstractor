@@ -35,8 +35,7 @@ export const CreatePRButton: FC = () => {
       },
       {
         value: branchName,
-        warning:
-          'Please specify the name of the branch to create or add the commit to',
+        warning: 'Please specify the name of the branch to create or add the commit to',
       },
       { value: generatedStyles, warning: 'Please generate the SCSS first' },
     ];

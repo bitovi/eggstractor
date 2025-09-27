@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  FC,
-  ReactNode,
-} from 'react';
+import { createContext, useContext, useMemo, useState, FC, ReactNode } from 'react';
 
 type StatusState =
   | { state: 'idle' }
@@ -32,7 +25,7 @@ export const StatusProvider: FC<StatusProviderProps> = ({ children }) => {
 
   const setIdle = () => {
     console.log('setIdle');
-    setStatus({ state: 'idle' })
+    setStatus({ state: 'idle' });
   };
   const setCreatingPR = () => setStatus({ state: 'creating-pr' });
   const setPRCreated = (url: string) => setStatus({ state: 'pr-created', url });
@@ -44,7 +37,7 @@ export const StatusProvider: FC<StatusProviderProps> = ({ children }) => {
       setCreatingPR,
       setPRCreated,
     }),
-    [status]
+    [status],
   );
 
   return <StatusContext.Provider value={value}>{children}</StatusContext.Provider>;

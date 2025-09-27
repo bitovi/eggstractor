@@ -5,10 +5,7 @@ interface NormalizeOptions {
   value: number;
 }
 
-export function normalizeValue({
-  propertyName,
-  value,
-}: NormalizeOptions): string {
+export function normalizeValue({ propertyName, value }: NormalizeOptions): string {
   const type = getValueType(propertyName);
 
   switch (type) {

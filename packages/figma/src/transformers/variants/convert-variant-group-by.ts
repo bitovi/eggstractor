@@ -19,22 +19,19 @@ export const convertVariantGroupBy = (
 ): ({ key: string } & StylesForVariantsCombination)[] => {
   const globalValueConflicts = new Map<string, Set<string>>();
 
-  Object.values(styleTokensGroupedByVariantCombination).forEach(
-    (groupTokens) => {
-      const componentId = groupTokens[0].componentId;
-      if (!componentId) return;
+  Object.values(styleTokensGroupedByVariantCombination).forEach((groupTokens) => {
+    const componentId = groupTokens[0].componentId;
+    if (!componentId) return;
 
-      const variants =
-        tokenCollection.components[componentId]?.variantProperties || {};
+    const variants = tokenCollection.components[componentId]?.variantProperties || {};
 
-      Object.entries(variants).forEach(([property, value]) => {
-        if (!globalValueConflicts.has(value)) {
-          globalValueConflicts.set(value, new Set());
-        }
-        globalValueConflicts.get(value)!.add(property.toLowerCase());
-      });
-    },
-  );
+    Object.entries(variants).forEach(([property, value]) => {
+      if (!globalValueConflicts.has(value)) {
+        globalValueConflicts.set(value, new Set());
+      }
+      globalValueConflicts.get(value)!.add(property.toLowerCase());
+    });
+  });
 
   const conflictMap: Record<string, string[]> = {};
   globalValueConflicts.forEach((properties, value) => {
@@ -43,14 +40,10 @@ export const convertVariantGroupBy = (
     }
   });
 
-  const instanceGroupedByVariants = Object.entries(
-    styleTokensGroupedByVariantCombination,
-  )
+  const instanceGroupedByVariants = Object.entries(styleTokensGroupedByVariantCombination)
     .map(([key, groupTokens]) => {
       const componentId = groupTokens[0].componentId
-        ? groupTokens.every(
-            (token) => token.componentId === groupTokens[0].componentId,
-          )
+        ? groupTokens.every((token) => token.componentId === groupTokens[0].componentId)
           ? groupTokens[0].componentId
           : (() => {
               throw new Error('Unexpected component id mismatch');
@@ -58,9 +51,7 @@ export const convertVariantGroupBy = (
         : undefined;
 
       const componentSetId = groupTokens[0].componentSetId
-        ? groupTokens.every(
-            (token) => token.componentSetId === groupTokens[0].componentSetId,
-          )
+        ? groupTokens.every((token) => token.componentSetId === groupTokens[0].componentSetId)
           ? groupTokens[0].componentSetId
           : (() => {
               throw new Error('Unexpected component id mismatch');
@@ -86,9 +77,7 @@ export const convertVariantGroupBy = (
         // Used for finding all possible variants
         componentSetId,
         // Variants
-        variants: componentId
-          ? tokenCollection.components[componentId].variantProperties
-          : {},
+        variants: componentId ? tokenCollection.components[componentId].variantProperties : {},
         styles,
       };
     })
@@ -96,11 +85,7 @@ export const convertVariantGroupBy = (
 
   if (!useCombinatorialParsing) {
     return instanceGroupedByVariants.map((variantGroup) => {
-      const key = namingContext.createName(
-        variantGroup.path,
-        conflictMap,
-        variantGroup.variants,
-      );
+      const key = namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants);
       return updatePaddingStylesBasedOnBorder({
         ...variantGroup,
         key,
@@ -132,11 +117,7 @@ export const convertVariantGroupBy = (
     }
 
     // No variants so we can generate the key now
-    const key = namingContext.createName(
-      variantGroup.path,
-      conflictMap,
-      variantGroup.variants,
-    );
+    const key = namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants);
     instancesWithoutVariant.push({ ...variantGroup, key });
   }
 
@@ -156,36 +137,28 @@ export const convertVariantGroupBy = (
     {} as Record<string, typeof instancesWithVariant>,
   );
 
-  const parsedVariantInstances = Object.entries(
-    instancesWithVariantMap,
-  ).flatMap(
+  const parsedVariantInstances = Object.entries(instancesWithVariantMap).flatMap(
     // We should not use the key from Object.entries since it's for temporary
     // grouping only. Instead, use namingContext to generate the final key.
     ([, instances]) => {
       const cssByVariantCombinations = generateCombinatorialStyles(instances);
 
-      return Object.entries(cssByVariantCombinations).map(
-        ([, cssByVariantCombination]) => {
-          const path = cssByVariantCombination.path;
-          const key = namingContext.createName(
-            path,
-            conflictMap,
-            cssByVariantCombination.variants,
-          );
-          return {
-            key,
-            styles: cssByVariantCombination.styles,
-            variants: cssByVariantCombination.variants,
-            // Preserve the path for context-aware generators
-            path,
-          };
-        },
-      );
+      return Object.entries(cssByVariantCombinations).map(([, cssByVariantCombination]) => {
+        const path = cssByVariantCombination.path;
+        const key = namingContext.createName(path, conflictMap, cssByVariantCombination.variants);
+        return {
+          key,
+          styles: cssByVariantCombination.styles,
+          variants: cssByVariantCombination.variants,
+          // Preserve the path for context-aware generators
+          path,
+        };
+      });
     },
   );
 
   // With combination parsing: new behavior
-  return [...instancesWithoutVariant, ...parsedVariantInstances].map(
-    (instance) => updatePaddingStylesBasedOnBorder(instance),
+  return [...instancesWithoutVariant, ...parsedVariantInstances].map((instance) =>
+    updatePaddingStylesBasedOnBorder(instance),
   );
 };

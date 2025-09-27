@@ -32,32 +32,24 @@ export const convert = (
       .join(', ');
   }
 
-  return value.replace(
-    /(\d*\.?\d+)(rem|px)/g,
-    (match: string, val: string, from: string) => {
-      if (from === 'px' && (to === 'rem' || to === 'em')) {
-        return String(convert(parseFloat(val), to, options));
-      }
+  return value.replace(/(\d*\.?\d+)(rem|px)/g, (match: string, val: string, from: string) => {
+    if (from === 'px' && (to === 'rem' || to === 'em')) {
+      return String(convert(parseFloat(val), to, options));
+    }
 
-      if (from === 'rem' && to === 'px') {
-        return String(convert(parseFloat(val), to, options));
-      }
+    if (from === 'rem' && to === 'px') {
+      return String(convert(parseFloat(val), to, options));
+    }
 
-      return match;
-    },
-  );
+    return match;
+  });
 };
 
-export const rem = (
-  value: number | string | object,
-  options?: ConvertOptions,
-) => convert(value, 'rem', options);
+export const rem = (value: number | string | object, options?: ConvertOptions) =>
+  convert(value, 'rem', options);
 
-export const em = (
-  value: number | string | object,
-  baseline: number,
-  options?: ConvertOptions,
-) => convert(value, 'em', { baseline, ...options });
+export const em = (value: number | string | object, baseline: number, options?: ConvertOptions) =>
+  convert(value, 'em', { baseline, ...options });
 
 export const px = (value: number | string | object, options?: ConvertOptions) =>
   convert(value, 'px', options);

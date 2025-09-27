@@ -1,7 +1,7 @@
-import { FC } from "react";
-import { Button } from "../../../components";
-import { messageMainThread } from "../../../utils";
-import { useOnPluginMessage } from "../../../hooks";
+import { FC } from 'react';
+import { Button } from '../../../components';
+import { messageMainThread } from '../../../utils';
+import { useOnPluginMessage } from '../../../hooks';
 
 export const ExportTestDataButton: FC = () => {
   useOnPluginMessage('test-data-exported', (msg) => {
@@ -21,5 +21,5 @@ export const ExportTestDataButton: FC = () => {
     messageMainThread({ type: 'export-test-data' });
   };
 
-  return <Button onClick={exportTestData}>Export Test Data</Button>
+  return <Button onClick={exportTestData}>Export Test Data</Button>;
 };

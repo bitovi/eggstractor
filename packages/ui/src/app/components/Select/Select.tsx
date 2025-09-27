@@ -20,9 +20,7 @@ export const Select = <T extends string = string>({
   ...props
 }: SelectProps<T>) => {
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const selectedOption = options.find(
-      (option) => option.value === event.target.value,
-    );
+    const selectedOption = options.find((option) => option.value === event.target.value);
     if (selectedOption) {
       onChange(selectedOption);
     }
@@ -31,11 +29,7 @@ export const Select = <T extends string = string>({
   return (
     <select {...props} value={value} onChange={handleChange}>
       {options.map((option) => (
-        <option
-          key={option.value}
-          value={option.value}
-          className={option.className}
-        >
+        <option key={option.value} value={option.value} className={option.className}>
           {option.label}
         </option>
       ))}

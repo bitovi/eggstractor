@@ -23,8 +23,7 @@ function hasTextAlign(node: SceneNode): node is SceneNode & NodeWithTextAlign {
 function isSymbol(value: unknown): value is symbol {
   return (
     typeof value === 'symbol' ||
-    (typeof value === 'object' &&
-      Object.prototype.toString.call(value) === '[object Symbol]')
+    (typeof value === 'object' && Object.prototype.toString.call(value) === '[object Symbol]')
   );
 }
 
@@ -32,10 +31,7 @@ export const fontProcessors: StyleProcessor[] = [
   {
     property: 'color',
     bindingKey: 'fills',
-    process: async (
-      variableTokenMapByProperty,
-      node,
-    ): Promise<ProcessedValue | null> => {
+    process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
       const colorVariable = variableTokenMapByProperty.get('fills');
       if (colorVariable) {
         return {
@@ -76,11 +72,7 @@ export const fontProcessors: StyleProcessor[] = [
         };
       }
 
-      if (
-        node.type === 'TEXT' &&
-        node.fontName &&
-        typeof node.fontName === 'object'
-      ) {
+      if (node.type === 'TEXT' && node.fontName && typeof node.fontName === 'object') {
         const value = node.fontName.family;
         return { value, rawValue: value };
       }
@@ -185,13 +177,8 @@ export const fontProcessors: StyleProcessor[] = [
           rawValue: styleVariable.rawValue.toLowerCase(),
         };
       }
-      if (
-        node?.type === 'TEXT' &&
-        node.fontName &&
-        typeof node.fontName === 'object'
-      ) {
-        const value =
-          node.fontName.style.toLowerCase() === 'italic' ? 'italic' : 'normal';
+      if (node?.type === 'TEXT' && node.fontName && typeof node.fontName === 'object') {
+        const value = node.fontName.style.toLowerCase() === 'italic' ? 'italic' : 'normal';
         return { value, rawValue: value };
       }
 
@@ -250,8 +237,7 @@ export const fontProcessors: StyleProcessor[] = [
       if (node.type === 'TEXT' && 'letterSpacing' in node) {
         const letterSpacing = node.letterSpacing;
         if (typeof letterSpacing === 'object' && letterSpacing.value !== 0) {
-          const type =
-            letterSpacing.unit.toLowerCase() === 'percent' ? '%' : 'px';
+          const type = letterSpacing.unit.toLowerCase() === 'percent' ? '%' : 'px';
           const value = `${letterSpacing.value}${type}`;
           return { value, rawValue: value, valueType: type };
         }
@@ -266,8 +252,7 @@ export const fontProcessors: StyleProcessor[] = [
       // Only apply flex if text has explicit sizing/alignment
       if (
         node.type === 'TEXT' &&
-        (node.textAutoResize !== 'WIDTH_AND_HEIGHT' ||
-          node.textAlignVertical !== 'TOP')
+        (node.textAutoResize !== 'WIDTH_AND_HEIGHT' || node.textAlignVertical !== 'TOP')
       ) {
         return { value: 'flex', rawValue: 'flex' };
       }
@@ -281,8 +266,7 @@ export const fontProcessors: StyleProcessor[] = [
       // Only apply if we're using flex display
       if (
         node.type === 'TEXT' &&
-        (node.textAutoResize !== 'WIDTH_AND_HEIGHT' ||
-          node.textAlignVertical !== 'TOP')
+        (node.textAutoResize !== 'WIDTH_AND_HEIGHT' || node.textAlignVertical !== 'TOP')
       ) {
         return { value: 'column', rawValue: 'column' };
       }
@@ -336,10 +320,7 @@ export const fontProcessors: StyleProcessor[] = [
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       // Only apply width if text doesn't auto-resize width
-      if (
-        node.type === 'TEXT' &&
-        !['WIDTH_AND_HEIGHT', 'WIDTH'].includes(node.textAutoResize)
-      ) {
+      if (node.type === 'TEXT' && !['WIDTH_AND_HEIGHT', 'WIDTH'].includes(node.textAutoResize)) {
         return {
           value: `${node.width}px`,
           rawValue: `${node.width}px`,
@@ -354,10 +335,7 @@ export const fontProcessors: StyleProcessor[] = [
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       // Only apply height if text doesn't auto-resize height
-      if (
-        node.type === 'TEXT' &&
-        !['WIDTH_AND_HEIGHT', 'HEIGHT'].includes(node.textAutoResize)
-      ) {
+      if (node.type === 'TEXT' && !['WIDTH_AND_HEIGHT', 'HEIGHT'].includes(node.textAutoResize)) {
         return {
           value: `${node.height}px`,
           rawValue: `${node.height}px`,

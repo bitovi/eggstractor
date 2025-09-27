@@ -1,8 +1,5 @@
 import { BaseToken } from '../../types';
-import {
-  defaultContextConfig,
-  NamingContextConfig,
-} from './naming-context.utils';
+import { defaultContextConfig, NamingContextConfig } from './naming-context.utils';
 
 export interface NamingContext {
   createName: (
@@ -32,9 +29,7 @@ export const createNamingContext = (
       .filter((part) => part.type !== 'COMPONENT')
       .map((part) => part.name.replace(/\s+/g, '-'));
 
-    const segmentsToUse = config.includePageInPath
-      ? pathSegments
-      : pathSegments.slice(1);
+    const segmentsToUse = config.includePageInPath ? pathSegments : pathSegments.slice(1);
     return segmentsToUse.join(config.delimiters.pathSeparator) || '';
   };
 
@@ -61,10 +56,7 @@ export const createNamingContext = (
       .map((part) => part.name.replace(/\s+/g, '-'));
 
     pathNames.forEach((pathName) => {
-      const regex = new RegExp(
-        `\\b${pathName.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`,
-        'g',
-      );
+      const regex = new RegExp(`\\b${pathName.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'g');
       cleaned = cleaned
         .replace(regex, '')
         .replace(/^--+|--+$/g, '')
@@ -92,14 +84,10 @@ export const createNamingContext = (
 
   return {
     createName(path, propertyNameConflicts = {}, variants = {}): string {
-      const standardizedVariants = standardizeVariantCombination(
-        path,
-        variants,
-      );
+      const standardizedVariants = standardizeVariantCombination(path, variants);
       const basePath = buildBasePath(path);
 
-      const variantParts =
-        standardizedVariants.split('--').filter(Boolean) || [];
+      const variantParts = standardizedVariants.split('--').filter(Boolean) || [];
       const parsedVariants = parseVariantParts(variantParts);
 
       const processedVariants = parsedVariants
@@ -110,9 +98,8 @@ export const createNamingContext = (
 
           // Check if this PROPERTY appears in ANY conflict
           const propertyHasConflicts = property
-            ? Object.values(propertyNameConflicts).some(
-                (conflictingProperties) =>
-                  conflictingProperties.includes(property),
+            ? Object.values(propertyNameConflicts).some((conflictingProperties) =>
+                conflictingProperties.includes(property),
               )
             : false;
 

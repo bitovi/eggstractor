@@ -68,11 +68,7 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'align-items',
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
-      if (
-        'layoutMode' in node &&
-        node.layoutMode !== 'NONE' &&
-        'counterAxisAlignItems' in node
-      ) {
+      if ('layoutMode' in node && node.layoutMode !== 'NONE' && 'counterAxisAlignItems' in node) {
         const alignMap = {
           MIN: 'flex-start',
           CENTER: 'center',
@@ -88,10 +84,7 @@ export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'gap',
     bindingKey: 'itemSpacing',
-    process: async (
-      variableTokenMapByProperty,
-      node,
-    ): Promise<ProcessedValue | null> => {
+    process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
       const gapVariable = variableTokenMapByProperty.get('gap');
       if (gapVariable) {
         return {
@@ -220,10 +213,7 @@ export const layoutProcessors: StyleProcessor[] = [
 
       // Handle text nodes
       if (node.type === 'TEXT') {
-        if (
-          node.textAutoResize === 'NONE' ||
-          node.textAutoResize === 'HEIGHT'
-        ) {
+        if (node.textAutoResize === 'NONE' || node.textAutoResize === 'HEIGHT') {
           return {
             value: `${node.absoluteBoundingBox?.width}px`,
             rawValue: `${node.absoluteBoundingBox?.width}px`,
@@ -236,10 +226,8 @@ export const layoutProcessors: StyleProcessor[] = [
       // Handle auto layout frames
       if (node.layoutMode) {
         if (
-          (node.layoutMode === 'HORIZONTAL' &&
-            node.primaryAxisSizingMode === 'FIXED') ||
-          (node.layoutMode === 'VERTICAL' &&
-            node.counterAxisSizingMode === 'FIXED')
+          (node.layoutMode === 'HORIZONTAL' && node.primaryAxisSizingMode === 'FIXED') ||
+          (node.layoutMode === 'VERTICAL' && node.counterAxisSizingMode === 'FIXED')
         ) {
           return {
             value: `${node.absoluteBoundingBox?.width}px`,
@@ -260,10 +248,7 @@ export const layoutProcessors: StyleProcessor[] = [
 
       // Handle text nodes - height is usually determined by content
       if (node.type === 'TEXT') {
-        if (
-          node.textAutoResize === 'NONE' ||
-          node.textAutoResize === 'WIDTH_AND_HEIGHT'
-        ) {
+        if (node.textAutoResize === 'NONE' || node.textAutoResize === 'WIDTH_AND_HEIGHT') {
           return {
             value: `${node.absoluteBoundingBox?.height}px`,
             rawValue: `${node.absoluteBoundingBox?.height}px`,
@@ -276,10 +261,8 @@ export const layoutProcessors: StyleProcessor[] = [
       // Handle auto layout frames
       if (node.layoutMode) {
         if (
-          (node.layoutMode === 'VERTICAL' &&
-            node.primaryAxisSizingMode === 'FIXED') ||
-          (node.layoutMode === 'HORIZONTAL' &&
-            node.counterAxisSizingMode === 'FIXED')
+          (node.layoutMode === 'VERTICAL' && node.primaryAxisSizingMode === 'FIXED') ||
+          (node.layoutMode === 'HORIZONTAL' && node.counterAxisSizingMode === 'FIXED')
         ) {
           return {
             value: `${node.absoluteBoundingBox?.height}px`,
@@ -296,11 +279,7 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'flex-wrap',
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
-      if (
-        'layoutMode' in node &&
-        node.layoutMode !== 'NONE' &&
-        'layoutWrap' in node
-      ) {
+      if ('layoutMode' in node && node.layoutMode !== 'NONE' && 'layoutWrap' in node) {
         const value = node.layoutWrap === 'WRAP' ? 'wrap' : '';
         return { value, rawValue: value };
       }

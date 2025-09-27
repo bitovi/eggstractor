@@ -9,14 +9,12 @@ export const convertToGeneratorTokens = (
   parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>,
 ): { variantPath: string; tokens: GeneratorToken[] }[] => {
   return parsedStyleTokens.map((parsedStyleToken) => {
-    const tokens = Object.entries(parsedStyleToken.styles).map(
-      ([property, rawValue]) => ({
-        property,
-        rawValue,
-        // Preserve the path for context-aware generators
-        path: parsedStyleToken.path,
-      }),
-    );
+    const tokens = Object.entries(parsedStyleToken.styles).map(([property, rawValue]) => ({
+      property,
+      rawValue,
+      // Preserve the path for context-aware generators
+      path: parsedStyleToken.path,
+    }));
 
     return {
       variantPath: parsedStyleToken.key,

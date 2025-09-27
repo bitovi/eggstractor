@@ -28,7 +28,7 @@ type ConfigType = Config & {
   setGithubToken: Dispatch<SetStateAction<string>>;
   setFormat: Dispatch<SetStateAction<StylesheetFormat>>;
   setUseCombinatorialParsing: Dispatch<SetStateAction<boolean>>;
-}
+};
 
 const ConfigContext = createContext<ConfigType | undefined>(undefined);
 
@@ -58,8 +58,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   const [branchName, setBranchName] = useState<string>(pBranchName ?? '');
   const [githubToken, setGithubToken] = useState<string>(pGithubToken ?? '');
   const [format, setFormat] = useState<StylesheetFormat>(pFormat ?? 'scss');
-  const [useCombinatorialParsing, setUseCombinatorialParsing] =
-    useState<boolean>(pUseComb ?? true);
+  const [useCombinatorialParsing, setUseCombinatorialParsing] = useState<boolean>(pUseComb ?? true);
 
   const value = useMemo(
     () => ({
@@ -76,14 +75,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       useCombinatorialParsing,
       setUseCombinatorialParsing,
     }),
-    [
-      repoPath,
-      filePath,
-      branchName,
-      githubToken,
-      format,
-      useCombinatorialParsing,
-    ]
+    [repoPath, filePath, branchName, githubToken, format, useCombinatorialParsing],
   );
 
   useEffect(() => {
@@ -96,18 +88,9 @@ export const ConfigProvider: FC<ConfigProps> = ({
       format,
       useCombinatorialParsing,
     });
-  }, [
-    repoPath,
-    filePath,
-    branchName,
-    githubToken,
-    format,
-    useCombinatorialParsing,
-  ]);
+  }, [repoPath, filePath, branchName, githubToken, format, useCombinatorialParsing]);
 
-  return (
-    <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>
-  );
+  return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;
 };
 
 export const useConfig = (): ConfigType => {

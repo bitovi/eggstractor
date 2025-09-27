@@ -2,10 +2,7 @@ import hljs, { HighlightResult } from 'highlight.js';
 import { highlightCode } from '../../app/utilities/highlightCode';
 
 // Define the function signature you want for the mock
-type HLHighlight = (
-  code: string,
-  opts: { language: string },
-) => { value: string };
+type HLHighlight = (code: string, opts: { language: string }) => { value: string };
 
 // Mock with a single generic (the function type)
 vi.mock('highlight.js', () => ({

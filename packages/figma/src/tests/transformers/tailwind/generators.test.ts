@@ -237,9 +237,7 @@ describe('generateTailwindBorderRadiusClass', () => {
   };
   it('should return tailwind utilities for border radius when given one property', () => {
     const result = generateTailwindBorderRadiusClass(borderRadiusToken);
-    expect(result).toBe(
-      'rounded-tl-[20px] rounded-tr-[20px] rounded-br-[20px] rounded-bl-[20px]',
-    );
+    expect(result).toBe('rounded-tl-[20px] rounded-tr-[20px] rounded-br-[20px] rounded-bl-[20px]');
   });
 
   it('should return tailwind utilities for border radius when given one property', () => {
@@ -258,9 +256,7 @@ describe('generateTailwindBorderRadiusClass', () => {
       rawValue: '5px 10px',
     };
     const result = generateTailwindBorderRadiusClass(borderRadiusMultiple);
-    expect(result).toBe(
-      'rounded-tl-[5px] rounded-tr-[10px] rounded-br-[5px] rounded-bl-[10px]',
-    );
+    expect(result).toBe('rounded-tl-[5px] rounded-tr-[10px] rounded-br-[5px] rounded-bl-[10px]');
   });
 
   it('should return tailwind utilities for border radius when given three properties', () => {
@@ -269,9 +265,7 @@ describe('generateTailwindBorderRadiusClass', () => {
       rawValue: '5px 10px 15px',
     };
     const result = generateTailwindBorderRadiusClass(borderRadiusMultiple);
-    expect(result).toBe(
-      'rounded-tl-[5px] rounded-tr-[10px] rounded-br-[15px] rounded-bl-[10px]',
-    );
+    expect(result).toBe('rounded-tl-[5px] rounded-tr-[10px] rounded-br-[15px] rounded-bl-[10px]');
   });
   it('should return tailwind utilities for border radius when given four properties', () => {
     const borderRadiusMultiple = {
@@ -279,9 +273,7 @@ describe('generateTailwindBorderRadiusClass', () => {
       rawValue: '5px 10px 15px 20px',
     };
     const result = generateTailwindBorderRadiusClass(borderRadiusMultiple);
-    expect(result).toBe(
-      'rounded-tl-[5px] rounded-tr-[10px] rounded-br-[15px] rounded-bl-[20px]',
-    );
+    expect(result).toBe('rounded-tl-[5px] rounded-tr-[10px] rounded-br-[15px] rounded-bl-[20px]');
   });
 });
 describe('generateTailwindFontFamilyOutput', () => {
@@ -370,9 +362,7 @@ describe('generateTailwindBoxShadowClass', () => {
       rawValue: '0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 0 #0a1264',
     };
     const result = generateTailwindBoxShadowClass(mixedShadowToken);
-    expect(result).toBe(
-      'shadow-[0_4px_6px_rgba(0,0,0,0.1),inset_0_1px_0_0_#0a1264]',
-    );
+    expect(result).toBe('shadow-[0_4px_6px_rgba(0,0,0,0.1),inset_0_1px_0_0_#0a1264]');
   });
 });
 
@@ -407,8 +397,7 @@ describe('createContextAwareColorGenerator', () => {
   it('should use context rule prefix when condition matches', () => {
     const generator = createContextAwareColorGenerator('bg', [
       {
-        condition: (token) =>
-          token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+        condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
         prefix: 'text',
       },
     ]);
@@ -420,8 +409,7 @@ describe('createContextAwareColorGenerator', () => {
   it('should use default prefix when context rule condition does not match', () => {
     const generator = createContextAwareColorGenerator('bg', [
       {
-        condition: (token) =>
-          token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+        condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
         prefix: 'text',
       },
     ]);
@@ -433,13 +421,11 @@ describe('createContextAwareColorGenerator', () => {
   it('should use first matching context rule when multiple rules exist', () => {
     const generator = createContextAwareColorGenerator('bg', [
       {
-        condition: (token) =>
-          token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+        condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
         prefix: 'text',
       },
       {
-        condition: (token) =>
-          token.path?.some((pathItem) => pathItem.name?.includes('icon')),
+        condition: (token) => token.path?.some((pathItem) => pathItem.name?.includes('icon')),
         prefix: 'fill',
       },
     ]);
@@ -460,8 +446,7 @@ describe('createContextAwareColorGenerator', () => {
 
     const generator = createContextAwareColorGenerator('bg', [
       {
-        condition: (token) =>
-          token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+        condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
         prefix: 'text',
       },
     ]);

@@ -59,11 +59,7 @@ export const Form: FC = () => {
       </div>
       <div className="button-group">
         <div className="button-container">
-          <Button
-            id="generateBtn"
-            type="submit"
-            disabled={disableGenerateButton}
-          >
+          <Button id="generateBtn" type="submit" disabled={disableGenerateButton}>
             Generate Styles
           </Button>
           <div id="spinner" className="spinner hidden"></div>

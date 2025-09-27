@@ -4,11 +4,8 @@ import { createNamingContext, rem } from '../utils';
 import { convertVariantGroupBy } from './variants';
 import { Transformer } from './types';
 
-const getClassNamePropertyAndValue = (
-  token: StyleToken,
-): Record<string, string> => {
-  const value =
-    token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue!;
+const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {
+  const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue!;
 
   return {
     [token.property]: value,
@@ -23,9 +20,7 @@ export const transformToCss: Transformer = (
 
   // Deduplicate warnings and errors
   const { warnings, errors } = deduplicateMessages(
-    tokens.tokens.filter(
-      (token): token is StyleToken => token.type === 'style',
-    ),
+    tokens.tokens.filter((token): token is StyleToken => token.type === 'style'),
   );
 
   // Filter for style tokens only and ensure they have valid values
@@ -38,9 +33,7 @@ export const transformToCss: Transformer = (
       token.rawValue !== '',
   );
 
-  const variantGroups = Object.entries(
-    groupBy(styleTokens, (t) => t.name),
-  ).reduce(
+  const variantGroups = Object.entries(groupBy(styleTokens, (t) => t.name)).reduce(
     (acc, [tokenName, tokens]) => {
       // Remove properties with zero values and unnecessary defaults
       const uniqueTokens = tokens.reduce((acc, token) => {

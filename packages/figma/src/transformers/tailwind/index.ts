@@ -12,10 +12,7 @@ export const transformToTailwindSassClass: Transformer = (
   useCombinatorialParsing: boolean,
 ) => {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
-  const groupedTokens = groupBy(
-    styleTokens,
-    (token: NonNullableStyleToken) => token.name,
-  );
+  const groupedTokens = groupBy(styleTokens, (token: NonNullableStyleToken) => token.name);
   const namingContext = createNamingContext();
   const selectors = convertVariantGroupBy(
     collection,
@@ -30,8 +27,8 @@ export const transformToTailwindSassClass: Transformer = (
   /**
    * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
    */
-  const formattedStyleTokens = convertToGeneratorTokens(selectors).sort(
-    (a, b) => a.variantPath.localeCompare(b.variantPath),
+  const formattedStyleTokens = convertToGeneratorTokens(selectors).sort((a, b) =>
+    a.variantPath.localeCompare(b.variantPath),
   );
 
   for (const { variantPath, tokens } of formattedStyleTokens) {
@@ -69,8 +66,8 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
   /**
    * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
    */
-  const formattedStyleTokens = convertToGeneratorTokens(selectors).sort(
-    (a, b) => a.variantPath.localeCompare(b.variantPath),
+  const formattedStyleTokens = convertToGeneratorTokens(selectors).sort((a, b) =>
+    a.variantPath.localeCompare(b.variantPath),
   );
 
   let output = '/* Generated Tailwind Utilities */\n';

@@ -4,11 +4,7 @@
     "target": "es2017",
     "lib": ["es2017"],
     "strict": true,
-    "typeRoots": [
-      "./types",
-      "../../node_modules/@types",
-      "../../node_modules/@figma"
-    ],
+    "typeRoots": ["./types", "../../node_modules/@types", "../../node_modules/@figma"],
     "skipLibCheck": true,
     "downlevelIteration": true, // safer for for...of and spreads
     "noEmit": false // <-- must emit since it is a referenced project

@@ -18,8 +18,7 @@ const getFileId = () => {
 export default {
   saveToken: async function (token: string) {
     const fileId = getFileId();
-    const userTokens =
-      (await figma.clientStorage.getAsync('fileTokens')) || '{}';
+    const userTokens = (await figma.clientStorage.getAsync('fileTokens')) || '{}';
     const tokens = JSON.parse(userTokens);
 
     tokens[fileId] = token;
@@ -27,27 +26,21 @@ export default {
   },
   getToken: async function (): Promise<string | null> {
     const fileId = getFileId();
-    const userTokens =
-      (await figma.clientStorage.getAsync('fileTokens')) || '{}';
+    const userTokens = (await figma.clientStorage.getAsync('fileTokens')) || '{}';
     const tokens = JSON.parse(userTokens);
 
     return tokens[fileId] || null;
   },
   saveBranchName: async function (branchName: string) {
     const fileId = getFileId();
-    const userBranches =
-      (await figma.clientStorage.getAsync('fileBranches')) || '{}';
+    const userBranches = (await figma.clientStorage.getAsync('fileBranches')) || '{}';
     const branches = JSON.parse(userBranches);
     branches[fileId] = branchName;
-    await figma.clientStorage.setAsync(
-      'fileBranches',
-      JSON.stringify(branches),
-    );
+    await figma.clientStorage.setAsync('fileBranches', JSON.stringify(branches));
   },
   getBranchName: async function (): Promise<string | null> {
     const fileId = getFileId();
-    const userBranches =
-      (await figma.clientStorage.getAsync('fileBranches')) || '{}';
+    const userBranches = (await figma.clientStorage.getAsync('fileBranches')) || '{}';
     const branches = JSON.parse(userBranches);
     return branches[fileId] || null;
   },
@@ -57,9 +50,7 @@ export default {
   getGithubConfig: async function getGithubConfig() {
     try {
       const savedConfig = figma.root.getPluginData('githubConfig');
-      const config = savedConfig
-        ? (JSON.parse(savedConfig) as GithubConfig)
-        : null;
+      const config = savedConfig ? (JSON.parse(savedConfig) as GithubConfig) : null;
       return config;
     } catch (error) {
       console.error('Error reading config:', error);
@@ -145,19 +136,16 @@ export default {
       }
 
       // Update or create file
-      const createFileResponse = await fetch(
-        `${baseUrl}/repos/${repoPath}/contents/${filePath}`,
-        {
-          method: 'PUT',
-          headers,
-          body: JSON.stringify({
-            message: 'Update SCSS variables from Figma',
-            content: toBase64(content),
-            branch: branchName,
-            ...(fileSha && { sha: fileSha }), // Include SHA if file exists
-          }),
-        },
-      );
+      const createFileResponse = await fetch(`${baseUrl}/repos/${repoPath}/contents/${filePath}`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({
+          message: 'Update SCSS variables from Figma',
+          content: toBase64(content),
+          branch: branchName,
+          ...(fileSha && { sha: fileSha }), // Include SHA if file exists
+        }),
+      });
 
       if (!createFileResponse.ok) {
         const error = (await createFileResponse.json()) as { message: string };

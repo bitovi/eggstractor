@@ -57,10 +57,7 @@ const splitByMatch = (items: StyleNode[]): [StyleNode[], StyleNode[]] => {
     for (let j = i + 1; j < items.length; j++) {
       const a = items[i];
       const b = items[j];
-      if (
-        a.cssProperty === b.cssProperty &&
-        shallowEqual(a.variants, b.variants)
-      ) {
+      if (a.cssProperty === b.cssProperty && shallowEqual(a.variants, b.variants)) {
         if (a.cssValue === b.cssValue) {
           exceptionCounts[i] += 1;
           exceptionCounts[j] += 1;
@@ -95,17 +92,12 @@ const splitByMatch = (items: StyleNode[]): [StyleNode[], StyleNode[]] => {
  * Compare element with every other element in array. If comparison is true, exclude from array
  */
 // TODO: is this just Array.filter()
-function removeByComparison<T>(
-  items: T[],
-  comparison: (a: T, b: T) => boolean,
-): T[] {
+function removeByComparison<T>(items: T[], comparison: (a: T, b: T) => boolean): T[] {
   const result: T[] = [];
 
   for (let i = 0; i < items.length; i++) {
     const current = items[i];
-    const isAlreadyIncluded = result.some((existing) =>
-      comparison(existing, current),
-    );
+    const isAlreadyIncluded = result.some((existing) => comparison(existing, current));
 
     if (!isAlreadyIncluded) {
       result.push(current);
@@ -116,9 +108,7 @@ function removeByComparison<T>(
 }
 
 // TODO: consideration, we already have "Style" token, so maybe the shape of the input should match the existing style tokens
-const getInitialStyleNodes = (
-  source: StylesForVariantsCombination[],
-): StyleNode[] => {
+const getInitialStyleNodes = (source: StylesForVariantsCombination[]): StyleNode[] => {
   const styleNodes: StyleNode[] = [];
 
   for (const instance of source) {
@@ -150,9 +140,7 @@ const getInitialStyleNodes = (
   return styleNodes;
 };
 
-const getFinalizedStyleNodes = (
-  styles: StyleNode[],
-): [StyleNode[], StyleNode[]] => {
+const getFinalizedStyleNodes = (styles: StyleNode[]): [StyleNode[], StyleNode[]] => {
   // "uniques" are finalized, duplicates need to be processed further
   const [uniques, duplicates] = splitByMatch(styles);
 
@@ -172,26 +160,24 @@ const createChildStyleNodes = (styles: StyleNode[]): StyleNode[] => {
   const [uniques, duplicates] = getFinalizedStyleNodes(styles);
 
   const nestedChildStyleNodes = duplicates.flatMap((instance) => {
-    return Object.entries(instance.possibleVariants).map(
-      ([variantProperty, variantValue]) => {
-        const possibleVariants = { ...instance.possibleVariants };
-        delete possibleVariants[variantProperty];
+    return Object.entries(instance.possibleVariants).map(([variantProperty, variantValue]) => {
+      const possibleVariants = { ...instance.possibleVariants };
+      delete possibleVariants[variantProperty];
 
-        const styleNode: StyleNode = {
-          cssProperty: instance.cssProperty,
-          cssValue: instance.cssValue,
-          variants: {
-            ...instance.variants,
-            [variantProperty]: variantValue,
-          },
-          possibleVariants,
-          id: instance.id,
-          path: instance.path,
-        };
+      const styleNode: StyleNode = {
+        cssProperty: instance.cssProperty,
+        cssValue: instance.cssValue,
+        variants: {
+          ...instance.variants,
+          [variantProperty]: variantValue,
+        },
+        possibleVariants,
+        id: instance.id,
+        path: instance.path,
+      };
 
-        return styleNode;
-      },
-    );
+      return styleNode;
+    });
   });
 
   const cleanedNestedChildStyleNodes: StyleNode[] = removeByComparison(
@@ -224,10 +210,7 @@ const convertStyleNodesToCssStylesheet = (
     // TODO: use naming context to generate className/mixin/utility name
     const key =
       Object.entries(style.variants)
-        .map(
-          ([variantProperty, variantValue]) =>
-            `${variantProperty}=${variantValue}`,
-        )
+        .map(([variantProperty, variantValue]) => `${variantProperty}=${variantValue}`)
         .join('--') || 'ROOT';
 
     styleTags[key] ??= {

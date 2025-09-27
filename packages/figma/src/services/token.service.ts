@@ -9,9 +9,7 @@ import {
 import { StyleProcessor, VariableBindings } from '../types/processors';
 import { collectBoundVariable } from './variable.service';
 
-export const extractInstanceSetToken = async (
-  node: InstanceNode,
-): Promise<InstanceToken> => {
+export const extractInstanceSetToken = async (node: InstanceNode): Promise<InstanceToken> => {
   const componentNode = await node.getMainComponentAsync();
 
   return {
@@ -37,14 +35,10 @@ export const extractComponentToken = (
   };
 };
 
-export const extractComponentSetToken = (
-  node: ComponentSetNode,
-): ComponentSetToken => {
+export const extractComponentSetToken = (node: ComponentSetNode): ComponentSetToken => {
   const variantPropertyDefinitions: Record<string, string[]> = {};
 
-  for (const [key, value] of Object.entries(
-    node.componentPropertyDefinitions,
-  )) {
+  for (const [key, value] of Object.entries(node.componentPropertyDefinitions)) {
     if (value.type !== 'VARIANT') {
       continue;
     }
@@ -109,8 +103,7 @@ export async function extractNodeToken(
   };
 
   // Step 1 & 2: Handle Variable Bindings
-  const customBoundVariables =
-    node.boundVariables as unknown as VariableBindings;
+  const customBoundVariables = node.boundVariables as unknown as VariableBindings;
   const bindings = processor.bindingKey
     ? Array.isArray(customBoundVariables[processor.bindingKey])
       ? (customBoundVariables[processor.bindingKey] as VariableAlias[])
@@ -140,10 +133,7 @@ export async function extractNodeToken(
     }
   }
 
-  const variableTokenMapByProperty = new Map<
-    string /* property */,
-    VariableToken
-  >();
+  const variableTokenMapByProperty = new Map<string /* property */, VariableToken>();
 
   variableTokensMap.forEach((token, key) => {
     if (!variableTokenMapByProperty.has(token.property)) {
@@ -163,10 +153,7 @@ export async function extractNodeToken(
   });
 
   // Step 4: Process the node and create Style Token
-  const processedValue = await processor.process(
-    variableTokenMapByProperty,
-    node,
-  );
+  const processedValue = await processor.process(variableTokenMapByProperty, node);
 
   if (processedValue) {
     const styleToken: StyleToken = {
@@ -180,10 +167,7 @@ export async function extractNodeToken(
       property: processor.property,
       path: pathNodes,
       // Deprecated and will be removed in the future
-      variables:
-        variableTokensMap.size > 0
-          ? [...variableTokensMap.values()]
-          : undefined,
+      variables: variableTokensMap.size > 0 ? [...variableTokensMap.values()] : undefined,
       variableTokenMapByProperty,
       metadata: {
         figmaId: node.id,

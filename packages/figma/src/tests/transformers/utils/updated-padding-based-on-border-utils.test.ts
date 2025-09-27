@@ -107,8 +107,7 @@ describe('updatePaddingStylesBasedOnBorder', () => {
       }),
     ).toStrictEqual({
       styles: {
-        padding:
-          'calc(1rem - 3px) calc(1.25rem - 3px) calc(2rem - 3px) calc(0.5rem - 3px)',
+        padding: 'calc(1rem - 3px) calc(1.25rem - 3px) calc(2rem - 3px) calc(0.5rem - 3px)',
         border: '3px solid #333',
       },
     });

@@ -14,9 +14,7 @@ const getSCSSVariableName = (variableName: string): string => {
   return `$${scssVariableName}`;
 };
 
-const getMixinPropertyAndValue = (
-  token: StyleToken,
-): Record<string, string> => {
+const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
     // Only use CSS variables if the token has associated variables
     if (token.variables && token.variables.length > 0) {
@@ -27,8 +25,7 @@ const getMixinPropertyAndValue = (
     }
 
     // Use the raw value directly if no variables are involved
-    const value =
-      token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+    const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
 
     // output += ` ${token.property}: ${value};\n`;
     return { [token.property]: value };
@@ -50,17 +47,14 @@ export const transformToScss: Transformer = (
 
   // Deduplicate warnings and errors from style tokens only
   const { warnings, errors } = deduplicateMessages(
-    tokens.tokens.filter(
-      (token): token is StyleToken => token.type === 'style',
-    ),
+    tokens.tokens.filter((token): token is StyleToken => token.type === 'style'),
   );
 
   // First, collect and output color variables
   const colorVariables = new Map<string, string>();
   tokens.tokens.forEach((token) => {
     if (token.type === 'variable') {
-      const value =
-        token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+      const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
       colorVariables.set(sanitizeName(token.name), value);
     }
   });
@@ -96,10 +90,7 @@ export const transformToScss: Transformer = (
     // Replace color values with variable references if they exist
     let gradientValue = token.rawValue ?? '';
     colorVariables.forEach((value, colorName) => {
-      gradientValue = gradientValue.replace(
-        value,
-        `${getSCSSVariableName(colorName)}`,
-      );
+      gradientValue = gradientValue.replace(value, `${getSCSSVariableName(colorName)}`);
     });
     if (gradientValue) {
       output += `#{${getSCSSVariableName(name)}}: ${gradientValue};\n`;
@@ -110,13 +101,9 @@ export const transformToScss: Transformer = (
   output += '\n// Generated SCSS Mixins\n';
 
   // Filter for style tokens and group by path
-  const styleTokens = tokens.tokens.filter(
-    (token): token is StyleToken => token.type === 'style',
-  );
+  const styleTokens = tokens.tokens.filter((token): token is StyleToken => token.type === 'style');
 
-  const variantGroups = Object.entries(
-    groupBy(styleTokens, (t) => t.name),
-  ).reduce(
+  const variantGroups = Object.entries(groupBy(styleTokens, (t) => t.name)).reduce(
     (acc, [tokenName, tokens]) => {
       const filteredTokens = sortAndDedupeTokens(tokens);
       if (filteredTokens.length) {

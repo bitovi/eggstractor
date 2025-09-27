@@ -31,9 +31,7 @@ export async function serializeFigmaData(node: BaseNode): Promise<unknown> {
 
   // Recursively process children
   if ('children' in node) {
-    baseData.children = await Promise.all(
-      node.children.map((child) => serializeFigmaData(child)),
-    );
+    baseData.children = await Promise.all(node.children.map((child) => serializeFigmaData(child)));
   }
 
   // Add variables collection
@@ -43,9 +41,7 @@ export async function serializeFigmaData(node: BaseNode): Promise<unknown> {
   const collectVariables = async (node: SceneNode) => {
     if ('boundVariables' in node) {
       for (const key in node.boundVariables) {
-        const vars = (
-          node.boundVariables as Record<string, VariableAlias | VariableAlias[]>
-        )[key];
+        const vars = (node.boundVariables as Record<string, VariableAlias | VariableAlias[]>)[key];
         if (Array.isArray(vars)) {
           for (const v of vars) {
             if (v.id) {
@@ -59,16 +55,11 @@ export async function serializeFigmaData(node: BaseNode): Promise<unknown> {
     }
 
     if ('children' in node) {
-      await Promise.all(
-        node.children.map((child) => collectVariables(child as SceneNode)),
-      );
+      await Promise.all(node.children.map((child) => collectVariables(child as SceneNode)));
     }
   };
 
-  async function collectVariableAndAliases(
-    variableId: string,
-    variables: Record<string, unknown>,
-  ) {
+  async function collectVariableAndAliases(variableId: string, variables: Record<string, unknown>) {
     const variable = await figma.variables.getVariableByIdAsync(variableId);
     if (!variable) return;
 
@@ -100,21 +91,14 @@ export async function serializeFigmaData(node: BaseNode): Promise<unknown> {
   };
 }
 
-function isVariableAlias(
-  value: unknown,
-): value is { type: 'VARIABLE_ALIAS'; id: string } {
+function isVariableAlias(value: unknown): value is { type: 'VARIABLE_ALIAS'; id: string } {
   if (!value) return false;
   return (
-    typeof value === 'object' &&
-    'type' in value &&
-    value.type === 'VARIABLE_ALIAS' &&
-    'id' in value
+    typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS' && 'id' in value
   );
 }
 
-export async function createTestVariableResolver(testData: {
-  variables: Record<string, unknown>;
-}) {
+export async function createTestVariableResolver(testData: { variables: Record<string, unknown> }) {
   // Helper to collect and flatten all variables including aliases
   const collectAllVariables = (variables: Record<string, unknown>) => {
     const allVariables = new Map<string, unknown>();
@@ -159,9 +143,7 @@ export async function createTestVariableResolver(testData: {
     };
 
     const modeId = Object.keys((variable as Variable).valuesByMode).sort()[0];
-    const resolvedValue = await resolveValue(
-      (variable as Variable).valuesByMode[modeId],
-    );
+    const resolvedValue = await resolveValue((variable as Variable).valuesByMode[modeId]);
 
     return {
       ...variable,
@@ -210,14 +192,11 @@ export function createTestData(jsonData: any) {
     ...jsonData,
     type: 'PAGE',
     parent: null,
-    children: (jsonData.children as PageNode['children']).map((child) =>
-      processNode(child, null),
-    ),
+    children: (jsonData.children as PageNode['children']).map((child) => processNode(child, null)),
   } as unknown as PageNode;
 
   pageNode.children.forEach(
-    (child) =>
-      ((child as unknown as { parent: PageNode | null }).parent = pageNode),
+    (child) => ((child as unknown as { parent: PageNode | null }).parent = pageNode),
   );
 
   return {

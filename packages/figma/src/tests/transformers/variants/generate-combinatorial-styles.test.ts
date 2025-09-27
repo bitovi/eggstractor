@@ -11,31 +11,23 @@ import { input as inputIncludeRoot } from './generate-combinatorial-styles-examp
 import { output as outputIncludeRoot } from './generate-combinatorial-styles-examples/output-include-root';
 
 test('results in regular output', () => {
-  expect(generateCombinatorialStyles(inputRegular)).toStrictEqual(
-    outputRegular,
-  );
+  expect(generateCombinatorialStyles(inputRegular)).toStrictEqual(outputRegular);
 });
 
 test('results in red medium no icon outlier output', () => {
-  expect(
-    generateCombinatorialStyles(inputRedMediumNoIconOutlier),
-  ).toStrictEqual(outputRedMediumNoIconOutlier);
+  expect(generateCombinatorialStyles(inputRedMediumNoIconOutlier)).toStrictEqual(
+    outputRedMediumNoIconOutlier,
+  );
 });
 
 test('results in pink purple output', () => {
-  expect(generateCombinatorialStyles(inputPinkPurple)).toStrictEqual(
-    outputPinkPurple,
-  );
+  expect(generateCombinatorialStyles(inputPinkPurple)).toStrictEqual(outputPinkPurple);
 });
 
 test('results in line height output', () => {
-  expect(generateCombinatorialStyles(inputLineHeight)).toStrictEqual(
-    outputLineHeight,
-  );
+  expect(generateCombinatorialStyles(inputLineHeight)).toStrictEqual(outputLineHeight);
 });
 
 test('results in include root output', () => {
-  expect(generateCombinatorialStyles(inputIncludeRoot)).toStrictEqual(
-    outputIncludeRoot,
-  );
+  expect(generateCombinatorialStyles(inputIncludeRoot)).toStrictEqual(outputIncludeRoot);
 });

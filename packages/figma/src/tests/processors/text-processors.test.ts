@@ -9,9 +9,7 @@ import testDataFontStyle from '../fixtures/figma-test-data_font-style.json';
 
 describe('Text Processors', () => {
   describe('Text Align Processor', () => {
-    const processor = fontProcessors.filter(
-      (p) => p.property === 'text-align',
-    )[0];
+    const processor = fontProcessors.filter((p) => p.property === 'text-align')[0];
 
     it('returns null for non-text nodes', async () => {
       const node = {

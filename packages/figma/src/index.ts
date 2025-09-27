@@ -80,10 +80,7 @@ function transformTokensToStylesheet(
     case 'tailwind-scss':
       return transformToTailwindSassClass(tokens, useCombinatorialParsing);
     case 'tailwind-v4':
-      return transformToTailwindLayerUtilityClassV4(
-        tokens,
-        useCombinatorialParsing,
-      );
+      return transformToTailwindLayerUtilityClassV4(tokens, useCombinatorialParsing);
     default:
       throw new Error(`Unsupported format: ${format}`);
   }
@@ -110,11 +107,7 @@ async function generateStyles(
 
   await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
 
-  const stylesheet = await transformTokensToStylesheet(
-    tokens,
-    format,
-    useCombinatorialParsing,
-  );
+  const stylesheet = await transformTokensToStylesheet(tokens, format, useCombinatorialParsing);
 
   postMessageToUI({
     type: 'progress-end',
@@ -179,8 +172,7 @@ figma.ui.onmessage = async (msg: MessageToMainThreadPayload) => {
         prUrl: result.prUrl,
       });
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'An unknown error occurred';
+      const message = error instanceof Error ? error.message : 'An unknown error occurred';
       postMessageToUI({ type: 'error', message });
     }
   } else if (msg.type === 'export-test-data') {

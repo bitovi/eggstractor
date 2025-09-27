@@ -1,11 +1,11 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { viteSingleFile } from 'vite-plugin-singlefile'
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
 export default defineConfig(({ mode }) => ({
   define: {
-    __DEV__: mode !== 'production'
+    __DEV__: mode !== 'production',
   },
   root: __dirname,
   cacheDir: '../../node_modules/.vite/packages/ui',
@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     // Figma requires the ui to only be html and css. All javascript must be
     // inlined.
-    viteSingleFile()
+    viteSingleFile(),
   ],
   build: {
     outDir: './dist',

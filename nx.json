@@ -68,10 +68,7 @@
   ],
   "targetDefaults": {
     "test": {
-      "dependsOn": [
-        "^build",
-        { "target": "generate-theme", "projects": "self" }
-      ],
+      "dependsOn": ["^build", { "target": "generate-theme", "projects": "self" }],
       "cache": true,
       "options": {
         "watch": false

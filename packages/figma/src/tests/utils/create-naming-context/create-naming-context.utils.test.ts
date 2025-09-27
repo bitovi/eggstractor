@@ -29,29 +29,17 @@ describe('createNamingContext', () => {
       });
 
       it('should handle multiple variants', () => {
-        const result = namingContext.createName(
-          path,
-          {},
-          { Size: 'Large', Theme: 'Primary' },
-        );
+        const result = namingContext.createName(path, {}, { Size: 'Large', Theme: 'Primary' });
         expect(result).toBe('button-page-button-large-primary');
       });
 
       it('should handle multi-word values', () => {
-        const result = namingContext.createName(
-          path,
-          {},
-          { 'Icon Only': 'True' },
-        );
+        const result = namingContext.createName(path, {}, { 'Icon Only': 'True' });
         expect(result).toBe('button-page-button-true');
       });
 
       it('should convert "Multi Bold" to "multi-bold"', () => {
-        const result = namingContext.createName(
-          path,
-          {},
-          { Weight: 'Multi Bold' },
-        );
+        const result = namingContext.createName(path, {}, { Weight: 'Multi Bold' });
         expect(result).toBe('button-page-button-multi-bold');
       });
 
@@ -63,9 +51,7 @@ describe('createNamingContext', () => {
           Theme: 'Primary',
           State: 'Hover',
         });
-        expect(result).toBe(
-          'button-page-button-size_default-theme_primary-hover',
-        );
+        expect(result).toBe('button-page-button-size_default-theme_primary-hover');
       });
 
       it('should filter out COMPONENT type from path', () => {
@@ -77,11 +63,7 @@ describe('createNamingContext', () => {
           } as SceneNode,
           { name: 'text', type: 'TEXT' } as SceneNode,
         ];
-        const result = namingContext.createName(
-          componentPath,
-          {},
-          { Size: 'Large' },
-        );
+        const result = namingContext.createName(componentPath, {}, { Size: 'Large' });
         expect(result).toBe('button-page-button-text-large');
       });
 
@@ -104,11 +86,7 @@ describe('createNamingContext', () => {
           { name: 'BUTTON PAGE', type: 'SECTION' } as SceneNode,
           { name: 'Button', type: 'COMPONENT_SET' } as SceneNode,
         ];
-        const result = namingContext.createName(
-          pathUpperCase,
-          {},
-          { Size: 'LARGE' },
-        );
+        const result = namingContext.createName(pathUpperCase, {}, { Size: 'LARGE' });
         expect(result).toBe('button-page-button-large');
       });
 
@@ -119,9 +97,7 @@ describe('createNamingContext', () => {
           { Disabled: 'True', Required: 'False', Active: 'Yes', Hidden: 'No' },
         );
         // true/yes = no prefix, false/no = always prefixed
-        expect(result).toBe(
-          'button-page-button-true-required_false-yes-hidden_no',
-        );
+        expect(result).toBe('button-page-button-true-required_false-yes-hidden_no');
       });
     });
   });

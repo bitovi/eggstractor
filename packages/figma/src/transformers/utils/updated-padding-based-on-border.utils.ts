@@ -164,9 +164,7 @@ function toPaddingShorthand(paddings: Partial<Padding>): string {
   return `${top} ${right} ${bottom} ${left}`;
 }
 
-const hasBorderAndPaddingStyles = <
-  T extends { styles: Record<string, string> },
->(
+const hasBorderAndPaddingStyles = <T extends { styles: Record<string, string> }>(
   instance: T,
 ): boolean => {
   const hasPadding = PADDING_PROPERTIES.some((prop) => prop in instance.styles);
@@ -186,9 +184,7 @@ const parseBorder = (borderStyleValue: string): string => {
 export const updatePaddingStylesBasedOnBorder = <
   T extends {
     styles: {
-      [K in
-        | (typeof BORDER_PROPERTIES)[number]
-        | (typeof PADDING_PROPERTIES)[number]]?: string;
+      [K in (typeof BORDER_PROPERTIES)[number] | (typeof PADDING_PROPERTIES)[number]]?: string;
     };
   },
 >(
@@ -198,9 +194,7 @@ export const updatePaddingStylesBasedOnBorder = <
     return instance;
   }
 
-  const borderStyle = instance.styles['border']
-    ? parseBorder(instance.styles['border'])
-    : null;
+  const borderStyle = instance.styles['border'] ? parseBorder(instance.styles['border']) : null;
   const borderTopStyle = instance.styles['border-top']
     ? parseBorder(instance.styles['border-top'])
     : null;
@@ -220,10 +214,7 @@ export const updatePaddingStylesBasedOnBorder = <
 
   const borders = {
     top:
-      instance.styles['border-top-width'] ||
-      borderWidth?.['top'] ||
-      borderTopStyle ||
-      borderStyle,
+      instance.styles['border-top-width'] || borderWidth?.['top'] || borderTopStyle || borderStyle,
     right:
       instance.styles['border-right-width'] ||
       borderWidth?.['right'] ||
@@ -246,19 +237,14 @@ export const updatePaddingStylesBasedOnBorder = <
     : null;
 
   const paddings: Padding<string | null> = {
-    'padding-top':
-      instance.styles['padding-top'] || paddingStyles?.['top'] || null,
-    'padding-right':
-      instance.styles['padding-right'] || paddingStyles?.['right'] || null,
-    'padding-bottom':
-      instance.styles['padding-bottom'] || paddingStyles?.['bottom'] || null,
-    'padding-left':
-      instance.styles['padding-left'] || paddingStyles?.['left'] || null,
+    'padding-top': instance.styles['padding-top'] || paddingStyles?.['top'] || null,
+    'padding-right': instance.styles['padding-right'] || paddingStyles?.['right'] || null,
+    'padding-bottom': instance.styles['padding-bottom'] || paddingStyles?.['bottom'] || null,
+    'padding-left': instance.styles['padding-left'] || paddingStyles?.['left'] || null,
   };
 
   // Only add padding properties if they exist
-  const newPaddings: { [K in (typeof PADDING_PROPERTIES)[number]]?: string } =
-    {};
+  const newPaddings: { [K in (typeof PADDING_PROPERTIES)[number]]?: string } = {};
 
   if (paddings['padding-top']) {
     newPaddings['padding-top'] = borders.top
