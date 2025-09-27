@@ -1,5 +1,5 @@
 import hljs, { HighlightResult } from 'highlight.js';
-import { highlightCode } from '../../app/utilities/highlightCode';
+import { highlightCode } from '../../app/utils';
 
 // Define the function signature you want for the mock
 type HLHighlight = (code: string, opts: { language: string }) => { value: string };

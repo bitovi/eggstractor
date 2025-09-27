@@ -9,6 +9,7 @@
     "build": "nx run-many -t build --projects=@eggstractor/ui,@eggstractor/figma --parallel --output-style=stream",
     "dev": "nx run-many -t build:watch --projects=@eggstractor/ui,@eggstractor/figma --parallel --output-style=stream",
     "start": "npm run dev",
+    "typecheck": "nx run-many -t typecheck --parallel --output-style=stream",
     "test": "nx run-many -t test --parallel --output-style=stream",
     "e2e": "nx run-many -t e2e --parallel --output-style=stream",
     "lint": "nx run-many -t lint:fix --parallel --output-style=stream",

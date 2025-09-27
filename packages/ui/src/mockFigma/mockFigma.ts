@@ -1,4 +1,3 @@
-// import { MessageToUIPayload } from "../../../common/src/types";
 import { MessageToMainThreadPayload, MessageToUIPayload } from '@eggstractor/common';
 import { isFigmaPluginUI } from '../app/utils';
 

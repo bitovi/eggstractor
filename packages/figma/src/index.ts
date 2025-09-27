@@ -11,8 +11,9 @@ import {
   getValidStylesheetFormat,
   StylesheetFormat,
   MessageToMainThreadPayload,
+  GithubConfig,
 } from '@eggstractor/common';
-import { GithubConfig, TokenCollection, TransformerResult } from './types';
+import { TokenCollection, TransformerResult } from './types';
 import { MAX_PROGRESS_PERCENTAGE, serializeFigmaData } from './utils';
 
 const main = async () => {
@@ -145,7 +146,7 @@ const main = async () => {
         Github.saveGithubConfig({
           repoPath: msg.repoPath,
           filePath: msg.filePath,
-          outputFormat: getValidStylesheetFormat(msg.format),
+          format: getValidStylesheetFormat(msg.format),
           useCombinatorialParsing: msg.useCombinatorialParsing,
         }),
       ]);

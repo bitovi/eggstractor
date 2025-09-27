@@ -211,7 +211,7 @@ export function createTestData(jsonData: any) {
           root: {
             children: [pageNode], // Array of pages
           },
-          loadAllPagesAsync: vi.fn().mockResolvedValue(undefined), // Mock this method
+          loadAllPagesAsync: () => Promise.resolve(undefined), // Stub this method
           variables: {
             getVariableByIdAsync,
           },

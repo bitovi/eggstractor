@@ -1,4 +1,4 @@
-import { GithubConfig } from './types';
+import { GithubConfig } from '@eggstractor/common';
 import { toBase64 } from './utils';
 
 export interface PRResult {

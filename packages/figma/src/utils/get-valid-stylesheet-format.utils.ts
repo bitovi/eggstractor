@@ -1,4 +1,4 @@
-import { StylesheetFormat } from '../types';
+import { StylesheetFormat } from '@eggstractor/common';
 
 /**
  * Returns format if valid. Defaults to 'scss' if invalid or not provided.

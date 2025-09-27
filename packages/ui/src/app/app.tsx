@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getValidStylesheetFormat } from '@eggstractor/common';
-import { Route, Routes, NavLink } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import '../styles.scss';
 import { messageMainThread } from './utils';
 import { About, Form, StatusProvider } from './routes';
@@ -23,7 +23,7 @@ export const App = () => {
       filePath: msg.config.filePath ?? '',
       githubToken: msg.config.githubToken ?? '',
       repoPath: msg.config.repoPath ?? '',
-      format: getValidStylesheetFormat(msg.config.outputFormat),
+      format: getValidStylesheetFormat(msg.config.format),
       useCombinatorialParsing: msg.config.useCombinatorialParsing ?? true,
     });
   });
