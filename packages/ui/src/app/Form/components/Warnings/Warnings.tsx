@@ -22,34 +22,36 @@ export const Warnings: FC = () => {
   };
 
   return (
-    <details open>
-      <summary>
-        <span role="img" aria-hidden="true">
-          ⚠️
-        </span>{' '}
-        Warnings (${warnings.length}){' '}
-        <span role="img" aria-hidden="true">
-          ⚠️
-        </span>
-      </summary>
-      <ul>
-        {warnings.map((warning, i) => {
-          const nodeMatch = warning.match(/\(node: ([^)]+)\)/);
-          const nodeId = nodeMatch?.[1];
-          return nodeId ? (
-            <li className="warning-item" key={i}>
-              {/* TODO use a button tag instead of anchor tag and style it as a "link" */}
-              <a data-node-id="${nodeId}" onClick={() => onClick(nodeId)}>
-                ${warning}
-              </a>
-            </li>
-          ) : (
-            <li className="warning-item" key={i}>
-              ${warning}
-            </li>
-          );
-        })}
-      </ul>
-    </details>
+    <div id="warnings">
+      <details open>
+        <summary>
+          <span role="img" aria-hidden="true">
+            ⚠️
+          </span>{' '}
+          Warnings ({warnings.length}){' '}
+          <span role="img" aria-hidden="true">
+            ⚠️
+          </span>
+        </summary>
+        <ul>
+          {warnings.map((warning, i) => {
+            const nodeMatch = warning.match(/\(node: ([^)]+)\)/);
+            const nodeId = nodeMatch?.[1];
+            return nodeId ? (
+              <li className="warning-item" key={i}>
+                {/* TODO use a button tag instead of anchor tag and style it as a "link" */}
+                <a data-node-id={nodeId} onClick={() => onClick(nodeId)}>
+                  {warning}
+                </a>
+              </li>
+            ) : (
+              <li className="warning-item" key={i}>
+                {warning}
+              </li>
+            );
+          })}
+        </ul>
+      </details>
+    </div>
   );
 };
