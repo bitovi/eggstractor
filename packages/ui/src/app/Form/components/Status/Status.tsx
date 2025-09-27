@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useStatus } from './context/StatusContext';
+import { useStatus } from './context';
 
 export const Status: FC = () => {
   const { status } = useStatus();

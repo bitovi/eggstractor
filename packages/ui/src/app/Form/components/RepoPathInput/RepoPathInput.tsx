@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { Input } from "../../../components/Input";
-import { useConfig } from "../../../context/ConfigContext";
+import { Input } from "../../../components";
+import { useConfig } from "../../../context";
 
 export const RepoPathInput: FC = () => {
   const { repoPath, setRepoPath } = useConfig();

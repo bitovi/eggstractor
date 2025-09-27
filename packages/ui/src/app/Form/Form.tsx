@@ -1,22 +1,24 @@
-import { FC, useState } from 'react';
-import { messageMainThread } from '../utilities';
+import { FC, FormEvent, useState } from 'react';
 import { getValidStylesheetFormat } from '@eggstractor/common';
-import { useConfig } from '../context/ConfigContext';
-import { Button } from '../components/Button';
-import { GithubTokenInput } from './components/GithubTokenInput';
-import { RepoPathInput } from './components/RepoPathInput';
-import { FilePathInput } from './components/FilePathInput';
-import { BranchNameInput } from './components/BranchNameInput';
-import { FormatSelect } from './components/FormatSelect/FormatSelect';
-import { ParsingModeRadioGroup } from './components/ParsingModeRadioGroup/ParsingModeRadioGroup';
-import { ExportTestDataButton } from './components/ExportTestDataButton';
+import { messageMainThread } from '../utils';
+import { useConfig, useGeneratedStyles } from '../context';
+import { Button } from '../components';
 import { useOnPluginMessage } from '../hooks';
-import { CreatePRButton, GeneratingStylesProgressBar } from './components';
+import {
+  BranchNameInput,
+  CreatePRButton,
+  ExportTestDataButton,
+  FilePathInput,
+  FormatSelect,
+  GeneratingStylesProgressBar,
+  GithubTokenInput,
+  Output,
+  ParsingModeRadioGroup,
+  RepoPathInput,
+  Status,
+  Warnings,
+} from './components';
 import { TIME_TO_REMOVE_PROGRESS_BAR } from './constants';
-import { useGeneratedStyles } from '../context/GeneratedStylesContext/GeneratedStylesContext';
-import { Warnings } from './components/Warnings';
-import { Output } from './components/Output';
-import { Status } from './components/Status';
 
 export const Form: FC = () => {
   const { setLoading } = useGeneratedStyles();
@@ -40,7 +42,7 @@ export const Form: FC = () => {
     }, TIME_TO_REMOVE_PROGRESS_BAR);
   });
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     generateStyles();
   };

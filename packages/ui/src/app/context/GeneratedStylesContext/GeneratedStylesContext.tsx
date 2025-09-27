@@ -6,6 +6,7 @@ import {
   Dispatch,
   FC,
   ReactNode,
+  SetStateAction,
 } from 'react';
 
 export interface GeneratedStyles {
@@ -14,8 +15,8 @@ export interface GeneratedStyles {
 }
 
 type GeneratedStylesType = GeneratedStyles & {
-  setLoading: Dispatch<React.SetStateAction<boolean>>;
-  setGeneratedStyles: Dispatch<React.SetStateAction<string>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  setGeneratedStyles: Dispatch<SetStateAction<string>>;
 };
 
 const GeneratedStylesContext = createContext<GeneratedStylesType | undefined>(undefined);

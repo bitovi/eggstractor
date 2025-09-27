@@ -1,10 +1,9 @@
 import { FC, useState } from 'react';
-import { Button } from '../../../components/Button';
-import { messageMainThread } from '../../../utilities';
-import { useConfig } from '../../../context/ConfigContext';
+import { Button } from '../../../components';
+import { messageMainThread } from '../../../utils';
+import { useConfig, useGeneratedStyles } from '../../../context';
 import { useOnPluginMessage } from '../../../hooks';
-import { useGeneratedStyles } from '../../../context/GeneratedStylesContext/GeneratedStylesContext';
-import { useStatus } from '../Status/context/StatusContext';
+import { useStatus } from '../Status';
 
 export const CreatePRButton: FC = () => {
   const { setCreatingPR, setPRCreated, setIdle } = useStatus();

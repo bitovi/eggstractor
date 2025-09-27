@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { useOnPluginMessage } from '../../../hooks';
-import { messageMainThread } from '../../../utilities';
+import { messageMainThread } from '../../../utils';
 
 export const Warnings: FC = () => {
   const [warnings, setWarnings] = useState<string[]>([]);

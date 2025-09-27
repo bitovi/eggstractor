@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { ChangeEvent, useId } from 'react';
 
 export interface RadioGroupOption<T extends string | number = string> {
   value: T;
@@ -16,7 +16,7 @@ export interface RadioGroupProps<T extends string | number = string> {
 export const RadioGroup = <T extends string | number = string>({
   label, name, value, onChange, options}: RadioGroupProps<T>) => {
   const id = useId();
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedOption = options.find(option => option.value === event.target.value);
     if (selectedOption) {
       onChange(selectedOption.value);

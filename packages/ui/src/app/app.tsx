@@ -1,14 +1,13 @@
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
+import { getValidStylesheetFormat } from '@eggstractor/common';
 import { Route, Routes, Link } from 'react-router-dom';
 import './app.scss';
-import { messageMainThread } from './utilities/messageMainThread';
+import { messageMainThread } from './utils';
 import { Form } from './Form';
-import { GeneratedStylesProvider } from './context/GeneratedStylesContext/GeneratedStylesContext';
-import { Config, ConfigProvider } from './context/ConfigContext';
+import { GeneratedStylesProvider, Config, ConfigProvider } from './context';
 import { useOnPluginMessage } from './hooks';
-import { getValidStylesheetFormat } from '@eggstractor/common';
-import { StatusProvider } from './Form/components/Status/context/StatusContext';
+import { StatusProvider } from './Form/components';
 
 declare global {
   interface Window {

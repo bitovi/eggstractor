@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { Button } from "../../../components/Button";
-import { messageMainThread } from "../../../utilities";
+import { Button } from "../../../components";
+import { messageMainThread } from "../../../utils";
 import { useOnPluginMessage } from "../../../hooks";
 
 export const ExportTestDataButton: FC = () => {

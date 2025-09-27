@@ -1,4 +1,4 @@
-import { FC, InputHTMLAttributes } from "react";
+import { ChangeEvent, FC, InputHTMLAttributes } from "react";
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
   label: string;
@@ -7,7 +7,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 export const Input: FC<InputProps> = ({ label, id, onChange, type="text", ...props }) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };
 

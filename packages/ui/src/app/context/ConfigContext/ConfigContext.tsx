@@ -8,8 +8,9 @@ import {
   Dispatch,
   FC,
   ReactNode,
+  SetStateAction,
 } from 'react';
-import { messageMainThread } from '../../utilities';
+import { messageMainThread } from '../../utils';
 
 export interface Config {
   repoPath: string;
@@ -21,12 +22,12 @@ export interface Config {
 }
 
 type ConfigType = Config & {
-  setRepoPath: Dispatch<React.SetStateAction<string>>;
-  setFilePath: Dispatch<React.SetStateAction<string>>;
-  setBranchName: Dispatch<React.SetStateAction<string>>;
-  setGithubToken: Dispatch<React.SetStateAction<string>>;
-  setFormat: Dispatch<React.SetStateAction<StylesheetFormat>>;
-  setUseCombinatorialParsing: Dispatch<React.SetStateAction<boolean>>;
+  setRepoPath: Dispatch<SetStateAction<string>>;
+  setFilePath: Dispatch<SetStateAction<string>>;
+  setBranchName: Dispatch<SetStateAction<string>>;
+  setGithubToken: Dispatch<SetStateAction<string>>;
+  setFormat: Dispatch<SetStateAction<StylesheetFormat>>;
+  setUseCombinatorialParsing: Dispatch<SetStateAction<boolean>>;
 }
 
 const ConfigContext = createContext<ConfigType | undefined>(undefined);

@@ -1,8 +1,7 @@
 import { FC, useState } from 'react';
-import { copyToClipboard } from '../../../utilities/copyToClipboard';
+import { copyToClipboard, highlightCode } from '../../../utils';
 import { useOnPluginMessage } from '../../../hooks';
-import { useGeneratedStyles } from '../../../context/GeneratedStylesContext/GeneratedStylesContext';
-import { highlightCode } from '../../../utilities/highlightCode';
+import { useGeneratedStyles } from '../../../context';
 
 export const Output: FC = () => {
   const { generatedStyles, setGeneratedStyles } = useGeneratedStyles();

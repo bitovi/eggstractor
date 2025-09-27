@@ -1,7 +1,7 @@
-import { FC } from 'react';
-import { Select, SelectOption } from '../../../components/Select';
 import { StylesheetFormat } from '@eggstractor/common';
-import { useConfig } from '../../../context/ConfigContext';
+import { FC } from 'react';
+import { Select, SelectOption } from '../../../components';
+import { useConfig } from '../../../context';
 
 const FORMAT_OPTIONS: SelectOption<StylesheetFormat>[] = [
   // Only include 'css' option in dev mode for testing purposes (for now)

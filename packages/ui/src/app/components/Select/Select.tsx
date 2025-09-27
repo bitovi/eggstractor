@@ -1,4 +1,4 @@
-import { SelectHTMLAttributes } from 'react';
+import { ChangeEvent, SelectHTMLAttributes } from 'react';
 
 export interface SelectOption<T extends string = string> {
   value: T;
@@ -19,7 +19,7 @@ export const Select = <T extends string = string>({
   onChange,
   ...props
 }: SelectProps<T>) => {
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedOption = options.find(
       (option) => option.value === event.target.value,
     );
