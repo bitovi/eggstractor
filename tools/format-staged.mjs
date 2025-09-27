@@ -1,4 +1,10 @@
 #!/usr/bin/env node
+
+/**
+ * A lint-staged script to run `nx format:write` (prettier) on staged code files
+ * only. This script is designed to be used in a git pre-commit hook.
+ */
+
 import { execSync } from 'node:child_process';
 
 const files = process.argv.slice(2);

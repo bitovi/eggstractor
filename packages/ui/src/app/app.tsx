@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getValidStylesheetFormat } from '@eggstractor/common';
 import { Route, Routes, Link } from 'react-router-dom';
-import '..styles.scss';
+import '../styles.scss';
 import { messageMainThread } from './utils';
 import { Form } from './Form';
 import { GeneratedStylesProvider, Config, ConfigProvider } from './context';
