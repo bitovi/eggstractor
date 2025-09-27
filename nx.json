@@ -67,6 +67,9 @@
     }
   ],
   "targetDefaults": {
+    "typecheck": {
+      "dependsOn": [{ "target": "generate-theme", "projects": "self" }]
+    },
     "test": {
       "dependsOn": ["^build", { "target": "generate-theme", "projects": "self" }],
       "cache": true,
