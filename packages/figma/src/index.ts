@@ -14,7 +14,7 @@ import {
 } from '@eggstractor/common';
 import { GithubConfig, TokenCollection, TransformerResult } from './types';
 import { MAX_PROGRESS_PERCENTAGE, serializeFigmaData } from './utils';
-  const test = "test";
+
 const postMessageToUI = (message: MessageToUIPayload) => {
   figma.ui.postMessage(message);
 };
