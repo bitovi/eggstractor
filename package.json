@@ -11,6 +11,7 @@
     "start": "npm run dev",
     "test": "nx run-many -t test --parallel --output-style=stream",
     "lint": "nx run-many -t lint:fix --parallel --output-style=stream",
+    "format": "nx run-many -t format --parallel --output-style=stream",
     "prepare": "husky"
   },
   "lint-staged": {

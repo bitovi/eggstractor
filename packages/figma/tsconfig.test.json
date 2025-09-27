@@ -1,6 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "outDir": "./out-tsc/vitest",
+    "tsBuildInfoFile": "./out-tsc/vitest/tsconfig.test.tsbuildinfo",
     "typeRoots": [
       "./types",
       "../../node_modules/@types",

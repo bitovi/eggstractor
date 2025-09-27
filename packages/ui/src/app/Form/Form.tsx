@@ -29,7 +29,7 @@ export const Form: FC = () => {
   const generateStyles = () => {
     messageMainThread({
       type: 'generate-styles',
-      format: __DEV__ ? getValidStylesheetFormat(format) : 'scss',
+      format: getValidStylesheetFormat(format),
       useCombinatorialParsing,
     });
   };

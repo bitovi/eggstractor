@@ -1,4 +1,6 @@
-// Add this function to handle copying
+/**
+ * Copies the provided text to the clipboard.
+ */
 export const copyToClipboard = (text: string) => {
   const textarea = document.createElement('textarea');
   textarea.value = text;

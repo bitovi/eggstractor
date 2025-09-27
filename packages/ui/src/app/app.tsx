@@ -1,68 +1,13 @@
-import { MemoryRouter, useLocation } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getValidStylesheetFormat } from '@eggstractor/common';
 import { Route, Routes, Link } from 'react-router-dom';
-import './app.scss';
+import '..styles.scss';
 import { messageMainThread } from './utils';
 import { Form } from './Form';
 import { GeneratedStylesProvider, Config, ConfigProvider } from './context';
-import { useOnPluginMessage } from './hooks';
+import { useOnPluginMessage, useRoutePersistence } from './hooks';
 import { StatusProvider } from './Form/components';
-
-declare global {
-  interface Window {
-    __DEV__?: boolean; // injected by vite define
-    __INITIAL_ROUTE__?: string; // injected by code.ts in Figma; undefined on web
-  }
-}
-
-export function isFigmaPluginUI(): boolean {
-  // Figma UI runs in an iframe
-  return window.parent && window.parent !== window;
-}
-
-/**
- * useRoutePersistence
- * - Returns a *synchronous* initialRoute string
- * - Also returns a small component that, when rendered inside a Router,
- *   uses useEffect + useLocation to keep the route persisted.
- */
-export function useRoutePersistence() {
-  // Compute the initial route synchronously once
-  const initialRoute = useMemo<string>(() => {
-    if (isFigmaPluginUI()) {
-      // From code.ts injection
-      return window.__INITIAL_ROUTE__ || '/';
-    } else {
-      // Browser build: sync read from localStorage
-      const v = window.localStorage.getItem('memoryRouterPath');
-      return v || '/';
-    }
-  }, []);
-
-  return initialRoute;
-}
-
-// Inner component that persists on route changes (render this inside your Router)
-function RoutePersistence() {
-  const location = useLocation();
-
-  useEffect(() => {
-    const path = location.pathname;
-    if (isFigmaPluginUI()) {
-      console.log('persisting route', path);
-      window.parent.postMessage(
-        { pluginMessage: { type: 'set-route', path } },
-        '*'
-      );
-    } else {
-      console.log('not figma plugin', path);
-      window.localStorage.setItem('memoryRouterPath', path);
-    }
-  }, [location.pathname]);
-
-  return null;
-}
+import { MemoryPersistenceRouter } from './components';
 
 export const App = () => {
   const initialRoute = useRoutePersistence();
@@ -85,12 +30,12 @@ export const App = () => {
   });
 
   if (!loadedConfig) {
+    // TODO: better loading state
     return <div>Loading...</div>;
   }
 
   return (
-    <MemoryRouter initialEntries={[initialRoute]}>
-      <RoutePersistence />
+    <MemoryPersistenceRouter initialRoute={initialRoute}>
       <GeneratedStylesProvider>
         <StatusProvider>
           <ConfigProvider {...loadedConfig}>
@@ -130,7 +75,7 @@ export const App = () => {
         </Routes>
         test
       </div> */}
-    </MemoryRouter>
+    </MemoryPersistenceRouter>
   );
 };
 

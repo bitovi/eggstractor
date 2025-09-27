@@ -1,9 +1,7 @@
+/// <reference types='vitest' />
 import { defineConfig } from 'vite';
 
-export default defineConfig(({ mode }) => ({
-  define: {
-    __DEV__: mode !== 'production',
-  },
+export default defineConfig({
   test: {
     environment: 'node',
     globals: true,
@@ -11,4 +9,4 @@ export default defineConfig(({ mode }) => ({
       tsconfig: './tsconfig.test.json',
     },
   },
-}));
+});
