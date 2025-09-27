@@ -1,0 +1,22 @@
+{
+  "name": "@eggstractor/common",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "test:watch": "vitest",
+    "test:update": "vitest -u",
+    "lint:fix": "nx lint figma --fix"
+  }
+}

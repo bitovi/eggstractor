@@ -1,14 +1,19 @@
 {
-  "compilerOptions": {
-    "target": "es2021",
-    "lib": ["es2021"],
-    "strict": true,
-    "module": "none",
-    "typeRoots": ["./node_modules/@types", "./node_modules/@figma"],
-    "skipLibCheck": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/ui.ts", "src/ui.css", "src/highlighter.ts"]
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/common"
+    },
+    {
+      "path": "./packages/figma"
+    },
+    {
+      "path": "./packages/ui"
+    },
+    {
+      "path": "./packages/ui-e2e"
+    }
+  ]
 }

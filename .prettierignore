@@ -1,0 +1,11 @@
+# Add files here to ignore them from prettier formatting
+node_modules
+dist
+coverage
+tmp
+.nx
+**/.next
+**/build
+**/*.min.*
+**/*.snap
+**/*.timestamp*
