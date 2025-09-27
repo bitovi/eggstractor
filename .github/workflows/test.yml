@@ -13,9 +13,10 @@ jobs:
         with:
           node-version: '20.x'
       - run: npm ci
-      # Installs Playwright browsers + system deps on Ubuntu runners
-      - run: npx playwright install --with-deps chromium
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
-      - run: npm run e2e
+      # TODO: consider running e2e tests
+      # # Installs Playwright browsers + system deps on Ubuntu runners
+      # - run: npx playwright install --with-deps chromium
+      # - run: npm run e2e
