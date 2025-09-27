@@ -3,7 +3,7 @@ import wordmarkUrl from '../../../../assets/bitovi-wordmark.png';
 
 export const About: FC = () => {
   return (
-    <div className="about">
+    <div className="about container">
       <p>
         Eggstractor is an open source project for exporting design as tokens and utility layers,
         letting developers build components their way, while supporting ultra-fast, designer-led

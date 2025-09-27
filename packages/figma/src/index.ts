@@ -27,7 +27,10 @@ const main = async () => {
 
   console.log('Initial route:', route);
 
-  const html = __html__.replace('null;/* __INITIAL_ROUTE_PLACEHOLDER__ */', JSON.stringify(route));
+  // This is a placeholder found in the index.html file of the UI build
+  // that we replace with the initial route to load.
+  // This is done to avoid async loading of the initial route in the UI.
+  const html = __html__.replace('null; /* __INITIAL_ROUTE_PLACEHOLDER__ */', JSON.stringify(route));
 
   // Show the UI with resizable window
   figma.showUI(html, {

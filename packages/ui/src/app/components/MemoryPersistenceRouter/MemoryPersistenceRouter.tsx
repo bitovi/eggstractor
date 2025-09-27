@@ -5,16 +5,16 @@ import { isFigmaPluginUI } from '../../utils';
 // Inner component that persists on route changes (render this inside your Router)
 const RoutePersistence = () => {
   const location = useLocation();
+  const path = location.pathname;
 
   useEffect(() => {
-    const path = location.pathname;
     if (isFigmaPluginUI()) {
       console.log('Persisting route to Figma:', path);
       window.parent.postMessage({ pluginMessage: { type: 'set-route', path } }, '*');
     } else {
       window.localStorage.setItem('memoryRouterPath', path);
     }
-  }, [location.pathname]);
+  }, [path]);
 
   return null;
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getValidStylesheetFormat } from '@eggstractor/common';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes, NavLink } from 'react-router-dom';
 import '../styles.scss';
 import { messageMainThread } from './utils';
 import { About, Form, StatusProvider } from './routes';
@@ -38,19 +38,29 @@ export const App = () => {
       <GeneratedStylesProvider>
         <StatusProvider>
           <ConfigProvider {...loadedConfig}>
-            <div role="navigation">
+            <nav className="navigation">
               <ul>
                 <li>
-                  <Link to="/">Home</Link>
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}
+                  >
+                    Export
+                  </NavLink>
                 </li>
                 <li>
-                  <Link to="/page-2">Page 2</Link>
+                  <NavLink
+                    to="/about"
+                    className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}
+                  >
+                    About
+                  </NavLink>
                 </li>
               </ul>
-            </div>
+            </nav>
             <Routes>
               <Route path="/" element={<Form />} />
-              <Route path="/page-2" element={<About />} />
+              <Route path="/about" element={<About />} />
             </Routes>
           </ConfigProvider>
         </StatusProvider>

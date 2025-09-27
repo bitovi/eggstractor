@@ -1,7 +1,11 @@
 body {
   margin: 0;
-  padding: 20px;
+  padding: 0;
   font-family: sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 img {
@@ -22,7 +26,6 @@ button#generateBtn {
   width: 100%;
   height: 50vh;
   padding: 0;
-  box-sizing: border-box;
   background: #1e1e1e;
   color: #dcdcdc;
   font-family: monospace;
@@ -55,7 +58,6 @@ button#generateBtn {
   cursor: pointer;
   opacity: 0.8;
   height: 100%;
-  box-sizing: border-box;
 }
 .copy-button:hover {
   background: var(--figma-color-bg-hover);
@@ -76,7 +78,6 @@ label {
 input {
   width: 100%;
   padding: 8px;
-  box-sizing: border-box;
 }
 pre {
   margin: 0;
@@ -140,7 +141,6 @@ pre {
 
   width: 16px;
   height: 16px;
-  box-sizing: border-box;
 
   border: 2px solid #f0f0f0;
   border-top-color: #007cba;
@@ -308,6 +308,39 @@ summary:hover {
   cursor: pointer;
 }
 
+.container {
+  padding: 30px;
+}
+
+nav {
+  height: 67px;
+  ul {
+    display: flex;
+    list-style-type: none;
+    padding: 12px 15px;
+    margin: 0;
+    border-bottom: 1px solid #00464a;
+  }
+  a {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    height: 19px + 24px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #a3adad;
+    font-weight: 600;
+    border-radius: 4px;
+  }
+  a:hover {
+    color: #01a6ae;
+    background: #00464a;
+  }
+  a.active-link {
+    color: #01a6ae;
+  }
+}
+
 .about {
   color: white;
   a {
@@ -319,6 +352,7 @@ summary:hover {
     text-decoration: underline;
   }
   p {
+    margin-top: 0;
     margin-bottom: 18px + 8px;
   }
   .last {
