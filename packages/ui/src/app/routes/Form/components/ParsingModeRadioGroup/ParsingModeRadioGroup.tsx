@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
-import { RadioGroup } from '../../../components';
-import { useConfig } from '../../../context';
+import { RadioGroup } from '../../../../components';
+import { useConfig } from '../../../../context';
 
 type ParsingMode = 'combinatorial' | 'templated';
 

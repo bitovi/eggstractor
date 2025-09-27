@@ -9,6 +9,7 @@ const RoutePersistence = () => {
   useEffect(() => {
     const path = location.pathname;
     if (isFigmaPluginUI()) {
+      console.log('Persisting route to Figma:', path);
       window.parent.postMessage({ pluginMessage: { type: 'set-route', path } }, '*');
     } else {
       window.localStorage.setItem('memoryRouterPath', path);

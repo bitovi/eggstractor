@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
-import { ProgressBar } from '../../../components';
-import { useOnPluginMessage } from '../../../hooks';
+import { ProgressBar } from '../../../../components';
+import { useOnPluginMessage } from '../../../../hooks';
 import { TIME_TO_REMOVE_PROGRESS_BAR } from '../../constants';
-import { messageMainThread } from '../../../utils';
+import { messageMainThread } from '../../../../utils';
 
 export const GeneratingStylesProgressBar: FC = () => {
   const [renderProgressBar, setRenderProgressBar] = useState(false);

@@ -3,6 +3,12 @@ body {
   padding: 20px;
   font-family: sans-serif;
 }
+
+img {
+  display: block;
+  margin: 0;
+}
+
 button {
   padding: 8px 16px;
   font-size: 14px;
@@ -302,6 +308,24 @@ summary:hover {
   cursor: pointer;
 }
 
-.dev-only {
-  display: none;
+.about {
+  color: white;
+  a {
+    color: #01a6ae;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  p {
+    margin-bottom: 18px + 8px;
+  }
+  .last {
+    margin-bottom: 50px;
+  }
+  img {
+    max-width: 215px;
+    height: auto;
+  }
 }

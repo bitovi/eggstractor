@@ -7,7 +7,8 @@ export type MessageType =
   | 'generate-styles'
   | 'export-test-data'
   | 'select-node'
-  | 'progress-updated';
+  | 'progress-updated'
+  | 'set-route';
 
 type BaseMessageToMainThreadPayload = {
   type: MessageType;
@@ -73,6 +74,15 @@ export interface ExportTestDataPayload extends BaseMessageToMainThreadPayload {
   type: 'export-test-data';
 }
 
+/**
+ * Acknowledges progress update receipt. This is to notify the main thread
+ * that the worker has received and is processing the progress update.
+ */
+export interface RouteSetPayload extends BaseMessageToMainThreadPayload {
+  type: 'set-route';
+  path: string;
+}
+
 export type MessageToMainThreadPayload =
   | LoadConfigPayload
   | CreatePRPayload
@@ -80,4 +90,5 @@ export type MessageToMainThreadPayload =
   | GenerateStylesPayload
   | SelectNodePayload
   | ProgressUpdatedPayload
-  | ExportTestDataPayload;
+  | ExportTestDataPayload
+  | RouteSetPayload;

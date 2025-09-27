@@ -1,9 +1,9 @@
 import { FC, FormEvent, useState } from 'react';
 import { getValidStylesheetFormat } from '@eggstractor/common';
-import { messageMainThread } from '../utils';
-import { useConfig, useGeneratedStyles } from '../context';
-import { Button } from '../components';
-import { useOnPluginMessage } from '../hooks';
+import { messageMainThread } from '../../utils';
+import { useConfig, useGeneratedStyles } from '../../context';
+import { Button } from '../../components';
+import { useOnPluginMessage } from '../../hooks';
 import {
   BranchNameInput,
   CreatePRButton,
