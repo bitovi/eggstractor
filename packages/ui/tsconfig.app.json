@@ -5,7 +5,7 @@
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "jsx": "react-jsx",
     "lib": ["dom"],
-    "types": ["node", "@nx/react/typings/image.d.ts", "vite/client"],
+    "types": ["node", "vite/client"],
     "rootDir": "src"
   },
   "exclude": [
