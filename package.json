@@ -28,8 +28,8 @@
     "react-router-dom": "6.29.0"
   },
   "devDependencies": {
-    "@figma/plugin-typings": "^1.117.0",
     "@figma/eslint-plugin-figma-plugins": "github:figma/eslint-plugin-figma-plugins#532a880",
+    "@figma/plugin-typings": "^1.117.0",
     "@nx/devkit": "21.5.2",
     "@nx/eslint": "21.5.2",
     "@nx/eslint-plugin": "21.5.2",
