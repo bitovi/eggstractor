@@ -23,9 +23,17 @@ export function toBase64(str: string): string {
 }
 
 export function sanitizeName(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '-') // Replace non-alphanumeric characters with hyphens
+    .replace(/-+/g, '-') // Replace multiple consecutive hyphens with single hyphen
+    .replace(/^-|-$/g, ''); // Remove leading and trailing hyphens
 }
 
 export function sanitizeSegment(segment: string): string {
-  return segment.toLowerCase().replace(/[^a-z0-9]/g, '-');
+  return segment
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '-') // Replace non-alphanumeric characters with hyphens
+    .replace(/-+/g, '-') // Replace multiple consecutive hyphens with single hyphen
+    .replace(/^-|-$/g, ''); // Remove leading and trailing hyphens
 }

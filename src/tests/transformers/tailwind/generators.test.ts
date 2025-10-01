@@ -44,7 +44,8 @@ jest.mock('../../../theme-tokens', () => ({
       '14px': '3.5',
     },
     fontFamily: {
-      sans: 'sans',
+      sans: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+      'gt-america': ['GT America', 'Helvetica Neue', 'Arial', 'sans-serif'],
     },
     borderWidths: {
       '1px': 'DEFAULT',
@@ -282,6 +283,11 @@ describe('generateTailwindFontFamilyOutput', () => {
     property: 'font',
     rawValue: 'sans',
   };
+  const fontFamilyToken = {
+    ...basicToken,
+    property: 'font-family',
+    rawValue: 'Arial',
+  };
   it('should return tailwind properties for a font family existing element', () => {
     const result = generateTailwindFontFamilyOutput(fontToken);
     expect(result).toBe('font-sans');
@@ -289,10 +295,201 @@ describe('generateTailwindFontFamilyOutput', () => {
   it("should return an arbitrary value for font family if it's not found", () => {
     const notFoundFontToken = {
       ...fontToken,
-      rawValue: 'arial',
+      rawValue: 'unknown-font',
     };
     const result = generateTailwindFontFamilyOutput(notFoundFontToken);
     expect(result).toBe(`font-[${notFoundFontToken.rawValue}]`);
+  });
+
+  it('should handle standard font families', () => {
+    const arialToken = {
+      ...fontFamilyToken,
+      rawValue: 'sans',
+    };
+    const result = generateTailwindFontFamilyOutput(arialToken);
+    expect(result).toBe('font-sans');
+  });
+
+  it('should return arbitrary value for custom font names', () => {
+    const customFontToken = {
+      ...fontFamilyToken,
+      rawValue: 'Custom Font Name',
+    };
+    const result = generateTailwindFontFamilyOutput(customFontToken);
+    expect(result).toBe('font-[Custom Font Name]');
+  });
+
+  it('should return arbitrary value for fonts with special characters', () => {
+    const specialFontToken = {
+      ...fontFamilyToken,
+      rawValue: 'Font-Name/With.Special_Characters',
+    };
+    const result = generateTailwindFontFamilyOutput(specialFontToken);
+    expect(result).toBe('font-[Font-Name/With.Special_Characters]');
+  });
+
+  it('should return arbitrary value for quoted font names', () => {
+    const quotedFontToken = {
+      ...fontFamilyToken,
+      rawValue: '"Times New Roman"',
+    };
+    const result = generateTailwindFontFamilyOutput(quotedFontToken);
+    expect(result).toBe('font-["Times New Roman"]');
+  });
+
+  it('should return arbitrary value for complex font names', () => {
+    const multiHyphenToken = {
+      ...fontFamilyToken,
+      rawValue: 'Font--Name---With____Multiple',
+    };
+    const result = generateTailwindFontFamilyOutput(multiHyphenToken);
+    expect(result).toBe('font-[Font--Name---With____Multiple]');
+  });
+
+  it('should return arbitrary value for edge case font names', () => {
+    const edgeCaseToken = {
+      ...fontFamilyToken,
+      rawValue: '-Font Name-',
+    };
+    const result = generateTailwindFontFamilyOutput(edgeCaseToken);
+    expect(result).toBe('font-[-Font Name-]');
+  });
+
+  it('should work with dynamicTheme font family mapping', () => {
+    const dynamicTheme = {
+      fontFamily: {
+        custom: ['Custom Font', 'fallback'],
+        brand: ['Brand Font'],
+      },
+    };
+
+    const customToken = {
+      ...fontFamilyToken,
+      rawValue: 'custom',
+    };
+    const result = generateTailwindFontFamilyOutput(customToken, dynamicTheme);
+    expect(result).toBe('font-custom');
+
+    const brandToken = {
+      ...fontFamilyToken,
+      rawValue: 'Brand Font',
+    };
+    const resultBrand = generateTailwindFontFamilyOutput(brandToken, dynamicTheme);
+    expect(resultBrand).toBe('font-brand');
+
+    // Unknown font should still return arbitrary value
+    const unknownToken = {
+      ...fontFamilyToken,
+      rawValue: 'Unknown Font',
+    };
+    const resultUnknown = generateTailwindFontFamilyOutput(unknownToken, dynamicTheme);
+    expect(resultUnknown).toBe('font-[Unknown Font]');
+  });
+
+  it('should return font class for fonts defined in theme (like gt-america)', () => {
+    const dynamicTheme = {
+      fontFamily: {
+        'gt-america': ['GT America', 'sans-serif'],
+        'custom-mono': ['Fira Code', 'monospace'],
+        sans: ['Inter', 'system-ui'],
+      },
+    };
+
+    // When rawValue is "gt-america" (the theme key), should return font-gt-america
+    const gtAmericaToken = {
+      ...fontFamilyToken,
+      rawValue: 'gt-america',
+    };
+    const result = generateTailwindFontFamilyOutput(gtAmericaToken, dynamicTheme);
+    expect(result).toBe('font-gt-america');
+
+    // When rawValue is "GT America" (the font name in the array), should also return font-gt-america
+    const gtAmericaFullNameToken = {
+      ...fontFamilyToken,
+      rawValue: 'GT America',
+    };
+    const resultFullName = generateTailwindFontFamilyOutput(gtAmericaFullNameToken, dynamicTheme);
+    expect(resultFullName).toBe('font-gt-america');
+
+    // When rawValue is "Fira Code" (font name in custom-mono array), should return font-custom-mono
+    const firaCodeToken = {
+      ...fontFamilyToken,
+      rawValue: 'Fira Code',
+    };
+    const resultFiraCode = generateTailwindFontFamilyOutput(firaCodeToken, dynamicTheme);
+    expect(resultFiraCode).toBe('font-custom-mono');
+
+    // Unknown font should still use arbitrary syntax
+    const unknownToken = {
+      ...fontFamilyToken,
+      rawValue: 'Comic Sans',
+    };
+    const resultUnknown = generateTailwindFontFamilyOutput(unknownToken, dynamicTheme);
+    expect(resultUnknown).toBe('font-[Comic Sans]');
+  });
+
+  it('should recognize gt-america from theme tokens as a known font', () => {
+    const gtAmericaToken = {
+      ...fontFamilyToken,
+      rawValue: 'gt-america',
+    };
+    const result = generateTailwindFontFamilyOutput(gtAmericaToken);
+    expect(result).toBe('font-gt-america');
+  });
+
+  it('should recognize GT America font name from theme tokens fallback array', () => {
+    const gtAmericaFullToken = {
+      ...fontFamilyToken,
+      rawValue: 'GT America',
+    };
+    const result = generateTailwindFontFamilyOutput(gtAmericaFullToken);
+    expect(result).toBe('font-gt-america');
+  });
+
+  it('should handle dynamic theme font family mappings correctly', () => {
+    // Simulate what buildDynamicThemeTokens should create (after fix)
+    const dynamicTheme = {
+      fontFamily: {
+        'gt-america': ['GT America'], // Correct - maps gt-america to actual font name
+      },
+    };
+
+    // Token with rawValue "GT America" should map to font-gt-america
+    const gtAmericaToken = {
+      ...fontFamilyToken,
+      rawValue: 'GT America',
+    };
+    const result = generateTailwindFontFamilyOutput(gtAmericaToken, dynamicTheme);
+    expect(result).toBe('font-gt-america');
+  });
+
+  it('should demonstrate the fix for dynamic theme font family mapping', () => {
+    // What we were creating (wrong)
+    const oldWrongDynamicTheme = {
+      fontFamily: {
+        'gt-america': ['gt-america'], // Wrong - maps gt-america to ["gt-america"]
+      },
+    };
+
+    // What we should be creating (correct)
+    const correctDynamicTheme = {
+      fontFamily: {
+        'gt-america': ['GT America'], // Correct - maps gt-america to actual font names
+      },
+    };
+
+    const gtAmericaToken = {
+      ...fontFamilyToken,
+      rawValue: 'GT America',
+    };
+
+    // Old wrong result
+    const wrongResult = generateTailwindFontFamilyOutput(gtAmericaToken, oldWrongDynamicTheme);
+    expect(wrongResult).toBe('font-[GT America]'); // This was the problem
+
+    // Correct result with fixed mapping
+    const correctResult = generateTailwindFontFamilyOutput(gtAmericaToken, correctDynamicTheme);
+    expect(correctResult).toBe('font-gt-america'); // This is what we want
   });
 });
 
@@ -363,6 +560,72 @@ describe('generateTailwindBoxShadowClass', () => {
     };
     const result = generateTailwindBoxShadowClass(mixedShadowToken);
     expect(result).toBe('shadow-[0_4px_6px_rgba(0,0,0,0.1),inset_0_1px_0_0_#0a1264]');
+  });
+
+  it('should use dynamic theme tokens when available', () => {
+    const shadowToken = {
+      ...boxShadowToken,
+      rawValue: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+    };
+
+    const dynamicTheme = {
+      boxShadow: {
+        '0px 4px 8px rgba(0, 0, 0, 0.1)': 'card-shadow',
+        'inset 0px 1px 0px rgba(255, 255, 255, 0.1)': 'button-inset',
+      },
+    };
+
+    const result = generateTailwindBoxShadowClass(shadowToken, dynamicTheme);
+    expect(result).toBe('shadow-card-shadow');
+  });
+
+  it('should handle normalized matching for slight formatting differences', () => {
+    const shadowToken = {
+      ...boxShadowToken,
+      rawValue: '0px  4px   8px rgba(0, 0, 0, 0.1)', // Extra spaces
+    };
+
+    const dynamicTheme = {
+      boxShadow: {
+        '0px 4px 8px rgba(0, 0, 0, 0.1)': 'card-shadow', // Normal spacing
+      },
+    };
+
+    const result = generateTailwindBoxShadowClass(shadowToken, dynamicTheme);
+    expect(result).toBe('shadow-card-shadow');
+  });
+
+  it('should handle comma-separated multi-shadows with formatting differences', () => {
+    const shadowToken = {
+      ...boxShadowToken,
+      rawValue: '0px 4px 8px rgba(0, 0, 0, 0.1),inset 0px 1px 0px rgba(255, 255, 255, 0.1)', // No space after comma
+    };
+
+    const dynamicTheme = {
+      boxShadow: {
+        '0px 4px 8px rgba(0, 0, 0, 0.1), inset 0px 1px 0px rgba(255, 255, 255, 0.1)':
+          'complex-shadow', // Space after comma
+      },
+    };
+
+    const result = generateTailwindBoxShadowClass(shadowToken, dynamicTheme);
+    expect(result).toBe('shadow-complex-shadow');
+  });
+
+  it('should fallback to inline shadow when no theme token matches', () => {
+    const shadowToken = {
+      ...boxShadowToken,
+      rawValue: '0px 8px 16px rgba(255, 0, 0, 0.2)',
+    };
+
+    const dynamicTheme = {
+      boxShadow: {
+        '0px 4px 8px rgba(0, 0, 0, 0.1)': 'card-shadow',
+      },
+    };
+
+    const result = generateTailwindBoxShadowClass(shadowToken, dynamicTheme);
+    expect(result).toBe('shadow-[0px_8px_16px_rgba(255,0,0,0.2)]');
   });
 });
 
@@ -511,5 +774,41 @@ describe('generateTailwindOpacityClass', () => {
     };
     const result = generateTailwindOpacityClass(decimalToken);
     expect(result).toBe('opacity-33');
+  });
+});
+describe('normalizeTailwindToken - Font Weight Edge Cases', () => {
+  it('should handle numeric font weight values correctly', () => {
+    const fontWeightMapping = {
+      '100': 'thin',
+      '200': 'extralight',
+      '300': 'light',
+      '400': 'normal',
+      '500': 'medium',
+      '600': 'semibold',
+      '700': 'bold',
+      '800': 'extrabold',
+      '900': 'black',
+    };
+
+    expect(normalizeTailwindToken(fontWeightMapping, '500')).toBe('medium');
+    expect(normalizeTailwindToken(fontWeightMapping, '700')).toBe('bold');
+    expect(normalizeTailwindToken(fontWeightMapping, '999')).toBe('[999]'); // Should fallback
+  });
+
+  it('should handle text font weight values correctly', () => {
+    const fontWeightMapping = {
+      thin: 'thin',
+      medium: 'medium',
+      bold: 'bold',
+    };
+
+    expect(normalizeTailwindToken(fontWeightMapping, 'medium')).toBe('medium');
+    expect(normalizeTailwindToken(fontWeightMapping, 'bold')).toBe('bold');
+    expect(normalizeTailwindToken(fontWeightMapping, 'unknown')).toBe('[unknown]'); // Should fallback
+  });
+
+  it('should return empty string for DEFAULT values', () => {
+    const mapping = { default: 'DEFAULT' };
+    expect(normalizeTailwindToken(mapping, 'default')).toBe('');
   });
 });

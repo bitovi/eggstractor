@@ -4,7 +4,12 @@ import { convertToGeneratorTokens, convertVariantGroupBy } from '../variants';
 import { filterStyleTokens } from './filters';
 import { createTailwindClasses } from './generators';
 import { getStylePropertyAndValue } from '../utils';
-import { createNamingContext, tailwind4NamingConfig } from '../../utils';
+import {
+  createNamingContext,
+  tailwind4NamingConfig,
+  generateThemeDirective,
+  buildDynamicThemeTokens,
+} from '../../utils';
 import { Transformer } from '../types';
 
 export const transformToTailwindSassClass: Transformer = (
@@ -52,7 +57,6 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
 ) => {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
-
   const namingContext = createNamingContext(tailwind4NamingConfig);
 
   const selectors = convertVariantGroupBy(
@@ -70,11 +74,21 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
     a.variantPath.localeCompare(b.variantPath),
   );
 
-  let output = '/* Generated Tailwind Utilities */\n';
+  let output = generateThemeDirective(collection);
+
+  // Build dynamic theme tokens from PRIMITIVE variable tokens only for utilities
+  const variableTokens = collection.tokens.filter((token) => token.type === 'variable');
+  const primitiveVariableTokens = variableTokens.filter(
+    (token) => token.metadata?.variableTokenType === 'primitive',
+  );
+
+  const dynamicThemeTokens = buildDynamicThemeTokens(primitiveVariableTokens);
+
+  output += '\n\n/* Generated Tailwind Utilities */\n';
 
   for (const { variantPath, tokens } of formattedStyleTokens) {
-    const classesToApply = createTailwindClasses(tokens);
-
+    // Pass dynamic theme tokens to the generator
+    const classesToApply = createTailwindClasses(tokens, dynamicThemeTokens);
     if (classesToApply.length) {
       output += `\n@utility ${variantPath} {\n  @apply ${classesToApply.join(' ')}; \n}\n`;
     }

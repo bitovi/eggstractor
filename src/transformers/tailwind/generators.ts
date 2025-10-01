@@ -1,8 +1,19 @@
 import { themeTokens } from '../../theme-tokens';
 import { StyleToken } from '../../types';
 
+interface DynamicTheme {
+  spacing?: Record<string, string>;
+  colors?: Record<string, string>;
+  borderWidths?: Record<string, string>;
+  borderRadius?: Record<string, string>;
+  fontWeight?: Record<string, string>;
+  fontFamily?: Record<string, string[]>;
+  fontSize?: Record<string, string>;
+  boxShadow?: Record<string, string>;
+}
+
 export type GeneratorToken = { rawValue: string; property: string; path: StyleToken['path'] };
-export type Generator = (token: GeneratorToken) => string;
+export type Generator = (token: GeneratorToken, dynamicTheme?: DynamicTheme) => string;
 
 const { spacing, colors, borderWidths, borderRadius, fontWeight, fontFamily, fontSize } =
   themeTokens;
@@ -88,10 +99,11 @@ export const normalizeTailwindToken = (themeMapping: Record<string, string>, val
     - "5px 6px 10px"        → top | horizontal | bottom
     - "5px 6px 10px 20px"   → top | right | bottom | left
 */
-export const generateTailwindPaddingClass: Generator = ({ rawValue }) => {
+export const generateTailwindPaddingClass: Generator = ({ rawValue }, dynamicTheme?) => {
+  const spacingMapping = dynamicTheme?.spacing || spacing;
   return normalizeFourSides(rawValue)
     .map((sizeValue, i) => {
-      const normalizedToken = normalizeTailwindToken(spacing, sizeValue);
+      const normalizedToken = normalizeTailwindToken(spacingMapping, sizeValue);
       return `p${directions[i]}-${normalizedToken}`;
     })
     .join(' ');
@@ -102,11 +114,12 @@ export const generateTailwindPaddingClass: Generator = ({ rawValue }) => {
     - "16px"           → both row and column gaps
     - "16px 8px"       → row | column
 */
-export const generateTailwindGapClass: Generator = ({ rawValue }) => {
+export const generateTailwindGapClass: Generator = ({ rawValue }, dynamicTheme?) => {
+  const spacingMapping = dynamicTheme?.spacing || spacing;
   const axes = ['x', 'y'] as const;
   return normalizeTwoSides(rawValue)
     .map((sizeValue, i) => {
-      const normalizeToken = normalizeTailwindToken(spacing, sizeValue);
+      const normalizeToken = normalizeTailwindToken(spacingMapping, sizeValue);
       return `gap-${axes[i]}-${normalizeToken}`;
     })
     .join(' ');
@@ -138,12 +151,13 @@ export function parseBorderShorthand(border: string) {
     - "5px 10px 15px"         → top-left, top-right + bottom-left, bottom-right
     - "5px 10px 15px 20px"    → top-left, top-right, bottom-right, bottom-left
 */
-export const generateTailwindBorderRadiusClass: Generator = ({ rawValue }) => {
+export const generateTailwindBorderRadiusClass: Generator = ({ rawValue }, dynamicTheme?) => {
+  const borderRadiusMapping = dynamicTheme?.borderRadius || borderRadius;
   const radiusCorners = ['tl', 'tr', 'br', 'bl'] as const;
   return normalizeBorderRadius(rawValue)
     .map((v) => (v === '0' ? '0px' : v)) //changing 0 to 0px tailwind utility picks it up
     .map((sizeValue, i) => {
-      const normalizedToken = normalizeTailwindToken(borderRadius, sizeValue);
+      const normalizedToken = normalizeTailwindToken(borderRadiusMapping, sizeValue);
 
       return normalizedToken
         ? `rounded-${radiusCorners[i]}-${normalizedToken}`
@@ -158,12 +172,14 @@ export const generateTailwindBorderRadiusClass: Generator = ({ rawValue }) => {
     - "solid #0daeff"         → style | color (uses default width)
     - "2px #0daeff"           → width | color (uses default style)
 */
-export const generateTailwindBorderClass: Generator = (token) => {
+export const generateTailwindBorderClass: Generator = (token, dynamicTheme?) => {
   const { width, style, color } = parseBorderShorthand(token.rawValue);
+  const borderWidthsMapping = dynamicTheme?.borderWidths || borderWidths;
+  const colorsMapping = dynamicTheme?.colors || colors;
 
   const borderResult: string[] = [];
   if (width) {
-    const normalizedToken = normalizeTailwindToken(borderWidths, width);
+    const normalizedToken = normalizeTailwindToken(borderWidthsMapping, width);
     borderResult.push(
       normalizedToken
         ? `${borderPropertyToShorthand[token.property]}-${normalizedToken}`
@@ -176,7 +192,7 @@ export const generateTailwindBorderClass: Generator = (token) => {
 
   if (color) {
     borderResult.push(
-      `${borderPropertyToShorthand[token.property]}-${normalizeTailwindToken(colors, color)}`,
+      `${borderPropertyToShorthand[token.property]}-${normalizeTailwindToken(colorsMapping, color)}`,
     );
   }
 
@@ -186,21 +202,28 @@ export const generateTailwindBorderClass: Generator = (token) => {
 /*
   Handles rawValue examples for font family:
     - "Arial, 'Times New Roman', 'Courier New', 'Lucida Console', 'monospace'"
+    - "gt america" → "font-[gt america]" (unknown font)
+    - "sans" → "font-sans" (known font family)
 */
-export const generateTailwindFontFamilyOutput: Generator = ({ rawValue }) => {
+export const generateTailwindFontFamilyOutput: Generator = ({ rawValue }, dynamicTheme?) => {
+  const fontFamilyMapping = dynamicTheme?.fontFamily || fontFamily;
   const normalizedRaw = rawValue.replace(/['"]/g, '').toLowerCase();
 
-  for (const [category, fallbacks] of Object.entries(fontFamily)) {
+  // First, try to match against standard Tailwind font families
+  for (const [category, fallbacks] of Object.entries(fontFamilyMapping)) {
     if (category === normalizedRaw) {
       return `font-${category}`;
     }
-    for (const fallback of fallbacks) {
-      if (fallback.replace(/['"]/g, '').toLowerCase() === normalizedRaw) {
-        return `font-${category}`;
+    if (Array.isArray(fallbacks)) {
+      for (const fallback of fallbacks) {
+        if (fallback.replace(/['"]/g, '').toLowerCase() === normalizedRaw) {
+          return `font-${category}`;
+        }
       }
     }
   }
 
+  // For unknown fonts, use the arbitrary value format
   return `font-[${rawValue}]`;
 };
 
@@ -211,10 +234,34 @@ const generateTailwindDisplayClass: Generator = ({ rawValue }) => {
   return rawValue;
 };
 
-export const generateTailwindBoxShadowClass: Generator = ({ rawValue }) => {
-  // Replace spaces with underscores, but preserve comma separation
-  // Split by comma, trim and process each shadow separately, then rejoin
-  const cleanValue = rawValue
+export const generateTailwindBoxShadowClass: Generator = (token, dynamicTheme?) => {
+  const boxShadowMapping = dynamicTheme?.boxShadow || {};
+
+  // First try exact match
+  const exactMatch = boxShadowMapping[token.rawValue];
+  if (exactMatch) {
+    return `shadow-${exactMatch}`;
+  }
+
+  // Try normalized match (remove extra spaces, normalize comma separation)
+  const normalizeBoxShadow = (value: string) => {
+    return value
+      .split(',')
+      .map((shadow) => shadow.trim().replace(/\s+/g, ' '))
+      .join(', ');
+  };
+
+  const normalizedTokenValue = normalizeBoxShadow(token.rawValue);
+
+  for (const [themeValue, themeName] of Object.entries(boxShadowMapping)) {
+    const normalizedThemeValue = normalizeBoxShadow(themeValue);
+    if (normalizedTokenValue === normalizedThemeValue) {
+      return `shadow-${themeName}`;
+    }
+  }
+
+  // Fallback to inline shadow for values not in theme
+  const cleanValue = token.rawValue
     .split(',')
     .map((shadow) => shadow.trim().replace(/\s+/g, '_'))
     .join(',');
@@ -228,12 +275,12 @@ export const createContextAwareColorGenerator = (
     condition: (token: GeneratorToken) => boolean;
     prefix: string;
   }>,
-): Generator => {
-  return (token) => {
+): ((token: GeneratorToken, colorMapping?: Record<string, string>) => string) => {
+  return (token, colorMapping = colors) => {
     const matchedRule = contextRules.find((rule) => rule.condition(token));
     const prefix = matchedRule?.prefix || defaultPrefix;
 
-    const normalizedToken = normalizeTailwindToken(colors, token.rawValue);
+    const normalizedToken = normalizeTailwindToken(colorMapping, token.rawValue);
 
     return `${prefix}-${normalizedToken}`;
   };
@@ -256,42 +303,57 @@ export const generateTailwindOpacityClass: Generator = ({ rawValue }) => {
   return `opacity-${normalizedOpacity}`;
 };
 
-const tailwindClassGenerators: Record<string, Generator> = {
+const createTailwindClassGenerators = (dynamicTheme?: DynamicTheme): Record<string, Generator> => ({
   padding: generateTailwindPaddingClass,
   display: generateTailwindDisplayClass,
   'border-radius': generateTailwindBorderRadiusClass,
   border: generateTailwindBorderClass,
   'box-shadow': generateTailwindBoxShadowClass,
-  'font-weight': ({ rawValue }) => `font-${normalizeTailwindToken(fontWeight, rawValue)}`,
-  'font-size': ({ rawValue }) => `text-${normalizeTailwindToken(fontSize, rawValue)}`,
-  'font-family': generateTailwindFontFamilyOutput,
-  color: ({ rawValue }) => `text-${normalizeTailwindToken(colors, rawValue)}`,
-  background: createContextAwareColorGenerator('bg', [
-    {
-      condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
-      prefix: 'text',
-    },
-  ]),
-  gap: (token) => generateTailwindGapClass(token),
-  'flex-direction': ({ rawValue }) => flexDirection[rawValue],
-  'align-items': ({ rawValue }) => alignItems[rawValue],
-  'justify-content': ({ rawValue }) => justifyContent[rawValue],
-  height: ({ rawValue }) => `h-${normalizeTailwindToken(spacing, rawValue)}`,
-  width: ({ rawValue }) => `w-${normalizeTailwindToken(spacing, rawValue)}`,
-  'max-height': ({ rawValue }) => `max-h-${normalizeTailwindToken(spacing, rawValue)}`,
-  'max-width': ({ rawValue }) => `max-w-${normalizeTailwindToken(spacing, rawValue)}`,
-  'min-height': ({ rawValue }) => `min-h-${normalizeTailwindToken(spacing, rawValue)}`,
-  'min-width': ({ rawValue }) => `min-w-${normalizeTailwindToken(spacing, rawValue)}`,
-  opacity: (token) => generateTailwindOpacityClass(token),
-};
+  'font-weight': ({ rawValue }: GeneratorToken) =>
+    `font-${normalizeTailwindToken(dynamicTheme?.fontWeight || fontWeight, rawValue)}`,
+  'font-size': ({ rawValue }: GeneratorToken) =>
+    `text-${normalizeTailwindToken(dynamicTheme?.fontSize || fontSize, rawValue)}`,
+  'font-family': (token: GeneratorToken) => generateTailwindFontFamilyOutput(token, dynamicTheme),
+  color: ({ rawValue }: GeneratorToken) =>
+    `text-${normalizeTailwindToken(dynamicTheme?.colors || colors, rawValue)}`,
+  background: (token: GeneratorToken) =>
+    createContextAwareColorGenerator('bg', [
+      {
+        condition: (token) => token.path?.some((pathItem) => pathItem.type === 'VECTOR'),
+        prefix: 'text',
+      },
+    ])(token, dynamicTheme?.colors || colors),
+  gap: (token: GeneratorToken) => generateTailwindGapClass(token),
+  'flex-direction': ({ rawValue }: GeneratorToken) => flexDirection[rawValue],
+  'align-items': ({ rawValue }: GeneratorToken) => alignItems[rawValue],
+  'justify-content': ({ rawValue }: GeneratorToken) => justifyContent[rawValue],
+  height: ({ rawValue }: GeneratorToken) =>
+    `h-${normalizeTailwindToken(dynamicTheme?.spacing || spacing, rawValue)}`,
+  width: ({ rawValue }: GeneratorToken) =>
+    `w-${normalizeTailwindToken(dynamicTheme?.spacing || spacing, rawValue)}`,
+  'max-height': ({ rawValue }: GeneratorToken) =>
+    `max-h-${normalizeTailwindToken(dynamicTheme?.spacing || spacing, rawValue)}`,
+  'max-width': ({ rawValue }: GeneratorToken) =>
+    `max-w-${normalizeTailwindToken(dynamicTheme?.spacing || spacing, rawValue)}`,
+  'min-height': ({ rawValue }: GeneratorToken) =>
+    `min-h-${normalizeTailwindToken(dynamicTheme?.spacing || spacing, rawValue)}`,
+  'min-width': ({ rawValue }: GeneratorToken) =>
+    `min-w-${normalizeTailwindToken(dynamicTheme?.spacing || spacing, rawValue)}`,
+  opacity: (token: GeneratorToken) => generateTailwindOpacityClass(token),
+});
 
-export function createTailwindClasses(tokens: GeneratorToken[]): string[] {
+export function createTailwindClasses(
+  tokens: GeneratorToken[],
+  dynamicThemeTokens?: DynamicTheme,
+): string[] {
+  const tailwindClassGenerators = createTailwindClassGenerators(dynamicThemeTokens);
   const classOutput: string[] = [];
 
   for (const token of tokens) {
-    const generator = tailwindClassGenerators[token.property];
+    const generator =
+      tailwindClassGenerators[token.property as keyof typeof tailwindClassGenerators];
     if (generator) {
-      const result = generator(token);
+      const result = generator(token, dynamicThemeTokens);
       classOutput.push(result);
     }
   }
