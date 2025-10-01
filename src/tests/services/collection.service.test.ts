@@ -4,6 +4,7 @@ import {
   shouldSkipInstanceTokenGeneration,
 } from '../../services/collection.service';
 import { createPrimitiveVariableToken } from '../../services/variable.service';
+import * as variableService from '../../services/variable.service';
 import { InstanceToken, TokenCollection } from '../../types';
 
 beforeEach(() => {
@@ -183,10 +184,7 @@ describe('createPrimitiveVariableToken', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     // Spy on the actual function
-    createPrimitiveVariableTokenSpy = jest.spyOn(
-      require('../../services/variable.service'),
-      'createPrimitiveVariableToken',
-    );
+    createPrimitiveVariableTokenSpy = jest.spyOn(variableService, 'createPrimitiveVariableToken');
   });
 
   afterEach(() => {
@@ -200,7 +198,7 @@ describe('createPrimitiveVariableToken', () => {
     valuesByMode: {
       'mode-1': { r: 0, g: 0.5, b: 1 },
     },
-  } as any;
+  } as Partial<Variable>;
 
   it('should be called with correct parameters for color variables', async () => {
     // Mock the implementation to return a known result
@@ -216,8 +214,7 @@ describe('createPrimitiveVariableToken', () => {
       },
     });
 
-    const { createPrimitiveVariableToken } = require('../../services/variable.service');
-    const result = await createPrimitiveVariableToken(mockColorVariable);
+    const result = await createPrimitiveVariableToken(mockColorVariable as Variable);
 
     expect(createPrimitiveVariableTokenSpy).toHaveBeenCalledWith(mockColorVariable);
     expect(result).toEqual({
@@ -241,12 +238,11 @@ describe('createPrimitiveVariableToken', () => {
       valuesByMode: {
         'mode-1': { type: 'VARIABLE_ALIAS', id: 'other-var' },
       },
-    } as any;
+    } as Partial<Variable>;
 
     createPrimitiveVariableTokenSpy.mockResolvedValue(null);
 
-    const { createPrimitiveVariableToken } = require('../../services/variable.service');
-    const result = await createPrimitiveVariableToken(aliasVariable);
+    const result = await createPrimitiveVariableToken(aliasVariable as Variable);
 
     expect(result).toBeNull();
   });
@@ -259,12 +255,11 @@ describe('createPrimitiveVariableToken', () => {
       valuesByMode: {
         'mode-1': true,
       },
-    } as any;
+    } as Partial<Variable>;
 
     createPrimitiveVariableTokenSpy.mockResolvedValue(null);
 
-    const { createPrimitiveVariableToken } = require('../../services/variable.service');
-    const result = await createPrimitiveVariableToken(unsupportedVariable);
+    const result = await createPrimitiveVariableToken(unsupportedVariable as Variable);
 
     expect(result).toBeNull();
   });

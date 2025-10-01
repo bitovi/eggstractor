@@ -12,10 +12,10 @@ function createEffectStyleToken(effectStyle: EffectStyle): VariableToken | null 
       .map((effect) => {
         const { offset, radius, color, spread } = effect;
         const isInset = effect.type === 'INNER_SHADOW';
-        
+
         // Convert RGBA to CSS rgba()
-        const colorValue = `rgba(${Math.round(color.r * 255)}, ${Math.round(color.g * 255)}, ${Math.round(color.b * 255)}, ${color.a || 1})`;
-        
+        const colorValue = `rgba(${Math.round(color.r * 255)}, ${Math.round(color.g * 255)}, ${Math.round(color.b * 255)}, ${color.a ?? 1})`;
+
         // Build box-shadow value: [inset] offset-x offset-y blur-radius [spread-radius] color
         const parts = [];
         if (isInset) parts.push('inset');
@@ -24,7 +24,7 @@ function createEffectStyleToken(effectStyle: EffectStyle): VariableToken | null 
         parts.push(`${radius || 0}px`);
         if (spread) parts.push(`${spread}px`);
         parts.push(colorValue);
-        
+
         return parts.join(' ');
       });
 
@@ -70,7 +70,7 @@ export async function collectAllFigmaEffectStyles(
 
     for (const effectStyle of effectStyles) {
       onProgress(8, `Processing effect style: ${effectStyle.name}`);
-      
+
       const token = createEffectStyleToken(effectStyle);
       if (token) {
         effectTokens.push(token);

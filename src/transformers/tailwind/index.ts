@@ -4,9 +4,13 @@ import { convertToGeneratorTokens, convertVariantGroupBy } from '../variants';
 import { filterStyleTokens } from './filters';
 import { createTailwindClasses } from './generators';
 import { getStylePropertyAndValue } from '../utils';
-import { createNamingContext, tailwind4NamingConfig } from '../../utils';
+import {
+  createNamingContext,
+  tailwind4NamingConfig,
+  generateThemeDirective,
+  buildDynamicThemeTokens,
+} from '../../utils';
 import { Transformer } from '../types';
-import { generateThemeDirective, buildDynamicThemeTokens } from '../../utils/theme-tokens.utils';
 
 export const transformToTailwindSassClass: Transformer = (
   collection: TokenCollection,

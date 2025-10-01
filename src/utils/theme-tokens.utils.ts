@@ -81,7 +81,10 @@ export function generateThemeDirective(collection: TokenCollection): string {
       screenSizeTokens.set(key, token.rawValue);
     } else if (token.property === 'box-shadow') {
       // Box shadow tokens from effect styles
-      cleanName = cleanName.replace(/^effect-/, '').replace(/^shadow-/, '').replace(/^box-shadow-/, '');
+      cleanName = cleanName
+        .replace(/^effect-/, '')
+        .replace(/^shadow-/, '')
+        .replace(/^box-shadow-/, '');
       key = `--${cleanName}`;
       boxShadowTokens.set(key, token.rawValue);
     } else if (token.property === 'spacing') {
@@ -179,20 +182,6 @@ export function generateThemeDirective(collection: TokenCollection): string {
  * Build dynamic theme mapping from variable tokens for use in generators
  */
 export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
-  const dynamicTheme = {
-    spacing: {} as Record<string, string>,
-    colors: {} as Record<string, string>,
-    borderWidths: {} as Record<string, string>,
-    borderRadius: {} as Record<string, string>,
-    fontWeight: {} as Record<string, string>,
-    fontFamily: {} as Record<string, string[]>,
-    fontSize: {} as Record<string, string>,
-    lineHeight: {} as Record<string, string>,
-    iconSize: {} as Record<string, string>,
-    screenSize: {} as Record<string, string>,
-    boxShadow: {} as Record<string, string>,
-  };
-
   // Initialize standard font weight mappings as fallback
   const standardFontWeights: Record<string, string> = {
     '100': 'thin',
@@ -206,8 +195,19 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
     '900': 'black',
   };
 
-  // Start with standard mappings
-  Object.assign(dynamicTheme.fontWeight, standardFontWeights);
+  const dynamicTheme = {
+    spacing: {} as Record<string, string>,
+    colors: {} as Record<string, string>,
+    borderWidths: {} as Record<string, string>,
+    borderRadius: {} as Record<string, string>,
+    fontWeight: standardFontWeights,
+    fontFamily: {} as Record<string, string[]>,
+    fontSize: {} as Record<string, string>,
+    lineHeight: {} as Record<string, string>,
+    iconSize: {} as Record<string, string>,
+    screenSize: {} as Record<string, string>,
+    boxShadow: {} as Record<string, string>,
+  };
 
   for (const token of variableTokens) {
     // Map rawValue to theme token name (matching themeTokens structure)
@@ -289,7 +289,10 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
       dynamicTheme.screenSize[token.rawValue] = cleanName;
     } else if (token.property === 'box-shadow') {
       // Box shadow tokens from effect styles
-      cleanName = cleanName.replace(/^effect-/, '').replace(/^shadow-/, '').replace(/^box-shadow-/, '');
+      cleanName = cleanName
+        .replace(/^effect-/, '')
+        .replace(/^shadow-/, '')
+        .replace(/^box-shadow-/, '');
       dynamicTheme.boxShadow[token.rawValue] = cleanName;
     } else if (token.property === 'spacing') {
       // Pure spacing tokens only (not border, font, icon, or screen related)
