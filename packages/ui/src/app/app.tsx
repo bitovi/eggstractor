@@ -12,11 +12,6 @@ export const App = () => {
   const initialRoute = useRoutePersistence();
   const [loadedConfig, setLoadedConfig] = useState<Config | null>(null);
 
-  useEffect(() => {
-    // Load saved config when UI opens
-    messageMainThread({ type: 'load-config' });
-  }, []);
-
   useOnPluginMessage('config-loaded', (msg) => {
     setLoadedConfig({
       branchName: msg.config.branchName ?? '',
@@ -27,6 +22,11 @@ export const App = () => {
       useCombinatorialParsing: msg.config.useCombinatorialParsing ?? true,
     });
   });
+
+  useEffect(() => {
+    // Load saved config when UI opens
+    messageMainThread({ type: 'load-config' });
+  }, []);
 
   if (!loadedConfig) {
     return null;
