@@ -1,0 +1,53 @@
+import { useEffect, useState } from 'react';
+import { getValidStylesheetFormat } from '@eggstractor/common';
+import { Route, Routes } from 'react-router-dom';
+import '../styles.scss';
+import { messageMainThread } from './utils';
+import { About, Form, StatusProvider } from './routes';
+import { GeneratedStylesProvider, Config, ConfigProvider } from './context';
+import { useOnPluginMessage, useRoutePersistence } from './hooks';
+import { MemoryPersistenceRouter } from './components';
+
+export const App = () => {
+  const initialRoute = useRoutePersistence();
+  const [loadedConfig, setLoadedConfig] = useState<Config | null>(null);
+
+  useOnPluginMessage('config-loaded', (msg) => {
+    setLoadedConfig({
+      branchName: msg.config.branchName ?? '',
+      filePath: msg.config.filePath ?? '',
+      githubToken: msg.config.githubToken ?? '',
+      repoPath: msg.config.repoPath ?? '',
+      format: getValidStylesheetFormat(msg.config.format),
+      useCombinatorialParsing: msg.config.useCombinatorialParsing ?? true,
+    });
+  });
+
+  useEffect(() => {
+    // Load saved config when UI opens
+    messageMainThread({ type: 'load-config' });
+  }, []);
+
+  if (!loadedConfig) {
+    return null;
+  }
+
+  return (
+    <MemoryPersistenceRouter initialRoute={initialRoute}>
+      <GeneratedStylesProvider>
+        <StatusProvider>
+          <ConfigProvider {...loadedConfig}>
+            {/* TODO: Add navigation */}
+            {/*<Nav />*/}
+            <Routes>
+              <Route path="/" element={<Form />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </ConfigProvider>
+        </StatusProvider>
+      </GeneratedStylesProvider>
+    </MemoryPersistenceRouter>
+  );
+};
+
+export default App;

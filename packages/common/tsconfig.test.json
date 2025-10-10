@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/vitest",
+    "tsBuildInfoFile": "./out-tsc/vitest/tsconfig.test.tsbuildinfo",
+    "typeRoots": [
+      "./types",
+      "../../node_modules",
+      "../../node_modules/@types",
+      "../../node_modules/@figma"
+    ],
+    "types": ["vitest/globals", "@figma/plugin-typings"]
+  },
+  "exclude": [
+    "out-tsc",
+    "dist",
+    "vite.config.ts",
+    "vite.config.mts",
+    "vitest.config.ts",
+    "vitest.config.mts",
+    "eslint.config.js",
+    "eslint.config.cjs",
+    "eslint.config.mjs"
+  ],
+  "include": ["src", "tests", "types"]
+}

@@ -1,0 +1,227 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Background Processors > should process background solid correctly > solid styles 1`] = `
+{
+  "alpha": "background: rgba(0, 70, 74, 0.5);",
+  "solid": "background: #00464a;",
+}
+`;
+
+exports[`Background Processors > should process background solid correctly > solid styles 2`] = `
+{
+  "alpha": "background: rgba(0, 70, 74, 0.5);",
+  "solid": "background: #00464a;",
+}
+`;
+
+exports[`Background Processors > should process background solid correctly - sass > solid styles 1`] = `
+"// Generated SCSS Variables
+$brand-primary: #00464a;
+$teal-800-50: rgba(0, 70, 74, 0.5);
+$teal-800: #00464a;
+
+// Generated SCSS Mixins
+@mixin background-solid-variable {
+  background: $brand-primary;
+}
+@mixin background-solid-alpha-variable {
+  background: $teal-800-50;
+}
+@mixin background-solid-custom {
+  background: #00464a;
+}
+@mixin background-solid-alpha-custom {
+  background: rgba(0, 70, 74, 0.5);
+}
+@mixin background-solid-hex-style {
+  background: #00464a;
+}
+@mixin background-solid-variable-style {
+  background: $teal-800;
+}
+@mixin background-solid-alpha-hex-style {
+  background: rgba(0, 70, 74, 0.5);
+}
+@mixin background-solid-alpha-variable-style {
+  background: $teal-800-50;
+}
+"
+`;
+
+exports[`Background Processors > should process background solid correctly - sass > solid styles 2`] = `
+"// Generated SCSS Variables
+$brand-primary: #00464a;
+$teal-800-50: rgba(0, 70, 74, 0.5);
+$teal-800: #00464a;
+
+// Generated SCSS Mixins
+@mixin background-solid-variable {
+  background: $brand-primary;
+}
+@mixin background-solid-alpha-variable {
+  background: $teal-800-50;
+}
+@mixin background-solid-custom {
+  background: #00464a;
+}
+@mixin background-solid-alpha-custom {
+  background: rgba(0, 70, 74, 0.5);
+}
+@mixin background-solid-hex-style {
+  background: #00464a;
+}
+@mixin background-solid-variable-style {
+  background: $teal-800;
+}
+@mixin background-solid-alpha-hex-style {
+  background: rgba(0, 70, 74, 0.5);
+}
+@mixin background-solid-alpha-variable-style {
+  background: $teal-800-50;
+}
+"
+`;
+
+exports[`Background Processors > should process opacity correctly > opacity styles 1`] = `
+"// Generated SCSS Variables
+$brand-primary: #00464a;
+$opacity-48: 0.48;
+$corner-radius-primary: 1rem;
+$size-16: 1rem;
+$font-weight-normal: 31.25rem;
+$text-primary: #a3adad;
+$size-48: 0.48;
+$spacing-9: 0.48;
+
+// Generated SCSS Mixins
+@mixin opacity-custom {
+  background: $brand-primary;
+  opacity: 0.5;
+}
+@mixin opacity-variable {
+  background: $brand-primary;
+  opacity: $opacity-48;
+}
+@mixin opacity-custom-group {
+  padding: 0rem;
+  background: #ffffff;
+  opacity: 0.5;
+}
+@mixin opacity-custom-group-opacity-custom {
+  background: #00464a;
+  opacity: 0.5;
+}
+@mixin opacity-custom-group-lorem-ipsum {
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+  font-family: Inter;
+  font-size: $corner-radius-primary;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $size-16;
+  width: 4.25rem;
+  height: 1rem;
+}
+@mixin opacity-variable-group {
+  padding: 0rem;
+  background: $text-primary;
+  opacity: $size-48;
+}
+@mixin opacity-variable-group-opacity-custom {
+  background: $brand-primary;
+  opacity: $size-48;
+}
+@mixin opacity-variable-group-lorem-ipsum {
+  display: flex;
+  flex-direction: column;
+  color: $text-primary;
+  font-family: Inter;
+  font-size: $corner-radius-primary;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $size-16;
+  width: 4.25rem;
+  height: 1rem;
+}
+"
+`;
+
+exports[`Background Processors > should process opacity correctly > opacity styles 2`] = `
+"// Generated SCSS Variables
+$brand-primary: #00464a;
+$opacity-48: 0.48;
+$corner-radius-primary: 1rem;
+$size-16: 1rem;
+$font-weight-normal: 31.25rem;
+$text-primary: #a3adad;
+$size-48: 0.48;
+$spacing-9: 0.48;
+
+// Generated SCSS Mixins
+@mixin opacity-custom {
+  background: $brand-primary;
+  opacity: 0.5;
+}
+@mixin opacity-variable {
+  background: $brand-primary;
+  opacity: $opacity-48;
+}
+@mixin opacity-custom-group {
+  padding: 0rem;
+  background: #ffffff;
+  opacity: 0.5;
+}
+@mixin opacity-custom-group-opacity-custom {
+  background: #00464a;
+  opacity: 0.5;
+}
+@mixin opacity-custom-group-lorem-ipsum {
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+  font-family: Inter;
+  font-size: $corner-radius-primary;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $size-16;
+  width: 4.25rem;
+  height: 1rem;
+}
+@mixin opacity-variable-group {
+  padding: 0rem;
+  background: $text-primary;
+  opacity: $size-48;
+}
+@mixin opacity-variable-group-opacity-custom {
+  background: $brand-primary;
+  opacity: $size-48;
+}
+@mixin opacity-variable-group-lorem-ipsum {
+  display: flex;
+  flex-direction: column;
+  color: $text-primary;
+  font-family: Inter;
+  font-size: $corner-radius-primary;
+  font-weight: 500;
+  font-style: normal;
+  line-height: $size-16;
+  width: 4.25rem;
+  height: 1rem;
+}
+"
+`;
+
+exports[`Background Processors > should skip background gradient correctly > gradient styles 1`] = `
+{
+  "linear": null,
+  "linearAlpha": null,
+}
+`;
+
+exports[`Background Processors > should skip background gradient correctly > gradient styles 2`] = `
+{
+  "linear": null,
+  "linearAlpha": null,
+}
+`;

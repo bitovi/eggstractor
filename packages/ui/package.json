@@ -1,0 +1,24 @@
+{
+  "name": "@eggstractor/ui",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Eggstractor Figma Plugin UI",
+  "scripts": {
+    "build:watch": "vite build --watch --mode development",
+    "test:watch": "vitest",
+    "test:update": "vitest -u",
+    "lint:fix": "nx lint ui --fix"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "highlight.js": "^11.11.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^6.29.0"
+  },
+  "devDependencies": {
+    "culori": "^4.0.1",
+    "lodash.merge": "^4.6.2",
+    "vite-plugin-singlefile": "^2.3.0"
+  }
+}

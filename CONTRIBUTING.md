@@ -32,16 +32,23 @@ npm -v # 10.5.2
 2. Run the plugin in Figma to test your changes
 
 - Run `npm run dev` to start the plugin in watch mode
-- Load the plugin in Figma and test your changes
+- Load the plugin in Figma desktop application and test your changes
 
 3. Write or update tests as needed
-4. Run tests: `npm test`
-5. Run the visualizer to check your changes: `npm run visualizer`
+4. Run unit tests: `npm test`
+5. Run unit tests: `npm run e2e`
+6. Run the visualizer to check your changes: `npm run visualizer`
+
+### Isolated UI Development
+
+Run `npx nx dev ui` to start the React application
+
+This will mock the postMessages expected from the Figma application found at `packages/ui/src/mockFigma`.
 
 ## Project Structure
 
 ```
-src/
+figma/src/
 ├── processors/ # property processors
 │ ├── layout.processor.ts
 │ ├── spacing.processor.ts
@@ -88,7 +95,7 @@ The visualizer helps you see how your changes affect the CSS output:
 
 ### Adding a New Processor
 
-1. Create a new file in `src/processors/`
+1. Create a new file in `figma/src/processors/`
 2. Follow the existing processor pattern:
 
 ```typescript
@@ -96,7 +103,7 @@ export const newProcessor: StyleProcessor[] = [
   {
     property: 'css-property',
     bindingKey: 'figmaProperty',
-    process: async (variables, node?) => {
+    process: async (variables, node) => {
       // Your processing logic here
       return {
         value: 'processed-value',
