@@ -4,7 +4,6 @@ import {
   InstanceToken,
   StyleToken,
   TokenCollection,
-  VariableToken,
 } from '../types';
 import { getProcessorsForNode } from '../processors';
 import {
@@ -15,14 +14,7 @@ import {
 } from './token.service';
 import { collectAllFigmaVariables } from './variable.service';
 import { collectAllFigmaEffectStyles } from './effect.service';
-import {
-  MAX_PROGRESS_PERCENTAGE,
-  delay,
-  getParentSceneNodes,
-  normalizeValue,
-  rgbaToString,
-  sanitizeName,
-} from '../utils';
+import { MAX_PROGRESS_PERCENTAGE, delay, getParentSceneNodes } from '../utils';
 
 /**
  * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
