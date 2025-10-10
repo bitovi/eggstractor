@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { getValidStylesheetFormat } from '../../utils';
 
 describe('getValidStylesheetFormat', () => {

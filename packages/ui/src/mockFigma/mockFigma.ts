@@ -1,38 +1,39 @@
 import { MessageToMainThreadPayload, MessageToUIPayload } from '@eggstractor/common';
 import { isFigmaPluginUI } from '../app/utils';
 
+/**
+ * Add `message` event listener to simulate Figma plugin environment.
+ */
 export const mockFigma = () => {
-  // To match dark mode in Figma
-  document.body.style.backgroundColor = '#2c2c2c';
-
   if (isFigmaPluginUI()) return; // don't run inside Figma
 
-  console.log('Figma API is being mocked.');
+  // To match dark mode in Figma
+  document.body.style.backgroundColor = '#2c2c2c';
 
   const mockPostMessageToUI = (message: MessageToUIPayload) => {
     window.postMessage({ pluginMessage: message }, '*');
   };
-
-  setTimeout(() => {
-    mockPostMessageToUI({
-      type: 'config-loaded',
-      config: {
-        repoPath: 'mock-repo-path',
-        branchName: 'mock-branch-name',
-        githubToken: 'mock-github-token',
-        format: 'scss',
-        filePath: 'styles/mock-output.scss',
-        useCombinatorialParsing: true,
-      },
-    });
-  }, 1000);
 
   const onMessage = (event: MessageEvent<{ pluginMessage: MessageToMainThreadPayload }>) => {
     if (!event.data.pluginMessage) return;
 
     const message = event.data.pluginMessage;
 
-    if (message.type === 'generate-styles') {
+    if (message.type === 'load-config') {
+      setTimeout(() => {
+        mockPostMessageToUI({
+          type: 'config-loaded',
+          config: {
+            repoPath: 'mock-repo-path',
+            branchName: 'mock-branch-name',
+            githubToken: 'mock-github-token',
+            format: 'scss',
+            filePath: 'styles/mock-output.scss',
+            useCombinatorialParsing: true,
+          },
+        });
+      }, 500);
+    } else if (message.type === 'generate-styles') {
       setTimeout(() => {
         mockPostMessageToUI({ type: 'progress-start' });
       }, 200);

@@ -6,7 +6,7 @@ import { messageMainThread } from './utils';
 import { About, Form, StatusProvider } from './routes';
 import { GeneratedStylesProvider, Config, ConfigProvider } from './context';
 import { useOnPluginMessage, useRoutePersistence } from './hooks';
-import { MemoryPersistenceRouter, Nav } from './components';
+import { MemoryPersistenceRouter } from './components';
 
 export const App = () => {
   const initialRoute = useRoutePersistence();
@@ -29,8 +29,7 @@ export const App = () => {
   });
 
   if (!loadedConfig) {
-    // TODO: better loading state
-    return <div>Loading...</div>;
+    return null;
   }
 
   return (
@@ -38,7 +37,8 @@ export const App = () => {
       <GeneratedStylesProvider>
         <StatusProvider>
           <ConfigProvider {...loadedConfig}>
-            <Nav />
+            {/* TODO: Add navigation */}
+            {/*<Nav />*/}
             <Routes>
               <Route path="/" element={<Form />} />
               <Route path="/about" element={<About />} />

@@ -78,6 +78,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
     [repoPath, filePath, branchName, githubToken, format, useCombinatorialParsing],
   );
 
+  // TODO: debounce this
   useEffect(() => {
     messageMainThread({
       type: 'save-config',
