@@ -2,7 +2,7 @@ import { collectTokens } from '../../services';
 import { transformToCss, transformToScss } from '../../transformers';
 import testData from '../fixtures/figma-test-data_background.json';
 import testDataOpacity from '../fixtures/figma-test-data_opacity.json';
-import { createTestData } from '../../utils';
+import { createTestData } from '../test.utils';
 
 function parseCssClass(css: string, className: string): string | null {
   const regex = new RegExp(`\\.${className}\\s*{([^}]*)}`, 'g');

@@ -1,7 +1,7 @@
 import { collectTokens } from '../../services';
 import { transformToScss } from '../../transformers';
 import testData from '../fixtures/figma-test-data_padding.json';
-import { createTestData } from '../../utils';
+import { createTestData } from '../test.utils';
 
 describe('Padding Processors', () => {
   it('should process padding correctly', async () => {

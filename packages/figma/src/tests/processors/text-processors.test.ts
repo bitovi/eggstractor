@@ -2,7 +2,7 @@ import { collectTokens } from '../../services';
 import { ProcessedValue } from '../../types';
 import { transformToScss } from '../../transformers';
 import { fontProcessors } from '../../processors/font.processor';
-import { createTestData } from '../../utils';
+import { createTestData } from '../test.utils';
 import testData from '../fixtures/figma-test-data_paragraph.json';
 import testDataAlignment from '../fixtures/figma-test-data-alignment.json';
 import testDataFontStyle from '../fixtures/figma-test-data_font-style.json';

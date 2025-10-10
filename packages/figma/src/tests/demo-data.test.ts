@@ -1,7 +1,7 @@
 import { collectTokens } from '../services';
 import { transformToScss } from '../transformers';
-import { createTestData } from '../utils';
 import testDataDemo from './fixtures/figma-test-data_demo.json';
+import { createTestData } from './test.utils';
 
 describe('Demo Data (real world-ish example)', () => {
   it('should process all demo data correctly', async () => {

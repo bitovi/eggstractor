@@ -1,6 +1,6 @@
 import { collectTokens } from '../../services';
 import { transformToScss } from '../../transformers';
-import { createTestData } from '../../utils';
+import { createTestData } from '../test.utils';
 import testData from '../fixtures/figma-test-data_border-position.json';
 import testDataSides from '../fixtures/figma-test-data_border-sides.json';
 import testDataShape from '../fixtures/figma-test-data_border-shape.json';

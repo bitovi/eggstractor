@@ -2,10 +2,10 @@ import { buildDynamicThemeTokens, generateThemeDirective } from '../../utils/the
 import { TokenCollection, VariableToken } from '../../types';
 
 // Mock console.log to suppress output during tests
-jest.mock('console', () => ({
-  log: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
+vi.mock('console', () => ({
+  log: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
 }));
 
 describe('buildDynamicThemeTokens', () => {

@@ -5,9 +5,9 @@
     "tsBuildInfoFile": "./out-tsc/vitest/tsconfig.test.tsbuildinfo",
     "typeRoots": [
       "./types",
+      "../../node_modules",
       "../../node_modules/@types",
-      "../../node_modules/@figma",
-      "../../node_modules"
+      "../../node_modules/@figma"
     ],
     "types": ["vitest/globals", "@figma/plugin-typings"]
   },
