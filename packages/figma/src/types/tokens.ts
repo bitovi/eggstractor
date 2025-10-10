@@ -19,6 +19,8 @@ export interface BaseToken {
     figmaId?: string;
     variableId?: string;
     variableName?: string;
+    /** Type of variable token: 'primitive' (base values) or 'semantic' (references to primitives) */
+    variableTokenType?: 'primitive' | 'semantic';
   };
 }
 

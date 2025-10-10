@@ -4,6 +4,7 @@ import {
   InstanceToken,
   StyleToken,
   TokenCollection,
+  VariableToken,
 } from '../types';
 import { getProcessorsForNode } from '../processors';
 import {
@@ -11,8 +12,17 @@ import {
   extractComponentToken,
   extractInstanceSetToken,
   extractNodeToken,
-} from '../services';
-import { MAX_PROGRESS_PERCENTAGE, delay, getParentSceneNodes } from '../utils';
+} from './token.service';
+import { collectAllFigmaVariables } from './variable.service';
+import { collectAllFigmaEffectStyles } from './effect.service';
+import {
+  MAX_PROGRESS_PERCENTAGE,
+  delay,
+  getParentSceneNodes,
+  normalizeValue,
+  rgbaToString,
+  sanitizeName,
+} from '../utils';
 
 /**
  * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
@@ -281,6 +291,13 @@ export async function collectTokens(onProgress: (progress: number, message: stri
 
   onProgress(0, 'Loading pages...');
   await figma.loadAllPagesAsync();
+
+  // Collect standalone Figma Variables (primitive tokens)
+  await collectAllFigmaVariables(collection, onProgress);
+
+  // Collect Figma Effect Styles (box-shadow, etc.)
+  await collectAllFigmaEffectStyles(collection, onProgress);
+
   onProgress(5, 'Counting nodes...');
 
   const allPageResults = figma.root.children.map((page) => getFlattenedValidNodes(page));
