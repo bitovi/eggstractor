@@ -8,15 +8,19 @@ import { isFigmaPluginUI } from './app/utils';
 // Register the SCSS language
 hljs.registerLanguage('scss', scss);
 
-// dynamic import mock figma server in dev mode
-if (!isFigmaPluginUI()) {
-  import('./mockFigma').then(({ mockFigma }) => mockFigma());
-}
+const main = async () => {
+  // dynamic import mock figma server in dev mode
+  if (!isFigmaPluginUI()) {
+    await import('./mockFigma').then(({ mockFigma }) => mockFigma());
+  }
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+  const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
-root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+  root.render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
+};
+
+void main();
