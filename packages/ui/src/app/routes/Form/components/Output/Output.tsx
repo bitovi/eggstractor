@@ -1,24 +1,25 @@
-import { FC, useState } from 'react';
+import { FC, useState, useMemo } from 'react';
 import { copyToClipboard, highlightCode } from '../../../../utils';
-import { useOnPluginMessage } from '../../../../hooks';
-import { useGeneratedStyles } from '../../../../context';
 
-export const Output: FC = () => {
-  const { generatedStyles, setGeneratedStyles } = useGeneratedStyles();
+interface OutputProps {
+  styles: string;
+}
+
+export const Output: FC<OutputProps> = ({ styles }) => {
   const [copied, setCopied] = useState(false);
 
-  const [highlightedCode, setHighlightedCode] = useState<string | null>(null);
-  useOnPluginMessage('output-styles', (msg) => {
-    setHighlightedCode(highlightCode(msg.styles));
-    setGeneratedStyles(msg.styles);
-  });
+  // Highlight the styles when they change
+  const highlightedCode = useMemo(() => {
+    if (!styles) return null;
+    return highlightCode(styles);
+  }, [styles]);
 
   if (!highlightedCode) {
     return null;
   }
 
   const onClick = () => {
-    copyToClipboard(generatedStyles);
+    copyToClipboard(styles);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);

@@ -1,13 +1,11 @@
-import { FC, useState } from 'react';
-import { useOnPluginMessage } from '../../../../hooks';
+import { FC } from 'react';
 import { messageMainThread } from '../../../../utils';
 
-export const Warnings: FC = () => {
-  const [warnings, setWarnings] = useState<string[]>([]);
-  useOnPluginMessage('output-styles', (msg) => {
-    setWarnings(msg.warnings || []);
-  });
+interface WarningsProps {
+  warnings: string[];
+}
 
+export const Warnings: FC<WarningsProps> = ({ warnings }) => {
   if (!warnings.length) {
     return null;
   }

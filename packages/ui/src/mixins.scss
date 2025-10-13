@@ -1,0 +1,2676 @@
+// Generated SCSS Variables
+$colour-page-bg: #f4f5f5;
+$size-none: 0rem;
+$colour-nav-bg: #ffffff;
+$size-xl: 1rem;
+$size-lg: 0.75rem;
+$colour-nav-border: #dfe2e2;
+$colour-nav-selected: #01a6ae;
+$font-family-display: inter;
+$colour-nav-unselected: #a3adad;
+$colour-sheet-bg: #ffffff;
+$size-3xl: 2rem;
+$colour-sheet-border: #dfe2e2;
+$colour-accent: #f5532d;
+$colour-white: #ffffff;
+$font-family-body: inter;
+$colour-stepper-inactive: #bfc5c6;
+$size-md: 0.5rem;
+$colour-text: #002a2d;
+$colour-button-primary-bg-resting: #01a6ae;
+$size-2xl: 1.5rem;
+$radius-brand: 0.5rem;
+$colour-button-primary-text-resting: #ffffff;
+$colour-card-bg: #f3feff;
+$colour-card-border: #01a6ae;
+$colour-loading-bg: #f4f5f5;
+$size-5xl: 3rem;
+$colour-loading-bar: #01a6ae;
+$colour-input-label: #002a2d;
+$colour-input-bg: #ffffff;
+$colour-input-border-resting: #dfe2e2;
+$colour-input-text: #002a2d;
+$colour-green-500: #5fa657;
+$colour-orange-500: #cf7c01;
+$colour-violet-500: #b068f4;
+$colour-blue-500: #5b91e9;
+$colour-brand: #01a6ae;
+$colour-scrollbar: #a3adad;
+$colour-button-icon-bg-resting: #ffffff;
+$colour-button-icon-icon-resting: #01a6ae;
+$colour-card-warning-bg: #fff3e3;
+$colour-card-warning-border: #ea9518;
+$colour-link-resting: #01a6ae;
+$size-4xl: 2.5rem;
+$colour-input-hint: #869597;
+$colour-button-segmented-unselected-border: #dfe2e2;
+$colour-button-segmented-unselected-bg-resting: #ffffff;
+$size-sm: 0.25rem;
+$colour-button-segmented-selected-bg: #01a6ae;
+$colour-button-segmented-selected-text: #ffffff;
+$colour-button-segmented-unselected-text-resting: #01a6ae;
+$colour-button-secondary-text-resting: #01a6ae;
+$colour-nav-hover: #687879;
+$colour-link-hover: #04646a;
+$colour-input-border-hover: #869597;
+$colour-input-border-active: #01a6ae;
+$colour-input-error: #f5532d;
+$colour-button-segmented-unselected-bg-hover: #ffffff;
+$colour-button-segmented-unselected-text-hover: #04646a;
+$colour-button-icon-icon-hover: #04646a;
+$colour-button-primary-bg-hover: #04646a;
+$colour-button-primary-text-hover: #ffffff;
+$colour-button-secondary-text-hover: #04646a;
+
+// Generated SCSS Mixins
+@mixin eggstractor-plugin-design-export---generate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $size-none;
+  padding: 0rem;
+  background: $colour-page-bg;
+  width: 37.5rem;
+  height: 53.75rem;
+}
+@mixin eggstractor-plugin-design-export---generate-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  height: 4.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---generate-nav-nav1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---generate-nav-nav1-export {
+  color: $colour-nav-selected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generate-nav-nav2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---generate-nav-nav2-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generate-nav-nav3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---generate-nav-nav3-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-3xl;
+  background: $colour-sheet-bg;
+  justify-content: flex-end;
+  width: 37.5rem;
+  border-bottom: 0.0625rem solid $colour-sheet-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-sheet-border;
+  padding: $size-3xl $size-3xl calc(#{$size-3xl} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-stepper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0rem;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-stepper-stepper-step {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0rem;
+  width: 15.75rem;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-stepper-stepper-step-circle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  background: $colour-sheet-bg;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0.125rem solid $colour-stepper-inactive;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-stepper-inactive,
+    inset -0.125rem 0 0 0 $colour-stepper-inactive,
+    inset 0 -0.125rem 0 0 $colour-stepper-inactive,
+    inset 0.125rem 0 0 0 $colour-stepper-inactive;
+  border-radius: 6249.9375rem;
+  padding: calc(#{$size-none} - 0.125rem) calc(#{$size-xl} - 0.125rem);
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-stepper-stepper-step-circle-1 {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-stepper-stepper-step-arrow-and-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0rem;
+  justify-content: center;
+  width: 13.75rem;
+  height: 2rem;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-stepper-stepper-step-arrow-and-text-arrow-1 {
+  border: 0.125rem solid $colour-stepper-inactive;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-stepper-inactive,
+    inset -0.125rem 0 0 0 $colour-stepper-inactive,
+    inset 0 -0.125rem 0 0 $colour-stepper-inactive,
+    inset 0.125rem 0 0 0 $colour-stepper-inactive;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-md;
+  background: $colour-sheet-bg;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg-label {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-action-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0rem;
+  width: 33.5rem;
+  height: 4.25rem;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-action-area-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-none $size-2xl;
+  background: $colour-button-primary-bg-resting;
+  justify-content: center;
+  width: 33.5rem;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+}
+@mixin eggstractor-plugin-design-export---generate-bottom-sheet-action-area-button-label {
+  color: $colour-button-primary-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generate-content-area {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: $size-3xl 0rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---generate-content-area-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.875rem;
+  background: $colour-card-bg;
+  width: 33.75rem;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-card-border,
+    inset -0.125rem 0 0 0 $colour-card-border,
+    inset 0 -0.125rem 0 0 $colour-card-border,
+    inset 0.125rem 0 0 0 $colour-card-border;
+  border-radius: 0.5rem;
+}
+@mixin eggstractor-plugin-design-export---generate-content-area-card-the-getting-started-guide-will-walk-you-through-the-steps-for-setting-up-a-demo-project-where-you-can-test-it-all-out- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-2xl;
+  width: 30rem;
+}
+@mixin eggstractor-plugin-design-export---generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $size-none;
+  padding: 0rem;
+  background: $colour-page-bg;
+  width: 37.5rem;
+  height: 53.75rem;
+}
+@mixin eggstractor-plugin-design-export---generating-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  height: 4.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---generating-nav-nav1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---generating-nav-nav1-export {
+  color: $colour-nav-selected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generating-nav-nav2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---generating-nav-nav2-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generating-nav-nav3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---generating-nav-nav3-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-3xl;
+  background: $colour-sheet-bg;
+  justify-content: flex-end;
+  width: 37.5rem;
+  border-bottom: 0.0625rem solid $colour-sheet-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-sheet-border;
+  padding: $size-3xl $size-3xl calc(#{$size-3xl} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-stepper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0rem;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-stepper-stepper-step {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0rem;
+  width: 15.75rem;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-stepper-stepper-step-circle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  background: $colour-sheet-bg;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0.125rem solid $colour-stepper-inactive;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-stepper-inactive,
+    inset -0.125rem 0 0 0 $colour-stepper-inactive,
+    inset 0 -0.125rem 0 0 $colour-stepper-inactive,
+    inset 0.125rem 0 0 0 $colour-stepper-inactive;
+  border-radius: 6249.9375rem;
+  padding: calc(#{$size-none} - 0.125rem) calc(#{$size-xl} - 0.125rem);
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-stepper-stepper-step-circle-1 {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-stepper-stepper-step-arrow-and-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0rem;
+  justify-content: center;
+  width: 13.75rem;
+  height: 2rem;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-stepper-stepper-step-arrow-and-text-arrow-1 {
+  border: 0.125rem solid $colour-stepper-inactive;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-stepper-inactive,
+    inset -0.125rem 0 0 0 $colour-stepper-inactive,
+    inset 0 -0.125rem 0 0 $colour-stepper-inactive,
+    inset 0.125rem 0 0 0 $colour-stepper-inactive;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-md;
+  background: $colour-sheet-bg;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg-label {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-action-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0rem;
+  justify-content: center;
+  width: 33.5rem;
+  height: 4.25rem;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-action-area-frame-36 {
+  padding: 0rem;
+  background: $colour-loading-bg;
+  border-radius: $size-5xl;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-action-area-frame-36-frame-37 {
+  padding: 0rem;
+  background: $colour-loading-bar;
+  border-radius: $size-5xl;
+}
+@mixin eggstractor-plugin-design-export---generating-bottom-sheet-action-area-processing-node-96---423 {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---generating-content-area {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: $size-3xl 0rem;
+  height: 39.5rem;
+}
+@mixin eggstractor-plugin-design-export---generating-content-area-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.875rem;
+  background: $colour-card-bg;
+  width: 33.75rem;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-card-border,
+    inset -0.125rem 0 0 0 $colour-card-border,
+    inset 0 -0.125rem 0 0 $colour-card-border,
+    inset 0.125rem 0 0 0 $colour-card-border;
+  border-radius: 0.5rem;
+}
+@mixin eggstractor-plugin-design-export---generating-content-area-card-the-getting-started-guide-will-walk-you-through-the-steps-for-setting-up-a-demo-project-where-you-can-test-it-all-out- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-2xl;
+  width: 30rem;
+}
+@mixin eggstractor-plugin-design-export---publish {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $size-none;
+  padding: 0rem;
+  background: $colour-page-bg;
+  width: 37.5rem;
+  height: 53.75rem;
+}
+@mixin eggstractor-plugin-design-export---publish-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  height: 4.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---publish-nav-nav1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---publish-nav-nav1-export {
+  color: $colour-nav-selected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---publish-nav-nav2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---publish-nav-nav2-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---publish-nav-nav3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---publish-nav-nav3-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-3xl;
+  background: $colour-sheet-bg;
+  justify-content: flex-end;
+  width: 37.5rem;
+  border-bottom: 0.0625rem solid $colour-sheet-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-sheet-border;
+  padding: $size-3xl $size-3xl calc(#{$size-3xl} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-stepper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0rem;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-stepper-stepper-step {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0rem;
+  width: 15.75rem;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-stepper-stepper-step-circle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  background: $colour-sheet-bg;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0.125rem solid $colour-stepper-inactive;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-stepper-inactive,
+    inset -0.125rem 0 0 0 $colour-stepper-inactive,
+    inset 0 -0.125rem 0 0 $colour-stepper-inactive,
+    inset 0.125rem 0 0 0 $colour-stepper-inactive;
+  border-radius: 6249.9375rem;
+  padding: calc(#{$size-none} - 0.125rem) calc(#{$size-xl} - 0.125rem);
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-stepper-stepper-step-circle-1 {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-stepper-stepper-step-arrow-and-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0rem;
+  justify-content: center;
+  width: 13.75rem;
+  height: 2rem;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-stepper-stepper-step-arrow-and-text-arrow-1 {
+  border: 0.125rem solid $colour-stepper-inactive;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-stepper-inactive,
+    inset -0.125rem 0 0 0 $colour-stepper-inactive,
+    inset 0 -0.125rem 0 0 $colour-stepper-inactive,
+    inset 0.125rem 0 0 0 $colour-stepper-inactive;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-md;
+  background: $colour-sheet-bg;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg-label {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-action-area {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: $size-xl;
+  padding: 0rem;
+  width: 33.5rem;
+  height: 4.25rem;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-action-area-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-md;
+  padding: 0rem;
+  width: 20.25rem;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-action-area-input-text-above {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 0rem;
+  width: 20.25rem;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-action-area-input-text-above-label {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-label;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 20.25rem;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-action-area-input-input-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  background: $colour-input-bg;
+  width: 20.25rem;
+  border: 0.0625rem solid $colour-input-border-resting;
+  box-shadow:
+    inset 0 0.0625rem 0 0 $colour-input-border-resting,
+    inset -0.0625rem 0 0 0 $colour-input-border-resting,
+    inset 0 -0.0625rem 0 0 $colour-input-border-resting,
+    inset 0.0625rem 0 0 0 $colour-input-border-resting;
+  border-radius: $radius-brand;
+  padding: calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-action-area-input-input-box-user-entered-text {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  width: 18.75rem;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-action-area-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-none $size-2xl;
+  background: $colour-button-primary-bg-resting;
+  justify-content: center;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+}
+@mixin eggstractor-plugin-design-export---publish-bottom-sheet-action-area-button-label {
+  color: $colour-button-primary-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---publish-content-area {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---publish-content-area-code-margins {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: $size-3xl;
+  width: 36.625rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---publish-content-area-code-margins-code-sample {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-export---publish-content-area-code-margins-code-sample----generated-scss-variables--base-size-xs--0-125rem---base-colour-grey-400---282828---base-font-size-xl--1-25rem---global-font-uidefaultfont--inter---base-font-linespacing-lg--1-5rem---base-font-weight-semibold--31-25rem---base-colour-static-white---ffffff---base-size-lg--0-75rem---base-radius-md--0-5rem---base-colour-grey-100---d9d9d9---global-colour-textonlight---282828-----generated-scss-mixins--mixin-input-resting---display--flex--flex-direction--column--align-items--flex-start--gap---base-size-xs--padding--0rem--width--15-937rem-----mixin-input-resting-label---display--flex--flex-direction--column--color---base-colour-grey-400--font-family---global-font-uidefaultfont--font-size---base-font-size-xl--font-weight--500--font-style--normal--line-height---base-font-linespacing-lg--width--15-937rem-----mixin-input-resting-input-box---display--flex--flex-direction--row--align-items--center--gap---base-size-lg--padding--0-687rem-3-562rem-0-687rem--base-size-lg--background---base-colour-static-white--width--15-937rem--border--0-093rem-solid--base-colour-grey-100--box-shadow--inset-0-0-093rem-0-0--base-colour-grey-100--inset--0-093rem-0-0-0--base-colour-grey-100--inset-0--0-093rem-0-0--base-colour-grey-100--inset-0-093rem-0-0-0--base-colour-grey-100--border-radius---base-radius-md-----mixin-input-resting-input-box-input-text---display--flex--flex-direction--column--color---global-colour-textonlight--font-family---global-font-uidefaultfont--font-size--1rem--font-weight--400--font-style--normal--line-height--20px--width--11-625rem-----mixin-input-hover---display--flex--flex-direction--column--align-items--flex-start--gap---base-size-xs--padding--0rem--width--15-937rem-----mixin-input-hover-label---display--flex--flex-direction--column--color---base-colour-grey-400--font-family---global-font-uidefaultfont--font-size---base-font-size-xl--font-weight--500--font-style--normal--line-height---base-font-linespacing-lg--width--15-937rem-----mixin-input-hover-input-box---display--flex--flex-direction--row--align-items--center--gap---base-size-lg--padding--0-687rem--base-size-lg--background---base-colour-static-white--width--15-937rem--border--0-093rem-solid--base-colour-grey-300--box-shadow--inset-0-0-093rem-0-0--base-colour-grey-300--inset--0-093rem-0-0-0--base-colour-grey-300--inset-0--0-093rem-0-0--base-colour-grey-300--inset-0-093rem-0-0-0--base-colour-grey-300--border-radius---base-radius-md-----mixin-input-hover-input-box-input-text---display--flex--flex-direction--column--color---global-colour-textonlight--font-family---global-font-uidefaultfont--font-size--1rem--font-weight--400--font-style--normal--line-height--20px--width--14-437rem-----mixin-input-active---display--flex--flex-direction--column--align-items--flex-start--gap---base-size-xs--padding--0rem--width--15-937rem-----mixin-input-active-label---display--flex--flex-direction--column--color---base-colour-pink-300--font-family---global-font-uidefaultfont--font-size---base-font-size-xl--font-weight--500--font-style--normal--line-height---base-font-linespacing-lg--width--15-937rem-----mixin-input-active-input-box---display--flex--flex-direction--row--align-items--center--gap---base-size-lg--padding--0-687rem--base-size-lg--background---base-colour-static-white--width--15-937rem--border--0-093rem-solid--base-colour-pink-300--box-shadow--inset-0-0-093rem-0-0--base-colour-pink-300--inset--0-093rem-0-0-0--base-colour-pink-300--inset-0--0-093rem-0-0--base-colour-pink-300--inset-0-093rem-0-0-0--base-colour-pink-300--border-radius---base-radius-md-----mixin-input-active-input-box-input-text---display--flex--flex-direction--column--color---global-colour-textonlight--font-family---global-font-uidefaultfont--font-size--1rem--font-weight--400--font-style--normal--line-height--20px--width--14-437rem--- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+  width: 32.625rem;
+  height: 45.6875rem;
+}
+@mixin eggstractor-plugin-design-export---publish-content-area-scrollbar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0.1875rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---publish-content-area-scrollbar-scrollbar-indicator {
+  background: $colour-scrollbar;
+  border-radius: 6.25rem;
+}
+@mixin eggstractor-plugin-design-export---publish-content-area-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  background: $colour-button-icon-bg-resting;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+}
+@mixin eggstractor-plugin-design-export---publish-content-area-button-copy {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-export---publish-content-area-button-copy-vector {
+  border: 0.125rem solid $colour-button-icon-icon-resting;
+}
+@mixin eggstractor-plugin-design-export---view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $size-none;
+  padding: 0rem;
+  background: $colour-page-bg;
+  width: 37.5rem;
+  height: 53.75rem;
+}
+@mixin eggstractor-plugin-design-export---view-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  height: 4.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---view-nav-nav1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---view-nav-nav1-export {
+  color: $colour-nav-selected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---view-nav-nav2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---view-nav-nav2-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---view-nav-nav3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---view-nav-nav3-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-3xl;
+  background: $colour-sheet-bg;
+  justify-content: flex-end;
+  width: 37.5rem;
+  border-bottom: 0.0625rem solid $colour-sheet-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-sheet-border;
+  padding: $size-3xl $size-3xl calc(#{$size-3xl} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-stepper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0rem;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-stepper-stepper-step {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0rem;
+  width: 15.75rem;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-stepper-stepper-step-circle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  background: $colour-accent;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0.125rem solid $colour-accent;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-accent,
+    inset -0.125rem 0 0 0 $colour-accent,
+    inset 0 -0.125rem 0 0 $colour-accent,
+    inset 0.125rem 0 0 0 $colour-accent;
+  border-radius: 6249.9375rem;
+  padding: calc(#{$size-none} - 0.125rem) calc(#{$size-xl} - 0.125rem);
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-stepper-stepper-step-circle-1 {
+  color: $colour-white;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-stepper-stepper-step-arrow-and-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0rem;
+  justify-content: center;
+  width: 13.75rem;
+  height: 2rem;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-stepper-stepper-step-arrow-and-text-arrow-1 {
+  border: 0.125rem solid $colour-accent;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-accent,
+    inset -0.125rem 0 0 0 $colour-accent,
+    inset 0 -0.125rem 0 0 $colour-accent,
+    inset 0.125rem 0 0 0 $colour-accent;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-md;
+  background: $colour-sheet-bg;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg-label {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-action-area {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: $size-3xl;
+  padding: 0rem;
+  width: 33.5rem;
+  height: 4.25rem;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-action-area-frame-38 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  height: 2.75rem;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-action-area-frame-38-checkcircle {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-action-area-frame-38-checkcircle-vector {
+  border: 0.125rem solid $colour-brand;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-action-area-frame-38-pull-request-created- {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-2xl;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-action-area-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-none $size-2xl;
+  background: $colour-button-primary-bg-resting;
+  justify-content: center;
+  width: 19.625rem;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+}
+@mixin eggstractor-plugin-design-export---view-bottom-sheet-action-area-button-label {
+  color: $colour-button-primary-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---view-content-area {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---view-content-area-code-margins {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: $size-3xl;
+  width: 36.625rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---view-content-area-code-margins-code-sample {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-export---view-content-area-code-margins-code-sample----generated-scss-variables--base-size-xs--0-125rem---base-colour-grey-400---282828---base-font-size-xl--1-25rem---global-font-uidefaultfont--inter---base-font-linespacing-lg--1-5rem---base-font-weight-semibold--31-25rem---base-colour-static-white---ffffff---base-size-lg--0-75rem---base-radius-md--0-5rem---base-colour-grey-100---d9d9d9---global-colour-textonlight---282828-----generated-scss-mixins--mixin-input-resting---display--flex--flex-direction--column--align-items--flex-start--gap---base-size-xs--padding--0rem--width--15-937rem-----mixin-input-resting-label---display--flex--flex-direction--column--color---base-colour-grey-400--font-family---global-font-uidefaultfont--font-size---base-font-size-xl--font-weight--500--font-style--normal--line-height---base-font-linespacing-lg--width--15-937rem-----mixin-input-resting-input-box---display--flex--flex-direction--row--align-items--center--gap---base-size-lg--padding--0-687rem-3-562rem-0-687rem--base-size-lg--background---base-colour-static-white--width--15-937rem--border--0-093rem-solid--base-colour-grey-100--box-shadow--inset-0-0-093rem-0-0--base-colour-grey-100--inset--0-093rem-0-0-0--base-colour-grey-100--inset-0--0-093rem-0-0--base-colour-grey-100--inset-0-093rem-0-0-0--base-colour-grey-100--border-radius---base-radius-md-----mixin-input-resting-input-box-input-text---display--flex--flex-direction--column--color---global-colour-textonlight--font-family---global-font-uidefaultfont--font-size--1rem--font-weight--400--font-style--normal--line-height--20px--width--11-625rem-----mixin-input-hover---display--flex--flex-direction--column--align-items--flex-start--gap---base-size-xs--padding--0rem--width--15-937rem-----mixin-input-hover-label---display--flex--flex-direction--column--color---base-colour-grey-400--font-family---global-font-uidefaultfont--font-size---base-font-size-xl--font-weight--500--font-style--normal--line-height---base-font-linespacing-lg--width--15-937rem-----mixin-input-hover-input-box---display--flex--flex-direction--row--align-items--center--gap---base-size-lg--padding--0-687rem--base-size-lg--background---base-colour-static-white--width--15-937rem--border--0-093rem-solid--base-colour-grey-300--box-shadow--inset-0-0-093rem-0-0--base-colour-grey-300--inset--0-093rem-0-0-0--base-colour-grey-300--inset-0--0-093rem-0-0--base-colour-grey-300--inset-0-093rem-0-0-0--base-colour-grey-300--border-radius---base-radius-md-----mixin-input-hover-input-box-input-text---display--flex--flex-direction--column--color---global-colour-textonlight--font-family---global-font-uidefaultfont--font-size--1rem--font-weight--400--font-style--normal--line-height--20px--width--14-437rem-----mixin-input-active---display--flex--flex-direction--column--align-items--flex-start--gap---base-size-xs--padding--0rem--width--15-937rem-----mixin-input-active-label---display--flex--flex-direction--column--color---base-colour-pink-300--font-family---global-font-uidefaultfont--font-size---base-font-size-xl--font-weight--500--font-style--normal--line-height---base-font-linespacing-lg--width--15-937rem-----mixin-input-active-input-box---display--flex--flex-direction--row--align-items--center--gap---base-size-lg--padding--0-687rem--base-size-lg--background---base-colour-static-white--width--15-937rem--border--0-093rem-solid--base-colour-pink-300--box-shadow--inset-0-0-093rem-0-0--base-colour-pink-300--inset--0-093rem-0-0-0--base-colour-pink-300--inset-0--0-093rem-0-0--base-colour-pink-300--inset-0-093rem-0-0-0--base-colour-pink-300--border-radius---base-radius-md-----mixin-input-active-input-box-input-text---display--flex--flex-direction--column--color---global-colour-textonlight--font-family---global-font-uidefaultfont--font-size--1rem--font-weight--400--font-style--normal--line-height--20px--width--14-437rem--- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+  width: 32.625rem;
+  height: 45.6875rem;
+}
+@mixin eggstractor-plugin-design-export---view-content-area-scrollbar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0.1875rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---view-content-area-scrollbar-scrollbar-indicator {
+  background: $colour-scrollbar;
+  border-radius: 6.25rem;
+}
+@mixin eggstractor-plugin-design-export---view-content-area-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  background: $colour-button-icon-bg-resting;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+}
+@mixin eggstractor-plugin-design-export---view-content-area-button-copy {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-export---view-content-area-button-copy-vector {
+  border: 0.125rem solid $colour-button-icon-icon-resting;
+}
+@mixin eggstractor-plugin-design-export---warnings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $size-none;
+  padding: 0rem;
+  background: $colour-page-bg;
+  width: 37.5rem;
+  height: 53.75rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  height: 4.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---warnings-nav-nav1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---warnings-nav-nav1-export {
+  color: $colour-nav-selected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---warnings-nav-nav2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---warnings-nav-nav2-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---warnings-nav-nav3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---warnings-nav-nav3-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-3xl;
+  background: $colour-sheet-bg;
+  justify-content: flex-end;
+  width: 37.5rem;
+  border-bottom: 0.0625rem solid $colour-sheet-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-sheet-border;
+  padding: $size-3xl $size-3xl calc(#{$size-3xl} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-stepper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0rem;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-stepper-stepper-step {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0rem;
+  width: 15.75rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-stepper-stepper-step-circle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  background: $colour-accent;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0.125rem solid $colour-accent;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-accent,
+    inset -0.125rem 0 0 0 $colour-accent,
+    inset 0 -0.125rem 0 0 $colour-accent,
+    inset 0.125rem 0 0 0 $colour-accent;
+  border-radius: 6249.9375rem;
+  padding: calc(#{$size-none} - 0.125rem) calc(#{$size-xl} - 0.125rem);
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-stepper-stepper-step-circle-1 {
+  color: $colour-white;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-stepper-stepper-step-arrow-and-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0rem;
+  justify-content: center;
+  width: 13.75rem;
+  height: 2rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-stepper-stepper-step-arrow-and-text-arrow-1 {
+  border: 0.125rem solid $colour-accent;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-accent,
+    inset -0.125rem 0 0 0 $colour-accent,
+    inset 0 -0.125rem 0 0 $colour-accent,
+    inset 0.125rem 0 0 0 $colour-accent;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-md;
+  background: $colour-sheet-bg;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-stepper-stepper-step-arrow-and-text-label-bg-label {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-action-area {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: $size-3xl;
+  padding: 0rem;
+  width: 33.5rem;
+  height: 4.25rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-action-area-frame-38 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  height: 2.75rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-action-area-frame-38-checkcircle {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-action-area-frame-38-checkcircle-vector {
+  border: 0.125rem solid $colour-brand;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-action-area-frame-38-pull-request-created- {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-2xl;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-action-area-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-none $size-2xl;
+  background: $colour-button-primary-bg-resting;
+  justify-content: center;
+  width: 19.625rem;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+}
+@mixin eggstractor-plugin-design-export---warnings-bottom-sheet-action-area-button-label {
+  color: $colour-button-primary-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-code-margins {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-3xl;
+  padding: $size-3xl;
+  width: 36.625rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-code-margins-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.875rem;
+  background: $colour-card-warning-bg;
+  width: 33.75rem;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-card-warning-border,
+    inset -0.125rem 0 0 0 $colour-card-warning-border,
+    inset 0 -0.125rem 0 0 $colour-card-warning-border,
+    inset 0.125rem 0 0 0 $colour-card-warning-border;
+  border-radius: 0.5rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-code-margins-card-frame-20 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  justify-content: center;
+  width: 30rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-code-margins-card-frame-20-not-sure-where-to-start- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-family: $font-family-display;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: $size-2xl;
+  width: 27.375rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-code-margins-card-frame-20-caretdown {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-code-margins-card-frame-20-caretdown-vector {
+  border: 0.125rem solid $colour-text;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-code-margins-card-the-getting-started-guide-will-walk-you-through-the-steps-for-setting-up-a-demo-project-where-you-can-test-it-all-out- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-2xl;
+  width: 30rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-code-margins-code-sample {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-code-margins-code-sample----generated-scss-variables--base-size-xs--0-125rem---base-colour-grey-400---282828---base-font-size-xl--1-25rem---global-font-uidefaultfont--inter---base-font-linespacing-lg--1-5rem---base-font-weight-semibold--31-25rem---base-colour-static-white---ffffff---base-size-lg--0-75rem---base-radius-md--0-5rem---base-colour-grey-100---d9d9d9---global-colour-textonlight---282828-----generated-scss-mixins--mixin-input-resting---display--flex--flex-direction--column--align-items--flex-start--gap---base-size-xs--padding--0rem--width--15-937rem-----mixin-input-resting-label---display--flex--flex-direction--column--color---base-colour-grey-400--font-family---global-font-uidefaultfont--font-size---base-font-size-xl--font-weight--500--font-style--normal--line-height---base-font-linespacing-lg--width--15-937rem-----mixin-input-resting-input-box---display--flex--flex-direction--row--align-items--center--gap---base-size-lg--padding--0-687rem-3-562rem-0-687rem--base-size-lg--background---base-colour-static-white--width--15-937rem--border--0-093rem-solid--base-colour-grey-100--box-shadow--inset-0-0-093rem-0-0--base-colour-grey-100--inset--0-093rem-0-0-0--base-colour-grey-100--inset-0--0-093rem-0-0--base-colour-grey-100--inset-0-093rem-0-0-0--base-colour-grey-100--border-radius---base-radius-md-----mixin-input-resting-input-box-input-text---display--flex--flex-direction--column--color---global-colour-textonlight--font-family---global-font-uidefaultfont--font-size--1rem--font-weight--400--font-style--normal--line-height--20px--width--11-625rem-----mixin-input-hover---display--flex--flex-direction--column--align-items--flex-start--gap---base-size-xs--padding--0rem--width--15-937rem-----mixin-input-hover-label---display--flex--flex-direction--column--color---base-colour-grey-400--font-family---global-font-uidefaultfont--font-size---base-font-size-xl--font-weight--500--font-style--normal--line-height---base-font-linespacing-lg--width--15-937rem-----mixin-input-hover-input-box---display--flex--flex-direction--row--align-items--center--gap---base-size-lg--padding--0-687rem--base-size-lg--background---base-colour-static-white--width--15-937rem--border--0-093rem-solid--base-colour-grey-300--box-shadow--inset-0-0-093rem-0-0--base-colour-grey-300--inset--0-093rem-0-0-0--base-colour-grey-300--inset-0--0-093rem-0-0--base-colour-grey-300--inset-0-093rem-0-0-0--base-colour-grey-300--border-radius---base-radius-md-----mixin-input-hover-input-box-input-text---display--flex--flex-direction--column--color---global-colour-textonlight--font-family---global-font-uidefaultfont--font-size--1rem--font-weight--400--font-style--normal--line-height--20px--width--14-437rem-----mixin-input-active---display--flex--flex-direction--column--align-items--flex-start--gap---base-size-xs--padding--0rem--width--15-937rem-----mixin-input-active-label---display--flex--flex-direction--column--color---base-colour-pink-300--font-family---global-font-uidefaultfont--font-size---base-font-size-xl--font-weight--500--font-style--normal--line-height---base-font-linespacing-lg--width--15-937rem-----mixin-input-active-input-box---display--flex--flex-direction--row--align-items--center--gap---base-size-lg--padding--0-687rem--base-size-lg--background---base-colour-static-white--width--15-937rem--border--0-093rem-solid--base-colour-pink-300--box-shadow--inset-0-0-093rem-0-0--base-colour-pink-300--inset--0-093rem-0-0-0--base-colour-pink-300--inset-0--0-093rem-0-0--base-colour-pink-300--inset-0-093rem-0-0-0--base-colour-pink-300--border-radius---base-radius-md-----mixin-input-active-input-box-input-text---display--flex--flex-direction--column--color---global-colour-textonlight--font-family---global-font-uidefaultfont--font-size--1rem--font-weight--400--font-style--normal--line-height--20px--width--14-437rem--- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+  width: 32.625rem;
+  height: 45.6875rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-scrollbar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0.1875rem;
+  height: 37rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-scrollbar-scrollbar-indicator {
+  background: $colour-scrollbar;
+  border-radius: 6.25rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  background: $colour-button-icon-bg-resting;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-button-copy {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-export---warnings-content-area-button-copy-vector {
+  border: 0.125rem solid $colour-button-icon-icon-resting;
+}
+@mixin eggstractor-plugin-design-about {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.5rem;
+  padding: 0rem;
+  background: $colour-page-bg;
+  width: 37.5rem;
+  height: 53.75rem;
+}
+@mixin eggstractor-plugin-design-about-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  height: 4.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-about-nav-nav1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-about-nav-nav1-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-about-nav-nav2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-about-nav-nav2-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-about-nav-nav3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-about-nav-nav3-export {
+  color: $colour-nav-selected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-about-side-padding {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.5rem;
+  padding: 0rem $size-3xl;
+  width: 37.5rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 0rem;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text-eggstractor-is-an-open-source-project-for-exporting-design-as-tokens-and-utility-layers--letting-developers-build-components-their-way--while-supporting-ultra-fast--designer-led-code-updates-to-styling--by-separating-structure-from-styling--eggstractor-ensures-that-design-changes-don-t-disrupt-component-architecture--and-with-automated-code-generation-for-updates--designers-can-take-control-of-their-styling-updates--allowing-for-instantaneous-design-qa-and-freeing-up-developers--who-now-only-need-to-review-a-pr-for-styling-changes---eggstractor-is-an-open-source-project-by-bitovi--need-some-help- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 150%;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text-links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0rem;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text-links-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text-links-link-link-text-- {
+  color: $colour-link-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text-links-- {
+  color: $colour-text;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 150%;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0rem;
+  justify-content: center;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text-cta-need-pros-to-help-design---build-your-design-system-or-app- {
+  color: $colour-text;
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 150%;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text-cta-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-about-side-padding-text-cta-link-link-text-- {
+  color: $colour-link-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-about-side-padding-bitovi-wordmark {
+  padding: 0rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-bitovi-wordmark-vector {
+  background: $colour-brand;
+}
+@mixin eggstractor-plugin-design-about-side-padding-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.875rem;
+  background: $colour-card-bg;
+  width: 33.75rem;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-card-border,
+    inset -0.125rem 0 0 0 $colour-card-border,
+    inset 0 -0.125rem 0 0 $colour-card-border,
+    inset 0.125rem 0 0 0 $colour-card-border;
+  border-radius: 0.5rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-card-frame-20 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  justify-content: center;
+  width: 30rem;
+  height: 2rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-card-frame-20-not-sure-where-to-start- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-family: $font-family-display;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: $size-2xl;
+  width: 30rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-card-the-getting-started-guide-will-walk-you-through-the-steps-for-setting-up-a-demo-project-where-you-can-test-it-all-out- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-2xl;
+  width: 30rem;
+}
+@mixin eggstractor-plugin-design-about-side-padding-card-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-about-side-padding-card-link-link-text-- {
+  color: $colour-link-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---filled {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $size-4xl;
+  padding: 0rem;
+  background: $colour-page-bg;
+  width: 37.5rem;
+  height: 53.75rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  height: 4.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-setup---filled-nav-nav1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-setup---filled-nav-nav1-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---filled-nav-nav2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-setup---filled-nav-nav2-export {
+  color: $colour-nav-selected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---filled-nav-nav3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-setup---filled-nav-nav3-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---filled-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-md;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-input-text-above {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-input-text-above-label {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-label;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 23.375rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-input-text-above-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-setup---filled-input-text-above-link-link-text-- {
+  color: $colour-link-resting;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---filled-input-input-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  background: $colour-input-bg;
+  width: 33.75rem;
+  border: 0.0625rem solid $colour-input-border-resting;
+  box-shadow:
+    inset 0 0.0625rem 0 0 $colour-input-border-resting,
+    inset -0.0625rem 0 0 0 $colour-input-border-resting,
+    inset 0 -0.0625rem 0 0 $colour-input-border-resting,
+    inset 0.0625rem 0 0 0 $colour-input-border-resting;
+  border-radius: $radius-brand;
+  padding: calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-setup---filled-input-input-box-user-entered-text {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  width: 32.25rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-input-text-below {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-hint;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-md;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-text-above {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-text-above-label {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-label;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 33.75rem;
+  border: 0.0625rem solid $colour-button-segmented-unselected-border;
+  box-shadow:
+    inset 0 0.0625rem 0 0 $colour-button-segmented-unselected-border,
+    inset -0.0625rem 0 0 0 $colour-button-segmented-unselected-border,
+    inset 0 -0.0625rem 0 0 $colour-button-segmented-unselected-border,
+    inset 0.0625rem 0 0 0 $colour-button-segmented-unselected-border;
+  border-radius: $radius-brand;
+  padding: 0;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19-item-1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: $size-sm;
+  background: $colour-button-segmented-unselected-bg-resting;
+  width: 16.875rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19-item-1-frame-18 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  background: $colour-button-segmented-selected-bg;
+  justify-content: center;
+  width: 16.375rem;
+  border-radius: 0.375rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19-item-1-frame-18-label {
+  color: $colour-button-segmented-selected-text;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19-item-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: $size-sm;
+  background: $colour-button-segmented-unselected-bg-resting;
+  width: 16.875rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19-item-2-frame-18 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  justify-content: center;
+  width: 16.375rem;
+  border-radius: 0.375rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19-item-2-frame-18-label {
+  color: $colour-button-segmented-unselected-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19-item-3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: $size-sm;
+  background: $colour-button-segmented-unselected-bg-resting;
+  width: 11.25rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19-item-3-frame-18 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  justify-content: center;
+  width: 10.75rem;
+  border-radius: 0.375rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-frame-19-item-3-frame-18-label {
+  color: $colour-button-segmented-unselected-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---filled-segmented-button-text-below {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-hint;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-bottom-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: $colour-sheet-bg;
+  justify-content: flex-end;
+  width: 37.5rem;
+  border-top: 0.0625rem solid $colour-sheet-border;
+  box-shadow: inset 0 0.0625rem 0 0 $colour-sheet-border;
+  padding: calc(#{$size-3xl} - 0.0625rem) $size-3xl $size-3xl;
+}
+@mixin eggstractor-plugin-design-setup---filled-bottom-sheet-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: $size-xl;
+  padding: 0rem;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-setup---filled-bottom-sheet-buttons-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-none $size-2xl;
+  background: $colour-button-primary-bg-resting;
+  justify-content: center;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+}
+@mixin eggstractor-plugin-design-setup---filled-bottom-sheet-buttons-button-label {
+  color: $colour-button-secondary-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $size-4xl;
+  padding: 0rem;
+  background: $colour-page-bg;
+  width: 37.5rem;
+  height: 53.75rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  height: 4.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-setup---empty-nav-nav1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-setup---empty-nav-nav1-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---empty-nav-nav2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-setup---empty-nav-nav2-export {
+  color: $colour-nav-selected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---empty-nav-nav3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-setup---empty-nav-nav3-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---empty-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-md;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-input-text-above {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-input-text-above-label {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-label;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 23.375rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-input-text-above-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  justify-content: center;
+}
+@mixin eggstractor-plugin-design-setup---empty-input-text-above-link-link-text-- {
+  color: $colour-link-resting;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---empty-input-input-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  background: $colour-input-bg;
+  width: 33.75rem;
+  border: 0.0625rem solid $colour-input-border-resting;
+  box-shadow:
+    inset 0 0.0625rem 0 0 $colour-input-border-resting,
+    inset -0.0625rem 0 0 0 $colour-input-border-resting,
+    inset 0 -0.0625rem 0 0 $colour-input-border-resting,
+    inset 0.0625rem 0 0 0 $colour-input-border-resting;
+  border-radius: $radius-brand;
+  padding: calc(#{$size-lg} - 0.0625rem);
+}
+@mixin eggstractor-plugin-design-setup---empty-input-text-below {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-hint;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-md;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-text-above {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-text-above-label {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-label;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 33.75rem;
+  border: 0.0625rem solid $colour-button-segmented-unselected-border;
+  box-shadow:
+    inset 0 0.0625rem 0 0 $colour-button-segmented-unselected-border,
+    inset -0.0625rem 0 0 0 $colour-button-segmented-unselected-border,
+    inset 0 -0.0625rem 0 0 $colour-button-segmented-unselected-border,
+    inset 0.0625rem 0 0 0 $colour-button-segmented-unselected-border;
+  border-radius: $radius-brand;
+  padding: 0;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19-item-1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: $size-sm;
+  background: $colour-button-segmented-unselected-bg-resting;
+  width: 16.875rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19-item-1-frame-18 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  background: $colour-button-segmented-selected-bg;
+  justify-content: center;
+  width: 16.375rem;
+  border-radius: 0.375rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19-item-1-frame-18-label {
+  color: $colour-button-segmented-selected-text;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19-item-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: $size-sm;
+  background: $colour-button-segmented-unselected-bg-resting;
+  width: 16.875rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19-item-2-frame-18 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  justify-content: center;
+  width: 16.375rem;
+  border-radius: 0.375rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19-item-2-frame-18-label {
+  color: $colour-button-segmented-unselected-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19-item-3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: $size-sm;
+  background: $colour-button-segmented-unselected-bg-resting;
+  width: 11.25rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19-item-3-frame-18 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  justify-content: center;
+  width: 10.75rem;
+  border-radius: 0.375rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-frame-19-item-3-frame-18-label {
+  color: $colour-button-segmented-unselected-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin eggstractor-plugin-design-setup---empty-segmented-button-text-below {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-hint;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 33.75rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-bottom-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: $colour-sheet-bg;
+  justify-content: flex-end;
+  width: 37.5rem;
+  border-top: 0.0625rem solid $colour-sheet-border;
+  box-shadow: inset 0 0.0625rem 0 0 $colour-sheet-border;
+  padding: calc(#{$size-3xl} - 0.0625rem) $size-3xl $size-3xl;
+}
+@mixin eggstractor-plugin-design-setup---empty-bottom-sheet-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: $size-xl;
+  padding: 0rem;
+  width: 33.5rem;
+}
+@mixin eggstractor-plugin-design-setup---empty-bottom-sheet-buttons-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-none $size-2xl;
+  background: $colour-button-primary-bg-resting;
+  justify-content: center;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+}
+@mixin eggstractor-plugin-design-setup---empty-bottom-sheet-buttons-button-label {
+  color: $colour-button-secondary-text-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin navitem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $size-xl;
+  justify-content: center;
+}
+@mixin navitem-export {
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin navitem-export-state_selected {
+  color: $colour-nav-selected;
+}
+@mixin navitem-export-state_unselected-resting {
+  color: $colour-nav-unselected;
+}
+@mixin navitem-export-state_unselected-hover {
+  color: $colour-nav-hover;
+}
+@mixin nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+}
+@mixin nav-nav1-export {
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+  color: $colour-nav-unselected;
+}
+@mixin nav-nav1-export-1st {
+  color: $colour-nav-selected;
+}
+@mixin nav-nav2-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin nav-nav2-export-2nd {
+  color: $colour-nav-selected;
+}
+@mixin nav-nav3-export {
+  color: $colour-nav-unselected;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin nav-nav3-export-3rd {
+  color: $colour-nav-selected;
+}
+@mixin link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  justify-content: center;
+}
+@mixin link-link-text-- {
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin link-link-text---state_resting {
+  color: $colour-link-resting;
+}
+@mixin link-link-text---bold_false {
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+@mixin link-link-text---true {
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+}
+@mixin link-link-text---state_hover {
+  color: $colour-link-hover;
+}
+@mixin input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $size-md;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin input-text-above {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 0rem;
+  width: 33.75rem;
+}
+@mixin input-text-above-label {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-label;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 29rem;
+}
+@mixin input-text-above-link-link-text-- {
+  color: $colour-link-resting;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin input-input-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  padding: $size-lg;
+  background: $colour-input-bg;
+  width: 33.75rem;
+  border-radius: $radius-brand;
+}
+@mixin input-input-box-state_resting {
+  border: 0.0625rem solid $colour-input-border-resting;
+  box-shadow:
+    inset 0 0.0625rem 0 0 $colour-input-border-resting,
+    inset -0.0625rem 0 0 0 $colour-input-border-resting,
+    inset 0 -0.0625rem 0 0 $colour-input-border-resting,
+    inset 0.0625rem 0 0 0 $colour-input-border-resting;
+}
+@mixin input-input-box-state_hover {
+  border: 0.0625rem solid $colour-input-border-hover;
+  box-shadow:
+    inset 0 0.0625rem 0 0 $colour-input-border-hover,
+    inset -0.0625rem 0 0 0 $colour-input-border-hover,
+    inset 0 -0.0625rem 0 0 $colour-input-border-hover,
+    inset 0.0625rem 0 0 0 $colour-input-border-hover;
+}
+@mixin input-input-box-state_active {
+  border: 0.0625rem solid $colour-input-border-active;
+  box-shadow:
+    inset 0 0.0625rem 0 0 $colour-input-border-active,
+    inset -0.0625rem 0 0 0 $colour-input-border-active,
+    inset 0 -0.0625rem 0 0 $colour-input-border-active,
+    inset 0.0625rem 0 0 0 $colour-input-border-active;
+}
+@mixin input-input-box-state_error {
+  border: 0.0625rem solid $colour-input-error;
+  box-shadow:
+    inset 0 0.0625rem 0 0 $colour-input-error,
+    inset -0.0625rem 0 0 0 $colour-input-error,
+    inset 0 -0.0625rem 0 0 $colour-input-error,
+    inset 0.0625rem 0 0 0 $colour-input-error;
+}
+@mixin input-input-box-user-entered-text {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  width: 32.25rem;
+}
+@mixin input-text-below {
+  display: flex;
+  flex-direction: column;
+  color: $colour-input-hint;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+  width: 33.75rem;
+}
+@mixin input-text-below-state_error {
+  color: $colour-input-error;
+}
+@mixin segmented-button-items {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: $size-sm;
+  background: $colour-button-segmented-unselected-bg-resting;
+  width: 5.125rem;
+}
+@mixin segmented-button-items-state_unselected-hover {
+  background: $colour-button-segmented-unselected-bg-hover;
+}
+@mixin segmented-button-items-frame-18 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  background: $colour-button-segmented-selected-bg;
+  justify-content: center;
+  width: 4.625rem;
+  border-radius: 0.375rem;
+}
+@mixin segmented-button-items-frame-18-label {
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin segmented-button-items-frame-18-label-state_selected {
+  color: $colour-button-segmented-selected-text;
+}
+@mixin segmented-button-items-frame-18-label-state_unselected {
+  color: $colour-button-segmented-unselected-text-resting;
+}
+@mixin segmented-button-items-frame-18-label-state_unselected-hover {
+  color: $colour-button-segmented-unselected-text-hover;
+}
+@mixin button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-none $size-2xl;
+  justify-content: center;
+  height: 2.75rem;
+  border-radius: $radius-brand;
+  width: 2.75rem;
+}
+@mixin button-icon {
+  padding: 0rem;
+  background: $colour-button-icon-bg-resting;
+}
+@mixin button-status_resting {
+  padding: 0rem;
+}
+@mixin button-status_hover {
+  padding: 0rem;
+}
+@mixin button-primary-status_resting {
+  background: $colour-button-primary-bg-resting;
+}
+@mixin button-primary-status_hover {
+  background: $colour-button-primary-bg-hover;
+}
+@mixin button-label {
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin button-label-primary-status_resting {
+  color: $colour-button-primary-text-resting;
+}
+@mixin button-label-secondary-status_resting {
+  color: $colour-button-secondary-text-resting;
+}
+@mixin button-label-primary-status_hover {
+  color: $colour-button-primary-text-hover;
+}
+@mixin button-label-secondary-status_hover {
+  color: $colour-button-secondary-text-hover;
+}
+@mixin button-copy {
+  padding: 0rem;
+}
+@mixin button-copy-vector-status_resting {
+  border: 0.125rem solid $colour-button-icon-icon-resting;
+}
+@mixin button-copy-vector-status_hover {
+  border: 0.125rem solid $colour-button-icon-icon-hover;
+}
+@mixin stepper-step {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0rem;
+  width: 15.375rem;
+}
+@mixin stepper-step-circle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  background: $colour-sheet-bg;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0.125rem solid $colour-accent;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-accent,
+    inset -0.125rem 0 0 0 $colour-accent,
+    inset 0 -0.125rem 0 0 $colour-accent,
+    inset 0.125rem 0 0 0 $colour-accent;
+  border-radius: 6249.9375rem;
+  padding: calc(#{$size-none} - 0.125rem) calc(#{$size-xl} - 0.125rem);
+}
+@mixin stepper-step-circle-status_current {
+  background: $colour-accent;
+}
+@mixin stepper-step-circle-status_future {
+  border: 0.125rem solid $colour-stepper-inactive;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-stepper-inactive,
+    inset -0.125rem 0 0 0 $colour-stepper-inactive,
+    inset 0 -0.125rem 0 0 $colour-stepper-inactive,
+    inset 0.125rem 0 0 0 $colour-stepper-inactive;
+}
+@mixin stepper-step-circle-1 {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin stepper-step-circle-1-status_current {
+  color: $colour-white;
+}
+@mixin stepper-step-arrow-and-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0rem;
+  justify-content: center;
+  width: 13.375rem;
+  height: 2rem;
+}
+@mixin stepper-step-arrow-and-text-arrow-1 {
+  border: 0.125rem solid $colour-stepper-inactive;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-stepper-inactive,
+    inset -0.125rem 0 0 0 $colour-stepper-inactive,
+    inset 0 -0.125rem 0 0 $colour-stepper-inactive,
+    inset 0.125rem 0 0 0 $colour-stepper-inactive;
+}
+@mixin stepper-step-arrow-and-text-arrow-1-status_past {
+  border: 0.125rem solid $colour-accent;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-accent,
+    inset -0.125rem 0 0 0 $colour-accent,
+    inset 0 -0.125rem 0 0 $colour-accent,
+    inset 0.125rem 0 0 0 $colour-accent;
+}
+@mixin stepper-step-arrow-and-text-label-bg {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: $size-md;
+  background: $colour-sheet-bg;
+  justify-content: center;
+}
+@mixin stepper-step-arrow-and-text-label-bg-label {
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.875rem;
+  width: 33.75rem;
+  border-radius: 0.5rem;
+  background: $colour-card-warning-bg;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-card-warning-border,
+    inset -0.125rem 0 0 0 $colour-card-warning-border,
+    inset 0 -0.125rem 0 0 $colour-card-warning-border,
+    inset 0.125rem 0 0 0 $colour-card-warning-border;
+}
+@mixin card-static {
+  background: $colour-card-bg;
+  box-shadow:
+    inset 0 0.125rem 0 0 $colour-card-border,
+    inset -0.125rem 0 0 0 $colour-card-border,
+    inset 0 -0.125rem 0 0 $colour-card-border,
+    inset 0.125rem 0 0 0 $colour-card-border;
+}
+@mixin card-frame-20 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0rem;
+  justify-content: center;
+  width: 30rem;
+  height: 2rem;
+}
+@mixin card-frame-20-not-sure-where-to-start- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-family: $font-family-display;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: $size-2xl;
+  width: 27.375rem;
+}
+@mixin card-frame-20-not-sure-where-to-start--static {
+  width: 30rem;
+}
+@mixin card-the-getting-started-guide-will-walk-you-through-the-steps-for-setting-up-a-demo-project-where-you-can-test-it-all-out- {
+  display: flex;
+  flex-direction: column;
+  color: $colour-text;
+  font-family: $font-family-body;
+  font-size: $size-xl;
+  font-weight: 400;
+  font-style: normal;
+  line-height: $size-2xl;
+  width: 30rem;
+}
+@mixin card-link-link-text-- {
+  color: $colour-link-resting;
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-weight: 600;
+  font-style: normal;
+  line-height: $size-xl;
+}
+@mixin card-frame-20-caretdown {
+  padding: 0rem;
+}
+@mixin card-frame-20-caretdown-vector {
+  border: 0.125rem solid $colour-text;
+}
+@mixin card-frame-20-caretright {
+  padding: 0rem;
+}
+@mixin card-frame-20-caretright-vector {
+  border: 0.125rem solid $colour-text;
+}

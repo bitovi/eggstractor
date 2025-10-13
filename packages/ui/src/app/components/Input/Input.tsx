@@ -4,18 +4,39 @@ export interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
   label: string;
   type?: 'password' | 'text';
-  onChange: (value: string) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  hint?: string;
+  linkText?: string;
+  onLinkClick?: () => void;
 }
 
-export const Input: FC<InputProps> = ({ label, id, onChange, type = 'text', ...props }) => {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.value);
-  };
-
+export const Input: FC<InputProps> = ({
+  label,
+  id,
+  onChange,
+  type = 'text',
+  hint,
+  linkText,
+  onLinkClick,
+  className = '',
+  ...props
+}) => {
   return (
-    <div className="form-group">
-      <label htmlFor={id}>{label}</label>
-      <input {...props} id={id} type={type} onChange={handleChange} />
+    <div className={`input-field ${className}`}>
+      <div className="input-field__header">
+        <label htmlFor={id} className="input-field__label">
+          {label}
+        </label>
+        {linkText && (
+          <button type="button" className="input-field__link" onClick={onLinkClick}>
+            {linkText}
+          </button>
+        )}
+      </div>
+      <div className="input-field__container">
+        <input {...props} id={id} type={type} onChange={onChange} className="input-field__input" />
+      </div>
+      {hint && <p className="input-field__hint">{hint}</p>}
     </div>
   );
 };

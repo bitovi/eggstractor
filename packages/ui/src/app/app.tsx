@@ -3,7 +3,7 @@ import { getValidStylesheetFormat } from '@eggstractor/common';
 import { Route, Routes } from 'react-router-dom';
 import '../styles.scss';
 import { messageMainThread } from './utils';
-import { About, Form, StatusProvider } from './routes';
+import { About, Form, StatusProvider, Setup } from './routes';
 import { GeneratedStylesProvider, Config, ConfigProvider } from './context';
 import { useOnPluginMessage, useRoutePersistence } from './hooks';
 import { MemoryPersistenceRouter } from './components';
@@ -41,6 +41,7 @@ export const App = () => {
             {/*<Nav />*/}
             <Routes>
               <Route path="/" element={<Form />} />
+              <Route path="/setup" element={<Setup />} />
               <Route path="/about" element={<About />} />
             </Routes>
           </ConfigProvider>
