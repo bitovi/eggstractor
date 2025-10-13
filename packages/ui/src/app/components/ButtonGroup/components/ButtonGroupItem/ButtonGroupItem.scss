@@ -1,0 +1,60 @@
+@use '../../../../../generated.scss' as *;
+@use '../../../../../resets.scss' as *;
+
+.button-group-item-container {
+  @include reset-button;
+  @include segmented-button-items;
+  // TODO: There is an issue with rendering the border radius of the buttons
+  // with the container. The workaround for now is to remove the background
+  // color of the buttons and just put it on the container
+  background: unset;
+  cursor: pointer;
+  width: 100%;
+  flex-grow: 1;
+
+  .button-group-item {
+    // TODO: there's a bug where the unset background color isn't be accounted for
+    // Going to manually set background to workaround
+    @include segmented-button-items-frame-18;
+    background: unset;
+    width: 100%;
+    height: 100%;
+
+    .segmented-button-item-label {
+      @include segmented-button-items-frame-18-label;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+  }
+
+  &:not(.active) {
+    .button-group-item {
+      .segmented-button-item-label {
+        @include segmented-button-items-frame-18-label-state_unselected;
+      }
+    }
+
+    &:hover {
+      @include segmented-button-items-state_unselected-hover;
+
+      .button-group-item {
+        .segmented-button-item-label {
+          @include segmented-button-items-frame-18-label-state_unselected-hover;
+        }
+      }
+    }
+  }
+
+  &.active {
+    @include segmented-button-items-frame-18-label-state_selected;
+
+    .button-group-item {
+      background: $colour-button-segmented-selected-bg;
+
+      .segmented-button-item-label {
+        @include segmented-button-items-frame-18-label-state_selected;
+      }
+    }
+  }
+}

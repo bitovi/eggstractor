@@ -1,26 +1,44 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
+@use './generated.scss' as *;
+@use './resets.scss' as *;
 
 * {
   box-sizing: border-box;
 }
 
-img {
-  display: block;
-  margin: 0;
+html,
+body,
+#root {
+  height: 100%;
 }
 
-button {
-  padding: 8px 16px;
-  font-size: 14px;
-  margin-bottom: 10px;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: $colour-page-bg;
 }
-button#generateBtn {
-  margin-bottom: 0;
+
+#root {
+  display: flex;
+  flex-direction: column;
 }
+
+img {
+  @include reset-img;
+}
+
+.container {
+  padding: 30px;
+}
+
+// button {
+//   padding: 8px 16px;
+//   font-size: 14px;
+//   margin-bottom: 10px;
+// }
+// button#generateBtn {
+//   margin-bottom: 0;
+// }
 
 #output {
   width: 100%;
@@ -67,9 +85,9 @@ button#generateBtn {
   width: 16px;
   height: 16px;
 }
-.form-group {
-  margin-bottom: 15px;
-}
+// .form-group {
+//   margin-bottom: 15px;
+// }
 label {
   display: block;
   margin-bottom: 5px;
@@ -99,11 +117,11 @@ pre {
 #status a:hover {
   text-decoration: underline;
 }
-.button-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+// .button-group {
+//   display: flex;
+//   align-items: center;
+//   gap: 8px;
+// }
 
 #progressBar {
   width: 100%;
@@ -123,11 +141,11 @@ pre {
   color: #999999;
 }
 
-.button-container {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 10px;
-}
+// .button-container {
+//   position: relative;
+//   display: inline-block;
+//   margin-bottom: 10px;
+// }
 
 .spinner {
   display: none;
@@ -159,10 +177,10 @@ pre {
   }
 }
 
-.button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+// .button:disabled {
+//   opacity: 0.6;
+//   cursor: not-allowed;
+// }
 
 /* Highlight.js VS2015 Theme */
 .hljs {
@@ -308,57 +326,30 @@ summary:hover {
   cursor: pointer;
 }
 
-.container {
-  padding: 30px;
-}
-
-nav {
-  height: 67px;
-  ul {
-    display: flex;
-    list-style-type: none;
-    padding: 12px 15px;
-    margin: 0;
-    border-bottom: 1px solid #00464a;
-  }
-  a {
-    display: flex;
-    align-self: center;
-    justify-content: center;
-    height: 19px + 24px;
-    padding: 12px 15px;
-    text-decoration: none;
-    color: #a3adad;
-    font-weight: 600;
-    border-radius: 4px;
-  }
-  a:hover {
-    background: #00464a;
-  }
-  a.active-link {
-    color: #01a6ae;
-  }
-}
-
-.about {
-  color: white;
-  a {
-    color: #01a6ae;
-    font-weight: 700;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-  p {
-    margin-top: 0;
-    margin-bottom: 18px + 8px;
-  }
-  .last {
-    margin-bottom: 50px;
-  }
-  img {
-    max-width: 215px;
-    height: auto;
-  }
-}
+// nav {
+//   height: 67px;
+//   ul {
+//     display: flex;
+//     list-style-type: none;
+//     padding: 12px 15px;
+//     margin: 0;
+//     border-bottom: 1px solid #00464a;
+//   }
+//   a {
+//     display: flex;
+//     align-self: center;
+//     justify-content: center;
+//     height: 19px + 24px;
+//     padding: 12px 15px;
+//     text-decoration: none;
+//     color: #a3adad;
+//     font-weight: 600;
+//     border-radius: 4px;
+//   }
+//   a:hover {
+//     background: #00464a;
+//   }
+//   a.active-link {
+//     color: #01a6ae;
+//   }
+// }

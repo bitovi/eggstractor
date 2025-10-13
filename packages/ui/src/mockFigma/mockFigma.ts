@@ -7,8 +7,10 @@ import { isFigmaPluginUI } from '../app/utils';
 export const mockFigma = () => {
   if (isFigmaPluginUI()) return; // don't run inside Figma
 
-  // To match dark mode in Figma
-  document.body.style.backgroundColor = '#2c2c2c';
+  console.log('mockFigma running');
+
+  // // To match dark mode in Figma
+  // document.body.style.backgroundColor = '#2c2c2c';
 
   const mockPostMessageToUI = (message: MessageToUIPayload) => {
     window.postMessage({ pluginMessage: message }, '*');
@@ -20,6 +22,7 @@ export const mockFigma = () => {
     const message = event.data.pluginMessage;
 
     if (message.type === 'load-config') {
+      console.log('mockFigma: load-config message received');
       setTimeout(() => {
         mockPostMessageToUI({
           type: 'config-loaded',

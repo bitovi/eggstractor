@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { getValidStylesheetFormat } from '@eggstractor/common';
 import { Route, Routes } from 'react-router-dom';
-import '../styles.scss';
 import { messageMainThread } from './utils';
-import { About, Form, StatusProvider } from './routes';
+import { Export, Setup, About, StatusProvider } from './routes';
 import { GeneratedStylesProvider, Config, ConfigProvider } from './context';
 import { useOnPluginMessage, useRoutePersistence } from './hooks';
-import { MemoryPersistenceRouter } from './components';
+import { MemoryPersistenceRouter, Nav } from './components';
+import '../styles.scss';
+import { Components } from './routes/Components';
 
 export const App = () => {
   const initialRoute = useRoutePersistence();
@@ -24,6 +25,7 @@ export const App = () => {
   });
 
   useEffect(() => {
+    console.log('loading config');
     // Load saved config when UI opens
     messageMainThread({ type: 'load-config' });
   }, []);
@@ -37,11 +39,13 @@ export const App = () => {
       <GeneratedStylesProvider>
         <StatusProvider>
           <ConfigProvider {...loadedConfig}>
-            {/* TODO: Add navigation */}
-            {/*<Nav />*/}
+            <Nav />
             <Routes>
-              <Route path="/" element={<Form />} />
+              {/* <Route path="/" element={<Form />} /> */}
+              <Route path="/" element={<Export />} />
+              <Route path="/setup" element={<Setup />} />
               <Route path="/about" element={<About />} />
+              <Route path="components" element={<Components />} />
             </Routes>
           </ConfigProvider>
         </StatusProvider>

@@ -1,0 +1,46 @@
+@use '../../../resets.scss' as *;
+
+.button-group {
+  display: flex;
+  width: 100%;
+
+  // TODO: There is an issue with rendering the border radius of the buttons
+  // with the container. The workaround for now is to remove the background
+  // color of the buttons and just put it on the container
+  background: var(--colour-button-segmented-unselected-bg, #ffffff);
+
+  // TODO: these styles didn't generate, adding them manually
+  border-radius: var(--radius-brand, 8px);
+  border: 1px solid var(--colour-button-segmented-unselected-border, #dfe2e2);
+}
+
+// TODO: These styles didn't generate, adding them manually
+.button-group-label {
+  display: flex;
+  justify-content: space-between;
+
+  color: var(--colour-input-label, #002a2d);
+
+  /* Label */
+  font-family: var(--font-family-display, Inter);
+  font-size: var(--size-xl, 16px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--size-xl, 16px); /* 100% */
+
+  margin-bottom: 8px;
+}
+
+.button-group-hint {
+  align-self: stretch;
+  color: var(--colour-input-hint, #869597);
+
+  /* Helper */
+  font-family: var(--font-family-body, Inter);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--size-xl, 16px); /* 114.286% */
+
+  margin-top: 8px;
+}

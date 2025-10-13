@@ -1,26 +1,15 @@
 import { FC } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavItem } from './components/NavItem';
+import './Nav.scss';
 
 export const Nav: FC = () => {
   return (
-    <nav className="navigation">
+    <nav>
       <ul>
-        <li>
-          <NavLink
-            to="/"
-            className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}
-          >
-            Export
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/about"
-            className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}
-          >
-            About
-          </NavLink>
-        </li>
+        <NavItem to="/">Export</NavItem>
+        <NavItem to="/setup">Setup</NavItem>
+        <NavItem to="/about">About</NavItem>
+        {__DEV__ ? <NavItem to="/components">Components</NavItem> : null}
       </ul>
     </nav>
   );
