@@ -22,12 +22,7 @@ export interface Config {
 }
 
 type ConfigType = Config & {
-  setRepoPath: Dispatch<SetStateAction<string>>;
-  setFilePath: Dispatch<SetStateAction<string>>;
-  setBranchName: Dispatch<SetStateAction<string>>;
-  setGithubToken: Dispatch<SetStateAction<string>>;
-  setFormat: Dispatch<SetStateAction<StylesheetFormat>>;
-  setUseCombinatorialParsing: Dispatch<SetStateAction<boolean>>;
+  saveConfig: (config: Partial<Config>) => void;
 };
 
 const ConfigContext = createContext<ConfigType | undefined>(undefined);
@@ -60,35 +55,41 @@ export const ConfigProvider: FC<ConfigProps> = ({
   const [format, setFormat] = useState<StylesheetFormat>(pFormat ?? 'scss');
   const [useCombinatorialParsing, setUseCombinatorialParsing] = useState<boolean>(pUseComb ?? true);
 
-  const value = useMemo(
-    () => ({
-      repoPath,
-      setRepoPath,
-      filePath,
-      setFilePath,
-      branchName,
-      setBranchName,
-      githubToken,
-      setGithubToken,
-      format,
-      setFormat,
-      useCombinatorialParsing,
-      setUseCombinatorialParsing,
-    }),
-    [repoPath, filePath, branchName, githubToken, format, useCombinatorialParsing],
-  );
+  const value = useMemo(() => {
+    const saveConfig = (config: Partial<Config>): void => {
+      const _reportPath = config.repoPath ?? repoPath;
+      const _filePath = config.filePath ?? filePath;
+      const _branchName = config.branchName ?? branchName;
+      const _githubToken = config.githubToken ?? githubToken;
+      const _format = config.format ?? format;
+      const _useCombinatorialParsing = config.useCombinatorialParsing ?? useCombinatorialParsing;
 
-  // TODO: debounce this
-  useEffect(() => {
-    messageMainThread({
-      type: 'save-config',
+      setRepoPath(config.repoPath ?? _reportPath);
+      setFilePath(config.filePath ?? _filePath);
+      setBranchName(config.branchName ?? _branchName);
+      setGithubToken(config.githubToken ?? _githubToken);
+      setFormat(config.format ?? _format);
+      setUseCombinatorialParsing(config.useCombinatorialParsing ?? _useCombinatorialParsing);
+      messageMainThread({
+        type: 'save-config',
+        repoPath: _reportPath,
+        filePath: _filePath,
+        branchName: _branchName,
+        githubToken: _githubToken,
+        format: _format,
+        useCombinatorialParsing: _useCombinatorialParsing,
+      });
+    };
+
+    return {
       repoPath,
       filePath,
       branchName,
       githubToken,
       format,
       useCombinatorialParsing,
-    });
+      saveConfig,
+    };
   }, [repoPath, filePath, branchName, githubToken, format, useCombinatorialParsing]);
 
   return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;

@@ -1,0 +1,68 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.input-container {
+  @include input;
+  // TODO: generated width messes up responsiveness, should be 100%
+  width: 100%;
+
+  .label-container {
+    @include input-text-above;
+    // TODO: generated width messes up responsiveness, should be 100%
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .label-text {
+      @include input-text-above-label;
+    }
+
+    // TODO: is this support to be here? LabelLink should handle this, why is
+    // this generated?
+    .label-link {
+      @include input-text-above-link-link-text;
+    }
+  }
+
+  .input {
+    @include reset-input;
+    @include input-input-box;
+    // TODO: there's no text element inside an input in html, this should be
+    // updated in figma
+    @include input-input-box-user-entered-text;
+    // TODO: generated width messes up responsiveness, should be 100%
+    width: 100%;
+  }
+
+  .hint {
+    @include input-text-below;
+  }
+
+  &:not(:hover):not(.active):not(.error) {
+    .input {
+      @include input-input-box-state_resting;
+    }
+  }
+
+  &:hover:not(.active):not(.error) {
+    .input {
+      @include input-input-box-state_hover;
+    }
+  }
+
+  &.error {
+    .input {
+      @include input-input-box-state_error;
+    }
+
+    .hint {
+      @include input-text-below-state_error;
+    }
+  }
+
+  &.active {
+    .input {
+      @include input-input-box-state_active;
+    }
+  }
+}

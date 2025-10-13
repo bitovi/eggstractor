@@ -1,0 +1,21 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.bottom-sheet {
+  border-top: 1px solid var(--colour-sheet-border, #dfe2e2);
+  background: var(--colour-sheet-bg, #fff);
+  display: flex;
+  padding: 32px;
+  gap: 16px;
+  margin-top: 32px;
+}

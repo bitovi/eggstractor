@@ -1,0 +1,35 @@
+@use '../../../../../generated.scss' as *;
+@use '../../../../../resets.scss' as *;
+
+li {
+  @include reset-li;
+  cursor: pointer;
+}
+
+.nav-item {
+  @include reset-a;
+  @include navitem;
+  cursor: pointer;
+
+  .nav-item-label {
+    @include navitem-export;
+  }
+
+  &:not(.active) {
+    .nav-item-label {
+      @include navitem-export-state_unselected-resting;
+    }
+
+    &:hover {
+      .nav-item-label {
+        @include navitem-export-state_unselected-hover;
+      }
+    }
+  }
+
+  &.active {
+    .nav-item-label {
+      @include navitem-export-state_selected;
+    }
+  }
+}

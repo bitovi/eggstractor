@@ -1,0 +1,33 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.label-link {
+  @include reset-a;
+  @include link;
+
+  span {
+    @include link-link-text;
+    @include link-link-text-state_resting;
+  }
+
+  &.bold {
+    span {
+      @include link-link-text-true;
+    }
+  }
+  &:not(.bold) {
+    span {
+      @include link-link-text-bold_false;
+    }
+  }
+
+  &:hover {
+    span {
+      @include link-link-text-state_hover;
+    }
+  }
+
+  ::after {
+    content: ' →';
+  }
+}
