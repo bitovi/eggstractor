@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
-import cn from 'classnames';
 import './NavItem.scss';
+import cn from 'classnames';
 
 interface NavItemProps {
   to: string;
