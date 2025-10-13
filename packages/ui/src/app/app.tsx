@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { getValidStylesheetFormat } from '@eggstractor/common';
 import { Route, Routes } from 'react-router-dom';
 import { messageMainThread } from './utils';
-import { Export, Setup, About, Components, StatusProvider } from './routes';
+import { Export, Setup, About, StatusProvider } from './routes';
 import { GeneratedStylesProvider, Config, ConfigProvider } from './context';
 import { useOnPluginMessage, useRoutePersistence } from './hooks';
 import { MemoryPersistenceRouter, Nav } from './components';
 import '../styles.scss';
+import { Components } from './routes/Components';
 
 export const App = () => {
   const initialRoute = useRoutePersistence();
@@ -40,7 +41,6 @@ export const App = () => {
           <ConfigProvider {...loadedConfig}>
             <Nav />
             <Routes>
-              {/* TODO: remove Form route as it's legacy */}
               {/* <Route path="/" element={<Form />} /> */}
               <Route path="/" element={<Export />} />
               <Route path="/setup" element={<Setup />} />

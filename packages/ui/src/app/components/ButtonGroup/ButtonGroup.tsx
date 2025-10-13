@@ -1,5 +1,5 @@
 import { LabelLink } from '../LabelLink/LabelLink';
-import { ButtonGroupItem } from './components';
+import { ButtonGroupItem } from './components/ButtonGroupItem';
 import styles from './ButtonGroup.module.scss';
 
 export interface ButtonGroupOption<T extends string | number = string> {
