@@ -7,8 +7,6 @@ import { isFigmaPluginUI } from '../app/utils';
 export const mockFigma = () => {
   if (isFigmaPluginUI()) return; // don't run inside Figma
 
-  console.info('mockFigma running');
-
   // // To match dark mode in Figma
   // document.body.style.backgroundColor = '#2c2c2c';
 
