@@ -26,6 +26,9 @@ body {
 img {
   @include reset-img;
 }
+form {
+  @include reset-form;
+}
 
 .container {
   padding: 30px;

@@ -56,3 +56,7 @@
   background-color: transparent;
   box-shadow: none;
 }
+
+@mixin reset-form {
+  margin: 0;
+}
