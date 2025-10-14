@@ -8,23 +8,25 @@
       const path = window.location.pathname.split('/').filter(Boolean);
       const repo = path[0];
 
-      // Check if we're already in an infinite loop
-      if (path.filter((p) => p === 'index.html').length > 1) {
-        document.body.innerHTML = '<p>Error: Path not found</p>';
-      } else if (path.length === 1) {
-        // At repo root, redirect to main
-        window.location.href = `/${repo}/main/`;
-      } else {
-        // Try the branch preview once
-        const branchPath = path[1];
-        const pathname = `/${repo}/${branchPath}/index.html`;
-
+      const redirect = (pathname) => {
         if (pathname === window.location.pathname) {
           document.body.innerHTML = '<p>Error: 404 Page not found</p>';
           return;
         }
 
         window.location.href = pathname;
+      };
+
+      // Check if we're already in an infinite loop
+      if (path.filter((p) => p === 'index.html').length > 1) {
+        document.body.innerHTML = '<p>Error: Path not found</p>';
+      } else if (path.length === 1) {
+        // At repo root, redirect to main
+        redirect(`/${repo}/main/`);
+      } else {
+        // Try the branch preview once
+        const branchPath = path[1];
+        redirect(`/${repo}/${branchPath}/index.html`);
       }
     </script>
   </head>
