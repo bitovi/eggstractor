@@ -5,21 +5,19 @@ import { useConfig, useGeneratedStyles } from '../../context';
 import { Button } from '../../components';
 import { useOnPluginMessage } from '../../hooks';
 import {
-  BranchNameInput,
   CreatePRButton,
   ExportTestDataButton,
-  FilePathInput,
-  FormatSelect,
   GeneratingStylesProgressBar,
-  GithubTokenInput,
   Output,
-  ParsingModeRadioGroup,
-  RepoPathInput,
   Status,
   Warnings,
 } from './components';
 import { TIME_TO_REMOVE_PROGRESS_BAR } from './constants';
 
+/**
+ * @deprecated - This route is legacy and will be removed in favor of Setup.tsx
+ * and Export.tsx
+ */
 export const Form: FC = () => {
   const { setLoading } = useGeneratedStyles();
   const [disableGenerateButton, setDisableGenerateButton] = useState(false);
@@ -49,14 +47,14 @@ export const Form: FC = () => {
 
   return (
     <form className="container" onSubmit={onSubmit}>
-      <GithubTokenInput />
-      <RepoPathInput />
-      <FilePathInput />
-      <BranchNameInput />
-      <div style={{ marginBottom: '10px' }}>
+      {/* <GithubTokenInput /> */}
+      {/* <RepoPathInput /> */}
+      {/* <FilePathInput /> */}
+      {/* <BranchNameInput /> */}
+      {/* <div style={{ marginBottom: '10px' }}>
         <FormatSelect />
         <ParsingModeRadioGroup />
-      </div>
+      </div> */}
       <div className="button-group">
         <div className="button-container">
           <Button id="generateBtn" type="submit" disabled={disableGenerateButton}>

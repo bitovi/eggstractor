@@ -1,15 +1,5 @@
 import { StylesheetFormat } from '@eggstractor/common';
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  Dispatch,
-  FC,
-  ReactNode,
-  SetStateAction,
-} from 'react';
+import { createContext, useContext, useMemo, useState, FC, ReactNode } from 'react';
 import { messageMainThread } from '../../utils';
 
 export interface Config {
