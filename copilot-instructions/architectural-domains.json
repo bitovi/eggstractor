@@ -1,0 +1,86 @@
+{
+  "figma-plugin-architecture": {
+    "required_patterns": {
+      "main-thread-ui-separation": "All Figma plugins must separate main thread (figma.ts) from UI iframe communication",
+      "message-passing": "Use typed message passing between main thread and UI via figma.ui.postMessage and window.addEventListener",
+      "client-storage": "Use figma.clientStorage for persistent data storage"
+    },
+    "architectural_constraints": {
+      "main-thread-restrictions": "Main thread cannot access DOM or React - only Figma API and Node.js-like APIs",
+      "ui-iframe-limitations": "UI iframe cannot directly access Figma API - must communicate via messages",
+      "typed-messages": "All messages must conform to MessageToUIPayload and MessageToMainThreadPayload types"
+    }
+  },
+  "design-token-processing": {
+    "required_patterns": {
+      "processor-pattern": "Use StyleProcessor interface for extracting properties from Figma nodes",
+      "node-type-routing": "Route processors based on Figma node types via getProcessorsForNode",
+      "token-collection": "Aggregate all tokens into TokenCollection for transformation"
+    },
+    "architectural_constraints": {
+      "processor-interface": "All processors must implement StyleProcessor with property, bindingKey, and process method",
+      "figma-node-types": "Processors are constrained to specific Figma node types (TEXT, FRAME, RECTANGLE, etc.)",
+      "async-processing": "All processor.process methods must be async and return ProcessedValue or null"
+    }
+  },
+  "code-generation": {
+    "required_patterns": {
+      "transformer-pattern": "Use Transformer type for converting TokenCollection to stylesheet formats",
+      "format-switching": "Support multiple output formats (CSS, SCSS, Tailwind) via format parameter",
+      "combinatorial-parsing": "Support both template and combinatorial parsing modes"
+    },
+    "architectural_constraints": {
+      "transformer-signature": "All transformers must match (tokens: TokenCollection, useCombinatorialParsing: boolean) => TransformerResult",
+      "supported-formats": "Only CSS, SCSS, tailwind-scss, and tailwind-v4 formats are supported",
+      "naming-context": "Must use createNamingContext for consistent token naming across formats"
+    }
+  },
+  "ui-state-management": {
+    "required_patterns": {
+      "context-providers": "Use React Context for global state (ConfigProvider, GeneratedStylesProvider, StatusProvider)",
+      "typed-hooks": "Use custom hooks (useConfig, useGeneratedStyles, useStatus) to access context",
+      "message-hooks": "Use useOnPluginMessage hook for handling plugin messages"
+    },
+    "architectural_constraints": {
+      "context-isolation": "Each context provider manages a single concern with specific state shape",
+      "hook-enforcement": "Context must only be accessed via custom hooks that enforce provider existence",
+      "message-typing": "useOnPluginMessage must use type-safe message filtering based on message.type"
+    }
+  },
+  "github-integration": {
+    "required_patterns": {
+      "github-service": "Use centralized Github service for all repository operations",
+      "file-scoped-storage": "Store tokens and configurations per-file using unique file IDs",
+      "pr-creation-workflow": "Follow create branch → commit file → create PR workflow"
+    },
+    "architectural_constraints": {
+      "storage-scope": "All GitHub data must be scoped to individual Figma files via getFileId()",
+      "api-limitations": "Only GitHub REST API is supported, no GraphQL",
+      "authentication": "Must use personal access tokens, no OAuth flow"
+    }
+  },
+  "component-structure": {
+    "required_patterns": {
+      "folder-per-component": "Each component gets its own folder with Component.tsx and index.ts",
+      "barrel-exports": "Use index.ts files for clean exports and re-exports",
+      "form-input-composition": "Compose form inputs using shared Input, Select, RadioGroup components"
+    },
+    "architectural_constraints": {
+      "component-isolation": "Components should not directly import from sibling component folders",
+      "prop-interface-export": "All component prop interfaces must be exported alongside components",
+      "context-dependency": "Form components must use useConfig hook for state management"
+    }
+  },
+  "testing-architecture": {
+    "required_patterns": {
+      "processor-testing": "Test processors using createTestData with Figma mock fixtures",
+      "snapshot-testing": "Use snapshot testing for transformer outputs to catch regressions",
+      "e2e-workflow": "Test complete user workflows via Playwright"
+    },
+    "architectural_constraints": {
+      "fixture-data": "All tests must use JSON fixtures that mirror real Figma API responses",
+      "vitest-framework": "Must use Vitest for unit tests, Playwright for E2E",
+      "mock-isolation": "Figma API mocks must be isolated per test to prevent interference"
+    }
+  }
+}
