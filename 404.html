@@ -17,7 +17,14 @@
       } else {
         // Try the branch preview once
         const branchPath = path[1];
-        window.location.href = `/${repo}/${branchPath}/index.html`;
+        const pathname = `/${repo}/${branchPath}/index.html`;
+
+        if (pathname === window.location.pathname) {
+          document.body.innerHTML = '<p>Error: 404 Page not found</p>';
+          return;
+        }
+
+        window.location.href = pathname;
       }
     </script>
   </head>
