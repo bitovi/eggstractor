@@ -4,6 +4,7 @@
 .label-link {
   @include reset-a;
   @include link;
+  white-space: nowrap;
 
   span {
     @include link-link-text;
