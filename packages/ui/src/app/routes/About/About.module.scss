@@ -1,21 +1,21 @@
 .about {
-  color: white;
-  a {
+  color: black;
+  .link {
     color: #01a6ae;
     font-weight: 700;
     text-decoration: none;
   }
-  a:hover {
+  .link:hover {
     text-decoration: underline;
   }
-  p {
+  .p {
     margin-top: 0;
     margin-bottom: 18px + 8px;
   }
   .last {
     margin-bottom: 50px;
   }
-  img {
+  .img {
     max-width: 215px;
     height: auto;
   }
