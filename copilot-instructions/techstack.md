@@ -87,6 +87,6 @@
 
 - **@figma/plugin-typings** - Strict dependency on Figma's plugin API and type definitions
 - **Figma Node Processing** - All processors are designed around Figma's specific node types and properties
-- **CSS Property Mapping** - Transformers have deep knowledge of CSS specification and browser compatibility
+- **CSS Property Mapping** - Transformers have deep knowledge of CSS specification
 - **GitHub API Constraints** - Limited to GitHub's REST API capabilities and authentication flows
 - **Monorepo Structure** - Nx-based architecture assumes multi-package development workflow

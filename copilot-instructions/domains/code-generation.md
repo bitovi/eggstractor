@@ -168,7 +168,7 @@ export const transformToCss: Transformer = (
 
 ### Property Value Processing
 
-CSS values are processed for browser compatibility:
+CSS values are processed:
 
 ```typescript
 const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {

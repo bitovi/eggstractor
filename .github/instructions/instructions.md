@@ -71,9 +71,7 @@ This file enables AI coding assistants to generate features aligned with the Egg
 **Examples**: `./packages/ui/src/app/context/ConfigContext/ConfigContext.tsx`  
 **Key Conventions**:
 
-- Auto-sync context changes to Figma plugin storage via `useEffect`
 - Controlled props with 'p' prefix and internal state fallbacks
-- Expose both values and setter functions in context type
 
 ### figma-processors
 
