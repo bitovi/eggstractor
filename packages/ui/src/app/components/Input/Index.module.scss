@@ -15,6 +15,7 @@
 
     .label-text {
       @include input-text-above-label;
+      cursor: pointer;
     }
 
     // TODO: is this support to be here? LabelLink should handle this, why is

@@ -34,7 +34,7 @@ const main = async () => {
   // Show the UI with resizable window
   figma.showUI(html, {
     width: 600,
-    height: 1200,
+    height: 900,
     themeColors: true,
     title: 'Eggstractor',
   });
