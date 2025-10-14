@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      // Get the path from the URL
+      const path = window.location.pathname.split('/').filter(Boolean);
+      const repo = path[0];
+
+      // Check if we're already in an infinite loop
+      if (path.filter((p) => p === 'index.html').length > 1) {
+        document.body.innerHTML = '<p>Error: Path not found</p>';
+      } else if (path.length === 1) {
+        // At repo root, redirect to main
+        window.location.href = `/${repo}/main/`;
+      } else {
+        // Try the branch preview once
+        const branchPath = path[1];
+        window.location.href = `/${repo}/${branchPath}/index.html`;
+      }
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to preview...</p>
+  </body>
+</html>
