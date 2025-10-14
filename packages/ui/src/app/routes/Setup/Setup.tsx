@@ -1,14 +1,13 @@
 import { FC, FormEvent, useState } from 'react';
 import type { StylesheetFormat } from '@eggstractor/common';
-import { useConfig } from '../../context';
-import { Button, Input } from '../../components';
-import { ButtonGroup, ButtonGroupOption } from '../../components/ButtonGroup';
 import cn from 'classnames';
+import { useConfig } from '../../context';
+import { Button, Input, ButtonGroup, ButtonGroupOption } from '../../components';
 import styles from './Setup.module.scss';
 
 const FORMAT_OPTIONS: ButtonGroupOption<StylesheetFormat>[] = [
   // Only include 'css' option in dev mode for testing purposes (for now)
-  // ...(__DEV__ ? [{ value: 'css' as const, label: 'CSS' }] : []),
+  ...(__DEV__ ? [{ value: 'css' as const, label: 'CSS' }] : []),
   { value: 'scss', label: 'SCSS' },
   { value: 'tailwind-scss', label: 'Tailwind 3 + SCSS' },
   { value: 'tailwind-v4', label: 'Tailwind 4' },

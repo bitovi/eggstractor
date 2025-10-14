@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import wordmarkUrl from '../../../../assets/bitovi-wordmark.png';
-import './About.scss';
+import styles from './About.module.scss';
 
 export const About: FC = () => {
   return (

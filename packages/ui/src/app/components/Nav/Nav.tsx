@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { NavItem } from './components/NavItem';
-import './Nav.scss';
+import { NavItem } from './components';
+import styles from './Nav.module.scss';
 
 export const Nav: FC = () => {
   return (
     <nav>
-      <ul>
+      <ul className={styles['nav-list']}>
         <NavItem to="/">Export</NavItem>
         <NavItem to="/setup">Setup</NavItem>
         <NavItem to="/about">About</NavItem>

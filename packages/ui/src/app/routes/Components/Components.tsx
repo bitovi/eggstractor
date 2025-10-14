@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { LabelLink } from '../../components/LabelLink/LabelLink';
 import { ButtonGroup } from '../../components/ButtonGroup';
-import './Components.scss';
+import styles from './Components.module.scss';
 import { Button, Input } from '../../components';
 
 export const Components: FC = () => {
@@ -22,7 +22,7 @@ export const Components: FC = () => {
         Bold
       </LabelLink>
       <h2>ButtonGroup</h2>
-      <div className="form-field">
+      <div className={styles['form-field']}>
         <ButtonGroup<string>
           label="Button Group"
           options={[
@@ -33,7 +33,7 @@ export const Components: FC = () => {
           onChange={setActiveButton}
         />
       </div>
-      <div className="form-field">
+      <div className={styles['form-field']}>
         <ButtonGroup
           label="Button Group With Link"
           options={[
@@ -46,7 +46,7 @@ export const Components: FC = () => {
           linkLabel="Go to Bitovi"
         />
       </div>
-      <div className="form-field">
+      <div className={styles['form-field']}>
         <ButtonGroup
           label="Button Group With Hint"
           options={[
@@ -58,7 +58,7 @@ export const Components: FC = () => {
           hint="This is a hint"
         />
       </div>
-      <div className="form-field">
+      <div className={styles['form-field']}>
         <ButtonGroup
           label="Button Group With Link and Hint"
           options={[
@@ -73,10 +73,10 @@ export const Components: FC = () => {
         />
       </div>
       <h2>Input</h2>
-      <div className="form-field">
+      <div className={styles['form-field']}>
         <Input label="Input Example" value={inputValue} onChange={setInputValue} />
       </div>
-      <div className="form-field">
+      <div className={styles['form-field']}>
         <Input
           label="With Hint"
           value={inputValue}
@@ -84,7 +84,7 @@ export const Components: FC = () => {
           hint="This is a hint"
         />
       </div>
-      <div className="form-field">
+      <div className={styles['form-field']}>
         <Input
           label="With Link"
           value={inputValue}
@@ -93,7 +93,7 @@ export const Components: FC = () => {
           linkLabel="Go to Bitovi"
         />
       </div>
-      <div className="form-field">
+      <div className={styles['form-field']}>
         <Input
           label="With Link and Hint"
           value={inputValue}
@@ -103,7 +103,7 @@ export const Components: FC = () => {
           hint="This is a hint"
         />
       </div>
-      <div className="form-field">
+      <div className={styles['form-field']}>
         <Input
           label="With Error"
           value={inputValue}

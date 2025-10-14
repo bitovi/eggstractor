@@ -1,7 +1,7 @@
 @use '../../../generated.scss' as *;
 @use '../../../resets.scss' as *;
 
-ul {
+.nav-list {
   @include reset-ul;
   // TODO this is likely not going to work in the future
   // The current nav is set up as a component set, but this isn't correct

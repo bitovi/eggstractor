@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, FocusEvent, InputHTMLAttributes, useId, useRef, useState } from 'react';
-import styles from './Index.module.scss';
+import styles from './Input.module.scss';
 import cn from 'classnames';
 import { LabelLink } from '../LabelLink';
 export interface InputProps
