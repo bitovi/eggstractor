@@ -6,6 +6,41 @@ This file enables AI coding assistants to generate features aligned with the Egg
 
 **Project Summary**: Eggstractor is a Figma plugin that extracts design tokens from Figma designs and generates production-ready CSS, SCSS, and Tailwind stylesheets with automated GitHub integration.
 
+## TypeScript Standards
+
+**All code must be written in TypeScript with strict typing enabled.** The project uses TypeScript's strict mode and requires:
+
+### Component Typing Requirements
+
+- **Props interfaces**: Define explicit interfaces for all component props: `interface ButtonProps { ... }`
+- **Generic constraints**: Use constrained generics for reusable components: `<T extends string = string>`
+- **Event handlers**: Type all event handlers with proper React types: `onClick: (event: MouseEvent<HTMLButtonElement>) => void`
+- **Ref forwarding**: Use `forwardRef` with proper typing when components need ref access
+- **Children typing**: Use `ReactNode` for children props, `ReactElement` when specific element types required
+
+### Hook Typing Requirements
+
+- **Return types**: Explicitly type all hook return values, especially for complex objects
+- **Generic hooks**: Use generics for reusable hooks with proper constraints
+- **Dependency arrays**: Ensure useEffect/useMemo dependencies are properly typed
+
+### Context Typing Requirements
+
+- **Context interfaces**: Define complete interfaces including both state and setters
+- **Provider typing**: Type all context provider props and default values
+- **Hook typing**: Custom context hooks must enforce provider presence with typed errors
+
+### API Typing Requirements
+
+- **Figma API**: Use strict typing for all Figma node interactions and plugin messages
+- **GitHub API**: Type all REST API requests and responses
+- **Message passing**: All plugin ↔ UI communication must use discriminated union types
+
+### Testing Typing Requirements
+
+- **Test types**: Use proper typing for test fixtures, mocks, and assertions
+- **Mock typing**: Type all mocks to match their real counterparts exactly
+
 ## File Category Reference
 
 ### react-components
@@ -98,12 +133,21 @@ This file enables AI coding assistants to generate features aligned with the Egg
 1. **Create component folder**: `packages/ui/src/app/components/NewComponent/`
 2. **Required files**:
    - `NewComponent.tsx` - Main component implementation
+   - `NewComponent.test.tsx` - Comprehensive test suite (required for all new components)
    - `index.ts` - Barrel export: `export * from './NewComponent';`
+   - `NewComponent.types.ts` - Component-specific TypeScript interfaces (if complex)
 3. **Component structure**:
-   - Use generic props with type constraints if needed
+   - **Define props interface**: `interface NewComponentProps { ... }` with explicit typing
+   - Use generic props with type constraints if needed: `<T extends string = string>`
    - Integrate with context hooks directly: `const { value, setValue } = useConfig()`
    - Include explicit `id` prop for form elements
    - Use `classnames` library for conditional CSS: `className={cn('base-class', props.className)}`
+   - **Export component with proper typing**: `export const NewComponent: FC<NewComponentProps> = ({ ... }) => { ... }`
+4. **Testing requirements**:
+   - Test all prop variations and edge cases
+   - Mock context providers when testing context integration
+   - Include accessibility testing for form components
+   - Test error states and validation behavior
 
 ### Adding a New Figma Processor
 
@@ -114,6 +158,11 @@ This file enables AI coding assistants to generate features aligned with the Egg
    - Return `ProcessedValue | null`
    - Include error/warning arrays in result
 4. **Register processor**: Add to appropriate array in `packages/figma/src/processors/index.ts`
+5. **Testing requirements**:
+   - Create test file: `packages/figma/src/tests/processors/new-property.processor.test.ts`
+   - Use `createTestData()` with JSON fixtures matching Figma API responses
+   - Test both variable-bound and literal value extraction
+   - Include edge cases and error scenarios
 
 ### Adding a New Transformer
 
@@ -121,6 +170,11 @@ This file enables AI coding assistants to generate features aligned with the Egg
 2. **Implement interface**: `export const transformToNewFormat: Transformer`
 3. **Handle parsing modes**: Branch on `useCombinatorialParsing` parameter
 4. **Register format**: Add case to switch statement in main thread `transformTokensToStylesheet`
+5. **Testing requirements**:
+   - Create test file: `packages/figma/src/tests/transformers/new-format.transformer.test.ts`
+   - Use snapshot testing for regression prevention
+   - Test both template and combinatorial parsing modes
+   - Validate output format compliance
 
 ### Adding a New Context Provider
 
@@ -129,6 +183,11 @@ This file enables AI coding assistants to generate features aligned with the Egg
    - Interface with both values and setters: `NewContextType = NewData & { setField: Dispatch<SetStateAction<Type>> }`
    - Error-throwing hook: `if (!ctx) throw new Error('useNew must be used within NewProvider')`
    - Auto-sync changes via `useEffect` if needed for persistence
+3. **Testing requirements**:
+   - Create test file: `packages/ui/src/app/context/NewContext/NewContext.test.tsx`
+   - Test provider functionality and hook error handling
+   - Mock storage interactions for persistence testing
+   - Test context value updates and side effects
 
 ## Integration Rules
 
@@ -170,9 +229,12 @@ This file enables AI coding assistants to generate features aligned with the Egg
 
 ### Testing Requirements
 
+- **All new features require tests**: Components, processors, transformers, and context providers must include comprehensive test suites
 - **Processor tests**: Use `createTestData()` with JSON fixtures matching Figma API responses
 - **Snapshot testing**: All transformer outputs must use snapshot tests for regression prevention
 - **Mock isolation**: Tests must properly isolate Figma API mocks per test case
+- **Component testing**: Include accessibility testing, prop variations, and error state handling
+- **Context testing**: Test provider functionality, hook error handling, and storage interactions
 
 ## Example Prompt Usage
 
@@ -180,21 +242,34 @@ This file enables AI coding assistants to generate features aligned with the Egg
 
 **Expected AI Response**:
 
-```text
+````text
 I'll create a number input component following the Eggstractor conventions:
 
 packages/ui/src/app/components/NumberInput/
 ├── NumberInput.tsx
+├── NumberInput.test.tsx
+├── NumberInput.types.ts
 └── index.ts
 
 packages/ui/src/app/routes/Form/components/FontSizeInput/
 ├── FontSizeInput.tsx
+├── FontSizeInput.test.tsx
 └── index.ts
 
-The NumberInput will use TypeScript generics, include required id prop, and integrate with validation. The FontSizeInput will connect to useConfig() context and include min/max validation for font sizes.
-```
+Implementation will include:
+- Explicit TypeScript interfaces for all props and state
+- Generic typing with constraints: NumberInput<T extends number = number>
+- Proper event handler typing: onChange: (value: T, event: ChangeEvent<HTMLInputElement>) => void
+- Form validation with typed error states
+- Integration with useConfig() context with proper typing
 
-**User Request**: "Add support for extracting font-style property from text nodes"
+Tests will cover:
+- All prop variations and validation scenarios
+- Context integration with mocked providers
+- Accessibility requirements for form inputs
+- Error states and edge cases
+- TypeScript compile-time type safety
+```**User Request**: "Add support for extracting font-style property from text nodes"
 
 **Expected AI Response**:
 
@@ -207,9 +282,13 @@ packages/figma/src/processors/font-style.processor.ts
 - Extract from TEXT nodes only
 - Return italic/normal values
 
+packages/figma/src/tests/processors/font-style.processor.test.ts
+- Test variable-bound and literal value extraction
+- Include edge cases and error scenarios
+- Use createTestData() with Figma API fixtures
+
 Update packages/figma/src/processors/font.processor.ts to include new processor
 Update packages/figma/src/processors/index.ts to register in TEXT_PROCESSORS
-Add test file with Figma fixture data
-```
+````
 
 This instruction file ensures all generated code follows established patterns and integrates seamlessly with the existing Eggstractor architecture.
