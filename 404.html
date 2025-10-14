@@ -3,13 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <title>Redirecting...</title>
+  </head>
+  <body>
+    <p>Redirecting to preview...</p>
     <script>
-      // Get the path from the URL
-      const path = window.location.pathname.split('/').filter(Boolean);
-      const repo = path[0];
+      const arePathsEqual = (pathA, pathB) => {
+        const normalize = (path) => path.replace(/^\/+|\/+$/g, '');
+        return normalize(pathA) === normalize(pathB);
+      };
 
       const redirect = (pathname) => {
-        if (pathname === window.location.pathname) {
+        // Avoid infinite redirect loops
+        if (arePathsEqual(pathname, window.location.pathname)) {
           document.body.innerHTML = '<p>Error: 404 Page not found</p>';
           return;
         }
@@ -17,10 +22,11 @@
         window.location.href = pathname;
       };
 
-      // Check if we're already in an infinite loop
-      if (path.filter((p) => p === 'index.html').length > 1) {
-        document.body.innerHTML = '<p>Error: Path not found</p>';
-      } else if (path.length === 1) {
+      // Get the path from the URL
+      const path = window.location.pathname.split('/').filter(Boolean);
+      const repo = path[0];
+
+      if (path.length === 1) {
         // At repo root, redirect to main
         redirect(`/${repo}/main/`);
       } else {
@@ -29,8 +35,5 @@
         redirect(`/${repo}/${branchPath}/index.html`);
       }
     </script>
-  </head>
-  <body>
-    <p>Redirecting to preview...</p>
   </body>
 </html>
