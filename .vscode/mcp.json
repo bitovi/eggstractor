@@ -1,0 +1,23 @@
+{
+  "inputs": [],
+  "servers": {
+    "atlassian": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/sse"
+    },
+    "bitovi-staging": {
+      "type": "http",
+      "url": "https://jira-mcp-auth-bridge-staging.bitovi.com/mcp"
+    },
+    "figma": {
+      "type": "http",
+      "url": "http://127.0.0.1:3845/mcp"
+    },
+    "github/github-mcp-server": {
+      "gallery": "https://api.mcp.github.com/v0/servers/ab12cd34-5678-90ef-1234-567890abcdef",
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "version": "0.13.0"
+    }
+  }
+}
