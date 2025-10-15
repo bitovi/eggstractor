@@ -15,7 +15,7 @@ export const ParsingModeRadioGroup: FC = () => {
 
   return (
     <RadioGroup<ParsingMode>
-      label="Eggstractor Output:"
+      label="EggstractorOutput Type:"
       name="parsingMode"
       value={parsingMode}
       options={[
