@@ -8,7 +8,7 @@ export const FilePathInput: FC = () => {
     <Input
       id="filePath"
       label="File Path:"
-      placeholder="e.g., src/styles/variables.scss"
+      placeholder="e.g., src/styles/eggstracted.scss"
       value={filePath}
       onChange={setFilePath}
     />

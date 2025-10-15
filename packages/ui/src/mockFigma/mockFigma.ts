@@ -28,7 +28,7 @@ export const mockFigma = () => {
             branchName: 'mock-branch-name',
             githubToken: 'mock-github-token',
             format: 'scss',
-            filePath: 'styles/mock-output.scss',
+            filePath: 'styles/eggstracted.scss',
             useCombinatorialParsing: true,
           },
         });
