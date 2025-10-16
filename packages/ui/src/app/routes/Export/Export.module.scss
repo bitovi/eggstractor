@@ -1,0 +1,164 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.top-sheet {
+  background: $colour-sheet-bg;
+  border-bottom: 1px solid $colour-sheet-border;
+  padding: $size-3xl;
+  display: flex;
+  flex-direction: column;
+  gap: $size-3xl;
+  width: calc(100% + 60px);
+  margin-left: -30px;
+  margin-right: -30px;
+  margin-top: -30px;
+  margin-bottom: 0;
+}
+
+.stepper-container {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.action-area {
+  display: flex;
+  gap: $size-xl;
+  align-items: flex-end;
+  height: 68px;
+}
+
+.generate-button {
+  flex: 1;
+  width: 100%;
+}
+
+.branch-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.progress-container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 68px;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 16px;
+  background: $colour-page-bg;
+  border-radius: 48px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: $colour-loading-bar;
+  border-radius: 48px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  color: $colour-text;
+  text-align: center;
+}
+
+.content-area {
+  padding-top: $size-3xl;
+  display: flex;
+}
+
+.card-wrapper {
+  max-width: 540px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.code-sample {
+  width: 100%;
+  max-height: 500px;
+  padding: $size-2xl;
+  background: transparent;
+  border: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  position: relative;
+  // Break out of container padding
+  width: calc(100% + 60px);
+  margin-left: -30px;
+  margin-right: -30px;
+
+  /* Custom scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 14px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $colour-grey-400;
+    border-radius: 100px;
+    border: 3px solid transparent;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $colour-grey-500;
+  }
+
+  pre {
+    position: static;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 16px;
+    line-height: 1.5;
+    color: $colour-text;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+}
+
+.copy-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  background: $colour-sheet-bg;
+  border: none;
+  border-radius: $radius-brand;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $colour-brand;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: $colour-grey-50;
+  }
+
+  &:active {
+    background: $colour-grey-100;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}

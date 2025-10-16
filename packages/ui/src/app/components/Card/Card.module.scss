@@ -1,0 +1,68 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.card {
+  @include card;
+
+  &.static {
+    @include card-static;
+  }
+}
+
+.header {
+  @include card-frame-20;
+  width: 100%;
+  cursor: pointer;
+  justify-content: space-between;
+
+  .static & {
+    cursor: default;
+  }
+
+  .collapsible.collapsed & {
+    margin-bottom: 0;
+  }
+}
+
+.title {
+  @include card-frame-20-not-sure-where-to-start;
+  margin: 0;
+  flex: 1;
+
+  .static & {
+    @include card-frame-20-not-sure-where-to-start-static;
+  }
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $colour-text;
+
+  svg {
+    width: 32px;
+    height: 32px;
+    color: inherit;
+  }
+}
+
+.content {
+  @include card-the-getting-started-guide-will-walk-you-through-the-steps-for-setting-up-a-demo-project-where-you-can-test-it-all-out;
+  align-items: flex-start;
+
+  // When card has no title, remove the top margin/gap
+  .card:not(:has(.header)) & {
+    margin-top: 0;
+  }
+}
+
+.link {
+  margin-top: $size-xl;
+  text-align: left;
+  align-self: flex-start;
+
+  a {
+    @include card-link-link-text;
+  }
+}

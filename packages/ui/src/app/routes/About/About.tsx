@@ -2,6 +2,7 @@ import { FC } from 'react';
 import cn from 'classnames';
 import wordmarkUrl from '../../../../assets/bitovi-wordmark.png';
 import styles from './About.module.scss';
+import { Card } from '../../components';
 
 export const About: FC = () => {
   return (
@@ -12,7 +13,7 @@ export const About: FC = () => {
         code updates to styling.
       </p>
       <p className={styles.p}>
-        By separating structure from styling, Eggstractor ensures that design changes don’t disrupt
+        By separating structure from styling, Eggstractor ensures that design changes don't disrupt
         component architecture. And with automated code generation for updates, designers can take
         control of their styling updates, allowing for instantaneous design QA and freeing up
         developers (who now only need to review a PR for styling changes).
@@ -30,6 +31,15 @@ export const About: FC = () => {
         <a className={styles.link}>That's us!</a>
       </p>
       <img className={styles.img} src={wordmarkUrl} alt="Bitovi" />
+      <Card
+        title="Not sure where to start?"
+        type="static"
+        linkHref="https://bitovi.com"
+        linkLabel="View the guide"
+      >
+        The Getting Started Guide will walk you through the steps for setting up a demo project
+        where you can test it all out.
+      </Card>
     </div>
   );
 };
