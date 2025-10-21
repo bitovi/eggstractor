@@ -45,6 +45,7 @@ export const Setup: FC = () => {
       format,
       useCombinatorialParsing,
     });
+    alert('Changes saved!');
   };
 
   return (
@@ -66,7 +67,7 @@ export const Setup: FC = () => {
             onChange={setFilePath}
             label="Output file path"
             linkLabel="Locating your file"
-            hint="e.g., src/scss/_source.scss"
+            hint="e.g., src/scss/_eggstracted.scss"
             linkHref="https://docs.github.com/en/repositories/working-with-files/using-files/viewing-and-understanding-files"
           />
         </div>

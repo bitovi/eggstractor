@@ -37,6 +37,7 @@
     &.icon {
       // TODO: generated icon styles don't include color styles for icon
       color: $colour-button-secondary-text-resting;
+      padding: 0rem 0rem;
     }
   }
   &:hover {
@@ -58,6 +59,7 @@
     &.icon {
       // TODO: generated icon styles don't include color styles for icon
       color: $colour-button-secondary-text-hover;
+      padding: 0rem 0rem;
     }
   }
 }

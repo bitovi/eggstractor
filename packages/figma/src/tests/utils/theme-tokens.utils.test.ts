@@ -1,9 +1,10 @@
 import { buildDynamicThemeTokens, generateThemeDirective } from '../../utils/theme-tokens.utils';
 import { TokenCollection, VariableToken } from '../../types';
 
-// Mock console.log to suppress output during tests
+// Mock console to suppress output during tests
 vi.mock('console', () => ({
   log: vi.fn(),
+  info: vi.fn(),
   warn: vi.fn(),
   error: vi.fn(),
 }));

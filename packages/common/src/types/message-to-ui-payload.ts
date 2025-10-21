@@ -40,6 +40,10 @@ export interface PRCreatedPayload extends BaseMessageToUIPayload {
   prUrl: string;
 }
 
+export interface PRCreatingPayload extends BaseMessageToUIPayload {
+  type: 'pr-creating';
+}
+
 export interface ErrorPayload extends BaseMessageToUIPayload {
   type: 'error';
   message: string;
@@ -58,6 +62,7 @@ export type MessageToUIPayload =
   | ProgressEndPayload
   | ConfigSavedPayload
   | ConfigLoadedPayload
+  | PRCreatingPayload
   | PRCreatedPayload
   | ErrorPayload
   | TestDataExportedPayload;

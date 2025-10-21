@@ -2,7 +2,7 @@ import { FC } from 'react';
 import cn from 'classnames';
 import wordmarkUrl from '../../../../assets/bitovi-wordmark.png';
 import styles from './About.module.scss';
-import { Card } from '../../components';
+import { StaticCard } from '../../components';
 
 export const About: FC = () => {
   return (
@@ -31,15 +31,14 @@ export const About: FC = () => {
         <a className={styles.link}>That's us!</a>
       </p>
       <img className={styles.img} src={wordmarkUrl} alt="Bitovi" />
-      <Card
+      <StaticCard
         title="Not sure where to start?"
-        type="static"
         linkHref="https://bitovi.com"
         linkLabel="View the guide"
       >
         The Getting Started Guide will walk you through the steps for setting up a demo project
         where you can test it all out.
-      </Card>
+      </StaticCard>
     </div>
   );
 };

@@ -2,17 +2,13 @@
 @use '../../../resets.scss' as *;
 
 .top-sheet {
+  width: 100%;
   background: $colour-sheet-bg;
   border-bottom: 1px solid $colour-sheet-border;
   padding: $size-3xl;
   display: flex;
   flex-direction: column;
   gap: $size-3xl;
-  width: calc(100% + 60px);
-  margin-left: -30px;
-  margin-right: -30px;
-  margin-top: -30px;
-  margin-bottom: 0;
 }
 
 .stepper-container {
@@ -20,23 +16,45 @@
   gap: 0;
   align-items: flex-start;
   width: 100%;
+  padding-right: 32px;
 }
 
 .action-area {
   display: flex;
   gap: $size-xl;
   align-items: flex-end;
-  height: 68px;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .generate-button {
   flex: 1;
-  width: 100%;
 }
 
-.branch-input {
-  flex: 1;
+.step-one-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+
+  .generate-button {
+    flex: 1 1 auto;
+  }
+
+  button:last-child {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+.branch-input-wrapper {
+  flex: 4 1 2;
   min-width: 0;
+}
+
+.publish-button {
+  flex: 2 2 2;
+  white-space: nowrap;
 }
 
 .progress-container {
@@ -74,91 +92,38 @@
 }
 
 .content-area {
-  padding-top: $size-3xl;
+  overflow-y: auto;
   display: flex;
 }
 
 .card-wrapper {
-  max-width: 540px;
   width: 100%;
-  margin: 0 auto;
-}
-
-.code-sample {
-  width: 100%;
-  max-height: 500px;
   padding: $size-2xl;
-  background: transparent;
-  border: none;
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  position: relative;
-  // Break out of container padding
-  width: calc(100% + 60px);
-  margin-left: -30px;
-  margin-right: -30px;
-
-  /* Custom scrollbar styling */
-  &::-webkit-scrollbar {
-    width: 14px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: $colour-grey-400;
-    border-radius: 100px;
-    border: 3px solid transparent;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: $colour-grey-500;
-  }
-
-  pre {
-    position: static;
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 16px;
-    line-height: 1.5;
-    color: $colour-text;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
 }
 
-.copy-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 44px;
-  height: 44px;
-  background: $colour-sheet-bg;
-  border: none;
-  border-radius: $radius-brand;
-  cursor: pointer;
+.success-state {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: $colour-brand;
-  transition: background-color 0.2s;
+  gap: $size-xl;
+  width: 100%;
+}
 
-  &:hover {
-    background: $colour-grey-50;
-  }
-
-  &:active {
-    background: $colour-grey-100;
-  }
+.success-message {
+  display: flex;
+  align-items: center;
+  flex: 2 1 0;
+  gap: $size-sm;
+  font-size: 16px;
+  font-weight: 500;
+  color: $colour-text;
 
   svg {
     width: 24px;
     height: 24px;
+    color: $colour-brand;
   }
+}
+
+.view-button {
+  flex: 3 0 0;
 }

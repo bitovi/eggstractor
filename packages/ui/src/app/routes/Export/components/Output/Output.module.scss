@@ -1,0 +1,78 @@
+@use '../../../../../generated.scss' as *;
+@use '../../../../../resets.scss' as *;
+
+.code-sample {
+  padding: $size-2xl;
+  background: transparent;
+  border: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  position: relative;
+
+  /* Custom scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 14px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $colour-grey-400;
+    border-radius: 100px;
+    border: 3px solid transparent;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $colour-grey-500;
+  }
+
+  /* Add spacing below Card component when present */
+  :global(.card) {
+    margin-bottom: $size-2xl;
+  }
+
+  pre {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 16px;
+    line-height: 1.5;
+    color: $colour-text;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+.code-block {
+  padding: $size-2xl 0;
+}
+
+.copy-button {
+  position: sticky;
+  top: $size-2xl;
+  z-index: 10;
+  float: right;
+}
+
+.warnings-list {
+  margin: 0;
+  padding-left: $size-xl;
+
+  li {
+    display: list-item;
+    list-style-type: disc;
+    margin-bottom: $size-sm;
+    color: $colour-text;
+    font-size: 14px;
+    line-height: 1.5;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

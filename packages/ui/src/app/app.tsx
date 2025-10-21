@@ -24,7 +24,7 @@ export const App = () => {
   });
 
   useEffect(() => {
-    console.log('loading config');
+    console.info('loading config');
     // Load saved config when UI opens
     messageMainThread({ type: 'load-config' });
   }, []);

@@ -1,30 +1,23 @@
-import { FC } from 'react';
+import { FC, HTMLAttributes } from 'react';
+import styles from './ProgressBar.module.scss';
 
-interface ProgressBarProps {
+interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
   percentage: number;
   message: string;
 }
 
-export const ProgressBar: FC<ProgressBarProps> = ({ percentage, message }) => {
+export const ProgressBar: FC<ProgressBarProps> = ({ percentage, message, ...rest }) => {
   return (
-    <div id="progressContainer">
-      <div
-        id="progressBar"
-        style={{ width: '100%', background: '#f0f0f0', borderRadius: '4px', overflow: 'hidden' }}
-      >
+    <div className={styles['progress-container']} {...rest}>
+      <div className={styles['progress-bar']}>
         <div
-          id="progressFill"
+          className={styles['progress-fill']}
           style={{
             width: `${percentage}%`,
-            height: '20px',
-            background: '#007cba',
-            transition: 'width 0.3s',
           }}
         ></div>
       </div>
-      <div id="progressText" style={{ color: '#999999' }}>
-        {message}
-      </div>
+      <div className={styles['progress-text']}>{message}</div>
     </div>
   );
 };

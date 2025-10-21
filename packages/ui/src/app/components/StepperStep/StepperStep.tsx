@@ -7,28 +7,22 @@ interface StepperStepProps {
   step: number;
   status?: 'past' | 'current' | 'future';
   position?: 'first' | 'middle' | 'last';
+  onClick?: () => void;
 }
 
 export const StepperStep: FC<StepperStepProps> = ({
   label,
   step,
-  status = 'future',
+  status = 'current',
   position = 'middle',
+  onClick,
 }) => {
   const precedingLine = position === 'first';
   const emitLine = position !== 'last';
+  const isPast = status === 'past';
 
-  return (
-    <div
-      className={cn(styles['stepper-step'], {
-        [styles.past]: status === 'past',
-        [styles.current]: status === 'current',
-        [styles.future]: status === 'future',
-        [styles.first]: position === 'first',
-        [styles.middle]: position === 'middle',
-        [styles.last]: position === 'last',
-      })}
-    >
+  const content = (
+    <>
       {precedingLine && <div className={styles['preceding-line']} />}
       <div className={styles.indicator}>
         <span className={styles.number}>{step}</span>
@@ -58,6 +52,25 @@ export const StepperStep: FC<StepperStepProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
+
+  const baseClassName = cn(styles['stepper-step'], {
+    [styles.past]: status === 'past',
+    [styles.current]: status === 'current',
+    [styles.future]: status === 'future',
+    [styles.first]: position === 'first',
+    [styles.middle]: position === 'middle',
+    [styles.last]: position === 'last',
+  });
+
+  if (isPast && onClick) {
+    return (
+      <button type="button" onClick={onClick} className={baseClassName}>
+        {content}
+      </button>
+    );
+  }
+
+  return <div className={baseClassName}>{content}</div>;
 };

@@ -3,14 +3,15 @@ import { ProgressBar } from '../../../../components';
 import { useOnPluginMessage } from '../../../../hooks';
 import { TIME_TO_REMOVE_PROGRESS_BAR } from '../../constants';
 import { messageMainThread } from '../../../../utils';
+import { useGeneratedStyles } from '../../../../context';
 
 export const GeneratingStylesProgressBar: FC = () => {
-  const [renderProgressBar, setRenderProgressBar] = useState(false);
+  const { loading, setLoading, setGeneratedStyles, setWarnings } = useGeneratedStyles();
   const [percentage, setPercentage] = useState(0);
   const [message, setMessage] = useState('');
 
   useOnPluginMessage('progress-start', () => {
-    setRenderProgressBar(true);
+    setLoading(true);
     setPercentage(0);
     setMessage('Starting...');
   });
@@ -25,11 +26,16 @@ export const GeneratingStylesProgressBar: FC = () => {
     setPercentage(100);
     setMessage('Complete!');
     setTimeout(() => {
-      setRenderProgressBar(false);
+      setLoading(false);
     }, TIME_TO_REMOVE_PROGRESS_BAR);
   });
 
-  if (!renderProgressBar) {
+  useOnPluginMessage('output-styles', (msg) => {
+    setGeneratedStyles(msg.styles);
+    setWarnings(msg.warnings || []);
+  });
+
+  if (!loading) {
     return null;
   }
 

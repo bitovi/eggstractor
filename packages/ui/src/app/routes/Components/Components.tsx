@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { LabelLink } from '../../components/LabelLink/LabelLink';
 import { ButtonGroup } from '../../components/ButtonGroup';
 import styles from './Components.module.scss';
-import { Button, Input, Card, StepperStep } from '../../components';
+import { Button, Input, StepperStep, StaticCard, ExpandableCard } from '../../components';
 
 export const Components: FC = () => {
   const [activeButton, setActiveButton] = useState('option1');
@@ -117,32 +117,30 @@ export const Components: FC = () => {
 
       <h2>Card</h2>
       <div className={styles['form-field']}>
-        <Card
+        <StaticCard
           title="Not sure where to start?"
-          type="static"
           linkHref="https://bitovi.com"
           linkLabel="View the guide"
         >
           The Getting Started Guide will walk you through the steps for setting up a demo project
           where you can test it all out.
-        </Card>
+        </StaticCard>
       </div>
       <div className={styles['form-field']}>
-        <Card
+        <ExpandableCard
           title="Not sure where to start?"
-          type="expanded"
           linkHref="https://bitovi.com"
           linkLabel="View the guide"
         >
           The Getting Started Guide will walk you through the steps for setting up a demo project
           where you can test it all out.
-        </Card>
+        </ExpandableCard>
       </div>
       <div className={styles['form-field']}>
-        <Card title="Not sure where to start?" type="collapsed">
+        <ExpandableCard title="Not sure where to start?" expanded={true}>
           The Getting Started Guide will walk you through the steps for setting up a demo project
           where you can test it all out.
-        </Card>
+        </ExpandableCard>
       </div>
 
       <h2>Stepper Step</h2>

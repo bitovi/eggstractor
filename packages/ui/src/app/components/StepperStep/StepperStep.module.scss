@@ -3,19 +3,43 @@
 
 .stepper-step {
   @include stepper-step;
+  //TODO: box-sizing? position? flex? not sure if bug from eggstractor or design doc problem.
   position: relative;
-  align-items: center;
   flex: 1 1 0;
   box-sizing: border-box;
-  min-width: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+
+  &.past {
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &.current,
+  &.future {
+    cursor: default;
+  }
 
   &.first {
     margin-left: -64px; // Pull it left so the leading line extends off screen
     padding-left: 64px; // Add padding to push the circle back to the right
   }
+
+  &.last {
+    flex-grow: 0; // Don't grow for the last step
+  }
 }
 
 .preceding-line {
+  //TODO: Need to update design doc to accomodate the other parts of the line; currently it doesn't include styling for the proceeding line.
   position: absolute;
   left: 0;
   width: 64px;
@@ -42,11 +66,6 @@
   .future & {
     @include stepper-step-circle-status_future;
   }
-
-  .past & {
-    background: $colour-sheet-bg;
-    border: 2px solid $colour-accent;
-  }
 }
 
 .number {
@@ -54,10 +73,6 @@
 
   .current & {
     @include stepper-step-circle-1-status_current;
-  }
-
-  .past & {
-    color: $colour-text;
   }
 }
 
