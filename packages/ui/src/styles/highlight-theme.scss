@@ -1,0 +1,73 @@
+// Custom Eggstractor highlight.js theme with design tokens
+// Maps highlight.js token classes to custom colors
+
+// Comments - green italic
+.hljs-comment {
+  color: #5fa657;
+  font-style: italic;
+}
+
+// At-rules (@mixin, @include, @import, @use) - orange
+// These appear as keywords in SCSS
+.hljs-keyword {
+  color: #cf7c01;
+}
+
+.hljs-at-rule,
+.hljs-attr,
+.hljs-selector-attr {
+  color: #cf7c01;
+}
+
+// Variables ($var) - purple
+.hljs-variable,
+.hljs-params,
+.hljs-template-variable {
+  color: #b068f4;
+}
+
+// Numbers, hex colors, units - teal
+.hljs-number,
+.hljs-literal,
+.hljs-attr-value {
+  color: #01a6ae;
+}
+
+// Strings and hex color values - teal
+.hljs-string {
+  color: #01a6ae;
+}
+
+// CSS properties, selectors - blue
+.hljs-attr,
+.hljs-property,
+.hljs-selector-tag,
+.hljs-selector-class,
+.hljs-selector-id {
+  color: #5b91e9;
+}
+
+// Symbol and name - blue
+.hljs-symbol,
+.hljs-name {
+  color: #5b91e9;
+}
+
+// Title/function names - blue
+.hljs-title,
+.hljs-section,
+.hljs-built_in {
+  color: #5b91e9;
+}
+
+// Operators and punctuation - default text color
+.hljs-operator,
+.hljs-punctuation {
+  color: #002a2d;
+}
+
+// Default text in hljs blocks
+.hljs {
+  color: #002a2d;
+  background: transparent;
+}
