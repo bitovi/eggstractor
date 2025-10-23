@@ -2,23 +2,23 @@
 
 exports[`Background Processors > should process background solid correctly > solid styles 1`] = `
 {
-  "alpha": "background: rgba(0, 70, 74, 0.5);",
-  "solid": "background: #00464a;",
+  "alpha": "background: $teal-800-50;",
+  "solid": "background: $brand-primary;",
 }
 `;
 
 exports[`Background Processors > should process background solid correctly > solid styles 2`] = `
 {
-  "alpha": "background: rgba(0, 70, 74, 0.5);",
-  "solid": "background: #00464a;",
+  "alpha": "background: $teal-800-50;",
+  "solid": "background: $brand-primary;",
 }
 `;
 
 exports[`Background Processors > should process background solid correctly - sass > solid styles 1`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
-$teal-800-50: rgba(0, 70, 74, 0.5);
-$teal-800: #00464a;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
+$teal-800-50: $teal-800-50;
+$teal-800: $teal-800;
 
 // Generated SCSS Mixins
 @mixin background-solid-variable {
@@ -49,10 +49,10 @@ $teal-800: #00464a;
 `;
 
 exports[`Background Processors > should process background solid correctly - sass > solid styles 2`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
-$teal-800-50: rgba(0, 70, 74, 0.5);
-$teal-800: #00464a;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
+$teal-800-50: $teal-800-50;
+$teal-800: $teal-800;
 
 // Generated SCSS Mixins
 @mixin background-solid-variable {
@@ -83,15 +83,15 @@ $teal-800: #00464a;
 `;
 
 exports[`Background Processors > should process opacity correctly > opacity styles 1`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
-$opacity-48: 0.48;
-$corner-radius-primary: 1rem;
-$size-16: 1rem;
-$font-weight-normal: 31.25rem;
-$text-primary: #a3adad;
-$size-48: 0.48;
-$spacing-9: 0.48;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
+$opacity-48: $opacity-48;
+$corner-radius-primary: $corner-radius-primary;
+$size-16: $size-16;
+$font-weight-normal: $font-weight-normal;
+$text-primary: $text-primary;
+$size-48: $size-48;
+$spacing-9: $spacing-9;
 
 // Generated SCSS Mixins
 @mixin opacity-custom {
@@ -148,15 +148,15 @@ $spacing-9: 0.48;
 `;
 
 exports[`Background Processors > should process opacity correctly > opacity styles 2`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
-$opacity-48: 0.48;
-$corner-radius-primary: 1rem;
-$size-16: 1rem;
-$font-weight-normal: 31.25rem;
-$text-primary: #a3adad;
-$size-48: 0.48;
-$spacing-9: 0.48;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
+$opacity-48: $opacity-48;
+$corner-radius-primary: $corner-radius-primary;
+$size-16: $size-16;
+$font-weight-normal: $font-weight-normal;
+$text-primary: $text-primary;
+$size-48: $size-48;
+$spacing-9: $spacing-9;
 
 // Generated SCSS Mixins
 @mixin opacity-custom {

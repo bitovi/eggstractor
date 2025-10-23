@@ -1,8 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Layout Processors > should process layout alignment correctly > alignment 1`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
 
 // Generated SCSS Mixins
 @mixin alignment-bottom-left {
@@ -159,8 +159,8 @@ $brand-primary: #00464a;
 `;
 
 exports[`Layout Processors > should process layout alignment correctly > alignment 2`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
 
 // Generated SCSS Mixins
 @mixin alignment-bottom-left {
@@ -317,8 +317,8 @@ $brand-primary: #00464a;
 `;
 
 exports[`Layout Processors > should process layout direction correctly > direction 1`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
 
 // Generated SCSS Mixins
 @mixin vertical-layout {
@@ -374,8 +374,8 @@ $brand-primary: #00464a;
 `;
 
 exports[`Layout Processors > should process layout direction correctly > direction 2`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
 
 // Generated SCSS Mixins
 @mixin vertical-layout {
@@ -431,8 +431,8 @@ $brand-primary: #00464a;
 `;
 
 exports[`Layout Processors > should process layout height correctly > height 1`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
 
 // Generated SCSS Mixins
 @mixin height-hug {
@@ -516,8 +516,8 @@ $brand-primary: #00464a;
 `;
 
 exports[`Layout Processors > should process layout height correctly > height 2`] = `
-"// Generated SCSS Variables
-$brand-primary: #00464a;
+"// Semantic SCSS Variables
+$brand-primary: $brand-primary;
 
 // Generated SCSS Mixins
 @mixin height-hug {
@@ -601,10 +601,10 @@ $brand-primary: #00464a;
 `;
 
 exports[`Layout Processors > should process layout width correctly > width 1`] = `
-"// Generated SCSS Variables
-$size-48: 3rem;
-$brand-primary: #00464a;
-$size-16: 1rem;
+"// Semantic SCSS Variables
+$size-48: $size-48;
+$brand-primary: $brand-primary;
+$size-16: $size-16;
 
 // Generated SCSS Mixins
 @mixin min-width-variable {
@@ -692,10 +692,10 @@ $size-16: 1rem;
 `;
 
 exports[`Layout Processors > should process layout width correctly > width 2`] = `
-"// Generated SCSS Variables
-$size-48: 3rem;
-$brand-primary: #00464a;
-$size-16: 1rem;
+"// Semantic SCSS Variables
+$size-48: $size-48;
+$brand-primary: $brand-primary;
+$size-16: $size-16;
 
 // Generated SCSS Mixins
 @mixin min-width-variable {

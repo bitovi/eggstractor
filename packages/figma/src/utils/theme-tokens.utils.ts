@@ -1,181 +1,323 @@
 import { TokenCollection, VariableToken } from '../types';
 
 export function generateThemeDirective(collection: TokenCollection): string {
-  let themeOutput = '/* Generated Tailwind Theme */\n@theme {\n';
-
   // Get variable tokens from the main tokens array
   const variableTokens = collection.tokens.filter((token) => token.type === 'variable');
 
-  // Filter to only primitive tokens for @theme directive
+  // Separate primitives and semantics
   const primitiveTokens = variableTokens.filter(
     (token) => token.metadata?.variableTokenType === 'primitive',
   );
+  const semanticTokens = variableTokens.filter(
+    (token) => token.metadata?.variableTokenType === 'semantic',
+  );
 
-  // Separate collections for different token types (primitives only)
-  const colorTokens = new Map<string, string>();
-  const spacingTokens = new Map<string, string>();
-  const fontFamilyTokens = new Map<string, string>();
-  const fontWeightTokens = new Map<string, string>();
-  const fontSizeTokens = new Map<string, string>();
-  const borderWidthTokens = new Map<string, string>();
-  const borderRadiusTokens = new Map<string, string>();
-  const lineHeightTokens = new Map<string, string>();
-  const iconSizeTokens = new Map<string, string>();
-  const screenSizeTokens = new Map<string, string>();
-  const boxShadowTokens = new Map<string, string>();
+  // Helper function to categorize and process tokens
+  const processTokens = () => {
+    return {
+      colorTokens: new Map<string, string>(),
+      spacingTokens: new Map<string, string>(),
+      fontFamilyTokens: new Map<string, string>(),
+      fontWeightTokens: new Map<string, string>(),
+      fontSizeTokens: new Map<string, string>(),
+      borderWidthTokens: new Map<string, string>(),
+      borderRadiusTokens: new Map<string, string>(),
+      lineHeightTokens: new Map<string, string>(),
+      iconSizeTokens: new Map<string, string>(),
+      screenSizeTokens: new Map<string, string>(),
+      boxShadowTokens: new Map<string, string>(),
+    };
+  };
 
-  // Process only primitive tokens
-  for (const token of primitiveTokens) {
-    let cleanName = token.name;
-    let key: string;
+  // Process tokens and categorize them
+  const processTokenCollection = (
+    tokens: VariableToken[],
+    collections: ReturnType<typeof processTokens>,
+    isSemantic: boolean,
+  ) => {
+    for (const token of tokens) {
+      let cleanName = token.name;
+      let key: string;
+      // Strip $ prefix from rawValue if present (for Tailwind output)
+      let value = token.rawValue.startsWith('$') ? token.rawValue.slice(1) : token.rawValue;
 
-    // Determine the actual token type from the name, not just the property
-    if (token.property === 'color' || cleanName.startsWith('colors-')) {
-      // Only pure color tokens
-      cleanName = cleanName.replace(/^colors-/, '').replace(/^color-/, '');
-      key = `--colors-${cleanName}`;
-      colorTokens.set(key, token.rawValue);
-    } else if (cleanName.includes('border-radius') || token.property === 'border-radius') {
-      // Border radius tokens (even if categorized as spacing)
-      cleanName = cleanName.replace(/^.*border-radius-/, '').replace(/^border-radius-/, '');
-      key = `--border-radius-${cleanName}`;
-      borderRadiusTokens.set(key, token.rawValue);
-    } else if (cleanName.includes('border-width') || token.property === 'border-width') {
-      // Border width tokens (even if categorized as spacing)
-      cleanName = cleanName.replace(/^.*border-width-/, '').replace(/^border-width-/, '');
-      key = `--border-width-${cleanName}`;
-      borderWidthTokens.set(key, token.rawValue);
-    } else if (cleanName.includes('font-weight') || token.property === 'font-weight') {
-      // Font weight tokens (even if categorized as font-family)
-      cleanName = cleanName.replace(/^.*font-weight-/, '').replace(/^font-weight-/, '');
-      key = `--font-weight-${cleanName}`;
-      fontWeightTokens.set(key, token.rawValue);
-    } else if (cleanName.includes('font-size') || token.property === 'font-size') {
-      // Font size tokens
-      cleanName = cleanName.replace(/^.*font-size-/, '').replace(/^font-size-/, '');
-      key = `--font-size-${cleanName}`;
-      fontSizeTokens.set(key, token.rawValue);
-    } else if (cleanName.includes('font-family') || token.property === 'font-family') {
-      // Font family tokens
-      cleanName = cleanName.replace(/^.*font-family-/, '').replace(/^font-family-/, '');
-      key = `--font-${cleanName}`;
-      fontFamilyTokens.set(key, token.rawValue);
-    } else if (cleanName.includes('font-leading') || cleanName.includes('line-height')) {
-      // Line height tokens (often categorized as spacing in Figma)
-      cleanName = cleanName
-        .replace(/^.*font-leading-/, '')
+      // For semantic tokens, rawValue contains the primitive variable name
+      // We need to look up what category it belongs to and create a var() reference
+      if (isSemantic) {
+        // The primitive name is in value, we need to determine its category and create --css-var format
+        value = convertPrimitiveNameToCssVarName(value);
+      }
+
+      // Determine the actual token type from the name, not just the property
+      if (token.property === 'color' || cleanName.startsWith('colors-')) {
+        cleanName = cleanName.replace(/^colors-/, '').replace(/^color-/, '');
+        key = `--colors-${cleanName}`;
+        collections.colorTokens.set(key, value);
+      } else if (cleanName.includes('border-radius') || token.property === 'border-radius') {
+        cleanName = cleanName.replace(/^.*border-radius-/, '').replace(/^border-radius-/, '');
+        key = `--border-radius-${cleanName}`;
+        collections.borderRadiusTokens.set(key, value);
+      } else if (cleanName.includes('border-width') || token.property === 'border-width') {
+        cleanName = cleanName.replace(/^.*border-width-/, '').replace(/^border-width-/, '');
+        key = `--border-width-${cleanName}`;
+        collections.borderWidthTokens.set(key, value);
+      } else if (cleanName.includes('font-weight') || token.property === 'font-weight') {
+        cleanName = cleanName.replace(/^.*font-weight-/, '').replace(/^font-weight-/, '');
+        key = `--font-weight-${cleanName}`;
+        collections.fontWeightTokens.set(key, value);
+      } else if (cleanName.includes('font-size') || token.property === 'font-size') {
+        cleanName = cleanName.replace(/^.*font-size-/, '').replace(/^font-size-/, '');
+        key = `--font-size-${cleanName}`;
+        collections.fontSizeTokens.set(key, value);
+      } else if (cleanName.includes('font-family') || token.property === 'font-family') {
+        cleanName = cleanName.replace(/^.*font-family-/, '').replace(/^font-family-/, '');
+        if (cleanName.startsWith('font-')) {
+          cleanName = cleanName.replace(/^font-/, '');
+        }
+        key = `--font-${cleanName}`;
+        collections.fontFamilyTokens.set(key, value);
+      } else if (cleanName.includes('font-leading') || cleanName.includes('line-height')) {
+        cleanName = cleanName
+          .replace(/^.*font-leading-/, '')
+          .replace(/^.*line-height-/, '')
+          .replace(/^font-leading-/, '')
+          .replace(/^line-height-/, '');
+        key = `--line-height-${cleanName}`;
+        collections.lineHeightTokens.set(key, value);
+      } else if (cleanName.includes('icon-size')) {
+        cleanName = cleanName.replace(/^.*icon-size-/, '').replace(/^icon-size-/, '');
+        key = `--icon-size-${cleanName}`;
+        collections.iconSizeTokens.set(key, value);
+      } else if (cleanName.includes('screen-size')) {
+        cleanName = cleanName.replace(/^.*screen-size-/, '').replace(/^screen-size-/, '');
+        key = `--screen-size-${cleanName}`;
+        collections.screenSizeTokens.set(key, value);
+      } else if (token.property === 'box-shadow') {
+        cleanName = cleanName
+          .replace(/^effect-/, '')
+          .replace(/^shadow-/, '')
+          .replace(/^box-shadow-/, '');
+        key = `--${cleanName}`;
+        collections.boxShadowTokens.set(key, value);
+      } else if (token.property === 'spacing') {
+        cleanName = cleanName.replace(/^spacing-/, '');
+        key = `--spacing-${cleanName}`;
+        collections.spacingTokens.set(key, value);
+      }
+    }
+  };
+
+  // Helper to convert primitive name to CSS variable name
+  const convertPrimitiveNameToCssVarName = (primitiveName: string): string => {
+    // This takes a primitive variable reference like "$color-blue-500"
+    // and converts it to a var() reference like "var(--colors-blue-500)"
+    // The primitiveName is already stripped of $ prefix
+
+    if (primitiveName.includes('color') || primitiveName.includes('colour')) {
+      // Remove color/colour prefix to avoid duplication
+      const cleanedName = primitiveName
+        .replace(/^colors-/, '')
+        .replace(/^color-/, '')
+        .replace(/^colours-/, '')
+        .replace(/^colour-/, '');
+      return `var(--colors-${cleanedName})`;
+    } else if (primitiveName.includes('border-radius')) {
+      const cleanedName = primitiveName
+        .replace(/^.*border-radius-/, '')
+        .replace(/^border-radius-/, '');
+      return `var(--border-radius-${cleanedName})`;
+    } else if (primitiveName.includes('border-width')) {
+      const cleanedName = primitiveName
+        .replace(/^.*border-width-/, '')
+        .replace(/^border-width-/, '');
+      return `var(--border-width-${cleanedName})`;
+    } else if (primitiveName.includes('font-weight')) {
+      const cleanedName = primitiveName.replace(/^.*font-weight-/, '').replace(/^font-weight-/, '');
+      return `var(--font-weight-${cleanedName})`;
+    } else if (primitiveName.includes('font-size')) {
+      const cleanedName = primitiveName.replace(/^.*font-size-/, '').replace(/^font-size-/, '');
+      return `var(--font-size-${cleanedName})`;
+    } else if (
+      primitiveName.includes('font') ||
+      primitiveName.startsWith('inter') ||
+      primitiveName.startsWith('roboto')
+    ) {
+      const cleanedName = primitiveName.replace(/^font-/, '');
+      return `var(--font-${cleanedName})`;
+    } else if (primitiveName.includes('line-height') || primitiveName.includes('font-leading')) {
+      const cleanedName = primitiveName
         .replace(/^.*line-height-/, '')
-        .replace(/^font-leading-/, '')
-        .replace(/^line-height-/, '');
-      key = `--line-height-${cleanName}`;
-      lineHeightTokens.set(key, token.rawValue);
-    } else if (cleanName.includes('icon-size')) {
-      // Icon size tokens (often categorized as spacing in Figma)
-      cleanName = cleanName.replace(/^.*icon-size-/, '').replace(/^icon-size-/, '');
-      key = `--icon-size-${cleanName}`;
-      iconSizeTokens.set(key, token.rawValue);
-    } else if (cleanName.includes('screen-size')) {
-      // Screen size tokens (often categorized as spacing in Figma)
-      cleanName = cleanName.replace(/^.*screen-size-/, '').replace(/^screen-size-/, '');
-      key = `--screen-size-${cleanName}`;
-      screenSizeTokens.set(key, token.rawValue);
-    } else if (token.property === 'box-shadow') {
-      // Box shadow tokens from effect styles
-      cleanName = cleanName
+        .replace(/^.*font-leading-/, '')
+        .replace(/^line-height-/, '')
+        .replace(/^font-leading-/, '');
+      return `var(--line-height-${cleanedName})`;
+    } else if (primitiveName.includes('icon-size')) {
+      const cleanedName = primitiveName.replace(/^.*icon-size-/, '').replace(/^icon-size-/, '');
+      return `var(--icon-size-${cleanedName})`;
+    } else if (primitiveName.includes('screen-size')) {
+      const cleanedName = primitiveName.replace(/^.*screen-size-/, '').replace(/^screen-size-/, '');
+      return `var(--screen-size-${cleanedName})`;
+    } else if (primitiveName.includes('shadow') || primitiveName.includes('effect')) {
+      const cleanedName = primitiveName
         .replace(/^effect-/, '')
         .replace(/^shadow-/, '')
         .replace(/^box-shadow-/, '');
-      key = `--${cleanName}`;
-      boxShadowTokens.set(key, token.rawValue);
-    } else if (token.property === 'spacing') {
-      // Pure spacing tokens only (not border, font, icon, or screen related)
-      cleanName = cleanName.replace(/^spacing-/, '');
-      key = `--spacing-${cleanName}`;
-      spacingTokens.set(key, token.rawValue);
+      return `var(--${cleanedName})`;
+    } else if (primitiveName.includes('spacing')) {
+      const cleanedName = primitiveName.replace(/^spacing-/, '');
+      return `var(--spacing-${cleanedName})`;
     }
-    // Skip composite tokens like background-color, fills, etc.
+    return `var(--${primitiveName})`;
+  };
+
+  // Process primitives and semantics
+  const primitiveCollections = processTokens();
+  const semanticCollections = processTokens();
+  processTokenCollection(primitiveTokens, primitiveCollections, false);
+  processTokenCollection(semanticTokens, semanticCollections, true);
+
+  // Helper to output a collection
+  const outputCollection = (map: Map<string, string>) => {
+    const sorted = Array.from(map.entries()).sort(([a], [b]) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
+    );
+    let output = '';
+    for (const [key, value] of sorted) {
+      output += `  ${key}: ${value};\n`;
+    }
+    return output;
+  };
+
+  let result = '';
+
+  // First, output :root with primitives ONLY (with actual values)
+  const hasPrimitives = Object.values(primitiveCollections).some((map) => map.size > 0);
+
+  if (hasPrimitives) {
+    result += ':root {\n';
+    // Output all primitives with actual values (NOT semantics)
+    result += outputCollection(primitiveCollections.colorTokens);
+    result += outputCollection(primitiveCollections.spacingTokens);
+    result += outputCollection(primitiveCollections.fontFamilyTokens);
+    result += outputCollection(primitiveCollections.fontWeightTokens);
+    result += outputCollection(primitiveCollections.fontSizeTokens);
+    result += outputCollection(primitiveCollections.borderWidthTokens);
+    result += outputCollection(primitiveCollections.borderRadiusTokens);
+    result += outputCollection(primitiveCollections.lineHeightTokens);
+    result += outputCollection(primitiveCollections.iconSizeTokens);
+    result += outputCollection(primitiveCollections.screenSizeTokens);
+    result += outputCollection(primitiveCollections.boxShadowTokens);
+    result += '}\n\n';
   }
 
-  // Output tokens in organized groups with natural sorting
-  const sortedColorEntries = Array.from(colorTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedColorEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
+  // Then, output @theme with simplified Tailwind naming convention
+  // Maps simplified names (--color-*, --leading-*, etc.) to full CSS variable names
+  result += '/* Generated Tailwind Theme */\n@theme {\n';
+
+  // Helper to extract simplified name from full CSS variable name
+  // e.g., "--colors-blue-100" → "color-blue-100"
+  // e.g., "--line-height-lg" → "leading-lg"
+  const extractSimplifiedName = (fullName: string): string => {
+    // Remove the -- prefix
+    const name = fullName.substring(2);
+
+    if (name.startsWith('colors-')) {
+      return name.replace('colors-', 'color-');
+    } else if (name.startsWith('line-height-')) {
+      return name.replace('line-height-', 'leading-');
+    } else if (name.startsWith('border-radius-')) {
+      return name.replace('border-radius-', 'radius-');
+    } else if (name.startsWith('border-width-')) {
+      return name.replace('border-width-', 'border-');
+    } else if (name.startsWith('font-weight-')) {
+      return name.replace('font-weight-', 'font-weight-');
+    } else if (name.startsWith('font-size-')) {
+      return name.replace('font-size-', 'font-size-');
+    } else if (name.startsWith('font-')) {
+      return name.replace('font-', 'font-');
+    } else if (name.startsWith('spacing-')) {
+      return name.replace('spacing-', 'spacing-');
+    } else if (name.startsWith('icon-size-')) {
+      return name.replace('icon-size-', 'icon-');
+    } else if (name.startsWith('screen-size-')) {
+      return name.replace('screen-size-', 'screen-');
+    } else if (name.startsWith('shadow-') || name.startsWith('box-shadow-')) {
+      return name.replace('box-shadow-', 'shadow-').replace('shadow-', 'shadow-');
+    }
+    return name;
+  };
+
+  // Helper to output theme collection with simplified names
+  const outputThemeCollection = (map: Map<string, string>) => {
+    const entries: Array<[string, string]> = [];
+    for (const [key, value] of map.entries()) {
+      const simplifiedKey = extractSimplifiedName(key);
+      entries.push([`--${simplifiedKey}`, value]);
+    }
+
+    // Sort by simplified key name
+    entries.sort(([a], [b]) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
+    );
+
+    let output = '';
+    for (const [simplifiedKey, value] of entries) {
+      output += `  ${simplifiedKey}: ${value};\n`;
+    }
+    return output;
+  };
+
+  if (hasPrimitives) {
+    // Output primitives with simplified names, referencing :root variables
+    const outputPrimitiveTheme = (map: Map<string, string>) => {
+      const entries: Array<[string, string]> = [];
+      for (const [key] of map.entries()) {
+        const simplifiedKey = extractSimplifiedName(key);
+        entries.push([`--${simplifiedKey}`, `var(${key})`]);
+      }
+
+      entries.sort(([a], [b]) =>
+        a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
+      );
+
+      let output = '';
+      for (const [simplifiedKey, value] of entries) {
+        output += `  ${simplifiedKey}: ${value};\n`;
+      }
+      return output;
+    };
+
+    result += outputPrimitiveTheme(primitiveCollections.colorTokens);
+    result += outputPrimitiveTheme(primitiveCollections.spacingTokens);
+    result += outputPrimitiveTheme(primitiveCollections.fontFamilyTokens);
+    result += outputPrimitiveTheme(primitiveCollections.fontWeightTokens);
+    result += outputPrimitiveTheme(primitiveCollections.fontSizeTokens);
+    result += outputPrimitiveTheme(primitiveCollections.borderWidthTokens);
+    result += outputPrimitiveTheme(primitiveCollections.borderRadiusTokens);
+    result += outputPrimitiveTheme(primitiveCollections.lineHeightTokens);
+    result += outputPrimitiveTheme(primitiveCollections.iconSizeTokens);
+    result += outputPrimitiveTheme(primitiveCollections.screenSizeTokens);
+    result += outputPrimitiveTheme(primitiveCollections.boxShadowTokens);
   }
 
-  const sortedSpacingEntries = Array.from(spacingTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedSpacingEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
+  if (Object.values(semanticCollections).some((map) => map.size > 0)) {
+    // Output semantics with simplified names
+    result += outputThemeCollection(semanticCollections.colorTokens);
+    result += outputThemeCollection(semanticCollections.spacingTokens);
+    result += outputThemeCollection(semanticCollections.fontFamilyTokens);
+    result += outputThemeCollection(semanticCollections.fontWeightTokens);
+    result += outputThemeCollection(semanticCollections.fontSizeTokens);
+    result += outputThemeCollection(semanticCollections.borderWidthTokens);
+    result += outputThemeCollection(semanticCollections.borderRadiusTokens);
+    result += outputThemeCollection(semanticCollections.lineHeightTokens);
+    result += outputThemeCollection(semanticCollections.iconSizeTokens);
+    result += outputThemeCollection(semanticCollections.screenSizeTokens);
+    result += outputThemeCollection(semanticCollections.boxShadowTokens);
   }
 
-  const sortedBorderWidthEntries = Array.from(borderWidthTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedBorderWidthEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
-  }
+  result += '}\n';
 
-  const sortedBorderRadiusEntries = Array.from(borderRadiusTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedBorderRadiusEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
-  }
-
-  const sortedFontFamilyEntries = Array.from(fontFamilyTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedFontFamilyEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
-  }
-
-  const sortedFontWeightEntries = Array.from(fontWeightTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedFontWeightEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
-  }
-
-  const sortedFontSizeEntries = Array.from(fontSizeTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedFontSizeEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
-  }
-
-  const sortedLineHeightEntries = Array.from(lineHeightTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedLineHeightEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
-  }
-
-  const sortedIconSizeEntries = Array.from(iconSizeTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedIconSizeEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
-  }
-
-  const sortedScreenSizeEntries = Array.from(screenSizeTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedScreenSizeEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
-  }
-
-  const sortedBoxShadowEntries = Array.from(boxShadowTokens.entries()).sort(([a], [b]) =>
-    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-  );
-  for (const [key, value] of sortedBoxShadowEntries) {
-    themeOutput += `  ${key}: ${value};\n`;
-  }
-
-  themeOutput += '}\n';
-  return themeOutput;
+  return result;
 }
 
 /**
@@ -212,6 +354,10 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
   for (const token of variableTokens) {
     // Map rawValue to theme token name (matching themeTokens structure)
     let cleanName = token.name;
+    // Strip $ prefix from rawValue if present (for variable references that might have it)
+    const rawValueForMapping = token.rawValue.startsWith('$')
+      ? token.rawValue.slice(1)
+      : token.rawValue;
 
     // Determine the actual token type from the name, not just the property
     if (
@@ -220,22 +366,24 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
       cleanName.startsWith('colors-')
     ) {
       cleanName = cleanName.replace(/^colors-/, '').replace(/^color-/, '');
-      dynamicTheme.colors[token.rawValue] = `colors-${cleanName}`;
+      // For colors, include the category prefix for dynamic theme mapping
+      dynamicTheme.colors[rawValueForMapping] = `colors-${cleanName}`;
     } else if (cleanName.includes('border-radius') || token.property === 'border-radius') {
       // Border radius tokens (even if categorized as spacing)
       cleanName = cleanName.replace(/^.*border-radius-/, '').replace(/^border-radius-/, '');
-      dynamicTheme.borderRadius[token.rawValue] = cleanName;
+      dynamicTheme.borderRadius[rawValueForMapping] = cleanName;
     } else if (cleanName.includes('border-width') || token.property === 'border-width') {
       // Border width tokens (even if categorized as spacing)
       cleanName = cleanName.replace(/^.*border-width-/, '').replace(/^border-width-/, '');
-      dynamicTheme.borderWidths[token.rawValue] = cleanName;
+      dynamicTheme.borderWidths[rawValueForMapping] = cleanName;
     } else if (cleanName.includes('font-weight') || token.property === 'font-weight') {
       // Font weight tokens (even if categorized as font-family)
       cleanName = cleanName.replace(/^.*font-weight-/, '').replace(/^font-weight-/, '');
 
       // For font weights, we need to map both the clean name and raw value to a consistent target
       // Check if we already have a mapping for this numeric value in standard mappings
-      const standardMapping = standardFontWeights[cleanName] || standardFontWeights[token.rawValue];
+      const standardMapping =
+        standardFontWeights[cleanName] || standardFontWeights[rawValueForMapping];
       const targetValue = standardMapping || cleanName;
 
       // Create bidirectional mapping for font weights
@@ -245,11 +393,11 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
       dynamicTheme.fontWeight[cleanName] = targetValue;
 
       // Map the raw value to the target value (e.g., "regular" → "normal")
-      dynamicTheme.fontWeight[token.rawValue] = targetValue;
+      dynamicTheme.fontWeight[rawValueForMapping] = targetValue;
     } else if (cleanName.includes('font-size') || token.property === 'font-size') {
       // Font size tokens
       cleanName = cleanName.replace(/^.*font-size-/, '').replace(/^font-size-/, '');
-      dynamicTheme.fontSize[token.rawValue] = cleanName;
+      dynamicTheme.fontSize[rawValueForMapping] = cleanName;
     } else if (cleanName.includes('font-family') || token.property === 'font-family') {
       // Font family tokens
       cleanName = cleanName.replace(/^.*font-family-/, '').replace(/^font-family-/, '');
@@ -268,8 +416,8 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
       }
 
       // Add the rawValue to the array if it's not already there
-      if (!dynamicTheme.fontFamily[cleanName].includes(token.rawValue)) {
-        dynamicTheme.fontFamily[cleanName].push(token.rawValue);
+      if (!dynamicTheme.fontFamily[cleanName].includes(rawValueForMapping)) {
+        dynamicTheme.fontFamily[cleanName].push(rawValueForMapping);
       }
     } else if (cleanName.includes('font-leading') || cleanName.includes('line-height')) {
       // Line height tokens (often categorized as spacing in Figma)
@@ -278,26 +426,26 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
         .replace(/^.*line-height-/, '')
         .replace(/^font-leading-/, '')
         .replace(/^line-height-/, '');
-      dynamicTheme.lineHeight[token.rawValue] = cleanName;
+      dynamicTheme.lineHeight[rawValueForMapping] = cleanName;
     } else if (cleanName.includes('icon-size')) {
       // Icon size tokens (often categorized as spacing in Figma)
       cleanName = cleanName.replace(/^.*icon-size-/, '').replace(/^icon-size-/, '');
-      dynamicTheme.iconSize[token.rawValue] = cleanName;
+      dynamicTheme.iconSize[rawValueForMapping] = cleanName;
     } else if (cleanName.includes('screen-size')) {
       // Screen size tokens (often categorized as spacing in Figma)
       cleanName = cleanName.replace(/^.*screen-size-/, '').replace(/^screen-size-/, '');
-      dynamicTheme.screenSize[token.rawValue] = cleanName;
+      dynamicTheme.screenSize[rawValueForMapping] = cleanName;
     } else if (token.property === 'box-shadow') {
       // Box shadow tokens from effect styles
       cleanName = cleanName
         .replace(/^effect-/, '')
         .replace(/^shadow-/, '')
         .replace(/^box-shadow-/, '');
-      dynamicTheme.boxShadow[token.rawValue] = cleanName;
+      dynamicTheme.boxShadow[rawValueForMapping] = cleanName;
     } else if (token.property === 'spacing') {
       // Pure spacing tokens only (not border, font, icon, or screen related)
       cleanName = cleanName.replace(/^spacing-/, '');
-      dynamicTheme.spacing[token.rawValue] = cleanName;
+      dynamicTheme.spacing[rawValueForMapping] = cleanName;
     }
   }
 

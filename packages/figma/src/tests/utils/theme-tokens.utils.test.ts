@@ -415,7 +415,7 @@ describe('generateThemeDirective', () => {
     expect(result).toContain('}');
   });
 
-  it('should only include primitive tokens, not semantic ones', () => {
+  it('should include primitives in :root and both primitives and semantics in @theme', () => {
     const collectionWithSemantic: TokenCollection = {
       tokens: [
         {
@@ -454,10 +454,16 @@ describe('generateThemeDirective', () => {
 
     const result = generateThemeDirective(collectionWithSemantic);
 
-    // Should include primitive token
+    // :root should only include primitives
+    expect(result).toContain(':root {');
     expect(result).toContain('--colors-blue-500: #0080ff;');
-    // Should NOT include semantic token
-    expect(result).not.toContain('--colors-primary');
+
+    // @theme should include both primitives and semantics with simplified names
+    expect(result).toContain('@theme {');
+    // Primitives use simplified names (--color-* instead of --colors-*)
+    expect(result).toContain('--color-blue-500: var(--colors-blue-500);');
+    // Semantics should reference primitives, not other semantics
+    expect(result).toContain('--color-primary: var(--colors-blue-500);');
   });
 
   it('should sort tokens naturally (numeric aware)', () => {

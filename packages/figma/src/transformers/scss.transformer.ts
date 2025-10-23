@@ -50,23 +50,52 @@ export const transformToScss: Transformer = (
     tokens.tokens.filter((token): token is StyleToken => token.type === 'style'),
   );
 
-  // First, collect and output color variables
-  const colorVariables = new Map<string, string>();
+  // Separate primitive and semantic variables
+  const primitiveVariables = new Map<string, string>();
+  const semanticVariables = new Map<string, string>();
+
   tokens.tokens.forEach((token) => {
     if (token.type === 'variable') {
-      const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
-      colorVariables.set(sanitizeName(token.name), value);
+      const rawValue = token.rawValue;
+      if (rawValue) {
+        const value = token.valueType === 'px' ? rem(rawValue) : rawValue;
+        const sanitizedName = sanitizeName(token.name);
+
+        if (token.metadata?.variableTokenType === 'primitive') {
+          primitiveVariables.set(sanitizedName, value);
+        } else if (token.metadata?.variableTokenType === 'semantic') {
+          semanticVariables.set(sanitizedName, value);
+        }
+      }
     }
   });
 
-  if (colorVariables.size > 0) {
-    output += '// Generated SCSS Variables\n';
+  // Deduplicate: if a variable appears in both primitive and semantic,
+  // remove it from semantic section (primitives take precedence)
+  semanticVariables.forEach((_, name) => {
+    if (primitiveVariables.has(name)) {
+      semanticVariables.delete(name);
+    }
+  });
+
+  // Output primitive variables first
+  if (primitiveVariables.size > 0) {
+    output += '// Primitive SCSS Variables\n';
+    primitiveVariables.forEach((value, name) => {
+      output += `${getSCSSVariableName(name)}: ${value};\n`;
+    });
   }
 
-  // Output color variables
-  colorVariables.forEach((value, name) => {
-    output += `${getSCSSVariableName(name)}: ${value};\n`;
-  });
+  // Output semantic variables
+  if (semanticVariables.size > 0) {
+    if (primitiveVariables.size > 0) {
+      output += '\n';
+    }
+    output += '// Semantic SCSS Variables\n';
+    semanticVariables.forEach((value, name) => {
+      output += `${getSCSSVariableName(name)}: ${value};\n`;
+    });
+  }
 
   // Then collect and output gradient variables
   const gradientVariables = new Map<string, StyleToken>();
@@ -89,7 +118,7 @@ export const transformToScss: Transformer = (
   gradientVariables.forEach((token, name) => {
     // Replace color values with variable references if they exist
     let gradientValue = token.rawValue ?? '';
-    colorVariables.forEach((value, colorName) => {
+    primitiveVariables.forEach((value, colorName) => {
       gradientValue = gradientValue.replace(value, `${getSCSSVariableName(colorName)}`);
     });
     if (gradientValue) {

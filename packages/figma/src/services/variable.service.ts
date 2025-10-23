@@ -3,7 +3,11 @@ import { rgbaToString, sanitizeName, normalizeValue } from '../utils';
 
 const variableCache = new Map<string, Variable>();
 
-async function getVariableFallback(variable: Variable, propertyName: string): Promise<string> {
+/**
+ * Resolves a variable to the name of the primitive variable it references (for semantic variables)
+ * Returns the primitive variable name, not the resolved value
+ */
+async function resolveToPrimitiveVariableName(variable: Variable): Promise<string | null> {
   const modeId = Object.keys(variable.valuesByMode)[0];
   const value = variable.valuesByMode[modeId];
 
@@ -21,30 +25,18 @@ async function getVariableFallback(variable: Variable, propertyName: string): Pr
       aliasVariable = aliasVariableFromFigma;
     }
 
-    return getVariableFallback(aliasVariable, propertyName);
+    // Recursively resolve to the primitive
+    const resolved = await resolveToPrimitiveVariableName(aliasVariable);
+    if (resolved) {
+      return resolved;
+    }
+
+    // If we reach here, this is a primitive (no more aliases)
+    return sanitizeName(aliasVariable.name);
   }
 
-  switch (variable.resolvedType) {
-    case 'FLOAT': {
-      const numValue = value as number;
-      return normalizeValue({
-        propertyName,
-        value: numValue,
-      });
-    }
-    case 'COLOR': {
-      if (typeof value === 'object' && 'r' in value) {
-        const color = value as RGB | RGBA;
-        const opacity = 'a' in color ? color.a : 1;
-        return rgbaToString(color.r, color.g, color.b, opacity);
-      }
-      return '#000000';
-    }
-    case 'STRING':
-      return value as string;
-    default:
-      return 'inherit';
-  }
+  // We've reached a primitive variable
+  return sanitizeName(variable.name);
 }
 
 /**
@@ -63,13 +55,18 @@ export async function collectBoundVariable(
   if (!variable) {
     variable = await figma.variables.getVariableByIdAsync(varId);
     if (variable) {
-      variableCache.set(varId, variable); // Cache it
+      variableCache.set(varId, variable);
     }
   }
 
   if (!variable) return null;
 
-  const rawValue = await getVariableFallback(variable, property);
+  // For semantic variables, resolve to the primitive variable name instead of the resolved value
+  const primitiveVariableName = await resolveToPrimitiveVariableName(variable);
+  if (!primitiveVariableName) return null;
+
+  // Store the primitive variable name as a reference (e.g., "$color-blue-500")
+  const rawValue = `$${primitiveVariableName}`;
   const valueType = rawValue.includes('px') ? 'px' : null;
 
   return {
@@ -96,17 +93,8 @@ export async function createPrimitiveVariableToken(
   variable: Variable,
 ): Promise<VariableToken | null> {
   try {
-    // Check ALL modes for aliases, not just the first one
-    const allModeValues = Object.values(variable.valuesByMode);
-    const hasAnyAlias = allModeValues.some(
-      (value) =>
-        value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS',
-    );
-
-    if (hasAnyAlias) {
-      console.log(`🚫 Skipping alias variable: ${variable.name}`);
-      return null;
-    }
+    // Note: Alias check is now done in collectPrimitiveVariables, so we don't check again here
+    // This function should only receive true primitives
 
     // Get first mode value for processing
     const modeId = Object.keys(variable.valuesByMode)[0];
@@ -134,10 +122,11 @@ export async function createPrimitiveVariableToken(
         });
         property = 'spacing';
         break;
-      case 'STRING':
+      case 'STRING': {
         rawValue = value as string;
         property = variable.name.toLowerCase().includes('font') ? 'font-family' : 'string';
         break;
+      }
       default:
         return null;
     }
@@ -163,9 +152,10 @@ export async function createPrimitiveVariableToken(
 }
 
 /**
- * Collect primitive Figma Variables (non-alias variables with direct values)
+ * Collect primitive variables from all Figma variable collections
+ * Only collects TRUE primitives - variables that don't alias in any mode
  */
-export async function collectAllFigmaVariables(
+export async function collectPrimitiveVariables(
   collection: TokenCollection,
   onProgress: (progress: number, message: string) => void,
 ) {
@@ -184,7 +174,24 @@ export async function collectAllFigmaVariables(
         const variable = await figma.variables.getVariableByIdAsync(variableId);
 
         if (variable) {
-          // Create VariableToken for each primitive variable
+          // Skip any variables that are aliases in ANY mode
+          const allModeValues = Object.values(variable.valuesByMode);
+          const hasAnyAlias = allModeValues.some(
+            (value) =>
+              value &&
+              typeof value === 'object' &&
+              'type' in value &&
+              value.type === 'VARIABLE_ALIAS',
+          );
+
+          if (hasAnyAlias) {
+            console.log(
+              `🚫 Skipping alias variable (won't be collected as primitive): ${variable.name}`,
+            );
+            continue;
+          }
+
+          // Create VariableToken for each true primitive variable
           const token = await createPrimitiveVariableToken(variable);
           if (token) {
             primitiveTokens.push(token);
