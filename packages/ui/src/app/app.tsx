@@ -40,8 +40,6 @@ export const App = () => {
           <ConfigProvider {...loadedConfig}>
             <Nav />
             <Routes>
-              {/* TODO: remove Form route as it's legacy */}
-              {/* <Route path="/" element={<Form />} /> */}
               <Route path="/" element={<Export />} />
               <Route path="/setup" element={<Setup />} />
               <Route path="/about" element={<About />} />

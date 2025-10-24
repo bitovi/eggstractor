@@ -16,7 +16,7 @@
   }
 }
 
-// When we re-generate the eggstracted.scss, double check these to see if mixins are available.
+// TODO: When we re-generate the eggstracted.scss, double check these to see if mixins are available.
 .spinner {
   position: relative;
   display: inline-flex;
@@ -26,7 +26,7 @@
   height: 24px;
 }
 
-// When we re-generate the eggstracted.scss, double check these to see if mixins are available.
+// TODO: When we re-generate the eggstracted.scss, double check these to see if mixins are available.
 .outer-circle {
   animation: spin 3s linear infinite;
   flex-shrink: 0;

@@ -49,6 +49,7 @@
   &.active {
     @include segmented-button-items-frame-18-label-state_selected;
 
+    //TODO: no output for this mixin, need to review output, could combinatorial bug
     .button-group-item {
       background: $colour-button-segmented-selected-bg;
 

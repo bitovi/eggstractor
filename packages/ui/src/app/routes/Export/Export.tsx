@@ -37,10 +37,10 @@ export const Export: FC = () => {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (stepOne) {
+    if (step === 1) {
       generateStyles();
       setLoading(true);
-    } else if (stepTwo) {
+    } else if (step === 2) {
       createPR();
     }
   };
@@ -100,13 +100,18 @@ export const Export: FC = () => {
     });
   };
 
+  const getStep: () => 1 | 2 | 3 | null = () => {
+    if (!generatedStyles && !loading) return 1;
+    if (generatedStyles && prStatus.state !== 'pr-created') return 2;
+    if (prStatus.state === 'pr-created') return 3;
+    return null;
+  };
+
   // Determine stepper statuses based on current step
-  const stepOne = !generatedStyles && !loading;
-  const stepTwo = generatedStyles && prStatus.state !== 'pr-created';
-  const stepThree = prStatus.state === 'pr-created';
-  const stepOneStatus = stepOne ? 'current' : 'past';
-  const stepTwoStatus = stepTwo ? 'current' : stepThree ? 'past' : 'future';
-  const stepThreeStatus = stepThree ? 'current' : 'future';
+  const step: 1 | 2 | 3 | null = getStep();
+  const stepOneStatus = step === 1 ? 'current' : 'past';
+  const stepTwoStatus = step === 2 ? 'current' : step === 3 ? 'past' : 'future';
+  const stepThreeStatus = step === 3 ? 'current' : 'future';
 
   const handleStepOneClick = () => {
     setGeneratedStyles('');
@@ -140,7 +145,7 @@ export const Export: FC = () => {
         </div>
 
         <form onSubmit={onSubmit} className={styles['action-area']}>
-          {stepOne ? (
+          {step === 1 ? (
             <div className={styles['step-one-buttons']}>
               <Button type="submit" variant="primary" className={styles['generate-button']}>
                 Generate styles
@@ -151,36 +156,38 @@ export const Export: FC = () => {
 
           <GeneratingStylesProgressBar />
 
-          {stepTwo && !loading ? (
-            <>
-              <div className={styles['branch-input-wrapper']}>
-                <Input
-                  label="Branch name"
-                  value={branchName}
-                  onChange={setBranchName}
-                  className={styles['branch-input']}
-                  disabled={prStatus.state === 'creating-pr'}
-                />
-              </div>
-              <div className={styles['publish-button']}>
-                <Button
-                  type="submit"
-                  disabled={prButtonDisabled || prStatus.state === 'creating-pr'}
-                  variant="primary"
-                >
-                  {prStatus.state === 'creating-pr' ? (
-                    <>
-                      <Spinner />
-                    </>
-                  ) : (
-                    'Create Pull Request'
-                  )}
-                </Button>
-              </div>
-            </>
+          {step === 2 ? (
+            !loading ? (
+              <>
+                <div className={styles['branch-input-wrapper']}>
+                  <Input
+                    label="Branch name"
+                    value={branchName}
+                    onChange={setBranchName}
+                    className={styles['branch-input']}
+                    disabled={prStatus.state === 'creating-pr'}
+                  />
+                </div>
+                <div className={styles['publish-button']}>
+                  <Button
+                    type="submit"
+                    disabled={prButtonDisabled || prStatus.state === 'creating-pr'}
+                    variant="primary"
+                  >
+                    {prStatus.state === 'creating-pr' ? (
+                      <>
+                        <Spinner />
+                      </>
+                    ) : (
+                      'Create Pull Request'
+                    )}
+                  </Button>
+                </div>
+              </>
+            ) : null
           ) : null}
 
-          {stepThree ? (
+          {step === 3 ? (
             <div className={styles['success-state']}>
               <div className={styles['success-message']}>
                 <svg
@@ -209,7 +216,9 @@ export const Export: FC = () => {
               </div>
               <Button
                 variant="primary"
-                onClick={() => window.open(prStatus.url, '_blank')}
+                onClick={() =>
+                  prStatus.state === 'pr-created' ? window.open(prStatus.url, '_blank') : null
+                }
                 className={styles['view-button']}
               >
                 Open in Github →
@@ -219,7 +228,7 @@ export const Export: FC = () => {
         </form>
       </div>
       <div className={styles['content-area']}>
-        {stepOne || loading ? (
+        {step === 1 || loading ? (
           <div className={styles['card-wrapper']}>
             <StaticCard>
               <p>Generating styles can take several minutes, depending on the size of the file.</p>

@@ -34,7 +34,7 @@ export const Output: FC = () => {
         <ExpandableCard
           title="Warnings"
           expanded={warningsExpanded}
-          setExpanded={setWarningsExpanded}
+          onToggle={() => setWarningsExpanded(!warningsExpanded)}
         >
           <ul className={styles['warnings-list']}>
             {warnings.map((warning, idx) => (

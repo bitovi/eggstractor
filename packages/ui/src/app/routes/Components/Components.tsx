@@ -138,7 +138,7 @@ export const Components: FC = () => {
         <ExpandableCard
           title="Not sure where to start?"
           expanded={expandableCard1Expanded}
-          setExpanded={setExpandableCard1Expanded}
+          onToggle={() => setExpandableCard1Expanded(!expandableCard1Expanded)}
           linkHref="https://bitovi.com"
           linkLabel="View the guide"
         >
@@ -150,7 +150,7 @@ export const Components: FC = () => {
         <ExpandableCard
           title="Not sure where to start?"
           expanded={expandableCard2Expanded}
-          setExpanded={setExpandableCard2Expanded}
+          onToggle={() => setExpandableCard2Expanded(!expandableCard2Expanded)}
         >
           The Getting Started Guide will walk you through the steps for setting up a demo project
           where you can test it all out.
@@ -166,6 +166,15 @@ export const Components: FC = () => {
       </div>
       <div className={styles['form-field']}>
         <StepperStep step={1} label="Label" status="future" />
+      </div>
+      <div className={styles['form-field']}>
+        <StepperStep step={1} label="Label" status="past" />
+      </div>
+      <div className={styles['form-field']}>
+        <StepperStep step={2} label="Label" status="past" />
+      </div>
+      <div className={styles['form-field']}>
+        <StepperStep step={3} label="Label" status="past" />
       </div>
     </div>
   );

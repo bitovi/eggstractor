@@ -27,13 +27,14 @@
   // TODO: same idea; var fallbacks here are indicate the intended design system
   font-family: $font-family-display;
   font-size: $size-xl;
-  font-style: normal;
-  font-weight: 600;
+  font-style: normal; // TODO: no variable(s) for font style
+  font-weight: 600; // TODO: no variable(s) for font weight
   line-height: $size-xl; /* 100% */
 
   margin-bottom: $size-md;
 }
 
+// TODO: These styles didn't generate, adding them manually
 .button-group-hint {
   align-self: stretch;
   color: $colour-input-hint;
@@ -42,8 +43,8 @@
   font-family: $font-family-body;
   // TODO: consider design match
   font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
+  font-style: normal; // TODO: no variable(s) for font style
+  font-weight: 400; // TODO: no variable(s) for font weight
   line-height: $size-xl; /* 114.286% */
 
   margin-top: $size-md;

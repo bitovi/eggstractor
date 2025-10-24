@@ -4,7 +4,7 @@
 .top-sheet {
   width: 100%;
   background: $colour-sheet-bg;
-  border-bottom: 1px solid $colour-sheet-border;
+  border-bottom: 1px solid $colour-sheet-border; //TODO: Need variable for 1px
   padding: $size-3xl;
   display: flex;
   flex-direction: column;

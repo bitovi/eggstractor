@@ -7,7 +7,7 @@ interface ExpandableCardProps {
   title: string;
   children?: ReactNode;
   expanded: boolean;
-  setExpanded: (expanded: boolean) => void;
+  onToggle: () => void;
   linkHref?: string;
   linkLabel?: string;
 }
@@ -16,14 +16,10 @@ export const ExpandableCard: FC<ExpandableCardProps> = ({
   title,
   children,
   expanded,
-  setExpanded,
+  onToggle,
   linkHref,
   linkLabel,
 }) => {
-  const handleToggle = () => {
-    setExpanded(!expanded);
-  };
-
   return (
     <div
       className={cn(styles.card, styles.collapsible, {
@@ -31,7 +27,7 @@ export const ExpandableCard: FC<ExpandableCardProps> = ({
         [styles.collapsed]: !expanded,
       })}
     >
-      <button className={styles.header} onClick={handleToggle}>
+      <button className={styles.header} onClick={onToggle}>
         <h3 className={styles.title}>{title}</h3>
         <span className={styles.icon}>
           {expanded ? (
@@ -70,7 +66,7 @@ export const ExpandableCard: FC<ExpandableCardProps> = ({
         </span>
       </button>
 
-      {expanded && (
+      {expanded ? (
         <div className={styles.content}>
           {children}
           {linkHref && linkLabel && (
@@ -81,7 +77,7 @@ export const ExpandableCard: FC<ExpandableCardProps> = ({
             </div>
           )}
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
