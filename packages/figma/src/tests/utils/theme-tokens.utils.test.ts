@@ -72,7 +72,7 @@ describe('buildDynamicThemeTokens', () => {
     const result = buildDynamicThemeTokens(mockPrimitiveTokens);
 
     expect(result.colors).toEqual({
-      '#0080ff': 'colors-blue-500',
+      '#0080ff': 'color-blue-500',
     });
 
     expect(result.spacing).toEqual({
@@ -410,7 +410,7 @@ describe('generateThemeDirective', () => {
     const result = generateThemeDirective(mockCollection);
 
     expect(result).toContain('@theme {');
-    expect(result).toContain('--colors-blue-500: #0080ff;');
+    expect(result).toContain('--color-blue-500: #0080ff;');
     expect(result).toContain('--spacing-large: 24px;');
     expect(result).toContain('}');
   });
@@ -457,14 +457,14 @@ describe('generateThemeDirective', () => {
 
     // :root should only include primitives
     expect(result).toContain(':root {');
-    expect(result).toContain('--colors-blue-500: #0080ff;');
+    expect(result).toContain('--color-blue-500: #0080ff;');
 
     // @theme should include both primitives and semantics with simplified names
     expect(result).toContain('@theme {');
     // Primitives use simplified names (--color-* instead of --colors-*)
-    expect(result).toContain('--color-blue-500: var(--colors-blue-500);');
+    expect(result).toContain('--color-blue-500: var(--color-blue-500);');
     // Semantics should reference primitives, not other semantics
-    expect(result).toContain('--color-primary: var(--colors-blue-500);');
+    expect(result).toContain('--color-primary: var(--color-blue-500);');
   });
 
   it('should sort tokens naturally (numeric aware)', () => {
@@ -521,11 +521,11 @@ describe('generateThemeDirective', () => {
     const result = generateThemeDirective(unsortedCollection);
 
     // Extract the lines with color variables to check order
-    const lines = result.split('\n').filter((line: string) => line.includes('--colors-blue-'));
+    const lines = result.split('\n').filter((line: string) => line.includes('--color-blue-'));
 
-    expect(lines[0]).toContain('--colors-blue-01');
-    expect(lines[1]).toContain('--colors-blue-02');
-    expect(lines[2]).toContain('--colors-blue-10');
+    expect(lines[0]).toContain('--color-blue-01');
+    expect(lines[1]).toContain('--color-blue-02');
+    expect(lines[2]).toContain('--color-blue-10');
   });
 
   it('should handle empty token collection', () => {
@@ -644,7 +644,7 @@ describe('generateThemeDirective', () => {
     const result = generateThemeDirective(mixedCollection);
 
     // Colors should come first, then spacing, then font-size
-    const colorIndex = result.indexOf('--colors-blue-500');
+    const colorIndex = result.indexOf('--color-blue-500');
     const spacingIndex = result.indexOf('--spacing-large');
     const fontSizeIndex = result.indexOf('--font-size-large');
 

@@ -14,7 +14,10 @@ const getSCSSVariableName = (variableName: string): string => {
   return `$${scssVariableName}`;
 };
 
-const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
+const getMixinPropertyAndValue = (
+  token: StyleToken,
+  primitiveVariables: Map<string, string>,
+): Record<string, string> => {
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
     // Only use CSS variables if the token has associated variables
     if (token.variables && token.variables.length > 0) {
@@ -25,18 +28,30 @@ const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => 
     }
 
     // Use the raw value directly if no variables are involved
-    const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+    const value = token.rawValue
+      ? token.valueType === 'px'
+        ? rem(token.rawValue)
+        : token.rawValue
+      : '';
 
     // output += ` ${token.property}: ${value};\n`;
     return { [token.property]: value };
   }
 
-  const baseValue = token.valueType === 'px' ? rem(token.value!) : token.value;
+  let baseValue = token.value ? (token.valueType === 'px' ? rem(token.value) : token.value) : '';
+
+  // Replace color values with variable references if they exist
+  if (token.property === 'color' || token.property === 'background' || token.property === 'fills') {
+    primitiveVariables.forEach((value, colorName) => {
+      baseValue = baseValue.replace(value, `${getSCSSVariableName(colorName)}`);
+    });
+  }
+
   // in SCSS negated variables are a parsing warning unless parenthesized
   const processedValue = baseValue
-    ?.replace(/-\$(\w|-)+/g, (match) => `(${match})`)
-    ?.replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
-  return { [token.property]: processedValue! };
+    .replace(/-\$(\w|-)+/g, (match) => `(${match})`)
+    .replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
+  return { [token.property]: processedValue };
 };
 
 export const transformToScss: Transformer = (
@@ -149,7 +164,7 @@ export const transformToScss: Transformer = (
   const selectors = convertVariantGroupBy(
     tokens,
     variantGroups,
-    getMixinPropertyAndValue,
+    (token) => getMixinPropertyAndValue(token, primitiveVariables),
     namingContext,
     useCombinatorialParsing,
   );

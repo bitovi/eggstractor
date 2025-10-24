@@ -52,7 +52,7 @@ export function generateThemeDirective(collection: TokenCollection): string {
       // Determine the actual token type from the name, not just the property
       if (token.property === 'color' || cleanName.startsWith('colors-')) {
         cleanName = cleanName.replace(/^colors-/, '').replace(/^color-/, '');
-        key = `--colors-${cleanName}`;
+        key = `--color-${cleanName}`;
         collections.colorTokens.set(key, value);
       } else if (cleanName.includes('border-radius') || token.property === 'border-radius') {
         cleanName = cleanName.replace(/^.*border-radius-/, '').replace(/^border-radius-/, '');
@@ -121,7 +121,7 @@ export function generateThemeDirective(collection: TokenCollection): string {
         .replace(/^color-/, '')
         .replace(/^colours-/, '')
         .replace(/^colour-/, '');
-      return `var(--colors-${cleanedName})`;
+      return `var(--color-${cleanedName})`;
     } else if (primitiveName.includes('border-radius')) {
       const cleanedName = primitiveName
         .replace(/^.*border-radius-/, '')
@@ -368,7 +368,7 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
     ) {
       cleanName = cleanName.replace(/^colors-/, '').replace(/^color-/, '');
       // For colors, include the category prefix for dynamic theme mapping
-      dynamicTheme.colors[rawValueForMapping] = `colors-${cleanName}`;
+      dynamicTheme.colors[rawValueForMapping] = `color-${cleanName}`;
     } else if (cleanName.includes('border-radius') || token.property === 'border-radius') {
       // Border radius tokens (even if categorized as spacing)
       cleanName = cleanName.replace(/^.*border-radius-/, '').replace(/^border-radius-/, '');

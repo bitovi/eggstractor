@@ -1,22 +1,25 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Demo Data (real world-ish example) > should process all demo data correctly > demo-data-combinatorial 1`] = `
-"// Semantic SCSS Variables
-$base-size-xs: $base-size-xs;
-$base-colour-grey-400: $base-colour-grey-400;
-$base-font-size-xl: $base-font-size-xl;
-$global-font-uidefaultfont: $global-font-uidefaultfont;
-$base-font-linespacing-lg: $base-font-linespacing-lg;
-$base-font-weight-semibold: $base-font-weight-semibold;
-$base-colour-static-white: $base-colour-static-white;
-$base-size-lg: $base-size-lg;
-$base-radius-sm: $base-radius-sm;
-$global-size-border-width: $global-size-border-width;
-$base-colour-grey-100: $base-colour-grey-100;
-$global-colour-textonlight: $global-colour-textonlight;
-$base-font-weight-regular: $base-font-weight-regular;
-$base-colour-grey-300: $base-colour-grey-300;
-$base-colour-blue-300: $base-colour-blue-300;
+"// Primitive SCSS Variables
+$base-size-xs: 0.125rem;
+$base-colour-grey-400: #282828;
+$base-size-lg: 0.75rem;
+$base-colour-blue-300: #0177cc;
+$base-font-size-xl: 1.25rem;
+$global-font-uidefaultfont: inter;
+$brand-font-body: inter;
+$base-radius-sm: 0.25rem;
+$base-font-family-inter: inter;
+$base-font-linespacing-lg: 1.5rem;
+$base-font-weight-semibold: 31.25rem;
+$global-size-border-width: 0.0625rem;
+$base-colour-static-white: #ffffff;
+$base-size-2xs: 0.0625rem;
+$global-colour-textonlight: #282828;
+$base-font-weight-regular: 25rem;
+$base-colour-grey-100: #d9d9d9;
+$base-colour-grey-300: #747474;
 
 // Generated SCSS Mixins
 @mixin input {
@@ -78,22 +81,25 @@ $base-colour-blue-300: $base-colour-blue-300;
 `;
 
 exports[`Demo Data (real world-ish example) > should process all demo data correctly > demo-data-template 1`] = `
-"// Semantic SCSS Variables
-$base-size-xs: $base-size-xs;
-$base-colour-grey-400: $base-colour-grey-400;
-$base-font-size-xl: $base-font-size-xl;
-$global-font-uidefaultfont: $global-font-uidefaultfont;
-$base-font-linespacing-lg: $base-font-linespacing-lg;
-$base-font-weight-semibold: $base-font-weight-semibold;
-$base-colour-static-white: $base-colour-static-white;
-$base-size-lg: $base-size-lg;
-$base-radius-sm: $base-radius-sm;
-$global-size-border-width: $global-size-border-width;
-$base-colour-grey-100: $base-colour-grey-100;
-$global-colour-textonlight: $global-colour-textonlight;
-$base-font-weight-regular: $base-font-weight-regular;
-$base-colour-grey-300: $base-colour-grey-300;
-$base-colour-blue-300: $base-colour-blue-300;
+"// Primitive SCSS Variables
+$base-size-xs: 0.125rem;
+$base-colour-grey-400: #282828;
+$base-size-lg: 0.75rem;
+$base-colour-blue-300: #0177cc;
+$base-font-size-xl: 1.25rem;
+$global-font-uidefaultfont: inter;
+$brand-font-body: inter;
+$base-radius-sm: 0.25rem;
+$base-font-family-inter: inter;
+$base-font-linespacing-lg: 1.5rem;
+$base-font-weight-semibold: 31.25rem;
+$global-size-border-width: 0.0625rem;
+$base-colour-static-white: #ffffff;
+$base-size-2xs: 0.0625rem;
+$global-colour-textonlight: #282828;
+$base-font-weight-regular: 25rem;
+$base-colour-grey-100: #d9d9d9;
+$base-colour-grey-300: #747474;
 
 // Generated SCSS Mixins
 @mixin input-resting {

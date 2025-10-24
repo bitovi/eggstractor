@@ -32,19 +32,19 @@ $teal-500: #04646a;
   background: $teal-800-50;
 }
 @mixin background-solid-custom {
-  background: #00464a;
+  background: $brand-primary;
 }
 @mixin background-solid-alpha-custom {
-  background: rgba(0, 70, 74, 0.5);
+  background: $teal-800-50;
 }
 @mixin background-solid-hex-style {
-  background: #00464a;
+  background: $brand-primary;
 }
 @mixin background-solid-variable-style {
   background: $teal-800;
 }
 @mixin background-solid-alpha-hex-style {
-  background: rgba(0, 70, 74, 0.5);
+  background: $teal-800-50;
 }
 @mixin background-solid-alpha-variable-style {
   background: $teal-800-50;
@@ -70,19 +70,19 @@ $teal-500: #04646a;
   background: $teal-800-50;
 }
 @mixin background-solid-custom {
-  background: #00464a;
+  background: $brand-primary;
 }
 @mixin background-solid-alpha-custom {
-  background: rgba(0, 70, 74, 0.5);
+  background: $teal-800-50;
 }
 @mixin background-solid-hex-style {
-  background: #00464a;
+  background: $brand-primary;
 }
 @mixin background-solid-variable-style {
   background: $teal-800;
 }
 @mixin background-solid-alpha-hex-style {
-  background: rgba(0, 70, 74, 0.5);
+  background: $teal-800-50;
 }
 @mixin background-solid-alpha-variable-style {
   background: $teal-800-50;
@@ -122,7 +122,7 @@ $v500: 31.25rem;
   opacity: 0.5;
 }
 @mixin opacity-custom-group-opacity-custom {
-  background: #00464a;
+  background: $brand-primary;
   opacity: 0.5;
 }
 @mixin opacity-custom-group-lorem-ipsum {
@@ -193,7 +193,7 @@ $v500: 31.25rem;
   opacity: 0.5;
 }
 @mixin opacity-custom-group-opacity-custom {
-  background: #00464a;
+  background: $brand-primary;
   opacity: 0.5;
 }
 @mixin opacity-custom-group-lorem-ipsum {
