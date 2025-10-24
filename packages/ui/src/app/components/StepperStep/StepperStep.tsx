@@ -23,11 +23,11 @@ export const StepperStep: FC<StepperStepProps> = ({
 
   const content = (
     <>
-      {precedingLine && <div className={styles['preceding-line']} />}
+      {precedingLine ? <div className={styles['preceding-line']} /> : null}
       <div className={styles.indicator}>
         <span className={styles.number}>{step}</span>
       </div>
-      {emitLine && (
+      {emitLine ? (
         <div className={styles['line-container']}>
           <div className={styles.line}>
             <svg
@@ -51,7 +51,7 @@ export const StepperStep: FC<StepperStepProps> = ({
             <span className={styles.label}>{label}</span>
           </div>
         </div>
-      )}
+      ) : null}
     </>
   );
 

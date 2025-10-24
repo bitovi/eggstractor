@@ -13,20 +13,20 @@ interface StaticCardProps {
 export const StaticCard: FC<StaticCardProps> = ({ title, children, linkHref, linkLabel }) => {
   return (
     <div className={cn(styles.card, styles.static)}>
-      {title && (
+      {title ? (
         <div className={styles.header}>
           <h3 className={styles.title}>{title}</h3>
         </div>
-      )}
+      ) : null}
       <div className={styles.content}>
         {children}
-        {linkHref && linkLabel && (
+        {linkHref && linkLabel ? (
           <div className={styles.link}>
             <LabelLink href={linkHref} bold>
               {linkLabel}
             </LabelLink>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

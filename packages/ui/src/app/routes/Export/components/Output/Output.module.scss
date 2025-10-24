@@ -12,7 +12,7 @@
 
   /* Custom scrollbar styling */
   &::-webkit-scrollbar {
-    width: 14px;
+    width: $size-md;
   }
 
   &::-webkit-scrollbar-track {
@@ -21,8 +21,9 @@
 
   &::-webkit-scrollbar-thumb {
     background: $colour-grey-400;
+    // TODO: consider design match (probably too large)
     border-radius: 100px;
-    border: 3px solid transparent;
+    border: $size-sm solid transparent;
   }
 
   &::-webkit-scrollbar-thumb:hover {
@@ -39,7 +40,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Roboto Mono', monospace;
-    font-size: 16px;
+    font-size: $size-xl;
     line-height: 1.5;
     color: $colour-text;
     white-space: pre-wrap;
@@ -66,10 +67,6 @@
   li {
     display: list-item;
     list-style-type: disc;
-    margin-bottom: $size-sm;
-    color: $colour-text;
-    font-size: 14px;
-    line-height: 1.5;
 
     &:last-child {
       margin-bottom: 0;

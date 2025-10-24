@@ -1,3 +1,5 @@
+@use '../../../generated.scss' as *;
+
 .form-field {
-  margin-bottom: 40px;
+  margin-bottom: $size-4xl;
 }

@@ -7,6 +7,8 @@ import { Button, Input, StepperStep, StaticCard, ExpandableCard } from '../../co
 export const Components: FC = () => {
   const [activeButton, setActiveButton] = useState('option1');
   const [inputValue, setInputValue] = useState('Input Example');
+  const [expandableCard1Expanded, setExpandableCard1Expanded] = useState(false);
+  const [expandableCard2Expanded, setExpandableCard2Expanded] = useState(true);
 
   return (
     <div className="container">
@@ -127,8 +129,16 @@ export const Components: FC = () => {
         </StaticCard>
       </div>
       <div className={styles['form-field']}>
+        <StaticCard>
+          <p>Generating styles can take several minutes, depending on the size of the file.</p>
+          <p>To publish to Github, connect your repo on the "Setup" tab.</p>
+        </StaticCard>
+      </div>
+      <div className={styles['form-field']}>
         <ExpandableCard
           title="Not sure where to start?"
+          expanded={expandableCard1Expanded}
+          setExpanded={setExpandableCard1Expanded}
           linkHref="https://bitovi.com"
           linkLabel="View the guide"
         >
@@ -137,7 +147,11 @@ export const Components: FC = () => {
         </ExpandableCard>
       </div>
       <div className={styles['form-field']}>
-        <ExpandableCard title="Not sure where to start?" expanded={true}>
+        <ExpandableCard
+          title="Not sure where to start?"
+          expanded={expandableCard2Expanded}
+          setExpanded={setExpandableCard2Expanded}
+        >
           The Getting Started Guide will walk you through the steps for setting up a demo project
           where you can test it all out.
         </ExpandableCard>

@@ -134,18 +134,18 @@ export const Export: FC = () => {
         </div>
 
         <form onSubmit={onSubmit} className={styles['action-area']}>
-          {stepOne && (
+          {stepOne ? (
             <div className={styles['step-one-buttons']}>
               <Button type="submit" variant="primary" className={styles['generate-button']}>
                 Generate styles
               </Button>
-              {__DEV__ && <ExportTestDataButton />}
+              {__DEV__ ? <ExportTestDataButton /> : null}
             </div>
-          )}
+          ) : null}
 
           <GeneratingStylesProgressBar />
 
-          {stepTwo && !loading && (
+          {stepTwo && !loading ? (
             <>
               <div className={styles['branch-input-wrapper']}>
                 <Input
@@ -166,9 +166,9 @@ export const Export: FC = () => {
                 </Button>
               </div>
             </>
-          )}
+          ) : null}
 
-          {stepThree && (
+          {stepThree ? (
             <div className={styles['success-state']}>
               <div className={styles['success-message']}>
                 <svg
@@ -203,7 +203,7 @@ export const Export: FC = () => {
                 Open in Github →
               </Button>
             </div>
-          )}
+          ) : null}
         </form>
       </div>
       <div className={styles['content-area']}>

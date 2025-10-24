@@ -1,4 +1,4 @@
-import { FC, useState, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import cn from 'classnames';
 import styles from './Card.module.scss';
 import { LabelLink } from '../LabelLink/LabelLink';
@@ -6,7 +6,8 @@ import { LabelLink } from '../LabelLink/LabelLink';
 interface ExpandableCardProps {
   title: string;
   children?: ReactNode;
-  expanded?: boolean;
+  expanded: boolean;
+  setExpanded: (expanded: boolean) => void;
   linkHref?: string;
   linkLabel?: string;
 }
@@ -14,27 +15,26 @@ interface ExpandableCardProps {
 export const ExpandableCard: FC<ExpandableCardProps> = ({
   title,
   children,
-  expanded = false,
+  expanded,
+  setExpanded,
   linkHref,
   linkLabel,
 }) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(expanded);
-
   const handleToggle = () => {
-    setIsExpanded(!isExpanded);
+    setExpanded(!expanded);
   };
 
   return (
     <div
       className={cn(styles.card, styles.collapsible, {
-        [styles.expanded]: isExpanded,
-        [styles.collapsed]: !isExpanded,
+        [styles.expanded]: expanded,
+        [styles.collapsed]: !expanded,
       })}
     >
       <button className={styles.header} onClick={handleToggle}>
         <h3 className={styles.title}>{title}</h3>
         <span className={styles.icon}>
-          {isExpanded ? (
+          {expanded ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="32"
@@ -70,7 +70,7 @@ export const ExpandableCard: FC<ExpandableCardProps> = ({
         </span>
       </button>
 
-      {isExpanded && (
+      {expanded && (
         <div className={styles.content}>
           {children}
           {linkHref && linkLabel && (

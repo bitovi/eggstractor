@@ -29,7 +29,9 @@
   }
 
   &.first {
+    // TODO: design element was added; revisit when new generated.scss is created
     margin-left: -64px; // Pull it left so the leading line extends off screen
+    // TODO: design element was added; revisit when new generated.scss is created
     padding-left: 64px; // Add padding to push the circle back to the right
   }
 
@@ -39,9 +41,10 @@
 }
 
 .preceding-line {
-  //TODO: Need to update design doc to accomodate the other parts of the line; currently it doesn't include styling for the proceeding line.
+  //TODO: design element was added; revisit when new generated.scss is created
   position: absolute;
   left: 0;
+  // TODO: design element was added; revisit when new generated.scss is created
   width: 64px;
   height: 2px;
   background: $colour-stepper-inactive;
@@ -88,6 +91,7 @@
   position: absolute;
   left: 0;
   right: 0;
+  // TODO: consider design match
   height: 2px;
   background: $colour-stepper-inactive;
   display: flex;
@@ -100,6 +104,7 @@
 }
 
 .arrow-tip {
+  // TODO: consider design match
   margin-right: -2px;
   color: $colour-stepper-inactive;
 

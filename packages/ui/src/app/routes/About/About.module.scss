@@ -1,7 +1,9 @@
+@use '../../../generated.scss' as *;
+
 .about {
   color: black;
   .link {
-    color: #01a6ae;
+    color: $colour-brand;
     font-weight: 700;
     text-decoration: none;
   }
@@ -10,14 +12,18 @@
   }
   .p {
     margin-top: 0;
+    // TODO: consider design match
     margin-bottom: 18px + 8px;
   }
   .last {
+    // TODO: consider design match
     margin-bottom: 50px;
   }
   .img {
+    // TODO: consider design match
     max-width: 215px;
     height: auto;
+    // TODO: consider design match
     margin-bottom: 50px;
   }
 }

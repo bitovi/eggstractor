@@ -1,6 +1,6 @@
 @use './generated.scss' as *;
 @use './resets.scss' as *;
-@import './styles/highlight-theme.scss';
+@use './styles/highlight-theme.scss';
 
 * {
   box-sizing: border-box;
@@ -32,24 +32,16 @@ form {
 }
 
 .container {
+  // TODO: consider design match
   padding: 30px;
 }
-
-// button {
-//   padding: 8px 16px;
-//   font-size: 14px;
-//   margin-bottom: 10px;
-// }
-// button#generateBtn {
-//   margin-bottom: 0;
-// }
 
 #output {
   width: 100%;
   height: 50vh;
   padding: 0;
-  background: #1e1e1e;
-  color: #dcdcdc;
+  background: $colour-grey-950;
+  color: $colour-grey-200;
   font-family: monospace;
   overflow: auto;
   white-space: pre;
@@ -61,6 +53,7 @@ form {
   top: 0;
   right: 0;
   z-index: 1;
+  // TODO: consider design match
   height: 32px;
   display: flex;
   align-items: stretch;
@@ -68,12 +61,14 @@ form {
 .copy-button {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 8px;
+  gap: $size-sm;
+  padding: $size-md;
+  // TODO: These are Figma plugin API variables, must remain as CSS custom properties
   border: 1px solid var(--figma-color-border);
   border-radius: 0;
   border-top: none;
   border-right: none;
+  // TODO: consider design match
   border-bottom-left-radius: 6px;
   background: var(--figma-color-bg);
   color: var(--figma-color-text);
@@ -86,20 +81,21 @@ form {
   opacity: 1;
 }
 .copy-button svg {
-  width: 16px;
-  height: 16px;
+  width: $size-xl;
+  height: $size-xl;
 }
 // .form-group {
 //   margin-bottom: 15px;
 // }
 label {
   display: block;
+  // TODO: consider design match
   margin-bottom: 5px;
-  color: #999999;
+  color: $colour-grey-500;
 }
 input {
   width: 100%;
-  padding: 8px;
+  padding: $size-md;
 }
 pre {
   margin: 0;
@@ -107,49 +103,42 @@ pre {
   top: 0;
   left: 0;
   right: 0;
+  // TODO: consider design match
   padding: 10px;
 }
 #status {
+  // TODO: consider design match
   margin-left: 10px;
-  color: #dcdcdc;
+  color: $colour-grey-200;
   font-style: italic;
 }
 #status a {
-  color: #7cc4f8;
+  color: $colour-blue-300;
   text-decoration: none;
 }
 #status a:hover {
   text-decoration: underline;
 }
-// .button-group {
-//   display: flex;
-//   align-items: center;
-//   gap: 8px;
-// }
 
 #progressBar {
   width: 100%;
-  background: #f0f0f0;
+  background: $colour-grey-100;
+  // TODO: consider design match
   border-radius: 4px;
   overflow: hidden;
 }
 
 #progressFill {
   width: 0%;
+  // TODO: consider design match
   height: 20px;
-  background: #007cba;
+  background: $colour-blue-600;
   transition: width 0.3s;
 }
 
 #progressText {
-  color: #999999;
+  color: $colour-grey-500;
 }
-
-// .button-container {
-//   position: relative;
-//   display: inline-block;
-//   margin-bottom: 10px;
-// }
 
 .spinner {
   display: none;
@@ -161,11 +150,11 @@ pre {
   left: 0;
   margin: auto;
 
-  width: 16px;
-  height: 16px;
+  width: $size-xl;
+  height: $size-xl;
 
-  border: 2px solid #f0f0f0;
-  border-top-color: #007cba;
+  border: 2px solid $colour-grey-100;
+  border-top-color: $colour-blue-600;
   border-radius: 50%;
 
   animation: spin 0.6s linear infinite;
@@ -181,32 +170,30 @@ pre {
   }
 }
 
-// .button:disabled {
-//   opacity: 0.6;
-//   cursor: not-allowed;
-// }
-
 #warnings {
-  background: #fff3cd;
-  border: 1px solid #ffeeba;
+  background: $colour-orange-100;
+  border: 1px solid $colour-orange-200;
+  // TODO: consider design match
   border-radius: 4px;
-  padding: 12px;
-  margin-bottom: 16px;
+  padding: $size-lg;
+  margin-bottom: $size-xl;
 }
 
 #warnings ul {
   margin: 0;
+  // TODO: consider design match
   padding-left: 20px;
-  color: #856404;
+  color: $colour-orange-700;
 }
 
 .warning-item {
+  // TODO: consider design match
   margin: 4px 0;
 }
 
 .warning-item a {
   font-size: small;
-  color: #856404;
+  color: $colour-orange-700;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -219,8 +206,8 @@ pre {
   cursor: pointer;
   text-align: center;
   font-size: large;
-  color: #856404;
-  margin: 0 0 8px;
+  color: $colour-orange-700;
+  margin: 0 0 $size-xl;
 }
 
 summary:hover {
@@ -228,26 +215,31 @@ summary:hover {
 }
 
 .parsing-mode-group {
+  // TODO: consider design match
   margin-top: 10px;
 }
 
 .parsing-mode-label {
   display: block;
-  color: #999999;
+  color: $colour-grey-500;
+  // TODO: consider design match
   font-size: 13px;
+  // TODO: consider design match
   margin-bottom: 6px;
 }
 
 .radio-group {
   display: flex;
-  gap: 16px;
+  gap: $size-xl;
 }
 
 .radio-option {
   display: flex;
   align-items: center;
+  // TODO: consider design match
   gap: 6px;
-  color: #999999;
+  color: $colour-grey-500;
+  // TODO: consider design match
   font-size: 13px;
   cursor: pointer;
 }
@@ -256,31 +248,3 @@ summary:hover {
   margin: 0;
   cursor: pointer;
 }
-
-// nav {
-//   height: 67px;
-//   ul {
-//     display: flex;
-//     list-style-type: none;
-//     padding: 12px 15px;
-//     margin: 0;
-//     border-bottom: 1px solid #00464a;
-//   }
-//   a {
-//     display: flex;
-//     align-self: center;
-//     justify-content: center;
-//     height: 19px + 24px;
-//     padding: 12px 15px;
-//     text-decoration: none;
-//     color: #a3adad;
-//     font-weight: 600;
-//     border-radius: 4px;
-//   }
-//   a:hover {
-//     background: #00464a;
-//   }
-//   a.active-link {
-//     color: #01a6ae;
-//   }
-// }

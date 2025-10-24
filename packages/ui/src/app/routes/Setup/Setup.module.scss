@@ -1,3 +1,5 @@
+@use '../../../generated.scss' as *;
+
 .form {
   display: flex;
   flex-direction: column;
@@ -8,14 +10,15 @@
 .form-fields {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: $size-4xl;
 }
 
+// TODO:
 .bottom-sheet {
-  border-top: 1px solid var(--colour-sheet-border, #dfe2e2);
-  background: var(--colour-sheet-bg, #fff);
+  border-top: 1px solid $colour-sheet-border;
+  background: $colour-sheet-bg;
   display: flex;
-  padding: 32px;
-  gap: 16px;
-  margin-top: 32px;
+  padding: $size-3xl;
+  gap: $size-xl;
+  margin-top: $size-3xl;
 }
