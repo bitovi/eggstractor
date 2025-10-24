@@ -164,13 +164,31 @@ export async function createPrimitiveVariableToken(
           return null;
         }
         break;
-      case 'FLOAT':
+      case 'FLOAT': {
+        // Detect property type from variable name to ensure correct normalization
+        // This matters because different property types normalize differently:
+        // - opacity: 48 → 0.48 (unitless, 0-1 range)
+        // - line-height: kept as is or converted to px if > 4
+        // - font-weight: kept as is (unitless)
+        // - dimensions (spacing, size, radius, etc.): 48 → 48px → 3rem
+        const varNameLower = variable.name.toLowerCase();
+        let propertyName = 'spacing'; // default for most FLOAT values
+
+        if (varNameLower.includes('opacity')) {
+          propertyName = 'opacity';
+        } else if (varNameLower.includes('line') || varNameLower.includes('linespacing')) {
+          propertyName = 'line-height';
+        } else if (varNameLower.includes('font-weight') || varNameLower.includes('weight')) {
+          propertyName = 'font-weight';
+        }
+
         rawValue = normalizeValue({
-          propertyName: 'spacing',
+          propertyName,
           value: value as number,
         });
-        property = 'spacing';
+        property = propertyName;
         break;
+      }
       case 'STRING': {
         rawValue = value as string;
         property = variable.name.toLowerCase().includes('font') ? 'font-family' : 'string';

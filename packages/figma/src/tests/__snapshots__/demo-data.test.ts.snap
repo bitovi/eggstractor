@@ -12,12 +12,12 @@ $brand-font-body: inter;
 $base-radius-sm: 0.25rem;
 $base-font-family-inter: inter;
 $base-font-linespacing-lg: 1.5rem;
-$base-font-weight-semibold: 31.25rem;
+$base-font-weight-semibold: 500;
 $global-size-border-width: 0.0625rem;
 $base-colour-static-white: #ffffff;
 $base-size-2xs: 0.0625rem;
 $global-colour-textonlight: #282828;
-$base-font-weight-regular: 25rem;
+$base-font-weight-regular: 400;
 $base-colour-grey-100: #d9d9d9;
 $base-colour-grey-300: #747474;
 
@@ -33,7 +33,7 @@ $base-colour-grey-300: #747474;
 @mixin input-label {
   display: flex;
   flex-direction: column;
-  color: $base-colour-grey-400;
+  color: $base-colour-grey(-$base-font-weight-regular);
   font-family: $global-font-uidefaultfont;
   font-size: $base-font-size-xl;
   font-weight: 500;
@@ -92,12 +92,12 @@ $brand-font-body: inter;
 $base-radius-sm: 0.25rem;
 $base-font-family-inter: inter;
 $base-font-linespacing-lg: 1.5rem;
-$base-font-weight-semibold: 31.25rem;
+$base-font-weight-semibold: 500;
 $global-size-border-width: 0.0625rem;
 $base-colour-static-white: #ffffff;
 $base-size-2xs: 0.0625rem;
 $global-colour-textonlight: #282828;
-$base-font-weight-regular: 25rem;
+$base-font-weight-regular: 400;
 $base-colour-grey-100: #d9d9d9;
 $base-colour-grey-300: #747474;
 
@@ -113,7 +113,7 @@ $base-colour-grey-300: #747474;
 @mixin input-label-resting {
   display: flex;
   flex-direction: column;
-  color: $base-colour-grey-400;
+  color: $base-colour-grey(-$base-font-weight-regular);
   font-family: $global-font-uidefaultfont;
   font-size: $base-font-size-xl;
   font-weight: 500;
@@ -155,7 +155,7 @@ $base-colour-grey-300: #747474;
 @mixin input-label-hover {
   display: flex;
   flex-direction: column;
-  color: $base-colour-grey-400;
+  color: $base-colour-grey(-$base-font-weight-regular);
   font-family: $global-font-uidefaultfont;
   font-size: $base-font-size-xl;
   font-weight: 500;

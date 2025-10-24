@@ -91,6 +91,10 @@ export const transformToScss: Transformer = (
   // remove it from semantic section (primitives take precedence)
   semanticVariables.forEach((_, name) => {
     if (primitiveVariables.has(name)) {
+      //TODO: EGG-113, review variable functions while adding functionality.
+      console.warn(
+        `Variable "${name}" is defined as both primitive and semantic. Removing semantic definition. This probably shoudn't be happening.`,
+      );
       semanticVariables.delete(name);
     }
   });

@@ -93,7 +93,7 @@ $teal-500: #04646a;
 exports[`Background Processors > should process opacity correctly > opacity styles 1`] = `
 "// Primitive SCSS Variables
 $brand-primary: #00464a;
-$opacity-48: 3rem;
+$opacity-48: 0.48;
 $corner-radius-primary: 1rem;
 $size-48: 3rem;
 $teal-dark: #00464a;
@@ -103,7 +103,7 @@ $teal-800: #00464a;
 $spacing-5: 1rem;
 $text-primary: #a3adad;
 $gray-300: #a3adad;
-$font-weight-normal: 31.25rem;
+$font-weight-normal: 500;
 $normal: 31.25rem;
 $v500: 31.25rem;
 
@@ -164,7 +164,7 @@ $v500: 31.25rem;
 exports[`Background Processors > should process opacity correctly > opacity styles 2`] = `
 "// Primitive SCSS Variables
 $brand-primary: #00464a;
-$opacity-48: 3rem;
+$opacity-48: 0.48;
 $corner-radius-primary: 1rem;
 $size-48: 3rem;
 $teal-dark: #00464a;
@@ -174,7 +174,7 @@ $teal-800: #00464a;
 $spacing-5: 1rem;
 $text-primary: #a3adad;
 $gray-300: #a3adad;
-$font-weight-normal: 31.25rem;
+$font-weight-normal: 500;
 $normal: 31.25rem;
 $v500: 31.25rem;
 
