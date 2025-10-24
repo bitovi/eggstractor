@@ -15,10 +15,14 @@ exports[`Background Processors > should process background solid correctly > sol
 `;
 
 exports[`Background Processors > should process background solid correctly - sass > solid styles 1`] = `
-"// Semantic SCSS Variables
-$brand-primary: $brand-primary;
-$teal-800-50: $teal-800-50;
-$teal-800: $teal-800;
+"// Primitive SCSS Variables
+$brand-primary: #00464a;
+$teal-800-50: rgba(0, 70, 74, 0.5);
+$teal-medium: #04646a;
+$brand-secondary: #04646a;
+$teal-800: #00464a;
+$teal-dark: #00464a;
+$teal-500: #04646a;
 
 // Generated SCSS Mixins
 @mixin background-solid-variable {
@@ -49,10 +53,14 @@ $teal-800: $teal-800;
 `;
 
 exports[`Background Processors > should process background solid correctly - sass > solid styles 2`] = `
-"// Semantic SCSS Variables
-$brand-primary: $brand-primary;
-$teal-800-50: $teal-800-50;
-$teal-800: $teal-800;
+"// Primitive SCSS Variables
+$brand-primary: #00464a;
+$teal-800-50: rgba(0, 70, 74, 0.5);
+$teal-medium: #04646a;
+$brand-secondary: #04646a;
+$teal-800: #00464a;
+$teal-dark: #00464a;
+$teal-500: #04646a;
 
 // Generated SCSS Mixins
 @mixin background-solid-variable {
@@ -83,15 +91,21 @@ $teal-800: $teal-800;
 `;
 
 exports[`Background Processors > should process opacity correctly > opacity styles 1`] = `
-"// Semantic SCSS Variables
-$brand-primary: $brand-primary;
-$opacity-48: $opacity-48;
-$corner-radius-primary: $corner-radius-primary;
-$size-16: $size-16;
-$font-weight-normal: $font-weight-normal;
-$text-primary: $text-primary;
-$size-48: $size-48;
-$spacing-9: $spacing-9;
+"// Primitive SCSS Variables
+$brand-primary: #00464a;
+$opacity-48: 3rem;
+$corner-radius-primary: 1rem;
+$size-48: 3rem;
+$teal-dark: #00464a;
+$size-16: 1rem;
+$spacing-9: 3rem;
+$teal-800: #00464a;
+$spacing-5: 1rem;
+$text-primary: #a3adad;
+$gray-300: #a3adad;
+$font-weight-normal: 31.25rem;
+$normal: 31.25rem;
+$v500: 31.25rem;
 
 // Generated SCSS Mixins
 @mixin opacity-custom {
@@ -148,15 +162,21 @@ $spacing-9: $spacing-9;
 `;
 
 exports[`Background Processors > should process opacity correctly > opacity styles 2`] = `
-"// Semantic SCSS Variables
-$brand-primary: $brand-primary;
-$opacity-48: $opacity-48;
-$corner-radius-primary: $corner-radius-primary;
-$size-16: $size-16;
-$font-weight-normal: $font-weight-normal;
-$text-primary: $text-primary;
-$size-48: $size-48;
-$spacing-9: $spacing-9;
+"// Primitive SCSS Variables
+$brand-primary: #00464a;
+$opacity-48: 3rem;
+$corner-radius-primary: 1rem;
+$size-48: 3rem;
+$teal-dark: #00464a;
+$size-16: 1rem;
+$spacing-9: 3rem;
+$teal-800: #00464a;
+$spacing-5: 1rem;
+$text-primary: #a3adad;
+$gray-300: #a3adad;
+$font-weight-normal: 31.25rem;
+$normal: 31.25rem;
+$v500: 31.25rem;
 
 // Generated SCSS Mixins
 @mixin opacity-custom {

@@ -110,6 +110,13 @@ export function createTestData(jsonData: {
         jsonData as Parameters<typeof createTestVariableResolver>[0],
       );
 
+      // Create a mock variable collection with all variables
+      const mockVariableCollection = {
+        name: 'Default',
+        id: 'default-collection',
+        variableIds: Object.keys(jsonData.variables),
+      };
+
       return {
         figma: {
           currentPage: pageNode,
@@ -120,7 +127,8 @@ export function createTestData(jsonData: {
           loadAllPagesAsync: () => Promise.resolve(undefined), // Stub this method
           variables: {
             getVariableByIdAsync,
-            getLocalVariableCollectionsAsync: () => Promise.resolve([]), // Stub this method
+            getLocalVariableCollectionsAsync: () =>
+              Promise.resolve([mockVariableCollection] as VariableCollection[]),
           },
         },
       };

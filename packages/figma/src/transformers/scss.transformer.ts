@@ -56,16 +56,18 @@ export const transformToScss: Transformer = (
 
   tokens.tokens.forEach((token) => {
     if (token.type === 'variable') {
-      const rawValue = token.rawValue;
-      if (rawValue) {
-        const value = token.valueType === 'px' ? rem(rawValue) : rawValue;
-        const sanitizedName = sanitizeName(token.name);
+      const sanitizedName = sanitizeName(token.name);
 
-        if (token.metadata?.variableTokenType === 'primitive') {
+      if (token.metadata?.variableTokenType === 'primitive') {
+        const rawValue = token.rawValue;
+        if (rawValue) {
+          const value = token.valueType === 'px' ? rem(rawValue) : rawValue;
           primitiveVariables.set(sanitizedName, value);
-        } else if (token.metadata?.variableTokenType === 'semantic') {
-          semanticVariables.set(sanitizedName, value);
         }
+      } else if (token.metadata?.variableTokenType === 'semantic' && token.primitiveRef) {
+        // For semantic variables, reference the primitive variable
+        const primitiveRefName = sanitizeName(token.primitiveRef);
+        semanticVariables.set(sanitizedName, getSCSSVariableName(primitiveRefName));
       }
     }
   });
