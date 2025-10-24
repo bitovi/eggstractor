@@ -85,52 +85,47 @@ export function normalizeBorderRadius(value: string): [string, string, string, s
   return parts.length === 3 ? [a, b, c, b] : [a, b, c, d];
 }
 
+/**
+ * Normalizes a value to a Tailwind token reference or arbitrary value.
+ *
+ * Maps actual values (hex colors, pixel sizes, etc.) to their theme token names.
+ * The theme mapping is created by `buildDynamicThemeTokens()` which maps
+ * actual values to their token names (e.g., "#0080ff" → "blue-500").
+ *
+ * @param themeMapping - Record mapping actual values to theme token names
+ * @param value - The actual value (hex, px, rem, etc.)
+ * @param fallbackValue - Optional fallback value for explicit colors not in theme
+ * @returns Tailwind token reference (e.g., "blue-500") or arbitrary value (e.g., "[#0080ff]")
+ *
+ * @example
+ * // With theme mapping
+ * normalizeTailwindToken({ "#0080ff": "blue-500" }, "#0080ff")
+ * // → "blue-500"
+ *
+ * @example
+ * // With fallback for color
+ * normalizeTailwindToken({}, "#ff00ff", "#ff00ff")
+ * // → "[#ff00ff]"
+ *
+ * @example
+ * // Without fallback (spacing/sizing)
+ * normalizeTailwindToken({}, "42px")
+ * // → "[42px]"
+ */
 export const normalizeTailwindToken = (
   themeMapping: Record<string, string>,
   value: string,
   fallbackValue?: string,
 ) => {
-  // Check if value is a variable reference (starts with $)
-  if (value.startsWith('$')) {
-    // Strip the $ prefix and try to find it in the theme mapping
-    const varName = value.substring(1); // Remove the $
-
-    // First try with the $ prefix stripped
-    let mapping = themeMapping[varName];
-    if (mapping && mapping !== 'DEFAULT') {
-      return mapping;
-    }
-
-    // Then try with the full value ($ included) - in case theme has full names
-    mapping = themeMapping[value];
-    if (mapping && mapping !== 'DEFAULT') {
-      return mapping;
-    }
-
-    // If not found by direct lookup, try a reverse lookup
-    // The theme maps rawValue → themeName, but we have a variable name
-    // We need to find which rawValue's theme name matches our variable name
-    for (const [, themeName] of Object.entries(themeMapping)) {
-      if (themeName === varName || themeName === `${varName}`) {
-        // Found it! But we need to return the theme name, not the raw value
-        // Actually themeName IS what we want to return
-        return themeName;
-      }
-    }
-
-    // Not found in theme - use the fallback value (hex code) if provided
-    if (fallbackValue) {
-      // Return hex code as arbitrary Tailwind value
-      return `[${fallbackValue}]`;
-    }
-
-    // Otherwise, we can't resolve it - this shouldn't happen in normal cases
-    return varName;
-  }
-
   const mapping = themeMapping[value];
   if (mapping === 'DEFAULT') return '';
-  return mapping ?? `[${value}]`;
+  if (mapping) return mapping;
+
+  if (fallbackValue) {
+    return `[${fallbackValue}]`;
+  }
+
+  return `[${value}]`;
 };
 
 /*
@@ -236,7 +231,7 @@ export const generateTailwindBorderClass: Generator = (token, dynamicTheme?) => 
       `${borderPropertyToShorthand[token.property]}-${normalizeTailwindToken(
         colorsMapping,
         color,
-        color.startsWith('$') ? undefined : color,
+        color,
       )}`,
     );
   }
@@ -253,22 +248,6 @@ export const generateTailwindBorderClass: Generator = (token, dynamicTheme?) => 
 */
 export const generateTailwindFontFamilyOutput: Generator = ({ rawValue }, dynamicTheme?) => {
   const fontFamilyMapping = dynamicTheme?.fontFamily || fontFamily;
-
-  // Check if value is a variable reference first
-  if (rawValue.startsWith('$')) {
-    const varName = rawValue.substring(1);
-
-    // Try to find this in the theme mapping
-    const mapping = fontFamilyMapping[varName];
-    if (mapping) {
-      // Found in theme! Use the theme key
-      return `font-${varName}`;
-    }
-
-    // Not in theme - just use the variable name as is
-    // The theme should contain all semantic and primitive font variables
-    return `font-${varName}`;
-  }
 
   const normalizedRaw = rawValue.replace(/['"]/g, '').toLowerCase();
 
@@ -297,17 +276,42 @@ const generateTailwindDisplayClass: Generator = ({ rawValue }) => {
   return rawValue;
 };
 
+/**
+ * Generates a Tailwind box-shadow utility class.
+ *
+ * Attempts to match shadows to named theme values (created by `buildDynamicThemeTokens()`).
+ * For unmatched shadows, generates inline arbitrary values with color resolution.
+ *
+ * @param token - The generator token with rawValue containing the shadow definition
+ * @param dynamicTheme - Optional dynamic theme mappings (boxShadow and colors)
+ * @returns Tailwind shadow utility class (e.g., "shadow-lg" or "shadow-[0_4px_6px_rgba...]")
+ *
+ * Resolution strategy:
+ * 1. Try exact match against theme shadow mappings
+ * 2. Try normalized match (whitespace-aware) against theme shadow mappings
+ * 3. For unmatched values, generate inline arbitrary shadow with color resolution:
+ *    - Replaces hex colors (#RRGGBB) with CSS variables if found in theme
+ *    - Converts spaces to underscores for Tailwind arbitrary value syntax
+ *
+ * @example
+ * // With theme match
+ * generateTailwindBoxShadowClass({ rawValue: "0 4px 6px rgba(0,0,0,0.1)", property: "box-shadow", path: [] }, { boxShadow: { "0 4px 6px rgba(0,0,0,0.1)": "md" } })
+ * // → "shadow-md"
+ *
+ * @example
+ * // Without theme match, with color resolution
+ * generateTailwindBoxShadowClass({ rawValue: "0 4px 6px #000000", property: "box-shadow", path: [] }, { colors: { "#000000": "black" } })
+ * // → "shadow-[0_4px_6px_var(--black)]"
+ */
 export const generateTailwindBoxShadowClass: Generator = (token, dynamicTheme?) => {
   const boxShadowMapping = dynamicTheme?.boxShadow || {};
   const colorMapping = dynamicTheme?.colors || colors;
 
-  // First try exact match
   const exactMatch = boxShadowMapping[token.rawValue];
   if (exactMatch) {
     return `shadow-${exactMatch}`;
   }
 
-  // Try normalized match (remove extra spaces, normalize comma separation)
   const normalizeBoxShadow = (value: string) => {
     return value
       .split(',')
@@ -324,31 +328,18 @@ export const generateTailwindBoxShadowClass: Generator = (token, dynamicTheme?) 
     }
   }
 
-  // Fallback to inline shadow for values not in theme
-  // Need to resolve any variable references within the shadow values
   const resolvedShadows = token.rawValue
     .split(',')
     .map((shadow) => {
       let resolvedShadow = shadow.trim();
 
-      // Replace variable references with CSS variable format
-      // Look for patterns like $variable-name within the shadow string
-      const variablePattern = /\$[\w-]+/g;
-      resolvedShadow = resolvedShadow.replace(variablePattern, (varRef) => {
-        const varName = varRef.substring(1); // Remove $
-        // Try to find in color theme mapping
-        const colorThemeName = colorMapping[varName];
-        if (colorThemeName) {
-          // Found in theme - convert to CSS variable format
-          // e.g., "colors-grey-300" → "var(--colors-grey-300)"
-          return `var(--${colorThemeName})`;
-        }
-        // Not found - return as CSS variable with the primitive name
-        // e.g., "$base-colour-pink-400" → "var(--colors-base-colour-pink-400)"
-        return `var(--colors-${varName})`;
+      const colorPattern = /#[0-9a-fA-F]{6}/g;
+      resolvedShadow = resolvedShadow.replace(colorPattern, (hexColor) => {
+        const normalizedHex = hexColor.toLowerCase();
+        const colorThemeName = colorMapping[normalizedHex];
+        return colorThemeName ? `var(--${colorThemeName})` : hexColor;
       });
 
-      // Replace remaining spaces with underscores for Tailwind arbitrary value format
       return resolvedShadow.replace(/\s+/g, '_');
     })
     .join(',');
@@ -356,6 +347,24 @@ export const generateTailwindBoxShadowClass: Generator = (token, dynamicTheme?) 
   return `shadow-[${resolvedShadows}]`;
 };
 
+/**
+ * Creates a color generator function that applies conditional prefixes based on token context.
+ *
+ * Resolves color values through the theme mapping to generate appropriate Tailwind
+ * utility classes. The color mapping (created by `buildDynamicThemeTokens()`) maps
+ * actual color values to their theme token names.
+ *
+ * @param defaultPrefix - Default prefix to use (e.g., "bg" for background, "text" for text color)
+ * @param contextRules - Array of rules to determine when to override the default prefix
+ * @returns A function that takes a token and optional color mapping and returns a Tailwind class
+ *
+ * @example
+ * const bgColorGenerator = createContextAwareColorGenerator("bg", [
+ *   { condition: (token) => token.path?.some(p => p.type === "VECTOR"), prefix: "text" }
+ * ]);
+ * bgColorGenerator({ rawValue: "#0080ff", property: "background", path: [] })
+ * // → "bg-blue-500"
+ */
 export const createContextAwareColorGenerator = (
   defaultPrefix: string,
   contextRules: Array<{
@@ -367,21 +376,7 @@ export const createContextAwareColorGenerator = (
     const matchedRule = contextRules.find((rule) => rule.condition(token));
     const prefix = matchedRule?.prefix || defaultPrefix;
 
-    // For variables, we rely on the dynamic theme mapping containing hex values
-    // If a variable is in the theme, we use its mapped name
-    // If not, the fallback logic (passed via dynamicThemeTokens) provides hex codes
-    let fallbackValue: string | undefined;
-    if (token.rawValue.startsWith('$')) {
-      // Variable reference - fallback depends on what dynamicThemeTokens contains
-      fallbackValue = undefined;
-    } else {
-      // Direct value (could be hex) - use as fallback
-      fallbackValue = token.rawValue;
-    }
-
-    // Pass rawValue as both the lookup value and as fallback
-    // This way if variable is not found in theme, it uses hex code instead
-    const normalizedToken = normalizeTailwindToken(colorMapping, token.rawValue, fallbackValue);
+    const normalizedToken = normalizeTailwindToken(colorMapping, token.rawValue, token.rawValue);
 
     return `${prefix}-${normalizedToken}`;
   };

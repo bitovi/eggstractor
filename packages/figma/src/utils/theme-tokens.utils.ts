@@ -110,9 +110,8 @@ export function generateThemeDirective(collection: TokenCollection): string {
 
   // Helper to convert primitive name to CSS variable name
   const convertPrimitiveNameToCssVarName = (primitiveName: string): string => {
-    // This takes a primitive variable reference like "$color-blue-500"
-    // and converts it to a var() reference like "var(--colors-blue-500)"
-    // The primitiveName is already stripped of $ prefix
+    // This takes a primitive variable name like "base-font-family-inter"
+    // and converts it to a var() reference like "var(--font-inter)"
 
     if (primitiveName.includes('color') || primitiveName.includes('colour')) {
       // Remove color/colour prefix to avoid duplication
@@ -138,12 +137,15 @@ export function generateThemeDirective(collection: TokenCollection): string {
     } else if (primitiveName.includes('font-size')) {
       const cleanedName = primitiveName.replace(/^.*font-size-/, '').replace(/^font-size-/, '');
       return `var(--font-size-${cleanedName})`;
-    } else if (
-      primitiveName.includes('font') ||
-      primitiveName.startsWith('inter') ||
-      primitiveName.startsWith('roboto')
-    ) {
-      const cleanedName = primitiveName.replace(/^font-/, '');
+    } else if (primitiveName.includes('font-family') || primitiveName.includes('font-')) {
+      // For font family, extract just the font name (e.g., "inter", "roboto")
+      // From "base-font-family-inter" -> "inter"
+      // From "base-font-inter" -> "inter"
+      const cleanedName = primitiveName
+        .replace(/^.*font-family-/, '')
+        .replace(/^.*font-/, '')
+        .replace(/^font-family-/, '')
+        .replace(/^font-/, '');
       return `var(--font-${cleanedName})`;
     } else if (primitiveName.includes('line-height') || primitiveName.includes('font-leading')) {
       const cleanedName = primitiveName
@@ -164,7 +166,9 @@ export function generateThemeDirective(collection: TokenCollection): string {
         .replace(/^shadow-/, '')
         .replace(/^box-shadow-/, '');
       return `var(--${cleanedName})`;
-    } else if (primitiveName.includes('spacing')) {
+    } else if (primitiveName.includes('spacing') || primitiveName.includes('size')) {
+      // For spacing/size tokens, ensure they have the spacing prefix
+      // e.g., "base-size-2xs" -> "spacing-base-size-2xs"
       const cleanedName = primitiveName.replace(/^spacing-/, '');
       return `var(--spacing-${cleanedName})`;
     }
@@ -354,11 +358,8 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
 
   for (const token of variableTokens) {
     // Map rawValue to theme token name (matching themeTokens structure)
+    // rawValue is always an actual value (hex, px, etc.), never a variable reference
     let cleanName = token.name;
-    // Strip $ prefix from rawValue if present (for variable references that might have it)
-    const rawValueForMapping = token.rawValue.startsWith('$')
-      ? token.rawValue.slice(1)
-      : token.rawValue;
 
     // Determine the actual token type from the name, not just the property
     if (
@@ -367,24 +368,24 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
       cleanName.startsWith('colors-')
     ) {
       cleanName = cleanName.replace(/^colors-/, '').replace(/^color-/, '');
-      // For colors, include the category prefix for dynamic theme mapping
-      dynamicTheme.colors[rawValueForMapping] = `color-${cleanName}`;
+      // For colors, don't include the category prefix - Tailwind 4 doesn't use it
+      // bg-global-colour-action-background not bg-color-global-colour-action-background
+      dynamicTheme.colors[token.rawValue] = cleanName;
     } else if (cleanName.includes('border-radius') || token.property === 'border-radius') {
       // Border radius tokens (even if categorized as spacing)
       cleanName = cleanName.replace(/^.*border-radius-/, '').replace(/^border-radius-/, '');
-      dynamicTheme.borderRadius[rawValueForMapping] = cleanName;
+      dynamicTheme.borderRadius[token.rawValue] = cleanName;
     } else if (cleanName.includes('border-width') || token.property === 'border-width') {
       // Border width tokens (even if categorized as spacing)
       cleanName = cleanName.replace(/^.*border-width-/, '').replace(/^border-width-/, '');
-      dynamicTheme.borderWidths[rawValueForMapping] = cleanName;
+      dynamicTheme.borderWidths[token.rawValue] = cleanName;
     } else if (cleanName.includes('font-weight') || token.property === 'font-weight') {
       // Font weight tokens (even if categorized as font-family)
       cleanName = cleanName.replace(/^.*font-weight-/, '').replace(/^font-weight-/, '');
 
       // For font weights, we need to map both the clean name and raw value to a consistent target
       // Check if we already have a mapping for this numeric value in standard mappings
-      const standardMapping =
-        standardFontWeights[cleanName] || standardFontWeights[rawValueForMapping];
+      const standardMapping = standardFontWeights[cleanName] || standardFontWeights[token.rawValue];
       const targetValue = standardMapping || cleanName;
 
       // Create bidirectional mapping for font weights
@@ -394,11 +395,11 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
       dynamicTheme.fontWeight[cleanName] = targetValue;
 
       // Map the raw value to the target value (e.g., "regular" → "normal")
-      dynamicTheme.fontWeight[rawValueForMapping] = targetValue;
+      dynamicTheme.fontWeight[token.rawValue] = targetValue;
     } else if (cleanName.includes('font-size') || token.property === 'font-size') {
       // Font size tokens
       cleanName = cleanName.replace(/^.*font-size-/, '').replace(/^font-size-/, '');
-      dynamicTheme.fontSize[rawValueForMapping] = cleanName;
+      dynamicTheme.fontSize[token.rawValue] = cleanName;
     } else if (cleanName.includes('font-family') || token.property === 'font-family') {
       // Font family tokens
       cleanName = cleanName.replace(/^.*font-family-/, '').replace(/^font-family-/, '');
@@ -417,8 +418,8 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
       }
 
       // Add the rawValue to the array if it's not already there
-      if (!dynamicTheme.fontFamily[cleanName].includes(rawValueForMapping)) {
-        dynamicTheme.fontFamily[cleanName].push(rawValueForMapping);
+      if (!dynamicTheme.fontFamily[cleanName].includes(token.rawValue)) {
+        dynamicTheme.fontFamily[cleanName].push(token.rawValue);
       }
     } else if (cleanName.includes('font-leading') || cleanName.includes('line-height')) {
       // Line height tokens (often categorized as spacing in Figma)
@@ -427,26 +428,26 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
         .replace(/^.*line-height-/, '')
         .replace(/^font-leading-/, '')
         .replace(/^line-height-/, '');
-      dynamicTheme.lineHeight[rawValueForMapping] = cleanName;
+      dynamicTheme.lineHeight[token.rawValue] = cleanName;
     } else if (cleanName.includes('icon-size')) {
       // Icon size tokens (often categorized as spacing in Figma)
       cleanName = cleanName.replace(/^.*icon-size-/, '').replace(/^icon-size-/, '');
-      dynamicTheme.iconSize[rawValueForMapping] = cleanName;
+      dynamicTheme.iconSize[token.rawValue] = cleanName;
     } else if (cleanName.includes('screen-size')) {
       // Screen size tokens (often categorized as spacing in Figma)
       cleanName = cleanName.replace(/^.*screen-size-/, '').replace(/^screen-size-/, '');
-      dynamicTheme.screenSize[rawValueForMapping] = cleanName;
+      dynamicTheme.screenSize[token.rawValue] = cleanName;
     } else if (token.property === 'box-shadow') {
       // Box shadow tokens from effect styles
       cleanName = cleanName
         .replace(/^effect-/, '')
         .replace(/^shadow-/, '')
         .replace(/^box-shadow-/, '');
-      dynamicTheme.boxShadow[rawValueForMapping] = cleanName;
+      dynamicTheme.boxShadow[token.rawValue] = cleanName;
     } else if (token.property === 'spacing') {
       // Pure spacing tokens only (not border, font, icon, or screen related)
       cleanName = cleanName.replace(/^spacing-/, '');
-      dynamicTheme.spacing[rawValueForMapping] = cleanName;
+      dynamicTheme.spacing[token.rawValue] = cleanName;
     }
   }
 

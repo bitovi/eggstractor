@@ -72,7 +72,7 @@ describe('buildDynamicThemeTokens', () => {
     const result = buildDynamicThemeTokens(mockPrimitiveTokens);
 
     expect(result.colors).toEqual({
-      '#0080ff': 'color-blue-500',
+      '#0080ff': 'blue-500',
     });
 
     expect(result.spacing).toEqual({
@@ -735,5 +735,97 @@ describe('generateThemeDirective', () => {
     expect(result).not.toContain('--spacing-font-leading');
     expect(result).not.toContain('--spacing-icon-size');
     expect(result).not.toContain('--spacing-screen-size');
+  });
+
+  it('should correctly reference primitive font-family in semantic tokens', () => {
+    const fontFamilyCollection: TokenCollection = {
+      tokens: [
+        {
+          type: 'variable',
+          name: 'base-font-family-inter',
+          property: 'font-family',
+          value: '$base-font-family-inter',
+          rawValue: 'Inter',
+          valueType: null,
+          path: [],
+          metadata: {
+            variableId: 'var-font-prim-1',
+            variableName: 'Font/Base/Family/Inter',
+            variableTokenType: 'primitive',
+          },
+        },
+        {
+          type: 'variable',
+          name: 'global-font-uidefaultfont',
+          property: 'font-family',
+          value: '$global-font-uidefaultfont',
+          rawValue: 'Inter',
+          primitiveRef: 'base-font-family-inter',
+          valueType: null,
+          path: [],
+          metadata: {
+            variableId: 'var-font-sem-1',
+            variableName: 'Global/Font/UI Default Font',
+            variableTokenType: 'semantic',
+          },
+        },
+      ],
+      components: {},
+      componentSets: {},
+      instances: {},
+    };
+
+    const result = generateThemeDirective(fontFamilyCollection);
+
+    // Primitive font family should use --font-inter
+    expect(result).toContain('--font-inter: Inter;');
+    // Semantic should reference primitive with correct CSS var name
+    expect(result).toContain('--font-global-font-uidefaultfont: var(--font-inter);');
+  });
+
+  it('should correctly reference primitive spacing/size in semantic tokens', () => {
+    const spacingCollection: TokenCollection = {
+      tokens: [
+        {
+          type: 'variable',
+          name: 'base-size-2xs',
+          property: 'spacing',
+          value: '$base-size-2xs',
+          rawValue: '2px',
+          valueType: 'px',
+          path: [],
+          metadata: {
+            variableId: 'var-spacing-prim-1',
+            variableName: 'Size/Base/2XS',
+            variableTokenType: 'primitive',
+          },
+        },
+        {
+          type: 'variable',
+          name: 'border-resting',
+          property: 'spacing',
+          value: '$border-resting',
+          rawValue: '2px',
+          primitiveRef: 'base-size-2xs',
+          valueType: 'px',
+          path: [],
+          metadata: {
+            variableId: 'var-border-sem-1',
+            variableName: 'Border/Resting',
+            variableTokenType: 'semantic',
+          },
+        },
+      ],
+      components: {},
+      componentSets: {},
+      instances: {},
+    };
+
+    const result = generateThemeDirective(spacingCollection);
+
+    // Primitive size should use --spacing-base-size-2xs
+    expect(result).toContain('--spacing-base-size-2xs: 2px;');
+    // Semantic should reference primitive with correct CSS var name including spacing prefix
+    expect(result).toContain('--spacing-border-resting: var(--spacing-base-size-2xs);');
   });
 });
