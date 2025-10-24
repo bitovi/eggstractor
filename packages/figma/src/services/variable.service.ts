@@ -40,6 +40,55 @@ async function resolveToPrimitiveVariableName(variable: Variable): Promise<strin
 }
 
 /**
+ * Helper to get the actual value from a variable (following alias chains)
+ */
+async function getVariableActualValue(variable: Variable, propertyName: string): Promise<string> {
+  const modeId = Object.keys(variable.valuesByMode)[0];
+  const value = variable.valuesByMode[modeId];
+
+  if (value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS') {
+    let aliasVariable = variableCache.get(value.id);
+
+    if (!aliasVariable) {
+      const aliasVariableFromFigma = await figma.variables.getVariableByIdAsync(value.id);
+
+      if (!aliasVariableFromFigma) {
+        throw new Error('Unexpected missing variable from Figma');
+      }
+
+      variableCache.set(value.id, aliasVariableFromFigma);
+      aliasVariable = aliasVariableFromFigma;
+    }
+
+    // Recursively resolve to the primitive's actual value
+    return getVariableActualValue(aliasVariable, propertyName);
+  }
+
+  // We've reached a primitive variable, extract its actual value
+  switch (variable.resolvedType) {
+    case 'FLOAT': {
+      const numValue = value as number;
+      return normalizeValue({
+        propertyName,
+        value: numValue,
+      });
+    }
+    case 'COLOR': {
+      if (typeof value === 'object' && 'r' in value) {
+        const color = value as RGB | RGBA;
+        const opacity = 'a' in color ? color.a : 1;
+        return rgbaToString(color.r, color.g, color.b, opacity);
+      }
+      return '#000000';
+    }
+    case 'STRING':
+      return value as string;
+    default:
+      return 'inherit';
+  }
+}
+
+/**
  * Get VariableToken for a given variable ID and property. This function checks
  * the cache first, then fetches the variable from Figma if not cached.
  */
@@ -61,12 +110,11 @@ export async function collectBoundVariable(
 
   if (!variable) return null;
 
-  // For semantic variables, resolve to the primitive variable name instead of the resolved value
+  // Get the primitive variable name and actual value
   const primitiveVariableName = await resolveToPrimitiveVariableName(variable);
   if (!primitiveVariableName) return null;
 
-  // Store the primitive variable name as a reference (e.g., "$color-blue-500")
-  const rawValue = `$${primitiveVariableName}`;
+  const rawValue = await getVariableActualValue(variable, property);
   const valueType = rawValue.includes('px') ? 'px' : null;
 
   return {
@@ -76,6 +124,7 @@ export async function collectBoundVariable(
     name: sanitizeName(variable.name),
     value: `$${sanitizeName(variable.name)}`,
     rawValue: rawValue.toLowerCase(),
+    primitiveRef: primitiveVariableName,
     valueType: valueType,
     metadata: {
       figmaId: node.id,

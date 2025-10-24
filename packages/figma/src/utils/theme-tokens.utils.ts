@@ -33,19 +33,20 @@ export function generateThemeDirective(collection: TokenCollection): string {
   const processTokenCollection = (
     tokens: VariableToken[],
     collections: ReturnType<typeof processTokens>,
-    isSemantic: boolean,
   ) => {
     for (const token of tokens) {
       let cleanName = token.name;
       let key: string;
-      // Strip $ prefix from rawValue if present (for Tailwind output)
-      let value = token.rawValue.startsWith('$') ? token.rawValue.slice(1) : token.rawValue;
+      // For semantic tokens, use primitiveRef for category detection
+      // For primitives, use rawValue directly
+      let value = token.rawValue;
 
-      // For semantic tokens, rawValue contains the primitive variable name
-      // We need to look up what category it belongs to and create a var() reference
-      if (isSemantic) {
-        // The primitive name is in value, we need to determine its category and create --css-var format
-        value = convertPrimitiveNameToCssVarName(value);
+      if (token.primitiveRef) {
+        // The primitive name is in primitiveRef, use it to determine category and create --css-var format
+        value = convertPrimitiveNameToCssVarName(token.primitiveRef);
+      } else if (value.startsWith('$')) {
+        // Strip $ prefix from rawValue if present (for Tailwind output)
+        value = value.slice(1);
       }
 
       // Determine the actual token type from the name, not just the property
@@ -173,8 +174,8 @@ export function generateThemeDirective(collection: TokenCollection): string {
   // Process primitives and semantics
   const primitiveCollections = processTokens();
   const semanticCollections = processTokens();
-  processTokenCollection(primitiveTokens, primitiveCollections, false);
-  processTokenCollection(semanticTokens, semanticCollections, true);
+  processTokenCollection(primitiveTokens, primitiveCollections);
+  processTokenCollection(semanticTokens, semanticCollections);
 
   // Helper to output a collection
   const outputCollection = (map: Map<string, string>) => {

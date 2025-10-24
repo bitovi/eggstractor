@@ -423,7 +423,8 @@ describe('generateThemeDirective', () => {
           name: 'color-primary',
           property: 'color',
           value: '$color-primary',
-          rawValue: '$color-blue-500',
+          rawValue: '#0080ff',
+          primitiveRef: 'color-blue-500',
           valueType: null,
           path: [],
           metadata: {
