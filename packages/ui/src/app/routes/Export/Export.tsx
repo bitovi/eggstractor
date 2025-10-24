@@ -3,7 +3,13 @@ import { getValidStylesheetFormat } from '@eggstractor/common';
 import { messageMainThread } from '../../utils';
 import { useConfig, useGeneratedStyles } from '../../context';
 import { Button, StepperStep, Input, StaticCard } from '../../components';
-import { GeneratingStylesProgressBar, useStatus, Output, ExportTestDataButton } from './components';
+import {
+  GeneratingStylesProgressBar,
+  useStatus,
+  Output,
+  ExportTestDataButton,
+  Spinner,
+} from './components';
 import { useOnPluginMessage } from '../../hooks';
 import styles from './Export.module.scss';
 
@@ -121,14 +127,14 @@ export const Export: FC = () => {
             label="Generate"
             status={stepOneStatus}
             position="first"
-            onClick={stepOneStatus === 'past' ? handleStepOneClick : undefined}
+            onClick={stepOneStatus === 'past' ? handleStepOneClick : null}
           />
           <StepperStep
             step={2}
             label="Publish"
             status={stepTwoStatus}
             position="middle"
-            onClick={stepTwoStatus === 'past' ? handleStepTwoClick : undefined}
+            onClick={stepTwoStatus === 'past' ? handleStepTwoClick : null}
           />
           <StepperStep step={3} status={stepThreeStatus} position="last" />
         </div>
@@ -162,7 +168,13 @@ export const Export: FC = () => {
                   disabled={prButtonDisabled || prStatus.state === 'creating-pr'}
                   variant="primary"
                 >
-                  {prStatus.state === 'creating-pr' ? 'Creating PR...' : 'Create Pull Request'}
+                  {prStatus.state === 'creating-pr' ? (
+                    <>
+                      <Spinner />
+                    </>
+                  ) : (
+                    'Create Pull Request'
+                  )}
                 </Button>
               </div>
             </>

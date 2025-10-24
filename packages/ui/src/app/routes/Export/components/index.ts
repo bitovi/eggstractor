@@ -1,4 +1,5 @@
 export * from './ExportTestDataButton';
 export * from './GeneratingStylesProgressBar';
 export * from './Output';
+export * from './Spinner';
 export * from './Status';

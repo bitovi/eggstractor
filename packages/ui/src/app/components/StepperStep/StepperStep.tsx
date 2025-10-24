@@ -7,7 +7,7 @@ interface StepperStepProps {
   step: number;
   status?: 'past' | 'current' | 'future';
   position?: 'first' | 'middle' | 'last';
-  onClick?: () => void;
+  onClick?: (() => void) | null;
 }
 
 export const StepperStep: FC<StepperStepProps> = ({
