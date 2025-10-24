@@ -36,13 +36,11 @@ export const transformToTailwindSassClass: Transformer = (
     a.variantPath.localeCompare(b.variantPath),
   );
 
-  // Build dynamic theme tokens from variable tokens for v3
-  // This provides hex code fallbacks when variables aren't found in static theme
-  const variableTokens = collection.tokens.filter((token) => token.type === 'variable');
-  const dynamicThemeTokens = buildDynamicThemeTokens(variableTokens);
-
+  /**
+   * don't use a theme mapping for Tailwind-SCSS generation; themeMapping works only for Tailwind v4+, and sass variables aren't compatible with tailwind built-in utilities.
+   */
   for (const { variantPath, tokens } of formattedStyleTokens) {
-    const classesToApply = createTailwindClasses(tokens, dynamicThemeTokens);
+    const classesToApply = createTailwindClasses(tokens);
 
     if (classesToApply.length) {
       output += `\n@mixin ${variantPath} {\n  @apply ${classesToApply.join(' ')}; \n}\n`;
