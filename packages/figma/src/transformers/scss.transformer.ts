@@ -41,9 +41,17 @@ const getMixinPropertyAndValue = (
   let baseValue = token.value ? (token.valueType === 'px' ? rem(token.value) : token.value) : '';
 
   // Replace color values with variable references if they exist
-  if (token.property === 'color' || token.property === 'background' || token.property === 'fills') {
+  // Only do this if the baseValue doesn't already contain variable references (e.g., $variable-name)
+  if (
+    (token.property === 'color' || token.property === 'background' || token.property === 'fills') &&
+    !baseValue.includes('$')
+  ) {
     primitiveVariables.forEach((value, colorName) => {
-      baseValue = baseValue.replace(value, `${getSCSSVariableName(colorName)}`);
+      // Simply replace exact matches - color values like #00464a or rgba(...) won't be
+      // part of other values since they have distinct formats
+      const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escapedValue, 'g');
+      baseValue = baseValue.replace(regex, `${getSCSSVariableName(colorName)}`);
     });
   }
 
