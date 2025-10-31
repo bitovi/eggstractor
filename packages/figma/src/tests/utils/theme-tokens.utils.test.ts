@@ -216,8 +216,10 @@ describe('buildDynamicThemeTokens', () => {
     });
 
     // Border width should be correctly categorized
+    // When the variable name ends with 'border' (matching the property name), it maps to 'DEFAULT'
+    // so Tailwind will use just 'border' class, not 'border-border'
     expect(result.borderWidths).toEqual({
-      '1px': 'border',
+      '1px': 'DEFAULT',
     });
 
     // Font weight should be correctly categorized and bidirectional
