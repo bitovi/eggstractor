@@ -12,7 +12,7 @@ import {
   extractInstanceSetToken,
   extractNodeToken,
 } from './token.service';
-import { collectAllFigmaVariables } from './variable.service';
+import { collectPrimitiveVariables } from './variable.service';
 import { collectAllFigmaEffectStyles } from './effect.service';
 import { MAX_PROGRESS_PERCENTAGE, delay, getParentSceneNodes } from '../utils';
 
@@ -285,7 +285,7 @@ export async function collectTokens(onProgress: (progress: number, message: stri
   await figma.loadAllPagesAsync();
 
   // Collect standalone Figma Variables (primitive tokens)
-  await collectAllFigmaVariables(collection, onProgress);
+  await collectPrimitiveVariables(collection, onProgress);
 
   // Collect Figma Effect Styles (box-shadow, etc.)
   await collectAllFigmaEffectStyles(collection, onProgress);

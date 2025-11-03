@@ -1,11 +1,19 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Padding Processors > should process padding correctly > padding 1`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $brand-primary: #00464a;
 $corner-radius-primary: 1rem;
 $size-null: 0rem;
 $border-size-primary: 0.25rem;
+$teal-dark: #00464a;
+$size-16: 1rem;
+$size-0: 0rem;
+$size-4: 0.25rem;
+$teal-800: #00464a;
+$spacing-5: 1rem;
+$spacing-0: 0rem;
+$spacing-3: 0.25rem;
 
 // Generated SCSS Mixins
 @mixin padding-left-right {
@@ -172,11 +180,19 @@ $border-size-primary: 0.25rem;
 `;
 
 exports[`Padding Processors > should process padding correctly > padding 2`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $brand-primary: #00464a;
 $corner-radius-primary: 1rem;
 $size-null: 0rem;
 $border-size-primary: 0.25rem;
+$teal-dark: #00464a;
+$size-16: 1rem;
+$size-0: 0rem;
+$size-4: 0.25rem;
+$teal-800: #00464a;
+$spacing-5: 1rem;
+$spacing-0: 0rem;
+$spacing-3: 0.25rem;
 
 // Generated SCSS Mixins
 @mixin padding-left-right {

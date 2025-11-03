@@ -1,9 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Border Processors > should process border correctly > border 1`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $border-size-primary: 0.25rem;
+$size-4: 0.25rem;
+$spacing-3: 0.25rem;
 $border-primary: #687879;
+$gray-medium: #687879;
+$gray-500: #687879;
 
 // Generated SCSS Mixins
 @mixin position-inside-custom {
@@ -19,9 +23,13 @@ $border-primary: #687879;
 `;
 
 exports[`Border Processors > should process border correctly > border 2`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $border-size-primary: 0.25rem;
+$size-4: 0.25rem;
+$spacing-3: 0.25rem;
 $border-primary: #687879;
+$gray-medium: #687879;
+$gray-500: #687879;
 
 // Generated SCSS Mixins
 @mixin position-inside-custom {
@@ -37,10 +45,14 @@ $border-primary: #687879;
 `;
 
 exports[`Border Processors > should process border radius correctly > border-radius 1`] = `
-"// Generated SCSS Variables
-$colors-primary-brand-teal-teal-800: #00464a;
+"// Primitive SCSS Variables
 $corner-radius-primary: 1rem;
 $size-null: 0rem;
+$colors-primary-brand-teal-teal-800: #00464a;
+$size-16: 1rem;
+$size-0: 0rem;
+$spacing-5: 1rem;
+$spacing-0: 0rem;
 
 // Generated SCSS Mixins
 @mixin border-radius-variable {
@@ -87,10 +99,14 @@ $size-null: 0rem;
 `;
 
 exports[`Border Processors > should process border radius correctly > border-radius 2`] = `
-"// Generated SCSS Variables
-$colors-primary-brand-teal-teal-800: #00464a;
+"// Primitive SCSS Variables
 $corner-radius-primary: 1rem;
 $size-null: 0rem;
+$colors-primary-brand-teal-teal-800: #00464a;
+$size-16: 1rem;
+$size-0: 0rem;
+$spacing-5: 1rem;
+$spacing-0: 0rem;
 
 // Generated SCSS Mixins
 @mixin border-radius-variable {
@@ -137,9 +153,13 @@ $size-null: 0rem;
 `;
 
 exports[`Border Processors > should process border shape correctly > border-shape 1`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $border-size-primary: 0.25rem;
+$size-4: 0.25rem;
+$spacing-3: 0.25rem;
 $border-primary: #687879;
+$gray-medium: #687879;
+$gray-500: #687879;
 
 // Generated SCSS Mixins
 @mixin shape-rectangle {
@@ -161,9 +181,13 @@ $border-primary: #687879;
 `;
 
 exports[`Border Processors > should process border shape correctly > border-shape 2`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $border-size-primary: 0.25rem;
+$size-4: 0.25rem;
+$spacing-3: 0.25rem;
 $border-primary: #687879;
+$gray-medium: #687879;
+$gray-500: #687879;
 
 // Generated SCSS Mixins
 @mixin shape-rectangle {
@@ -185,11 +209,18 @@ $border-primary: #687879;
 `;
 
 exports[`Border Processors > should process border sides correctly > border-sides 1`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $border-size-primary: 0.25rem;
 $size-null: 0rem;
+$size-4: 0.25rem;
+$size-0: 0rem;
+$spacing-3: 0.25rem;
+$spacing-0: 0rem;
 $border-primary: #687879;
+$gray-medium: #687879;
+$gray-500: #687879;
 $size-16: 1rem;
+$spacing-5: 1rem;
 
 // Generated SCSS Mixins
 @mixin border-center-solid-custom-topleft {
@@ -230,11 +261,18 @@ $size-16: 1rem;
 `;
 
 exports[`Border Processors > should process border sides correctly > border-sides 2`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $border-size-primary: 0.25rem;
 $size-null: 0rem;
+$size-4: 0.25rem;
+$size-0: 0rem;
+$spacing-3: 0.25rem;
+$spacing-0: 0rem;
 $border-primary: #687879;
+$gray-medium: #687879;
+$gray-500: #687879;
 $size-16: 1rem;
+$spacing-5: 1rem;
 
 // Generated SCSS Mixins
 @mixin border-center-solid-custom-topleft {

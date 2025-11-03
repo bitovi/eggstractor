@@ -1,12 +1,20 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Text Processors > Text Align Processor > should process font style correctly > font-style 1`] = `
-"// Generated SCSS Variables
-$text-primary: #bfc5c6;
+"// Primitive SCSS Variables
+$text-primary: #a3adad;
+$gray-300: #a3adad;
 $size-16: 1rem;
+$spacing-5: 1rem;
 $font-style-italic: italic;
 $font-weight-normal: normal;
-$font-weight-medium: 31.25rem;
+$font-weight-medium: 500;
+$style-italic: italic;
+$weight-normal: normal;
+$medium: 31.25rem;
+$italic: italic;
+$normal: normal;
+$v500: 31.25rem;
 
 // Generated SCSS Mixins
 @mixin font-style-italics-variable {
@@ -73,12 +81,20 @@ $font-weight-medium: 31.25rem;
 `;
 
 exports[`Text Processors > Text Align Processor > should process font style correctly > font-style 2`] = `
-"// Generated SCSS Variables
-$text-primary: #bfc5c6;
+"// Primitive SCSS Variables
+$text-primary: #a3adad;
+$gray-300: #a3adad;
 $size-16: 1rem;
+$spacing-5: 1rem;
 $font-style-italic: italic;
 $font-weight-normal: normal;
-$font-weight-medium: 31.25rem;
+$font-weight-medium: 500;
+$style-italic: italic;
+$weight-normal: normal;
+$medium: 31.25rem;
+$italic: italic;
+$normal: normal;
+$v500: 31.25rem;
 
 // Generated SCSS Mixins
 @mixin font-style-italics-variable {
@@ -145,9 +161,11 @@ $font-weight-medium: 31.25rem;
 `;
 
 exports[`Text Processors > Text Align Processor > should process paragraph alignment correctly > paragraph-alignment 1`] = `
-"// Generated SCSS Variables
-$text-primary: #bfc5c6;
+"// Primitive SCSS Variables
+$text-primary: #a3adad;
+$gray-300: #a3adad;
 $size-16: 1rem;
+$spacing-5: 1rem;
 
 // Generated SCSS Mixins
 @mixin frame-top {
@@ -298,9 +316,11 @@ $size-16: 1rem;
 `;
 
 exports[`Text Processors > Text Align Processor > should process paragraph alignment correctly > paragraph-alignment 2`] = `
-"// Generated SCSS Variables
-$text-primary: #bfc5c6;
+"// Primitive SCSS Variables
+$text-primary: #a3adad;
+$gray-300: #a3adad;
 $size-16: 1rem;
+$spacing-5: 1rem;
 
 // Generated SCSS Mixins
 @mixin frame-top {
@@ -451,9 +471,11 @@ $size-16: 1rem;
 `;
 
 exports[`Text Processors > Text Align Processor > should process text alignment correctly > text-alignment 1`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $text-primary: #bfc5c6;
+$gray-300: #bfc5c6;
 $size-16: 1rem;
+$spacing-5: 1rem;
 
 // Generated SCSS Mixins
 @mixin paragraph-justification-justify {
@@ -508,9 +530,11 @@ $size-16: 1rem;
 `;
 
 exports[`Text Processors > Text Align Processor > should process text alignment correctly > text-alignment 2`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $text-primary: #bfc5c6;
+$gray-300: #bfc5c6;
 $size-16: 1rem;
+$spacing-5: 1rem;
 
 // Generated SCSS Mixins
 @mixin paragraph-justification-justify {

@@ -5,10 +5,17 @@ import { convertVariantGroupBy } from './variants';
 import { Transformer } from './types';
 
 const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {
-  const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue!;
+  // Use token.value (which contains variable references) instead of rawValue
+  // This ensures semantic variables are referenced, not their resolved values
+  const baseValue = token.value || token.rawValue;
+  if (!baseValue) {
+    return { [token.property]: '' };
+  }
+
+  const processedValue = token.valueType === 'px' ? rem(baseValue) : baseValue;
 
   return {
-    [token.property]: value,
+    [token.property]: processedValue,
   };
 };
 

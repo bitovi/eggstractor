@@ -529,7 +529,7 @@ describe('generateTailwindBoxShadowClass', () => {
       rawValue: 'inset 0 1px 0 0 #0a1264',
     };
     const result = generateTailwindBoxShadowClass(insetShadowToken);
-    expect(result).toBe('shadow-[inset_0_1px_0_0_#0a1264]');
+    expect(result).toBe('shadow-[inset_0_1px_0_0_var(--blue-900)]');
   });
 
   it('should handle multiple box shadows (complex inside strokes)', () => {
@@ -540,7 +540,7 @@ describe('generateTailwindBoxShadowClass', () => {
     };
     const result = generateTailwindBoxShadowClass(multiShadowToken);
     expect(result).toBe(
-      'shadow-[inset_0_1px_0_0_#0a1264,inset_-1px_0_0_0_#0a1264,inset_0_-1px_0_0_#0a1264,inset_1px_0_0_0_#0a1264]',
+      'shadow-[inset_0_1px_0_0_var(--blue-900),inset_-1px_0_0_0_var(--blue-900),inset_0_-1px_0_0_var(--blue-900),inset_1px_0_0_0_var(--blue-900)]',
     );
   });
 
@@ -559,7 +559,7 @@ describe('generateTailwindBoxShadowClass', () => {
       rawValue: '0 4px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 0 #0a1264',
     };
     const result = generateTailwindBoxShadowClass(mixedShadowToken);
-    expect(result).toBe('shadow-[0_4px_6px_rgba(0,0,0,0.1),inset_0_1px_0_0_#0a1264]');
+    expect(result).toBe('shadow-[0_4px_6px_rgba(0,0,0,0.1),inset_0_1px_0_0_var(--blue-900)]');
   });
 
   it('should use dynamic theme tokens when available', () => {

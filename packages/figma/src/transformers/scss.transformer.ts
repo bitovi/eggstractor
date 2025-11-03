@@ -14,7 +14,10 @@ const getSCSSVariableName = (variableName: string): string => {
   return `$${scssVariableName}`;
 };
 
-const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => {
+const getMixinPropertyAndValue = (
+  token: StyleToken,
+  primitiveVariables: Map<string, string>,
+): Record<string, string> => {
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
     // Only use CSS variables if the token has associated variables
     if (token.variables && token.variables.length > 0) {
@@ -25,18 +28,38 @@ const getMixinPropertyAndValue = (token: StyleToken): Record<string, string> => 
     }
 
     // Use the raw value directly if no variables are involved
-    const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
+    const value = token.rawValue
+      ? token.valueType === 'px'
+        ? rem(token.rawValue)
+        : token.rawValue
+      : '';
 
     // output += ` ${token.property}: ${value};\n`;
     return { [token.property]: value };
   }
 
-  const baseValue = token.valueType === 'px' ? rem(token.value!) : token.value;
+  let baseValue = token.value ? (token.valueType === 'px' ? rem(token.value) : token.value) : '';
+
+  // Replace color values with variable references if they exist
+  // Only do this if the baseValue doesn't already contain variable references (e.g., $variable-name)
+  if (
+    (token.property === 'color' || token.property === 'background' || token.property === 'fills') &&
+    !baseValue.includes('$')
+  ) {
+    primitiveVariables.forEach((value, colorName) => {
+      // Simply replace exact matches - color values like #00464a or rgba(...) won't be
+      // part of other values since they have distinct formats
+      const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escapedValue, 'g');
+      baseValue = baseValue.replace(regex, `${getSCSSVariableName(colorName)}`);
+    });
+  }
+
   // in SCSS negated variables are a parsing warning unless parenthesized
   const processedValue = baseValue
-    ?.replace(/-\$(\w|-)+/g, (match) => `(${match})`)
-    ?.replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
-  return { [token.property]: processedValue! };
+    .replace(/-\$(\w|-)+/g, (match) => `(${match})`)
+    .replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
+  return { [token.property]: processedValue };
 };
 
 export const transformToScss: Transformer = (
@@ -50,23 +73,58 @@ export const transformToScss: Transformer = (
     tokens.tokens.filter((token): token is StyleToken => token.type === 'style'),
   );
 
-  // First, collect and output color variables
-  const colorVariables = new Map<string, string>();
+  // Separate primitive and semantic variables
+  const primitiveVariables = new Map<string, string>();
+  const semanticVariables = new Map<string, string>();
+
   tokens.tokens.forEach((token) => {
     if (token.type === 'variable') {
-      const value = token.valueType === 'px' ? rem(token.rawValue!) : token.rawValue;
-      colorVariables.set(sanitizeName(token.name), value);
+      const sanitizedName = sanitizeName(token.name);
+
+      if (token.metadata?.variableTokenType === 'primitive') {
+        const rawValue = token.rawValue;
+        if (rawValue) {
+          const value = token.valueType === 'px' ? rem(rawValue) : rawValue;
+          primitiveVariables.set(sanitizedName, value);
+        }
+      } else if (token.metadata?.variableTokenType === 'semantic' && token.primitiveRef) {
+        // For semantic variables, reference the primitive variable
+        const primitiveRefName = sanitizeName(token.primitiveRef);
+        semanticVariables.set(sanitizedName, getSCSSVariableName(primitiveRefName));
+      }
     }
   });
 
-  if (colorVariables.size > 0) {
-    output += '// Generated SCSS Variables\n';
+  // Deduplicate: if a variable appears in both primitive and semantic,
+  // remove it from semantic section (primitives take precedence)
+  semanticVariables.forEach((_, name) => {
+    if (primitiveVariables.has(name)) {
+      //TODO: EGG-113, review variable functions while adding functionality.
+      console.warn(
+        `Variable "${name}" is defined as both primitive and semantic. Removing semantic definition. This probably shoudn't be happening.`,
+      );
+      semanticVariables.delete(name);
+    }
+  });
+
+  // Output primitive variables first
+  if (primitiveVariables.size > 0) {
+    output += '// Primitive SCSS Variables\n';
+    primitiveVariables.forEach((value, name) => {
+      output += `${getSCSSVariableName(name)}: ${value};\n`;
+    });
   }
 
-  // Output color variables
-  colorVariables.forEach((value, name) => {
-    output += `${getSCSSVariableName(name)}: ${value};\n`;
-  });
+  // Output semantic variables
+  if (semanticVariables.size > 0) {
+    if (primitiveVariables.size > 0) {
+      output += '\n';
+    }
+    output += '// Semantic SCSS Variables\n';
+    semanticVariables.forEach((value, name) => {
+      output += `${getSCSSVariableName(name)}: ${value};\n`;
+    });
+  }
 
   // Then collect and output gradient variables
   const gradientVariables = new Map<string, StyleToken>();
@@ -89,7 +147,7 @@ export const transformToScss: Transformer = (
   gradientVariables.forEach((token, name) => {
     // Replace color values with variable references if they exist
     let gradientValue = token.rawValue ?? '';
-    colorVariables.forEach((value, colorName) => {
+    primitiveVariables.forEach((value, colorName) => {
       gradientValue = gradientValue.replace(value, `${getSCSSVariableName(colorName)}`);
     });
     if (gradientValue) {
@@ -118,7 +176,7 @@ export const transformToScss: Transformer = (
   const selectors = convertVariantGroupBy(
     tokens,
     variantGroups,
-    getMixinPropertyAndValue,
+    (token) => getMixinPropertyAndValue(token, primitiveVariables),
     namingContext,
     useCombinatorialParsing,
   );

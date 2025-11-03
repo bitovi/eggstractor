@@ -1,22 +1,25 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Demo Data (real world-ish example) > should process all demo data correctly > demo-data-combinatorial 1`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $base-size-xs: 0.125rem;
 $base-colour-grey-400: #282828;
+$base-size-lg: 0.75rem;
+$base-colour-blue-300: #0177cc;
 $base-font-size-xl: 1.25rem;
 $global-font-uidefaultfont: inter;
-$base-font-linespacing-lg: 1.5rem;
-$base-font-weight-semibold: 31.25rem;
-$base-colour-static-white: #ffffff;
-$base-size-lg: 0.75rem;
+$brand-font-body: inter;
 $base-radius-sm: 0.25rem;
+$base-font-family-inter: inter;
+$base-font-linespacing-lg: 1.5rem;
+$base-font-weight-semibold: 500;
 $global-size-border-width: 0.0625rem;
-$base-colour-grey-100: #d9d9d9;
+$base-colour-static-white: #ffffff;
+$base-size-2xs: 0.0625rem;
 $global-colour-textonlight: #282828;
-$base-font-weight-regular: 25rem;
+$base-font-weight-regular: 400;
+$base-colour-grey-100: #d9d9d9;
 $base-colour-grey-300: #747474;
-$base-colour-blue-300: #0177cc;
 
 // Generated SCSS Mixins
 @mixin input {
@@ -78,22 +81,25 @@ $base-colour-blue-300: #0177cc;
 `;
 
 exports[`Demo Data (real world-ish example) > should process all demo data correctly > demo-data-template 1`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $base-size-xs: 0.125rem;
 $base-colour-grey-400: #282828;
+$base-size-lg: 0.75rem;
+$base-colour-blue-300: #0177cc;
 $base-font-size-xl: 1.25rem;
 $global-font-uidefaultfont: inter;
-$base-font-linespacing-lg: 1.5rem;
-$base-font-weight-semibold: 31.25rem;
-$base-colour-static-white: #ffffff;
-$base-size-lg: 0.75rem;
+$brand-font-body: inter;
 $base-radius-sm: 0.25rem;
+$base-font-family-inter: inter;
+$base-font-linespacing-lg: 1.5rem;
+$base-font-weight-semibold: 500;
 $global-size-border-width: 0.0625rem;
-$base-colour-grey-100: #d9d9d9;
+$base-colour-static-white: #ffffff;
+$base-size-2xs: 0.0625rem;
 $global-colour-textonlight: #282828;
-$base-font-weight-regular: 25rem;
+$base-font-weight-regular: 400;
+$base-colour-grey-100: #d9d9d9;
 $base-colour-grey-300: #747474;
-$base-colour-blue-300: #0177cc;
 
 // Generated SCSS Mixins
 @mixin input-resting {

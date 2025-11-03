@@ -36,6 +36,9 @@ export const transformToTailwindSassClass: Transformer = (
     a.variantPath.localeCompare(b.variantPath),
   );
 
+  /**
+   * don't use a theme mapping for Tailwind-SCSS generation; themeMapping works only for Tailwind v4+, and sass variables aren't compatible with tailwind built-in utilities.
+   */
   for (const { variantPath, tokens } of formattedStyleTokens) {
     const classesToApply = createTailwindClasses(tokens);
 
@@ -76,13 +79,11 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
 
   let output = generateThemeDirective(collection);
 
-  // Build dynamic theme tokens from PRIMITIVE variable tokens only for utilities
+  // Build dynamic theme tokens from ALL variable tokens (both primitive and semantic)
+  // so that style tokens can reference either type
   const variableTokens = collection.tokens.filter((token) => token.type === 'variable');
-  const primitiveVariableTokens = variableTokens.filter(
-    (token) => token.metadata?.variableTokenType === 'primitive',
-  );
 
-  const dynamicThemeTokens = buildDynamicThemeTokens(primitiveVariableTokens);
+  const dynamicThemeTokens = buildDynamicThemeTokens(variableTokens);
 
   output += '\n\n/* Generated Tailwind Utilities */\n';
 

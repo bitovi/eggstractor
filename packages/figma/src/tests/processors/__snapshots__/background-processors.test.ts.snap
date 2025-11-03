@@ -2,23 +2,27 @@
 
 exports[`Background Processors > should process background solid correctly > solid styles 1`] = `
 {
-  "alpha": "background: rgba(0, 70, 74, 0.5);",
-  "solid": "background: #00464a;",
+  "alpha": "background: $teal-800-50;",
+  "solid": "background: $brand-primary;",
 }
 `;
 
 exports[`Background Processors > should process background solid correctly > solid styles 2`] = `
 {
-  "alpha": "background: rgba(0, 70, 74, 0.5);",
-  "solid": "background: #00464a;",
+  "alpha": "background: $teal-800-50;",
+  "solid": "background: $brand-primary;",
 }
 `;
 
 exports[`Background Processors > should process background solid correctly - sass > solid styles 1`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $brand-primary: #00464a;
 $teal-800-50: rgba(0, 70, 74, 0.5);
+$teal-medium: #04646a;
+$brand-secondary: #04646a;
 $teal-800: #00464a;
+$teal-dark: #00464a;
+$teal-500: #04646a;
 
 // Generated SCSS Mixins
 @mixin background-solid-variable {
@@ -28,19 +32,19 @@ $teal-800: #00464a;
   background: $teal-800-50;
 }
 @mixin background-solid-custom {
-  background: #00464a;
+  background: $brand-primary;
 }
 @mixin background-solid-alpha-custom {
-  background: rgba(0, 70, 74, 0.5);
+  background: $teal-800-50;
 }
 @mixin background-solid-hex-style {
-  background: #00464a;
+  background: $brand-primary;
 }
 @mixin background-solid-variable-style {
   background: $teal-800;
 }
 @mixin background-solid-alpha-hex-style {
-  background: rgba(0, 70, 74, 0.5);
+  background: $teal-800-50;
 }
 @mixin background-solid-alpha-variable-style {
   background: $teal-800-50;
@@ -49,10 +53,14 @@ $teal-800: #00464a;
 `;
 
 exports[`Background Processors > should process background solid correctly - sass > solid styles 2`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $brand-primary: #00464a;
 $teal-800-50: rgba(0, 70, 74, 0.5);
+$teal-medium: #04646a;
+$brand-secondary: #04646a;
 $teal-800: #00464a;
+$teal-dark: #00464a;
+$teal-500: #04646a;
 
 // Generated SCSS Mixins
 @mixin background-solid-variable {
@@ -62,19 +70,19 @@ $teal-800: #00464a;
   background: $teal-800-50;
 }
 @mixin background-solid-custom {
-  background: #00464a;
+  background: $brand-primary;
 }
 @mixin background-solid-alpha-custom {
-  background: rgba(0, 70, 74, 0.5);
+  background: $teal-800-50;
 }
 @mixin background-solid-hex-style {
-  background: #00464a;
+  background: $brand-primary;
 }
 @mixin background-solid-variable-style {
   background: $teal-800;
 }
 @mixin background-solid-alpha-hex-style {
-  background: rgba(0, 70, 74, 0.5);
+  background: $teal-800-50;
 }
 @mixin background-solid-alpha-variable-style {
   background: $teal-800-50;
@@ -83,15 +91,21 @@ $teal-800: #00464a;
 `;
 
 exports[`Background Processors > should process opacity correctly > opacity styles 1`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $brand-primary: #00464a;
 $opacity-48: 0.48;
 $corner-radius-primary: 1rem;
+$size-48: 3rem;
+$teal-dark: #00464a;
 $size-16: 1rem;
-$font-weight-normal: 31.25rem;
+$spacing-9: 3rem;
+$teal-800: #00464a;
+$spacing-5: 1rem;
 $text-primary: #a3adad;
-$size-48: 0.48;
-$spacing-9: 0.48;
+$gray-300: #a3adad;
+$font-weight-normal: 500;
+$normal: 31.25rem;
+$v500: 31.25rem;
 
 // Generated SCSS Mixins
 @mixin opacity-custom {
@@ -108,7 +122,7 @@ $spacing-9: 0.48;
   opacity: 0.5;
 }
 @mixin opacity-custom-group-opacity-custom {
-  background: #00464a;
+  background: $brand-primary;
   opacity: 0.5;
 }
 @mixin opacity-custom-group-lorem-ipsum {
@@ -148,15 +162,21 @@ $spacing-9: 0.48;
 `;
 
 exports[`Background Processors > should process opacity correctly > opacity styles 2`] = `
-"// Generated SCSS Variables
+"// Primitive SCSS Variables
 $brand-primary: #00464a;
 $opacity-48: 0.48;
 $corner-radius-primary: 1rem;
+$size-48: 3rem;
+$teal-dark: #00464a;
 $size-16: 1rem;
-$font-weight-normal: 31.25rem;
+$spacing-9: 3rem;
+$teal-800: #00464a;
+$spacing-5: 1rem;
 $text-primary: #a3adad;
-$size-48: 0.48;
-$spacing-9: 0.48;
+$gray-300: #a3adad;
+$font-weight-normal: 500;
+$normal: 31.25rem;
+$v500: 31.25rem;
 
 // Generated SCSS Mixins
 @mixin opacity-custom {
@@ -173,7 +193,7 @@ $spacing-9: 0.48;
   opacity: 0.5;
 }
 @mixin opacity-custom-group-opacity-custom {
-  background: #00464a;
+  background: $brand-primary;
   opacity: 0.5;
 }
 @mixin opacity-custom-group-lorem-ipsum {

@@ -72,7 +72,7 @@ describe('buildDynamicThemeTokens', () => {
     const result = buildDynamicThemeTokens(mockPrimitiveTokens);
 
     expect(result.colors).toEqual({
-      '#0080ff': 'colors-blue-500',
+      '#0080ff': 'blue-500',
     });
 
     expect(result.spacing).toEqual({
@@ -412,12 +412,12 @@ describe('generateThemeDirective', () => {
     const result = generateThemeDirective(mockCollection);
 
     expect(result).toContain('@theme {');
-    expect(result).toContain('--colors-blue-500: #0080ff;');
+    expect(result).toContain('--color-blue-500: #0080ff;');
     expect(result).toContain('--spacing-large: 24px;');
     expect(result).toContain('}');
   });
 
-  it('should only include primitive tokens, not semantic ones', () => {
+  it('should include primitives in :root and both primitives and semantics in @theme', () => {
     const collectionWithSemantic: TokenCollection = {
       tokens: [
         {
@@ -425,7 +425,8 @@ describe('generateThemeDirective', () => {
           name: 'color-primary',
           property: 'color',
           value: '$color-primary',
-          rawValue: '$color-blue-500',
+          rawValue: '#0080ff',
+          primitiveRef: 'color-blue-500',
           valueType: null,
           path: [],
           metadata: {
@@ -456,10 +457,16 @@ describe('generateThemeDirective', () => {
 
     const result = generateThemeDirective(collectionWithSemantic);
 
-    // Should include primitive token
-    expect(result).toContain('--colors-blue-500: #0080ff;');
-    // Should NOT include semantic token
-    expect(result).not.toContain('--colors-primary');
+    // :root should only include primitives
+    expect(result).toContain(':root {');
+    expect(result).toContain('--color-blue-500: #0080ff;');
+
+    // @theme should include both primitives and semantics with simplified names
+    expect(result).toContain('@theme {');
+    // Primitives use simplified names (--color-* instead of --colors-*)
+    expect(result).toContain('--color-blue-500: var(--color-blue-500);');
+    // Semantics should reference primitives, not other semantics
+    expect(result).toContain('--color-primary: var(--color-blue-500);');
   });
 
   it('should sort tokens naturally (numeric aware)', () => {
@@ -516,11 +523,11 @@ describe('generateThemeDirective', () => {
     const result = generateThemeDirective(unsortedCollection);
 
     // Extract the lines with color variables to check order
-    const lines = result.split('\n').filter((line: string) => line.includes('--colors-blue-'));
+    const lines = result.split('\n').filter((line: string) => line.includes('--color-blue-'));
 
-    expect(lines[0]).toContain('--colors-blue-01');
-    expect(lines[1]).toContain('--colors-blue-02');
-    expect(lines[2]).toContain('--colors-blue-10');
+    expect(lines[0]).toContain('--color-blue-01');
+    expect(lines[1]).toContain('--color-blue-02');
+    expect(lines[2]).toContain('--color-blue-10');
   });
 
   it('should handle empty token collection', () => {
@@ -639,7 +646,7 @@ describe('generateThemeDirective', () => {
     const result = generateThemeDirective(mixedCollection);
 
     // Colors should come first, then spacing, then font-size
-    const colorIndex = result.indexOf('--colors-blue-500');
+    const colorIndex = result.indexOf('--color-blue-500');
     const spacingIndex = result.indexOf('--spacing-large');
     const fontSizeIndex = result.indexOf('--font-size-large');
 
@@ -730,5 +737,97 @@ describe('generateThemeDirective', () => {
     expect(result).not.toContain('--spacing-font-leading');
     expect(result).not.toContain('--spacing-icon-size');
     expect(result).not.toContain('--spacing-screen-size');
+  });
+
+  it('should correctly reference primitive font-family in semantic tokens', () => {
+    const fontFamilyCollection: TokenCollection = {
+      tokens: [
+        {
+          type: 'variable',
+          name: 'base-font-family-inter',
+          property: 'font-family',
+          value: '$base-font-family-inter',
+          rawValue: 'Inter',
+          valueType: null,
+          path: [],
+          metadata: {
+            variableId: 'var-font-prim-1',
+            variableName: 'Font/Base/Family/Inter',
+            variableTokenType: 'primitive',
+          },
+        },
+        {
+          type: 'variable',
+          name: 'global-font-uidefaultfont',
+          property: 'font-family',
+          value: '$global-font-uidefaultfont',
+          rawValue: 'Inter',
+          primitiveRef: 'base-font-family-inter',
+          valueType: null,
+          path: [],
+          metadata: {
+            variableId: 'var-font-sem-1',
+            variableName: 'Global/Font/UI Default Font',
+            variableTokenType: 'semantic',
+          },
+        },
+      ],
+      components: {},
+      componentSets: {},
+      instances: {},
+    };
+
+    const result = generateThemeDirective(fontFamilyCollection);
+
+    // Primitive font family should use --font-inter
+    expect(result).toContain('--font-inter: Inter;');
+    // Semantic should reference primitive with correct CSS var name
+    expect(result).toContain('--font-global-font-uidefaultfont: var(--font-inter);');
+  });
+
+  it('should correctly reference primitive spacing/size in semantic tokens', () => {
+    const spacingCollection: TokenCollection = {
+      tokens: [
+        {
+          type: 'variable',
+          name: 'base-size-2xs',
+          property: 'spacing',
+          value: '$base-size-2xs',
+          rawValue: '2px',
+          valueType: 'px',
+          path: [],
+          metadata: {
+            variableId: 'var-spacing-prim-1',
+            variableName: 'Size/Base/2XS',
+            variableTokenType: 'primitive',
+          },
+        },
+        {
+          type: 'variable',
+          name: 'border-resting',
+          property: 'spacing',
+          value: '$border-resting',
+          rawValue: '2px',
+          primitiveRef: 'base-size-2xs',
+          valueType: 'px',
+          path: [],
+          metadata: {
+            variableId: 'var-border-sem-1',
+            variableName: 'Border/Resting',
+            variableTokenType: 'semantic',
+          },
+        },
+      ],
+      components: {},
+      componentSets: {},
+      instances: {},
+    };
+
+    const result = generateThemeDirective(spacingCollection);
+
+    // Primitive size should use --spacing-base-size-2xs
+    expect(result).toContain('--spacing-base-size-2xs: 2px;');
+    // Semantic should reference primitive with correct CSS var name including spacing prefix
+    expect(result).toContain('--spacing-border-resting: var(--spacing-base-size-2xs);');
   });
 });

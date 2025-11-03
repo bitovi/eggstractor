@@ -34,6 +34,12 @@ export interface VariableToken extends BaseToken {
    * Actual value e.g. #FF0000.
    */
   rawValue: string;
+  /**
+   * For semantic tokens: the primitive variable name it references (e.g., color-blue-500).
+   * Used for category detection when generating CSS variable references.
+   * Undefined for primitive tokens.
+   */
+  primitiveRef?: string;
 }
 
 export interface StyleToken extends BaseToken {
