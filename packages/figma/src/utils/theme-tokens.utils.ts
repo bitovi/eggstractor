@@ -228,6 +228,11 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
     } else if (cleanName.includes('border-width') || token.property === 'border-width') {
       // Border width tokens (even if categorized as spacing)
       cleanName = cleanName.replace(/^.*border-width-/, '').replace(/^border-width-/, '');
+      // If the extracted name is 'border' (the property name itself), it's the default border width
+      // Map it to 'DEFAULT' so Tailwind uses just 'border' class, not 'border-border'
+      if (cleanName === 'border') {
+        cleanName = 'DEFAULT';
+      }
       dynamicTheme.borderWidths[token.rawValue] = cleanName;
     } else if (cleanName.includes('font-weight') || token.property === 'font-weight') {
       // Font weight tokens (even if categorized as font-family)
