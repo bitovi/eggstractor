@@ -30,7 +30,7 @@ export const Output: FC = () => {
 
   return (
     <div className={styles['code-sample']}>
-      {warnings.length > 0 && (
+      {warnings.length > 0 ? (
         <ExpandableCard
           title="Warnings"
           expanded={warningsExpanded}
@@ -42,7 +42,7 @@ export const Output: FC = () => {
             ))}
           </ul>
         </ExpandableCard>
-      )}
+      ) : null}
       <div className={styles['code-block']}>
         <Button
           variant="icon"
