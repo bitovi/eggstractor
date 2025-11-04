@@ -1,6 +1,9 @@
 import { TokenCollection, VariableToken } from '../types';
 
-export function generateThemeDirective(collection: TokenCollection): string {
+export function generateThemeDirective(
+  collection: TokenCollection,
+  excludeSemanticColorsFromTheme = false,
+): string {
   // Get variable tokens from the main tokens array
   const variableTokens = collection.tokens.filter((token) => token.type === 'variable');
 
@@ -307,7 +310,11 @@ export function generateThemeDirective(collection: TokenCollection): string {
 
   if (Object.values(semanticCollections).some((map) => map.size > 0)) {
     // Output semantics with simplified names
-    result += outputThemeCollection(semanticCollections.colorTokens);
+    // When excludeSemanticColorsFromTheme is true, skip semantic colors to prevent
+    // Tailwind from auto-generating utilities (we'll generate custom @utility rules instead)
+    if (!excludeSemanticColorsFromTheme) {
+      result += outputThemeCollection(semanticCollections.colorTokens);
+    }
     result += outputThemeCollection(semanticCollections.spacingTokens);
     result += outputThemeCollection(semanticCollections.fontFamilyTokens);
     result += outputThemeCollection(semanticCollections.fontWeightTokens);
@@ -457,4 +464,59 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
   }
 
   return dynamicTheme;
+}
+
+/**
+ * Generate custom @utility rules for semantic color tokens based on their naming patterns.
+ * Only generates utilities for colors with 'bg', 'text', or 'border' in their names.
+ *
+ * @param semanticColorTokens - Array of semantic color variable tokens
+ * @returns CSS string containing @utility rules
+ */
+export function generateSemanticColorUtilities(semanticColorTokens: VariableToken[]): string {
+  if (!semanticColorTokens.length) {
+    return '';
+  }
+
+  let output = '\n/* Custom Semantic Color Utilities */\n';
+  const processedNames = new Set<string>(); // Track processed names to avoid duplicates
+
+  for (const token of semanticColorTokens) {
+    // Only process color tokens
+    if (token.property !== 'color' && !token.name.startsWith('color')) {
+      continue;
+    }
+
+    // Use the EXACT same name cleaning logic as the :root generation (line 57-58)
+    const cleanName = token.name.replace(/^colors-/, '').replace(/^color-/, '');
+
+    // The CSS variable name in :root has --color- prefix
+    const cssVarName = `--color-${cleanName}`;
+
+    // Skip if we've already processed this name (avoid duplicates)
+    if (processedNames.has(cssVarName)) {
+      continue;
+    }
+
+    // Determine utility type based on name pattern (case-insensitive)
+    const lowerName = cleanName.toLowerCase();
+    let utilityProperty: string | null = null;
+
+    if (lowerName.includes('bg') || lowerName.includes('background')) {
+      utilityProperty = 'background-color';
+    } else if (lowerName.includes('text') || lowerName.includes('foreground')) {
+      utilityProperty = 'color';
+    } else if (lowerName.includes('border')) {
+      utilityProperty = 'border-color';
+    }
+
+    // Only generate utility if we can determine the property from the name
+    if (utilityProperty) {
+      processedNames.add(cssVarName);
+      // Use cleanName for the utility class name, but cssVarName for the var() reference
+      output += `\n@utility ${cleanName} {\n  ${utilityProperty}: var(${cssVarName});\n}\n`;
+    }
+  }
+
+  return output;
 }

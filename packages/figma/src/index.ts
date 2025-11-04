@@ -80,16 +80,17 @@ const main = async () => {
     tokens: Readonly<TokenCollection>,
     format: StylesheetFormat,
     useCombinatorialParsing: boolean,
+    config?: { generateSemanticColorUtilities?: boolean },
   ): TransformerResult {
     switch (format) {
       case 'scss':
-        return transformToScss(tokens, useCombinatorialParsing);
+        return transformToScss(tokens, useCombinatorialParsing, config);
       case 'css':
-        return transformToCss(tokens, useCombinatorialParsing);
+        return transformToCss(tokens, useCombinatorialParsing, config);
       case 'tailwind-scss':
-        return transformToTailwindSassClass(tokens, useCombinatorialParsing);
+        return transformToTailwindSassClass(tokens, useCombinatorialParsing, config);
       case 'tailwind-v4':
-        return transformToTailwindLayerUtilityClassV4(tokens, useCombinatorialParsing);
+        return transformToTailwindLayerUtilityClassV4(tokens, useCombinatorialParsing, config);
       default:
         throw new Error(`Unsupported format: ${format}`);
     }
@@ -99,6 +100,7 @@ const main = async () => {
   async function generateStyles(
     format: StylesheetFormat,
     useCombinatorialParsing: boolean,
+    config?: { generateSemanticColorUtilities?: boolean },
   ): Promise<TransformerResult> {
     postMessageToUI({
       type: 'progress-start',
@@ -116,7 +118,12 @@ const main = async () => {
 
     await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
 
-    const stylesheet = await transformTokensToStylesheet(tokens, format, useCombinatorialParsing);
+    const stylesheet = await transformTokensToStylesheet(
+      tokens,
+      format,
+      useCombinatorialParsing,
+      config,
+    );
 
     postMessageToUI({
       type: 'progress-end',
@@ -131,6 +138,7 @@ const main = async () => {
       const result = await generateStyles(
         getValidStylesheetFormat(msg.format),
         msg.useCombinatorialParsing,
+        { generateSemanticColorUtilities: msg.generateSemanticColorUtilities },
       );
       generatedScss = result.result; // Store just the generated code
       postMessageToUI({
