@@ -99,7 +99,7 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
     (token): token is VariableToken => token.type === 'variable',
   );
   const dynamicThemeTokens = buildDynamicThemeTokens(variableTokens);
-  let output = themeDirective; // Don't concatenate the object!
+  let output = themeDirective;
 
   // Generate custom semantic color utilities (before component utilities)
   if (generateSemantics && semanticColorTokens.length > 0) {

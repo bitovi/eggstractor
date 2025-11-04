@@ -55,7 +55,13 @@ export function generateThemeDirective(
       // Determine the actual token type from the name, not just the property
       if (token.property === 'color' || cleanName.startsWith('colors-')) {
         cleanName = cleanName.replace(/^colors-/, '').replace(/^color-/, '');
-        key = `--color-${cleanName}`;
+        // For semantic tokens (those with primitiveRef), don't add the --color- prefix
+        // For primitive tokens, keep the --color- prefix
+        if (token.primitiveRef) {
+          key = `--${cleanName}`; // Semantic: --action-bg
+        } else {
+          key = `--color-${cleanName}`; // Primitive: --color-base-blue-500
+        }
         collections.colorTokens.set(key, value);
       } else if (cleanName.includes('border-radius') || token.property === 'border-radius') {
         cleanName = cleanName.replace(/^.*border-radius-/, '').replace(/^border-radius-/, '');
@@ -474,7 +480,24 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
  * @returns CSS string containing @utility rules
  */
 export function generateSemanticColorUtilities(semanticColorTokens: VariableToken[]): string {
+  console.log(
+    '🔍 generateSemanticColorUtilities called with:',
+    semanticColorTokens.length,
+    'tokens',
+  );
+  console.log(
+    '🔍 Token details:',
+    semanticColorTokens.map((t) => ({
+      name: t.name,
+      property: t.property,
+      rawValue: t.rawValue,
+      primitiveRef: t.primitiveRef,
+      metadata: t.metadata,
+    })),
+  );
+
   if (!semanticColorTokens.length) {
+    console.log('⚠️ No semantic color tokens to process');
     return '';
   }
 
@@ -482,41 +505,53 @@ export function generateSemanticColorUtilities(semanticColorTokens: VariableToke
   const processedNames = new Set<string>(); // Track processed names to avoid duplicates
 
   for (const token of semanticColorTokens) {
-    // Only process color tokens
-    if (token.property !== 'color' && !token.name.startsWith('color')) {
-      continue;
-    }
-
     // Use the EXACT same name cleaning logic as the :root generation (line 57-58)
     const cleanName = token.name.replace(/^colors-/, '').replace(/^color-/, '');
+    const lowerName = cleanName.toLowerCase();
 
-    // The CSS variable name in :root has --color- prefix
-    const cssVarName = `--color-${cleanName}`;
+    console.log('🎨 Processing token:', {
+      originalName: token.name,
+      cleanName: cleanName,
+      lowerName: lowerName,
+      property: token.property,
+      hasBg: lowerName.includes('bg'),
+      hasBackground: lowerName.includes('background'),
+      hasText: lowerName.includes('text'),
+      hasBorder: lowerName.includes('border'),
+      alreadyProcessed: processedNames.has(cleanName),
+    });
 
     // Skip if we've already processed this name (avoid duplicates)
-    if (processedNames.has(cssVarName)) {
+    if (processedNames.has(cleanName)) {
+      console.log('⏭️ Skipping duplicate:', cleanName);
       continue;
     }
 
     // Determine utility type based on name pattern (case-insensitive)
-    const lowerName = cleanName.toLowerCase();
     let utilityProperty: string | null = null;
 
     if (lowerName.includes('bg') || lowerName.includes('background')) {
       utilityProperty = 'background-color';
+      console.log('✅ Matched as background-color:', cleanName);
     } else if (lowerName.includes('text') || lowerName.includes('foreground')) {
       utilityProperty = 'color';
+      console.log('✅ Matched as color:', cleanName);
     } else if (lowerName.includes('border')) {
       utilityProperty = 'border-color';
+      console.log('✅ Matched as border-color:', cleanName);
+    } else {
+      console.log('❌ No pattern match for:', cleanName);
     }
 
     // Only generate utility if we can determine the property from the name
     if (utilityProperty) {
-      processedNames.add(cssVarName);
+      processedNames.add(cleanName);
       // Use cleanName for the utility class name, but cssVarName for the var() reference
-      output += `\n@utility ${cleanName} {\n  ${utilityProperty}: var(${cssVarName});\n}\n`;
+      output += `\n@utility ${cleanName} {\n  ${utilityProperty}: var(--${cleanName});\n}\n`;
+      console.log('✨ Generated utility for:', cleanName);
     }
   }
 
+  console.log('📦 Total utilities generated:', processedNames.size);
   return output;
 }

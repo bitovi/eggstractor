@@ -110,6 +110,15 @@ export async function collectBoundVariable(
 
   if (!variable) return null;
 
+  console.log(
+    '🔍 collectBoundVariable:',
+    variable.name,
+    '| property:',
+    property,
+    '| node:',
+    node.name,
+  );
+
   // Get the primitive variable name and actual value
   const primitiveVariableName = await resolveToPrimitiveVariableName(variable);
   if (!primitiveVariableName) return null;
@@ -117,7 +126,7 @@ export async function collectBoundVariable(
   const rawValue = await getVariableActualValue(variable, property);
   const valueType = rawValue.includes('px') ? 'px' : null;
 
-  return {
+  const token = {
     type: 'variable',
     path,
     property,
@@ -133,6 +142,10 @@ export async function collectBoundVariable(
       variableTokenType: 'semantic',
     },
   };
+
+  console.log('✅ Created semantic token:', token.name, '| primitiveRef:', token.primitiveRef);
+
+  return token;
 }
 
 /**
@@ -233,8 +246,16 @@ export async function collectPrimitiveVariables(
     // Get all variable collections
     const variableCollections = await figma.variables.getLocalVariableCollectionsAsync();
 
+    console.log('📊 Variable collections found:', variableCollections.length);
+
     for (const varCollection of variableCollections) {
       onProgress(7, `Processing variable collection: ${varCollection.name}`);
+      console.log(
+        '📁 Collection:',
+        varCollection.name,
+        '| variables:',
+        varCollection.variableIds.length,
+      );
 
       // Get all variables in this collection
       for (const variableId of varCollection.variableIds) {
@@ -261,6 +282,7 @@ export async function collectPrimitiveVariables(
           // Create VariableToken for each true primitive variable
           const token = await createPrimitiveVariableToken(variable);
           if (token) {
+            console.log('✅ Primitive token created:', token.name);
             primitiveTokens.push(token);
           }
         }
