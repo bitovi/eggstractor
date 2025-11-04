@@ -18,16 +18,14 @@ export const About: FC = () => {
         control of their styling updates, allowing for instantaneous design QA and freeing up
         developers (who now only need to review a PR for styling changes).
       </p>
-      <p className={styles.p}>Eggstractor is an open source project by Bitovi.</p>
+      <p className={styles.p}>Eggstractor is an open source project by Bitovi. Need some help?</p>
       <p className={styles.p}>
-        Need some help?
-        <br />
         <a className={styles.link}>Chat with us on Discord</a> •{' '}
         <a className={styles.link}>Send feature requests</a> •{' '}
         <a className={styles.link}>Email us</a>
       </p>
       <p className={styles.last}>
-        Need pros to help design & build your design system or app?{' '}
+        Need pros to help design & build your design system or app? <br />
         <a className={styles.link}>That's us!</a>
       </p>
       <img className={styles.img} src={wordmarkUrl} alt="Bitovi" />

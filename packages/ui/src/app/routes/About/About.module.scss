@@ -1,17 +1,20 @@
 @use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
 
 .about {
-  color: black;
+  @include eggstractor-plugin-design-about-side-padding-card-the-getting-started-guide-will-walk-you-through-the-steps-for-setting-up-a-demo-project-where-you-can-test-it-all-out;
+  //TODO: width is off; should be fixed on next generation.
+  width: 100%;
   .link {
-    color: $colour-brand;
-    font-weight: 700;
+    @include eggstractor-plugin-design-about-side-padding-card-link-link-text;
     text-decoration: none;
+    cursor: pointer;
   }
   .link:hover {
     text-decoration: underline;
   }
   .p {
-    margin-top: 0;
+    @include reset-p;
     // TODO: consider design match
     margin-bottom: 18px + 8px;
   }
