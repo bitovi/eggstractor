@@ -20,6 +20,7 @@ export const App = () => {
       repoPath: msg.config.repoPath ?? '',
       format: getValidStylesheetFormat(msg.config.format),
       useCombinatorialParsing: msg.config.useCombinatorialParsing ?? true,
+      generateSemanticColorUtilities: msg.config.generateSemanticColorUtilities ?? false,
     });
   });
 

@@ -1,9 +1,10 @@
-import { PathNode } from '../../types';
+import { PathNode, StyleToken } from '../../types';
 
 export type StylesForVariantsCombination = {
   styles: Record<string, string>;
   variants: Record<string, string>;
   path: PathNode[];
+  tokens?: StyleToken[];
 };
 
 type StyleNode = {

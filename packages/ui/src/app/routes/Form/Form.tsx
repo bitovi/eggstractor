@@ -24,13 +24,14 @@ export const Form: FC = () => {
   const { setLoading } = useGeneratedStyles();
   const [disableGenerateButton, setDisableGenerateButton] = useState(false);
 
-  const { format, useCombinatorialParsing } = useConfig();
+  const { format, useCombinatorialParsing, generateSemanticColorUtilities } = useConfig();
 
   const generateStyles = () => {
     messageMainThread({
       type: 'generate-styles',
       format: getValidStylesheetFormat(format),
       useCombinatorialParsing,
+      generateSemanticColorUtilities,
     });
   };
 
