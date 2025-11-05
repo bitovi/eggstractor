@@ -93,13 +93,7 @@ export function generateThemeDirective(
         if (cleanName.startsWith('font-')) {
           cleanName = cleanName.replace(/^font-/, '');
         }
-        // For semantic tokens (those with primitiveRef), use the original name
-        // For primitive tokens, add the --font- prefix
-        if (token.primitiveRef) {
-          key = `--${token.name}`;
-        } else {
-          key = `--font-${cleanName}`;
-        }
+        key = `--font-${cleanName}`;
         collections.fontFamilyTokens.set(key, value);
       } else if (cleanName.includes('font-leading') || cleanName.includes('line-height')) {
         cleanName = cleanName
@@ -126,13 +120,7 @@ export function generateThemeDirective(
         collections.boxShadowTokens.set(key, value);
       } else if (token.property === 'spacing') {
         cleanName = cleanName.replace(/^spacing-/, '');
-        // For semantic tokens (those with primitiveRef), use the original name
-        // For primitive tokens, add the --spacing- prefix
-        if (token.primitiveRef) {
-          key = `--${token.name}`;
-        } else {
-          key = `--spacing-${cleanName}`;
-        }
+        key = `--spacing-${cleanName}`;
         collections.spacingTokens.set(key, value);
       }
     }

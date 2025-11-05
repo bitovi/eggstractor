@@ -49,7 +49,7 @@ export interface GenerateStylesPayload extends BaseMessageToMainThreadPayload {
   type: 'generate-styles';
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
-  generateSemanticColorUtilities?: boolean;
+  generateSemanticColorUtilities: boolean;
 }
 
 /**

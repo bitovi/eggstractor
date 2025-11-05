@@ -786,8 +786,8 @@ describe('generateThemeDirective', () => {
 
     // Primitive font family should use --font-inter
     expect(result).toContain('--font-inter: Inter;');
-    // Semantic should reference primitive with correct CSS var name (without --font- prefix)
-    expect(result).toContain('--global-font-uidefaultfont: var(--font-inter);');
+    // Semantic should also use --font- prefix and reference primitive
+    expect(result).toContain('--font-global-font-uidefaultfont: var(--font-inter);');
   });
 
   it('should correctly reference primitive spacing/size in semantic tokens', () => {
@@ -832,8 +832,8 @@ describe('generateThemeDirective', () => {
 
     // Primitive size should use --spacing-base-size-2xs
     expect(result).toContain('--spacing-base-size-2xs: 2px;');
-    // Semantic should reference primitive with correct CSS var name (without --spacing- prefix)
-    expect(result).toContain('--border-resting: var(--spacing-base-size-2xs);');
+    // Semantic should also use --spacing- prefix and reference primitive
+    expect(result).toContain('--spacing-border-resting: var(--spacing-base-size-2xs);');
   });
 
   describe('semantic color exclusion from @theme', () => {
