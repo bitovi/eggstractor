@@ -80,7 +80,7 @@ const main = async () => {
     tokens: Readonly<TokenCollection>,
     format: StylesheetFormat,
     useCombinatorialParsing: boolean,
-    config?: { generateSemanticColorUtilities?: boolean },
+    generateSemanticColorUtilities: boolean,
   ): TransformerResult {
     switch (format) {
       case 'scss':
@@ -93,7 +93,7 @@ const main = async () => {
         return transformToTailwindLayerUtilityClassV4(
           tokens,
           useCombinatorialParsing,
-          config?.generateSemanticColorUtilities || false,
+          generateSemanticColorUtilities,
         );
       default:
         throw new Error(`Unsupported format: ${format}`);
@@ -104,7 +104,7 @@ const main = async () => {
   async function generateStyles(
     format: StylesheetFormat,
     useCombinatorialParsing: boolean,
-    config?: { generateSemanticColorUtilities?: boolean },
+    generateSemanticColorUtilities: boolean,
   ): Promise<TransformerResult> {
     postMessageToUI({
       type: 'progress-start',
@@ -126,7 +126,7 @@ const main = async () => {
       tokens,
       format,
       useCombinatorialParsing,
-      config,
+      generateSemanticColorUtilities,
     );
 
     postMessageToUI({
@@ -142,7 +142,7 @@ const main = async () => {
       const result = await generateStyles(
         getValidStylesheetFormat(msg.format),
         msg.useCombinatorialParsing,
-        { generateSemanticColorUtilities: msg.generateSemanticColorUtilities },
+        msg.generateSemanticColorUtilities,
       );
       generatedScss = result.result; // Store just the generated code
       postMessageToUI({
