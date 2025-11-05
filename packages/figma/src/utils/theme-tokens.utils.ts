@@ -19,6 +19,9 @@ export function generateThemeDirective(
   const standaloneSemanticColors = semanticTokens.filter(
     (token) => token.path.length === 0 && token.property === 'color',
   );
+  const standaloneSemanticNonColors = semanticTokens.filter(
+    (token) => token.path.length === 0 && token.property !== 'color',
+  );
   const boundSemanticTokens = semanticTokens.filter((token) => token.path.length > 0);
 
   // Helper function to categorize and process tokens
@@ -90,7 +93,13 @@ export function generateThemeDirective(
         if (cleanName.startsWith('font-')) {
           cleanName = cleanName.replace(/^font-/, '');
         }
-        key = `--font-${cleanName}`;
+        // For semantic tokens (those with primitiveRef), use the original name
+        // For primitive tokens, add the --font- prefix
+        if (token.primitiveRef) {
+          key = `--${token.name}`;
+        } else {
+          key = `--font-${cleanName}`;
+        }
         collections.fontFamilyTokens.set(key, value);
       } else if (cleanName.includes('font-leading') || cleanName.includes('line-height')) {
         cleanName = cleanName
@@ -117,7 +126,13 @@ export function generateThemeDirective(
         collections.boxShadowTokens.set(key, value);
       } else if (token.property === 'spacing') {
         cleanName = cleanName.replace(/^spacing-/, '');
-        key = `--spacing-${cleanName}`;
+        // For semantic tokens (those with primitiveRef), use the original name
+        // For primitive tokens, add the --spacing- prefix
+        if (token.primitiveRef) {
+          key = `--${token.name}`;
+        } else {
+          key = `--spacing-${cleanName}`;
+        }
         collections.spacingTokens.set(key, value);
       }
     }
@@ -195,6 +210,9 @@ export function generateThemeDirective(
   const semanticCollections = processTokens();
   processTokenCollection(primitiveTokens, primitiveCollections);
   processTokenCollection(boundSemanticTokens, semanticCollections);
+  // Also process standalone non-color semantics (fonts, spacing, etc.) into semanticCollections
+  // They should always appear in @theme regardless of the flag
+  processTokenCollection(standaloneSemanticNonColors, semanticCollections);
 
   // Process standalone semantic colors separately (for :root only when flag is true)
   const standaloneSemanticCollections = processTokens();
@@ -353,6 +371,15 @@ export function generateThemeDirective(
     result += outputThemeCollection(semanticCollections.iconSizeTokens);
     result += outputThemeCollection(semanticCollections.screenSizeTokens);
     result += outputThemeCollection(semanticCollections.boxShadowTokens);
+  }
+
+  // When excludeSemanticColorsFromTheme is false, also add standalone semantic colors to @theme
+  // (they're already in :root when the flag is true, so only add to @theme when flag is false)
+  if (
+    !excludeSemanticColorsFromTheme &&
+    Object.values(standaloneSemanticCollections).some((map) => map.size > 0)
+  ) {
+    result += outputThemeCollection(standaloneSemanticCollections.colorTokens);
   }
 
   result += '}\n';
