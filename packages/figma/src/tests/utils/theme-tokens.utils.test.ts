@@ -470,8 +470,8 @@ describe('generateThemeDirective', () => {
     expect(result).toContain('@theme {');
     // Primitives use simplified names (--color-* instead of --colors-*)
     expect(result).toContain('--color-blue-500: var(--color-blue-500);');
-    // Semantics should reference primitives, not other semantics
-    expect(result).toContain('--color-primary: var(--color-blue-500);');
+    // Semantics should reference primitives (without --color- prefix)
+    expect(result).toContain('--primary: var(--color-blue-500);');
   });
 
   it('should sort tokens naturally (numeric aware)', () => {
@@ -786,8 +786,8 @@ describe('generateThemeDirective', () => {
 
     // Primitive font family should use --font-inter
     expect(result).toContain('--font-inter: Inter;');
-    // Semantic should reference primitive with correct CSS var name
-    expect(result).toContain('--font-global-font-uidefaultfont: var(--font-inter);');
+    // Semantic should reference primitive with correct CSS var name (without --font- prefix)
+    expect(result).toContain('--global-font-uidefaultfont: var(--font-inter);');
   });
 
   it('should correctly reference primitive spacing/size in semantic tokens', () => {
@@ -832,8 +832,8 @@ describe('generateThemeDirective', () => {
 
     // Primitive size should use --spacing-base-size-2xs
     expect(result).toContain('--spacing-base-size-2xs: 2px;');
-    // Semantic should reference primitive with correct CSS var name including spacing prefix
-    expect(result).toContain('--spacing-border-resting: var(--spacing-base-size-2xs);');
+    // Semantic should reference primitive with correct CSS var name (without --spacing- prefix)
+    expect(result).toContain('--border-resting: var(--spacing-base-size-2xs);');
   });
 
   describe('semantic color exclusion from @theme', () => {
@@ -909,19 +909,20 @@ describe('generateThemeDirective', () => {
     it('should include semantic colors in @theme by default', () => {
       const result = generateThemeDirective(collectionWithSemanticColors, false);
 
-      // Semantic colors should appear in @theme
-      expect(result).toContain('--color-action-bg:');
-      expect(result).toContain('--color-text-default:');
-      expect(result).toContain('--color-border-primary:');
+      // Semantic colors should appear in @theme (without --color- prefix)
+      expect(result).toContain('--action-bg:');
+      expect(result).toContain('--text-default:');
+      expect(result).toContain('--border-primary:');
     });
 
     it('should exclude semantic colors from @theme when flag is true', () => {
       const result = generateThemeDirective(collectionWithSemanticColors, true);
 
-      // Semantic colors should NOT appear in @theme
-      expect(result).not.toContain('--color-action-bg:');
-      expect(result).not.toContain('--color-text-default:');
-      expect(result).not.toContain('--color-border-primary:');
+      // Semantic colors should NOT appear in @theme (only in :root)
+      const themeSection = result.substring(result.indexOf('@theme'));
+      expect(themeSection).not.toContain('--action-bg:');
+      expect(themeSection).not.toContain('--text-default:');
+      expect(themeSection).not.toContain('--border-primary:');
 
       // But primitive colors should still be there
       expect(result).toContain('--color-base-blue-500:');
@@ -930,9 +931,12 @@ describe('generateThemeDirective', () => {
     it('should still include semantic colors in :root even when excluded from @theme', () => {
       const result = generateThemeDirective(collectionWithSemanticColors, true);
 
-      // :root should contain all colors
+      // :root should contain primitives and semantics
       const rootSection = result.substring(0, result.indexOf('@theme'));
       expect(rootSection).toContain('--color-base-blue-500:');
+      expect(rootSection).toContain('--action-bg:');
+      expect(rootSection).toContain('--text-default:');
+      expect(rootSection).toContain('--border-primary:');
     });
   });
 });
@@ -959,7 +963,7 @@ describe('generateSemanticColorUtilities', () => {
     const result = generateSemanticColorUtilities(semanticTokens);
 
     expect(result).toContain('@utility action-bg {');
-    expect(result).toContain('background-color: var(--color-action-bg);');
+    expect(result).toContain('background-color: var(--action-bg);');
   });
 
   it('should generate @utility for colors with "text" in name', () => {
@@ -983,7 +987,7 @@ describe('generateSemanticColorUtilities', () => {
     const result = generateSemanticColorUtilities(semanticTokens);
 
     expect(result).toContain('@utility text-default {');
-    expect(result).toContain('color: var(--color-text-default);');
+    expect(result).toContain('color: var(--text-default);');
   });
 
   it('should generate @utility for colors with "border" in name', () => {
@@ -1007,7 +1011,7 @@ describe('generateSemanticColorUtilities', () => {
     const result = generateSemanticColorUtilities(semanticTokens);
 
     expect(result).toContain('@utility border-primary {');
-    expect(result).toContain('border-color: var(--color-border-primary);');
+    expect(result).toContain('border-color: var(--border-primary);');
   });
 
   it('should NOT generate @utility for colors without bg/text/border in name', () => {
@@ -1083,11 +1087,11 @@ describe('generateSemanticColorUtilities', () => {
     const result = generateSemanticColorUtilities(semanticTokens);
 
     expect(result).toContain('@utility action-bg {');
-    expect(result).toContain('background-color: var(--color-action-bg);');
+    expect(result).toContain('background-color: var(--action-bg);');
     expect(result).toContain('@utility action-text {');
-    expect(result).toContain('color: var(--color-action-text);');
+    expect(result).toContain('color: var(--action-text);');
     expect(result).toContain('@utility border-default {');
-    expect(result).toContain('border-color: var(--color-border-default);');
+    expect(result).toContain('border-color: var(--border-default);');
   });
 
   it('should return empty string for empty array', () => {

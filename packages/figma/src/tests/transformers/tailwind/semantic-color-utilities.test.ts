@@ -110,15 +110,15 @@ describe('Tailwind v4 Transformer - Semantic Color Utilities', () => {
 
     // Should generate utility for action-bg
     expect(result.result).toContain('@utility action-bg {');
-    expect(result.result).toContain('background-color: var(--color-action-bg);');
+    expect(result.result).toContain('background-color: var(--action-bg);');
 
     // Should generate utility for action-text
     expect(result.result).toContain('@utility action-text {');
-    expect(result.result).toContain('color: var(--color-action-text);');
+    expect(result.result).toContain('color: var(--action-text);');
 
     // Should generate utility for border-default
     expect(result.result).toContain('@utility border-default {');
-    expect(result.result).toContain('border-color: var(--color-border-default);');
+    expect(result.result).toContain('border-color: var(--border-default);');
 
     // Should NOT generate utility for 'primary' (no bg/text/border in name)
     expect(result.result).not.toContain('@utility primary {');
@@ -146,40 +146,54 @@ describe('Tailwind v4 Transformer - Semantic Color Utilities', () => {
 
     // Semantic colors should be in :root (they define the CSS variables)
     expect(result.result).toContain(':root {');
-    expect(result.result).toContain('--color-action-bg:');
-    expect(result.result).toContain('--color-action-text:');
-    expect(result.result).toContain('--color-border-default:');
+    expect(result.result).toContain('--action-bg:');
+    expect(result.result).toContain('--action-text:');
+    expect(result.result).toContain('--border-default:');
 
     // And primitives should also be there
     expect(result.result).toContain('--color-base-blue-500:');
     expect(result.result).toContain('--color-base-white:');
   });
 
-  it('should include semantic colors in :root when feature is disabled', () => {
+  it('should NOT include semantic colors in :root when feature is disabled', () => {
     const result = transformToTailwindLayerUtilityClassV4(mockCollection, false, false);
 
-    // Semantic colors should be in :root (they're always there)
-    expect(result.result).toContain(':root {');
-    expect(result.result).toContain('--color-action-bg:');
-    expect(result.result).toContain('--color-action-text:');
+    // When feature is disabled, semantic colors are not collected for :root
+    // They should appear in @theme instead (normal behavior)
+    // Semantic colors should NOT be in :root
+    const rootSection = result.result.split('@theme')[0];
+    expect(rootSection).not.toContain('--action-bg:');
+    expect(rootSection).not.toContain('--action-text:');
+
+    // But they SHOULD appear in @theme
+    const themeSection = result.result.split('@theme')[1];
+    expect(themeSection).toContain('--action-bg:');
+    expect(themeSection).toContain('--action-text:');
+
+    // But primitives should still be there
+    expect(result.result).toContain('--color-base-blue-500:');
+    expect(result.result).toContain('--color-base-white:');
   });
 
-  it('should include semantic colors in :root regardless of feature flag', () => {
+  it('should only include semantic colors in :root when feature is enabled', () => {
     const resultEnabled = transformToTailwindLayerUtilityClassV4(mockCollection, false, true);
     const resultDisabled = transformToTailwindLayerUtilityClassV4(mockCollection, false, false);
 
-    // Both should have semantic colors in :root
-    const getRootSection = (output: string) => {
-      const rootStart = output.indexOf(':root {');
-      const rootEnd = output.indexOf('}', rootStart);
-      return output.substring(rootStart, rootEnd);
-    };
+    // Enabled should have semantic colors in :root
+    const rootEnabled = resultEnabled.result.split('@theme')[0];
+    expect(rootEnabled).toContain('--action-bg:');
+    expect(rootEnabled).toContain('--action-text:');
 
-    const rootEnabled = getRootSection(resultEnabled.result);
-    const rootDisabled = getRootSection(resultDisabled.result);
+    // Disabled should have semantic colors in @theme (not :root)
+    const rootDisabled = resultDisabled.result.split('@theme')[0];
+    const themeDisabled = resultDisabled.result.split('@theme')[1];
+    expect(rootDisabled).not.toContain('--action-bg:');
+    expect(rootDisabled).not.toContain('--action-text:');
+    expect(themeDisabled).toContain('--action-bg:');
+    expect(themeDisabled).toContain('--action-text:');
 
-    // :root should contain semantic color variable definitions (not just references)
-    expect(rootEnabled).toContain('--color-base-blue-500:');
-    expect(rootDisabled).toContain('--color-base-blue-500:');
+    // Both should have primitives in :root
+    expect(resultEnabled.result).toContain('--color-base-blue-500:');
+    expect(resultDisabled.result).toContain('--color-base-blue-500:');
   });
 });
