@@ -19,6 +19,7 @@ export interface Config {
   githubToken: string;
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
+  generateSemanticColorUtilities: boolean;
 }
 
 type ConfigType = Config & {
@@ -28,6 +29,7 @@ type ConfigType = Config & {
   setGithubToken: Dispatch<SetStateAction<string>>;
   setFormat: Dispatch<SetStateAction<StylesheetFormat>>;
   setUseCombinatorialParsing: Dispatch<SetStateAction<boolean>>;
+  setGenerateSemanticColorUtilities: Dispatch<SetStateAction<boolean>>;
 };
 
 const ConfigContext = createContext<ConfigType | undefined>(undefined);
@@ -41,6 +43,7 @@ interface ConfigProps {
   githubToken?: string;
   format?: StylesheetFormat;
   useCombinatorialParsing?: boolean;
+  generateSemanticColorUtilities?: boolean;
 }
 
 export const ConfigProvider: FC<ConfigProps> = ({
@@ -51,6 +54,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   githubToken: pGithubToken = '',
   format: pFormat = 'scss',
   useCombinatorialParsing: pUseComb = true,
+  generateSemanticColorUtilities: pGenSemColorUtil = false,
 }) => {
   // Internal defaults used only when the prop is undefined at mount
   const [repoPath, setRepoPath] = useState<string>(pRepoPath ?? '');
@@ -59,6 +63,9 @@ export const ConfigProvider: FC<ConfigProps> = ({
   const [githubToken, setGithubToken] = useState<string>(pGithubToken ?? '');
   const [format, setFormat] = useState<StylesheetFormat>(pFormat ?? 'scss');
   const [useCombinatorialParsing, setUseCombinatorialParsing] = useState<boolean>(pUseComb ?? true);
+  const [generateSemanticColorUtilities, setGenerateSemanticColorUtilities] = useState<boolean>(
+    pGenSemColorUtil ?? false,
+  );
 
   const value = useMemo(
     () => ({
@@ -74,8 +81,20 @@ export const ConfigProvider: FC<ConfigProps> = ({
       setFormat,
       useCombinatorialParsing,
       setUseCombinatorialParsing,
+      generateSemanticColorUtilities,
+      setGenerateSemanticColorUtilities,
     }),
-    [repoPath, filePath, branchName, githubToken, format, useCombinatorialParsing],
+    [
+      repoPath,
+      filePath,
+      branchName,
+      githubToken,
+      format,
+      useCombinatorialParsing,
+      setUseCombinatorialParsing,
+      generateSemanticColorUtilities,
+      setGenerateSemanticColorUtilities,
+    ],
   );
 
   // TODO: debounce this
@@ -88,8 +107,17 @@ export const ConfigProvider: FC<ConfigProps> = ({
       githubToken,
       format,
       useCombinatorialParsing,
+      generateSemanticColorUtilities,
     });
-  }, [repoPath, filePath, branchName, githubToken, format, useCombinatorialParsing]);
+  }, [
+    repoPath,
+    filePath,
+    branchName,
+    githubToken,
+    format,
+    useCombinatorialParsing,
+    generateSemanticColorUtilities,
+  ]);
 
   return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;
 };
