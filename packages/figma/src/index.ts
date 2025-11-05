@@ -84,13 +84,17 @@ const main = async () => {
   ): TransformerResult {
     switch (format) {
       case 'scss':
-        return transformToScss(tokens, useCombinatorialParsing, config);
+        return transformToScss(tokens, useCombinatorialParsing);
       case 'css':
-        return transformToCss(tokens, useCombinatorialParsing, config);
+        return transformToCss(tokens, useCombinatorialParsing);
       case 'tailwind-scss':
-        return transformToTailwindSassClass(tokens, useCombinatorialParsing, config);
+        return transformToTailwindSassClass(tokens, useCombinatorialParsing);
       case 'tailwind-v4':
-        return transformToTailwindLayerUtilityClassV4(tokens, useCombinatorialParsing, config);
+        return transformToTailwindLayerUtilityClassV4(
+          tokens,
+          useCombinatorialParsing,
+          config?.generateSemanticColorUtilities || false,
+        );
       default:
         throw new Error(`Unsupported format: ${format}`);
     }

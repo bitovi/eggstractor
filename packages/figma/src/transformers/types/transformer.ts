@@ -7,5 +7,5 @@ export interface TransformerConfig {
 export type Transformer = (
   tokens: TokenCollection,
   useCombinatorialParsing: boolean,
-  config?: TransformerConfig,
+  generateSemanticColorUtilities?: boolean,
 ) => TransformerResult;
