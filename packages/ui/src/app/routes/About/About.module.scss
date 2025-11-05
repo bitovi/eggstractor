@@ -2,11 +2,17 @@
 @use '../../../resets.scss' as *;
 
 .about {
-  @include eggstractor-plugin-design-about-side-padding-card-the-getting-started-guide-will-walk-you-through-the-steps-for-setting-up-a-demo-project-where-you-can-test-it-all-out;
-  //TODO: width is off; should be fixed on next generation.
-  width: 100%;
+  font-family: $font-family-body;
+  font-style: normal;
+  line-height: $size-2xl;
+  // TODO: consider design match; why no font weight variables?
+  font-weight: 400;
+  color: $colour-text;
   .link {
-    @include eggstractor-plugin-design-about-side-padding-card-link-link-text;
+    color: $colour-link-resting;
+    // TODO: consider design match
+    font-weight: 600;
+    line-height: $size-xl;
     text-decoration: none;
     cursor: pointer;
   }
