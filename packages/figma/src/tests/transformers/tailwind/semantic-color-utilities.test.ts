@@ -103,9 +103,7 @@ describe('Tailwind v4 Transformer - Semantic Color Utilities', () => {
   };
 
   it('should generate semantic color utilities when feature is enabled', () => {
-    const result = transformToTailwindLayerUtilityClassV4(mockCollection, false, {
-      generateSemanticColorUtilities: true,
-    });
+    const result = transformToTailwindLayerUtilityClassV4(mockCollection, false, true);
 
     // Should include semantic color utility section
     expect(result.result).toContain('/* Custom Semantic Color Utilities */');
@@ -127,9 +125,7 @@ describe('Tailwind v4 Transformer - Semantic Color Utilities', () => {
   });
 
   it('should not generate semantic color utilities when feature is disabled', () => {
-    const result = transformToTailwindLayerUtilityClassV4(mockCollection, false, {
-      generateSemanticColorUtilities: false,
-    });
+    const result = transformToTailwindLayerUtilityClassV4(mockCollection, false, false);
 
     // Should NOT include semantic color utility section
     expect(result.result).not.toContain('/* Custom Semantic Color Utilities */');
@@ -146,9 +142,7 @@ describe('Tailwind v4 Transformer - Semantic Color Utilities', () => {
   });
 
   it('should keep semantic colors in :root when feature is enabled', () => {
-    const result = transformToTailwindLayerUtilityClassV4(mockCollection, false, {
-      generateSemanticColorUtilities: true,
-    });
+    const result = transformToTailwindLayerUtilityClassV4(mockCollection, false, true);
 
     // Semantic colors should be in :root (they define the CSS variables)
     expect(result.result).toContain(':root {');
@@ -162,9 +156,7 @@ describe('Tailwind v4 Transformer - Semantic Color Utilities', () => {
   });
 
   it('should include semantic colors in :root when feature is disabled', () => {
-    const result = transformToTailwindLayerUtilityClassV4(mockCollection, false, {
-      generateSemanticColorUtilities: false,
-    });
+    const result = transformToTailwindLayerUtilityClassV4(mockCollection, false, false);
 
     // Semantic colors should be in :root (they're always there)
     expect(result.result).toContain(':root {');
@@ -173,12 +165,8 @@ describe('Tailwind v4 Transformer - Semantic Color Utilities', () => {
   });
 
   it('should include semantic colors in :root regardless of feature flag', () => {
-    const resultEnabled = transformToTailwindLayerUtilityClassV4(mockCollection, false, {
-      generateSemanticColorUtilities: true,
-    });
-    const resultDisabled = transformToTailwindLayerUtilityClassV4(mockCollection, false, {
-      generateSemanticColorUtilities: false,
-    });
+    const resultEnabled = transformToTailwindLayerUtilityClassV4(mockCollection, false, true);
+    const resultDisabled = transformToTailwindLayerUtilityClassV4(mockCollection, false, false);
 
     // Both should have semantic colors in :root
     const getRootSection = (output: string) => {

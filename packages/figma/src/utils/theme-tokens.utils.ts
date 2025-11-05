@@ -15,6 +15,12 @@ export function generateThemeDirective(
     (token) => token.metadata?.variableTokenType === 'semantic',
   );
 
+  // Separate standalone semantic colors (for utilities) from bound semantics (for components)
+  const standaloneSemanticColors = semanticTokens.filter(
+    (token) => token.path.length === 0 && token.property === 'color',
+  );
+  const boundSemanticTokens = semanticTokens.filter((token) => token.path.length > 0);
+
   // Helper function to categorize and process tokens
   const processTokens = () => {
     return {
@@ -188,7 +194,11 @@ export function generateThemeDirective(
   const primitiveCollections = processTokens();
   const semanticCollections = processTokens();
   processTokenCollection(primitiveTokens, primitiveCollections);
-  processTokenCollection(semanticTokens, semanticCollections);
+  processTokenCollection(boundSemanticTokens, semanticCollections);
+
+  // Process standalone semantic colors separately (for :root only when flag is true)
+  const standaloneSemanticCollections = processTokens();
+  processTokenCollection(standaloneSemanticColors, standaloneSemanticCollections);
 
   // Helper to output a collection
   const outputCollection = (map: Map<string, string>) => {
@@ -204,12 +214,16 @@ export function generateThemeDirective(
 
   let result = '';
 
-  // First, output :root with primitives ONLY (with actual values)
+  // First, output :root with primitives
+  // When excludeSemanticColorsFromTheme is true, also include ALL semantic colors in :root
   const hasPrimitives = Object.values(primitiveCollections).some((map) => map.size > 0);
+  const hasStandaloneSemantics = Object.values(standaloneSemanticCollections).some(
+    (map) => map.size > 0,
+  );
 
-  if (hasPrimitives) {
+  if (hasPrimitives || (excludeSemanticColorsFromTheme && hasStandaloneSemantics)) {
     result += ':root {\n';
-    // Output all primitives with actual values (NOT semantics)
+    // Output all primitives with actual values
     result += outputCollection(primitiveCollections.colorTokens);
     result += outputCollection(primitiveCollections.spacingTokens);
     result += outputCollection(primitiveCollections.fontFamilyTokens);
@@ -221,6 +235,14 @@ export function generateThemeDirective(
     result += outputCollection(primitiveCollections.iconSizeTokens);
     result += outputCollection(primitiveCollections.screenSizeTokens);
     result += outputCollection(primitiveCollections.boxShadowTokens);
+
+    // When excludeSemanticColorsFromTheme is true, add standalone semantic colors to :root
+    if (excludeSemanticColorsFromTheme) {
+      result += outputCollection(standaloneSemanticCollections.colorTokens);
+      // Also add bound semantic colors to :root when flag is true
+      result += outputCollection(semanticCollections.colorTokens);
+    }
+
     result += '}\n\n';
   }
 
@@ -340,8 +362,13 @@ export function generateThemeDirective(
 
 /**
  * Build dynamic theme mapping from variable tokens for use in generators
+ * @param variableTokens - Array of variable tokens
+ * @param excludeSemanticColors - When true, excludes semantic colors from the theme mapping
  */
-export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
+export function buildDynamicThemeTokens(
+  variableTokens: VariableToken[],
+  excludeSemanticColors = false,
+) {
   // Initialize standard font weight mappings as fallback
   const standardFontWeights: Record<string, string> = {
     '100': 'thin',
@@ -381,9 +408,17 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
       cleanName.startsWith('colors-')
     ) {
       cleanName = cleanName.replace(/^colors-/, '').replace(/^color-/, '');
-      // For colors, don't include the category prefix - Tailwind 4 doesn't use it
-      // bg-global-colour-action-background not bg-color-global-colour-action-background
-      dynamicTheme.colors[token.rawValue] = cleanName;
+
+      // When excludeSemanticColors is true AND this is a semantic token with primitiveRef:
+      // Map to the semantic name instead of primitive name
+      // This allows components to reference semantic color utilities
+      if (excludeSemanticColors && token.primitiveRef) {
+        // Use the semantic variable name directly (already cleaned)
+        dynamicTheme.colors[token.rawValue] = cleanName;
+      } else {
+        // Default behavior: use the token name (could be primitive or semantic)
+        dynamicTheme.colors[token.rawValue] = cleanName;
+      }
     } else if (cleanName.includes('border-radius') || token.property === 'border-radius') {
       // Border radius tokens (even if categorized as spacing)
       cleanName = cleanName.replace(/^.*border-radius-/, '').replace(/^border-radius-/, '');
@@ -480,24 +515,7 @@ export function buildDynamicThemeTokens(variableTokens: VariableToken[]) {
  * @returns CSS string containing @utility rules
  */
 export function generateSemanticColorUtilities(semanticColorTokens: VariableToken[]): string {
-  console.log(
-    '🔍 generateSemanticColorUtilities called with:',
-    semanticColorTokens.length,
-    'tokens',
-  );
-  console.log(
-    '🔍 Token details:',
-    semanticColorTokens.map((t) => ({
-      name: t.name,
-      property: t.property,
-      rawValue: t.rawValue,
-      primitiveRef: t.primitiveRef,
-      metadata: t.metadata,
-    })),
-  );
-
   if (!semanticColorTokens.length) {
-    console.log('⚠️ No semantic color tokens to process');
     return '';
   }
 
@@ -507,40 +525,22 @@ export function generateSemanticColorUtilities(semanticColorTokens: VariableToke
   for (const token of semanticColorTokens) {
     // Use the EXACT same name cleaning logic as the :root generation (line 57-58)
     const cleanName = token.name.replace(/^colors-/, '').replace(/^color-/, '');
-    const lowerName = cleanName.toLowerCase();
-
-    console.log('🎨 Processing token:', {
-      originalName: token.name,
-      cleanName: cleanName,
-      lowerName: lowerName,
-      property: token.property,
-      hasBg: lowerName.includes('bg'),
-      hasBackground: lowerName.includes('background'),
-      hasText: lowerName.includes('text'),
-      hasBorder: lowerName.includes('border'),
-      alreadyProcessed: processedNames.has(cleanName),
-    });
 
     // Skip if we've already processed this name (avoid duplicates)
     if (processedNames.has(cleanName)) {
-      console.log('⏭️ Skipping duplicate:', cleanName);
       continue;
     }
 
     // Determine utility type based on name pattern (case-insensitive)
+    const lowerName = cleanName.toLowerCase();
     let utilityProperty: string | null = null;
 
     if (lowerName.includes('bg') || lowerName.includes('background')) {
       utilityProperty = 'background-color';
-      console.log('✅ Matched as background-color:', cleanName);
     } else if (lowerName.includes('text') || lowerName.includes('foreground')) {
       utilityProperty = 'color';
-      console.log('✅ Matched as color:', cleanName);
     } else if (lowerName.includes('border')) {
       utilityProperty = 'border-color';
-      console.log('✅ Matched as border-color:', cleanName);
-    } else {
-      console.log('❌ No pattern match for:', cleanName);
     }
 
     // Only generate utility if we can determine the property from the name
@@ -548,10 +548,8 @@ export function generateSemanticColorUtilities(semanticColorTokens: VariableToke
       processedNames.add(cleanName);
       // Use cleanName for the utility class name, but cssVarName for the var() reference
       output += `\n@utility ${cleanName} {\n  ${utilityProperty}: var(--${cleanName});\n}\n`;
-      console.log('✨ Generated utility for:', cleanName);
     }
   }
 
-  console.log('📦 Total utilities generated:', processedNames.size);
   return output;
 }

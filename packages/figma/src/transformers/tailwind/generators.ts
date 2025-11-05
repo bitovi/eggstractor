@@ -11,7 +11,12 @@ interface DynamicTheme {
   boxShadow?: Record<string, string>;
 }
 
-export type GeneratorToken = { rawValue: string; property: string; path: StyleToken['path'] };
+export type GeneratorToken = {
+  rawValue: string;
+  property: string;
+  path: StyleToken['path'];
+  semanticVariableName?: string;
+};
 export type Generator = (token: GeneratorToken, dynamicTheme?: DynamicTheme) => string;
 
 const { spacing, colors, borderWidths, borderRadius, fontWeight, fontFamily, fontSize } =
@@ -441,11 +446,20 @@ const createTailwindClassGenerators = (dynamicTheme?: DynamicTheme): Record<stri
 export function createTailwindClasses(
   tokens: GeneratorToken[],
   dynamicThemeTokens?: DynamicTheme,
+  generateSemantics = false,
 ): string[] {
   const tailwindClassGenerators = createTailwindClassGenerators(dynamicThemeTokens);
   const classOutput: string[] = [];
 
   for (const token of tokens) {
+    // If generating semantic utilities and this token has a semantic variable, use it
+    if (generateSemantics && token.semanticVariableName) {
+      const cleanName = token.semanticVariableName.replace(/^colors-/, '').replace(/^color-/, '');
+      classOutput.push(cleanName);
+      continue;
+    }
+
+    // Otherwise, use the normal generator (which will use the primitive from @theme)
     const generator =
       tailwindClassGenerators[token.property as keyof typeof tailwindClassGenerators];
     if (generator) {
