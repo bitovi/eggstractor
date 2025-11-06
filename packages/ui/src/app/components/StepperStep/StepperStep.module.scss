@@ -1,0 +1,124 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.stepper-step {
+  @include stepper-step;
+  //TODO: box-sizing? position? flex? not sure if bug from eggstractor or design doc problem.
+  position: relative;
+  flex: 1 1 0;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+
+  &.past {
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &.current,
+  &.future {
+    cursor: default;
+  }
+
+  &.first {
+    // TODO: design element was added; revisit when new generated.scss is created
+    margin-left: -64px; // Pull it left so the leading line extends off screen
+    // TODO: design element was added; revisit when new generated.scss is created
+    padding-left: 64px; // Add padding to push the circle back to the right
+  }
+
+  &.last {
+    flex-grow: 0; // Don't grow for the last step
+  }
+}
+
+.preceding-line {
+  //TODO: design element was added; revisit when new generated.scss is created
+  position: absolute;
+  left: 0;
+  // TODO: design element was added; revisit when new generated.scss is created
+  width: 64px;
+  height: 2px;
+  background: $colour-stepper-inactive;
+
+  .current & {
+    background: $colour-accent;
+  }
+
+  .past & {
+    background: $colour-accent;
+  }
+}
+
+.indicator {
+  @include stepper-step-circle;
+  flex-shrink: 0;
+
+  .current & {
+    @include stepper-step-circle-status_current;
+  }
+
+  .future & {
+    @include stepper-step-circle-status_future;
+  }
+}
+
+.number {
+  @include stepper-step-circle-1;
+
+  .current & {
+    @include stepper-step-circle-1-status_current;
+  }
+}
+
+.line-container {
+  @include stepper-step-arrow-and-text;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  // TODO: consider design match
+  height: 2px;
+  background: $colour-stepper-inactive;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  .past & {
+    background: $colour-accent;
+  }
+}
+
+.arrow-tip {
+  // TODO: consider design match
+  margin-right: -2px;
+  color: $colour-stepper-inactive;
+
+  .past & {
+    color: $colour-accent;
+  }
+}
+
+.label-wrapper {
+  @include stepper-step-arrow-and-text-label-bg;
+  position: relative;
+  z-index: 1;
+}
+
+.label {
+  @include stepper-step-arrow-and-text-label-bg-label;
+}

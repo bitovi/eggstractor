@@ -1,0 +1,24 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.nav-list {
+  @include reset-ul;
+  // TODO this is likely not going to work in the future
+  // The current nav is set up as a component set, but this isn't correct
+  // when it's just a component, it'll likely not work again since
+  // component exported styles don't seem to be working
+  @include nav;
+  /*
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $size-none;
+  background: $colour-nav-bg;
+  width: 37.5rem;
+  border-bottom: 0.0625rem solid $colour-nav-border;
+  box-shadow: inset 0 -0.0625rem 0 0 $colour-nav-border;
+  padding: $size-lg $size-xl calc(#{$size-lg} - 0.0625rem);
+  */
+  // TODO: generated width is messing up with responsiveness
+  width: unset;
+}

@@ -1,2 +1,4 @@
 export * from './About';
-export * from './Form';
+export * from './Components';
+export * from './Export';
+export * from './Setup';

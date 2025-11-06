@@ -1,0 +1,66 @@
+@mixin reset-button {
+  /* Remove default border */
+  border: none;
+  /* Remove default background */
+  background: none;
+  /* Remove default padding */
+  padding: 0;
+  /* Remove default margin */
+  margin: 0;
+  /* Inherit font styles from parent */
+  font: inherit;
+  /* Reset text alignment */
+  text-align: left; /* Or center, depending on desired default */
+  /* Remove default outline on focus */
+  outline: none;
+  /* Change cursor to pointer for interactivity */
+  cursor: pointer;
+  /* Remove default text decoration for anchor-styled buttons */
+  text-decoration: none;
+  /* Reset color for text */
+  color: inherit;
+}
+
+@mixin reset-ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin reset-li {
+  list-style: none; /* Removes bullet points/numbers */
+  margin: 0; /* Removes default margin */
+  padding: 0; /* Removes default padding */
+  text-align: initial; /* Resets text alignment */
+  color: unset; /* Resets color to inherited or user-agent default */
+  /* For properties like 'display' that might have been explicitly set to 'none' */
+  display: block;
+}
+
+@mixin reset-a {
+  color: inherit; /* Inherits color from parent, removing default blue/purple */
+  text-decoration: none; /* Removes the underline */
+  font-weight: normal; /* Resets bolding if applied */
+  /* Add other properties as needed, e.g., background, padding, margin */
+}
+
+@mixin reset-img {
+  display: block;
+  margin: 0;
+}
+
+@mixin reset-input {
+  outline: none;
+  border: none;
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+@mixin reset-form {
+  margin: 0;
+}
+
+@mixin reset-p {
+  margin: 0;
+}

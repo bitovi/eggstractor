@@ -1,0 +1,38 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.about {
+  font-family: $font-family-body;
+  font-style: normal;
+  line-height: $size-2xl;
+  // TODO: consider design match; why no font weight variables?
+  font-weight: 400;
+  color: $colour-text;
+  .link {
+    color: $colour-link-resting;
+    // TODO: consider design match
+    font-weight: 600;
+    line-height: $size-xl;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .link:hover {
+    text-decoration: underline;
+  }
+  .p {
+    @include reset-p;
+    // TODO: consider design match
+    margin-bottom: 18px + 8px;
+  }
+  .last {
+    // TODO: consider design match
+    margin-bottom: 50px;
+  }
+  .img {
+    // TODO: consider design match
+    max-width: 215px;
+    height: auto;
+    // TODO: consider design match
+    margin-bottom: 50px;
+  }
+}

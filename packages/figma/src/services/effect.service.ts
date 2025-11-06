@@ -77,7 +77,7 @@ export async function collectAllFigmaEffectStyles(
       }
     }
 
-    console.log(`✨ Collected ${effectTokens.length} effect style tokens`);
+    console.info(`✨ Collected ${effectTokens.length} effect style tokens`);
     collection.tokens.push(...effectTokens);
   } catch (error) {
     console.warn('Failed to collect Figma Effect Styles:', error);

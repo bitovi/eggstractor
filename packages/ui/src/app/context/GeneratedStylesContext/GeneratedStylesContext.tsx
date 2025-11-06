@@ -12,11 +12,13 @@ import {
 export interface GeneratedStyles {
   loading: boolean;
   generatedStyles: string;
+  warnings: string[];
 }
 
 type GeneratedStylesType = GeneratedStyles & {
   setLoading: Dispatch<SetStateAction<boolean>>;
   setGeneratedStyles: Dispatch<SetStateAction<string>>;
+  setWarnings: Dispatch<SetStateAction<string[]>>;
 };
 
 const GeneratedStylesContext = createContext<GeneratedStylesType | undefined>(undefined);
@@ -28,15 +30,18 @@ interface GeneratedStylesProviderProps {
 export const GeneratedStylesProvider: FC<GeneratedStylesProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [generatedStyles, setGeneratedStyles] = useState<string>('');
+  const [warnings, setWarnings] = useState<string[]>([]);
 
   const value = useMemo(
     () => ({
       loading,
       generatedStyles,
+      warnings,
       setLoading,
       setGeneratedStyles,
+      setWarnings,
     }),
-    [loading, generatedStyles],
+    [loading, generatedStyles, warnings],
   );
 
   return (

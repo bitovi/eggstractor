@@ -1,0 +1,40 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+//TODO: Animation related stuff is a bit tricky; ended up not using mixins, maybe revisit?
+.progress-container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  // TODO: consider design match
+  gap: 20px;
+  // TODO: consider design match
+  height: 68px;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: $size-xl;
+  background: $colour-page-bg;
+  border-radius: $size-5xl;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: $colour-loading-bar;
+  border-radius: $size-5xl;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  width: 100%;
+  // TODO: consider design match
+  font-size: 14px;
+  font-weight: 400;
+  color: $colour-text;
+  text-align: center;
+}

@@ -1,0 +1,136 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.top-sheet {
+  width: 100%;
+  background: $colour-sheet-bg;
+  border-bottom: 1px solid $colour-sheet-border; //TODO: Need variable for 1px
+  padding: $size-3xl;
+  display: flex;
+  flex-direction: column;
+  gap: $size-3xl;
+}
+
+.stepper-container {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.action-area {
+  display: flex;
+  gap: $size-xl;
+  align-items: flex-end;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.generate-button {
+  flex: 1;
+}
+
+.step-one-buttons {
+  display: flex;
+  gap: $size-lg;
+  align-items: center;
+  width: 100%;
+
+  .generate-button {
+    flex: 1 1 auto;
+  }
+
+  button:last-child {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+.branch-input-wrapper {
+  flex: 4 1 2;
+  min-width: 0;
+}
+
+.publish-button {
+  flex: 2 2 2;
+  white-space: nowrap;
+}
+
+.progress-container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  // TODO: consider design match
+  gap: 20px;
+  // TODO: consider design match
+  height: 68px;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: $size-xl;
+  background: $colour-page-bg;
+  // TODO: consider design match
+  border-radius: $size-5xl;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: $colour-loading-bar;
+  // TODO: consider design match
+  border-radius: $size-5xl;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  width: 100%;
+  // TODO: consider design match
+  font-size: 14px;
+  font-weight: 400;
+  color: $colour-text;
+  text-align: center;
+}
+
+.content-area {
+  overflow-y: auto;
+  display: flex;
+}
+
+.card-wrapper {
+  width: 100%;
+  padding: $size-2xl;
+}
+
+.success-state {
+  display: flex;
+  align-items: center;
+  gap: $size-xl;
+  width: 100%;
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  flex: 2 1 0;
+  gap: $size-sm;
+  // TODO: consider design match
+  font-size: 16px;
+  font-weight: 500;
+  color: $colour-text;
+
+  svg {
+    // TODO: consider design match
+    width: 24px;
+    // TODO: consider design match
+    height: 24px;
+    color: $colour-brand;
+  }
+}
+
+.view-button {
+  flex: 3 0 0;
+}

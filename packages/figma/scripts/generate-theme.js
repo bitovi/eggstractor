@@ -147,4 +147,4 @@ export const themeTokens: {
 
 fs.writeFileSync(path.resolve(__dirname, '../src/theme-tokens.ts'), tsOutput);
 
-console.log('✅ Generated theme-tokens.ts');
+console.info('✅ Generated theme-tokens.ts');

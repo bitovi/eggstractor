@@ -267,7 +267,7 @@ export async function collectPrimitiveVariables(
       }
     }
 
-    console.log(`✨ Collected ${primitiveTokens.length} primitive variable tokens`);
+    console.info(`✨ Collected ${primitiveTokens.length} primitive variable tokens`);
     collection.tokens.push(...primitiveTokens);
   } catch (error) {
     console.warn('Failed to collect Figma Variables:', error);

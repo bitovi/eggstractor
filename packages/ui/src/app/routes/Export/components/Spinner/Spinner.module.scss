@@ -1,0 +1,39 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbitSpin {
+  from {
+    transform: rotate(0deg) translateY(-11px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateY(-11px) rotate(-360deg);
+  }
+}
+
+// TODO: When we re-generate the eggstracted.scss, double check these to see if mixins are available.
+.spinner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+// TODO: When we re-generate the eggstracted.scss, double check these to see if mixins are available.
+.outer-circle {
+  animation: spin 3s linear infinite;
+  flex-shrink: 0;
+}
+
+// When we re-generate the eggstracted.scss, double check these to see if mixins are available.
+.inner-circle {
+  position: absolute;
+  animation: orbitSpin 1.5s linear infinite;
+}

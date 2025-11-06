@@ -1,0 +1,51 @@
+@use '../../../resets.scss' as *;
+@use '../../../generated.scss' as *;
+
+.button-group {
+  display: flex;
+  width: 100%;
+
+  // TODO: There is an issue with rendering the border radius of the buttons
+  // with the container. The workaround for now is to remove the background
+  // color of the buttons and just put it on the container
+  background: $colour-button-segmented-unselected-bg-resting;
+
+  // TODO: these styles didn't generate, adding them manually
+  border-radius: $radius-brand;
+  border: $size-1px solid $colour-button-segmented-unselected-border;
+}
+
+// TODO: These styles didn't generate, adding them manually
+.button-group-label {
+  display: flex;
+  justify-content: space-between;
+
+  // TODO: really should be using eggstracted color variables here.
+  color: $colour-input-label;
+
+  /* Label */
+  // TODO: same idea; var fallbacks here are indicate the intended design system
+  font-family: $font-family-display;
+  font-size: $size-xl;
+  font-style: normal; // TODO: no variable(s) for font style
+  font-weight: 600; // TODO: no variable(s) for font weight
+  line-height: $size-xl; /* 100% */
+
+  margin-bottom: $size-md;
+}
+
+// TODO: These styles didn't generate, adding them manually
+.button-group-hint {
+  align-self: stretch;
+  color: $colour-input-hint;
+
+  /* Helper */
+  font-family: $font-family-body;
+  // TODO: consider design match
+  font-size: 14px;
+  font-style: normal; // TODO: no variable(s) for font style
+  font-weight: 400; // TODO: no variable(s) for font weight
+  line-height: $size-xl; /* 114.286% */
+
+  margin-top: $size-md;
+}

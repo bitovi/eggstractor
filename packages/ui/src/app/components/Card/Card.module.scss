@@ -1,0 +1,69 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.card {
+  @include card;
+  // TODO: overriding generated padding to make header fully clickable; may need to be adjusted in eggstractor as well
+  padding: 0; //overriding to make header fully clickable
+  width: 100%; //responsiveness fix
+
+  &.static {
+    @include card-static;
+  }
+}
+
+.header {
+  @include reset-button;
+  @include card-frame-20;
+  cursor: pointer;
+  // TODO: generated width messes up responsiveness, should be 100%
+  width: 100%;
+  justify-content: space-between;
+  // TODO: overriding generated padding to make header fully clickable; may need to be adjusted in eggstractor as well
+  padding: 1.875rem; //Want to use @size-3xl but card mixin uses 1.875rem internally
+  height: auto;
+
+  .static & {
+    cursor: default;
+  }
+
+  .collapsible.collapsed & {
+    margin-bottom: 0;
+  }
+}
+
+.title {
+  @include card-frame-20-not-sure-where-to-start;
+  margin: 0;
+  flex: 1;
+
+  .static & {
+    @include card-frame-20-not-sure-where-to-start-static;
+  }
+}
+
+.content {
+  @include card-the-getting-started-guide-will-walk-you-through-the-steps-for-setting-up-a-demo-project-where-you-can-test-it-all-out;
+  white-space: pre-line;
+  // TODO: overriding generated padding to make header fully clickable; may need to be adjusted in eggstractor as well
+  width: 100%; //responsiveness fix
+  padding: 1.875rem; //Want to use $size-3xl but card mixin uses 1.875rem internally
+  padding-top: 0;
+  align-items: flex-start;
+
+  // When card has no title, add top padding back.
+  .card:not(:has(.header)) & {
+    padding-top: 1.875rem;
+  }
+}
+
+.link {
+  // TODO: double check if design doc can be updated for these styles
+  margin-top: $size-xl;
+  text-align: left;
+  align-self: flex-start;
+
+  a {
+    @include card-link-link-text;
+  }
+}

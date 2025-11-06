@@ -1,0 +1,65 @@
+@use '../../../generated.scss' as *;
+@use '../../../resets.scss' as *;
+
+.button {
+  @include reset-button;
+  @include button;
+  // TODO: generated set width is causing issues
+  width: unset;
+  .label {
+    @include button-label;
+  }
+  &.icon {
+    @include button-icon;
+    // TODO: generated icon styles don't include height/width
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+  }
+
+  &:not(:hover) {
+    @include button-status_resting;
+    // TODO: generated padding: 0 is causing issues with padding
+    padding: $size-none $size-2xl;
+    &.primary {
+      @include button-primary-status_resting;
+      .label {
+        @include button-label-primary-status_resting;
+      }
+    }
+    &.secondary {
+      .label {
+        @include button-label-secondary-status_resting;
+      }
+    }
+    &.icon {
+      // TODO: generated icon styles don't include color styles for icon
+      color: $colour-button-secondary-text-resting;
+      padding: 0rem 0rem;
+    }
+  }
+  &:hover {
+    @include button-status_hover;
+    // TODO: generated padding: 0 is causing issues with padding
+    padding: $size-none $size-2xl;
+    &.primary {
+      @include button-primary-status_hover;
+      width: unset;
+      .label {
+        @include button-label-primary-status_hover;
+      }
+    }
+    &.secondary {
+      .label {
+        @include button-label-secondary-status_hover;
+      }
+    }
+    &.icon {
+      // TODO: generated icon styles don't include color styles for icon
+      color: $colour-button-secondary-text-hover;
+      padding: 0rem 0rem;
+    }
+  }
+}

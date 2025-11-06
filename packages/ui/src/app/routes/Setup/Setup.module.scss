@@ -1,0 +1,24 @@
+@use '../../../generated.scss' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: $size-4xl;
+}
+
+// TODO:
+.bottom-sheet {
+  border-top: 1px solid $colour-sheet-border;
+  background: $colour-sheet-bg;
+  display: flex;
+  padding: $size-3xl;
+  gap: $size-xl;
+  margin-top: $size-3xl;
+}
