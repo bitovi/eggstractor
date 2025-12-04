@@ -106,7 +106,7 @@ export function getProcessorsForNode(node: SceneNode): StyleProcessor[] {
     case 'TEXT':
       return [...fontProcessors, ...textAlignProcessors];
     case 'FRAME':
-      return [backgroundProcessor, ...layoutProcessors, ...borderProcessors];
+      return [backgroundProcessor, ...layoutProcessors, ...borderProcessors, ...shadowProcessors];
   }
 }
 ```
@@ -184,6 +184,66 @@ Processes fills and colors:
 - Solid & gradient colors
 - Opacity
 - Color variables
+
+### Shadow Processor
+
+Extracts shadow effects from Figma nodes and converts them to CSS box-shadow properties:
+
+- **Supported Effects**: `DROP_SHADOW` and `INNER_SHADOW`
+- **Filtered Out**: `LAYER_BLUR`, `BACKGROUND_BLUR`, shadows with zero opacity, and invisible shadows (`visible: false`)
+- **INSIDE Border Merging**: When a node has both INSIDE stroke alignment borders and shadow effects, the shadow processor combines them into a single `box-shadow` property
+
+#### How it Works
+
+The shadow processor follows these steps:
+
+1. Checks if the node has an `effects` array
+2. Filters for visible shadow effects (DROP_SHADOW and INNER_SHADOW) with opacity > 0
+3. If the node also has INSIDE stroke alignment, extracts border shadows
+4. Combines border shadows (first) with effect shadows (comma-separated)
+5. Returns the combined box-shadow value
+
+#### Example Input
+
+Figma node with a drop shadow:
+
+```json
+{
+  "effects": [
+    {
+      "type": "DROP_SHADOW",
+      "visible": true,
+      "radius": 10,
+      "color": { "r": 0, "g": 0, "b": 0, "a": 0.25 },
+      "offset": { "x": 0, "y": 4 },
+      "spread": 0
+    }
+  ]
+}
+```
+
+#### Example Output
+
+```css
+.shadow-element {
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+}
+```
+
+#### INSIDE Border Integration
+
+When a node has both INSIDE borders and shadow effects:
+
+```scss
+.combined-shadow {
+  // Border shadows (from INSIDE stroke) + shadow effects
+  box-shadow: inset 0 2px 0 0 #687879, inset -2px 0 0 0 #687879, 
+              inset 0 -2px 0 0 #687879, inset 2px 0 0 0 #687879, 
+              0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+}
+```
+
+**Note**: The shadow processor takes precedence over the border processor for `box-shadow` output. When shadow effects are present, the border processor returns `null` for `box-shadow`, allowing the shadow processor to handle the merging. This ensures only ONE processor outputs the `box-shadow` property per node, as enforced by the token collection architecture.
 
 ## Testing
 

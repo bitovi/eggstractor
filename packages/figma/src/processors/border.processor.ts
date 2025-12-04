@@ -171,6 +171,23 @@ export const borderProcessors: StyleProcessor[] = [
         return null;
       }
 
+      // Check if node has shadow effects - if so, defer to shadow processor
+      // The shadow processor will handle combining INSIDE borders with shadow effects
+      if ('effects' in node && Array.isArray(node.effects)) {
+        const hasShadowEffects = node.effects.some((effect) => {
+          const isShadowType = effect.type === 'DROP_SHADOW' || effect.type === 'INNER_SHADOW';
+          const isVisible = effect.visible !== false;
+          const hasOpacity =
+            (effect as DropShadowEffect | InnerShadowEffect).color?.a !== 0 &&
+            (effect as DropShadowEffect | InnerShadowEffect).color?.a !== undefined;
+          return isShadowType && isVisible && hasOpacity;
+        });
+
+        if (hasShadowEffects) {
+          return null; // Shadow processor will handle this
+        }
+      }
+
       const weights = getBorderWeights(node);
       if (!hasAnyBorder(weights)) {
         return null;

@@ -1,0 +1,157 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Shadow Processors > should generate correct snapshot output for combinatorial mode > shadow-combinatorial-mode 1`] = `
+"
+// Generated SCSS Mixins
+@mixin single-drop-shadow {
+  background: #cccccc;
+  box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.25);
+}
+@mixin multiple-drop-shadows {
+  background: #cccccc;
+  box-shadow: 0rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1), 0rem 0.5rem 0.9375rem 0.125rem rgba(0, 0, 0, 0.2);
+}
+@mixin inner-shadow {
+  background: #cccccc;
+  box-shadow: inset 0rem 0.125rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.3);
+}
+@mixin combined-shadows {
+  background: #cccccc;
+  box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.15), inset 0rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.2);
+}
+@mixin no-effects {
+  background: #cccccc;
+}
+@mixin inside-border-with-shadow {
+  background: #cccccc;
+  box-shadow: inset 0 0.125rem 0 0 #3366cc, inset -0.125rem 0 0 0 #3366cc, inset 0 -0.125rem 0 0 #3366cc, inset 0.125rem 0 0 0 #3366cc, 0rem 0.1875rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+@mixin inside-border-only {
+  background: #cccccc;
+  box-shadow: inset 0 0.1875rem 0 0 #3366cc, inset -0.1875rem 0 0 0 #3366cc, inset 0 -0.1875rem 0 0 #3366cc, inset 0.1875rem 0 0 0 #3366cc;
+}
+@mixin zero-opacity-shadow {
+  background: #cccccc;
+}
+@mixin invisible-shadow {
+  background: #cccccc;
+}
+"
+`;
+
+exports[`Shadow Processors > should generate correct snapshot output for template mode > shadow-template-mode 1`] = `
+"
+// Generated SCSS Mixins
+@mixin single-drop-shadow {
+  background: #cccccc;
+  box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.25);
+}
+@mixin multiple-drop-shadows {
+  background: #cccccc;
+  box-shadow: 0rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1), 0rem 0.5rem 0.9375rem 0.125rem rgba(0, 0, 0, 0.2);
+}
+@mixin inner-shadow {
+  background: #cccccc;
+  box-shadow: inset 0rem 0.125rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.3);
+}
+@mixin combined-shadows {
+  background: #cccccc;
+  box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.15), inset 0rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.2);
+}
+@mixin no-effects {
+  background: #cccccc;
+}
+@mixin inside-border-with-shadow {
+  background: #cccccc;
+  box-shadow: inset 0 0.125rem 0 0 #3366cc, inset -0.125rem 0 0 0 #3366cc, inset 0 -0.125rem 0 0 #3366cc, inset 0.125rem 0 0 0 #3366cc, 0rem 0.1875rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+@mixin inside-border-only {
+  background: #cccccc;
+  box-shadow: inset 0 0.1875rem 0 0 #3366cc, inset -0.1875rem 0 0 0 #3366cc, inset 0 -0.1875rem 0 0 #3366cc, inset 0.1875rem 0 0 0 #3366cc;
+}
+@mixin zero-opacity-shadow {
+  background: #cccccc;
+}
+@mixin invisible-shadow {
+  background: #cccccc;
+}
+"
+`;
+
+exports[`Shadow Processors > should process single drop shadow correctly > shadow-effects-combinatorial 1`] = `
+"
+// Generated SCSS Mixins
+@mixin single-drop-shadow {
+  background: #cccccc;
+  box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.25);
+}
+@mixin multiple-drop-shadows {
+  background: #cccccc;
+  box-shadow: 0rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1), 0rem 0.5rem 0.9375rem 0.125rem rgba(0, 0, 0, 0.2);
+}
+@mixin inner-shadow {
+  background: #cccccc;
+  box-shadow: inset 0rem 0.125rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.3);
+}
+@mixin combined-shadows {
+  background: #cccccc;
+  box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.15), inset 0rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.2);
+}
+@mixin no-effects {
+  background: #cccccc;
+}
+@mixin inside-border-with-shadow {
+  background: #cccccc;
+  box-shadow: inset 0 0.125rem 0 0 #3366cc, inset -0.125rem 0 0 0 #3366cc, inset 0 -0.125rem 0 0 #3366cc, inset 0.125rem 0 0 0 #3366cc, 0rem 0.1875rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+@mixin inside-border-only {
+  background: #cccccc;
+  box-shadow: inset 0 0.1875rem 0 0 #3366cc, inset -0.1875rem 0 0 0 #3366cc, inset 0 -0.1875rem 0 0 #3366cc, inset 0.1875rem 0 0 0 #3366cc;
+}
+@mixin zero-opacity-shadow {
+  background: #cccccc;
+}
+@mixin invisible-shadow {
+  background: #cccccc;
+}
+"
+`;
+
+exports[`Shadow Processors > should process single drop shadow correctly > shadow-effects-template 1`] = `
+"
+// Generated SCSS Mixins
+@mixin single-drop-shadow {
+  background: #cccccc;
+  box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.25);
+}
+@mixin multiple-drop-shadows {
+  background: #cccccc;
+  box-shadow: 0rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1), 0rem 0.5rem 0.9375rem 0.125rem rgba(0, 0, 0, 0.2);
+}
+@mixin inner-shadow {
+  background: #cccccc;
+  box-shadow: inset 0rem 0.125rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.3);
+}
+@mixin combined-shadows {
+  background: #cccccc;
+  box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.15), inset 0rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.2);
+}
+@mixin no-effects {
+  background: #cccccc;
+}
+@mixin inside-border-with-shadow {
+  background: #cccccc;
+  box-shadow: inset 0 0.125rem 0 0 #3366cc, inset -0.125rem 0 0 0 #3366cc, inset 0 -0.125rem 0 0 #3366cc, inset 0.125rem 0 0 0 #3366cc, 0rem 0.1875rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+@mixin inside-border-only {
+  background: #cccccc;
+  box-shadow: inset 0 0.1875rem 0 0 #3366cc, inset -0.1875rem 0 0 0 #3366cc, inset 0 -0.1875rem 0 0 #3366cc, inset 0.1875rem 0 0 0 #3366cc;
+}
+@mixin zero-opacity-shadow {
+  background: #cccccc;
+}
+@mixin invisible-shadow {
+  background: #cccccc;
+}
+"
+`;
