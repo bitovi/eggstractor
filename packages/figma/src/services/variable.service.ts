@@ -273,3 +273,82 @@ export async function collectPrimitiveVariables(
     console.warn('Failed to collect Figma Variables:', error);
   }
 }
+
+/**
+ * Collect semantic color variables for utility generation
+ * Only collects color alias variables that match bg/text/border patterns
+ */
+export async function collectSemanticColorVariables(
+  collection: TokenCollection,
+  onProgress: (progress: number, message: string) => void,
+) {
+  try {
+    onProgress(6, 'Collecting semantic color variables...');
+    const semanticColorTokens: VariableToken[] = [];
+
+    // Get all variable collections
+    const variableCollections = await figma.variables.getLocalVariableCollectionsAsync();
+
+    for (const varCollection of variableCollections) {
+      // Get all variables in this collection
+      for (const variableId of varCollection.variableIds) {
+        const variable = await figma.variables.getVariableByIdAsync(variableId);
+
+        if (!variable) continue;
+
+        // Only collect COLOR variables that are aliases (semantic variables)
+        if (variable.resolvedType !== 'COLOR') continue;
+
+        const modeId = Object.keys(variable.valuesByMode)[0];
+        const value = variable.valuesByMode[modeId];
+
+        // Skip if not an alias (must be a semantic/reference variable)
+        if (
+          !value ||
+          typeof value !== 'object' ||
+          !('type' in value) ||
+          value.type !== 'VARIABLE_ALIAS'
+        ) {
+          continue;
+        }
+
+        // Filter by pattern: bg/background, text/foreground, border
+        const varName = variable.name.toLowerCase();
+        if (!/\/(bg|background|text|foreground|border)\//.test(varName)) {
+          continue;
+        }
+
+        // Resolve to primitive variable name
+        const primitiveVariableName = await resolveToPrimitiveVariableName(variable);
+        if (!primitiveVariableName) continue;
+
+        // Get the actual resolved color value
+        const rawValue = await getVariableActualValue(variable, 'fills');
+
+        // Create token with primitiveRef set
+        const token: VariableToken = {
+          type: 'variable',
+          path: [], // No component path - standalone utility
+          property: 'color', // COLOR type variable
+          name: sanitizeName(variable.name),
+          value: `$${sanitizeName(variable.name)}`,
+          rawValue: rawValue.toLowerCase(),
+          primitiveRef: primitiveVariableName,
+          valueType: null,
+          metadata: {
+            figmaId: '', // No specific node association
+            variableId: variable.id,
+            variableName: variable.name,
+            variableTokenType: 'semantic',
+          },
+        };
+
+        semanticColorTokens.push(token);
+      }
+    }
+
+    collection.tokens.push(...semanticColorTokens);
+  } catch (error) {
+    console.warn('Failed to collect semantic color variables:', error);
+  }
+}

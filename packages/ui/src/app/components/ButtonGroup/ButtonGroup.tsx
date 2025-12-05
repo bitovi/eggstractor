@@ -2,12 +2,12 @@ import { LabelLink } from '../LabelLink/LabelLink';
 import { ButtonGroupItem } from './components';
 import styles from './ButtonGroup.module.scss';
 
-export interface ButtonGroupOption<T extends string | number = string> {
+export interface ButtonGroupOption<T extends string | number | boolean = string> {
   value: T;
   label: string;
 }
 
-export interface ButtonGroupProps<T extends string | number = string> {
+export interface ButtonGroupProps<T extends string | number | boolean = string> {
   label: string;
   value?: T;
   linkHref?: string;
@@ -17,7 +17,7 @@ export interface ButtonGroupProps<T extends string | number = string> {
   options: ButtonGroupOption<T>[];
 }
 
-export const ButtonGroup = <T extends string | number = string>({
+export const ButtonGroup = <T extends string | number | boolean = string>({
   label,
   value,
   onChange,
@@ -37,7 +37,7 @@ export const ButtonGroup = <T extends string | number = string>({
       <div role="group" aria-label={label} className={styles['button-group']}>
         {options.map((option) => (
           <ButtonGroupItem
-            key={option.value}
+            key={String(option.value)}
             active={option.value === value}
             onClick={() => onChange(option.value)}
           >

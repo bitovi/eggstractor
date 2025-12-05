@@ -22,6 +22,7 @@ const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string>
 export const transformToCss: Transformer = (
   tokens: TokenCollection,
   useCombinatorialParsing: boolean,
+  _config,
 ): TransformerResult => {
   let output = '/* Generated CSS */';
 
