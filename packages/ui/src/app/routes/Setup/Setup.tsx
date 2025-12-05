@@ -18,6 +18,11 @@ export const OUTPUT_GROUPING_OPTIONS: ButtonGroupOption<'combinatorial' | 'templ
   { value: 'combinatorial', label: 'Combinatorial' },
 ];
 
+export const USE_SEMANTIC_COLOR_UTILITIES_OPTIONS: ButtonGroupOption<boolean>[] = [
+  { value: true, label: 'Yes' },
+  { value: false, label: 'No' },
+];
+
 export const Setup: FC = () => {
   const {
     repoPath: initialRepoPath,
@@ -25,6 +30,7 @@ export const Setup: FC = () => {
     githubToken: initialGithubToken,
     format: initialFormat,
     useCombinatorialParsing: initialUseCombinatorialParsing,
+    generateSemanticColorUtilities: initialGenerateSemanticColorUtilities,
     saveConfig,
   } = useConfig();
 
@@ -35,6 +41,9 @@ export const Setup: FC = () => {
   const [useCombinatorialParsing, setUseCombinatorialParsing] = useState(
     initialUseCombinatorialParsing,
   );
+  const [generateSemanticColorUtilities, setGenerateSemanticColorUtilities] = useState(
+    initialGenerateSemanticColorUtilities,
+  );
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -44,6 +53,7 @@ export const Setup: FC = () => {
       githubToken,
       format,
       useCombinatorialParsing,
+      generateSemanticColorUtilities,
     });
     alert('Changes saved!');
   };
@@ -88,6 +98,16 @@ export const Setup: FC = () => {
             onChange={setFormat}
             options={FORMAT_OPTIONS}
           ></ButtonGroup>
+        </div>
+        <div>
+          {format === 'tailwind-v4' ? (
+            <ButtonGroup
+              label="Output Semantic Variables as Tailwind Utilities"
+              value={generateSemanticColorUtilities}
+              onChange={setGenerateSemanticColorUtilities}
+              options={USE_SEMANTIC_COLOR_UTILITIES_OPTIONS}
+            ></ButtonGroup>
+          ) : null}
         </div>
         <div>
           <ButtonGroup

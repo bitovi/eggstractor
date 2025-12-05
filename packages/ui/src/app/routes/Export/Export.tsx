@@ -21,6 +21,7 @@ export const Export: FC = () => {
     githubToken,
     repoPath,
     filePath,
+    generateSemanticColorUtilities,
   } = useConfig();
   const { loading, setLoading, generatedStyles, setGeneratedStyles } = useGeneratedStyles();
   const { status: prStatus, setCreatingPR, setPRCreated, setIdle } = useStatus();
@@ -32,6 +33,7 @@ export const Export: FC = () => {
       type: 'generate-styles',
       format: getValidStylesheetFormat(format),
       useCombinatorialParsing,
+      generateSemanticColorUtilities,
     });
   };
 
@@ -174,13 +176,7 @@ export const Export: FC = () => {
                     disabled={prButtonDisabled || prStatus.state === 'creating-pr'}
                     variant="primary"
                   >
-                    {prStatus.state === 'creating-pr' ? (
-                      <>
-                        <Spinner />
-                      </>
-                    ) : (
-                      'Create Pull Request'
-                    )}
+                    {prStatus.state === 'creating-pr' ? <Spinner /> : 'Create Pull Request'}
                   </Button>
                 </div>
               </>
