@@ -174,6 +174,23 @@ export async function createPrimitiveVariableToken(
     // This function should only receive true primitives
 
     const modes = getModesFromCollection(collection);
+
+    // If collection has no modes (e.g., in tests), use first mode from valuesByMode
+    if (modes.length === 0) {
+      const modeIds = Object.keys(variable.valuesByMode);
+      if (modeIds.length === 0) {
+        console.warn(`Variable ${variable.name} has no modes`);
+        return null;
+      }
+
+      // Create a default mode from the first mode ID
+      modes.push({
+        modeId: modeIds[0],
+        modeName: 'default',
+        sanitizedName: 'default',
+      });
+    }
+
     const defaultMode = modes[0];
 
     // Get default mode value for the primary rawValue
@@ -359,6 +376,30 @@ export async function collectSemanticColorVariables(
 
     for (const varCollection of variableCollections) {
       const modes = getModesFromCollection(varCollection);
+
+      // If collection has no modes (e.g., in tests), use first mode from a variable
+      if (modes.length === 0) {
+        // Try to get mode from first variable in collection
+        if (varCollection.variableIds.length > 0) {
+          const firstVar = await figma.variables.getVariableByIdAsync(varCollection.variableIds[0]);
+          if (firstVar) {
+            const modeIds = Object.keys(firstVar.valuesByMode);
+            if (modeIds.length > 0) {
+              modes.push({
+                modeId: modeIds[0],
+                modeName: 'default',
+                sanitizedName: 'default',
+              });
+            }
+          }
+        }
+
+        // If still no modes, skip this collection
+        if (modes.length === 0) {
+          continue;
+        }
+      }
+
       const defaultMode = modes[0];
 
       // Get all variables in this collection

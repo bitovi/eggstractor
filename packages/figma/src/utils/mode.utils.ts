@@ -22,6 +22,11 @@ export interface ModeInfo {
  * @returns Array of ModeInfo objects
  */
 export function getModesFromCollection(collection: VariableCollection): ModeInfo[] {
+  // Safety check for test mocks or collections without modes
+  if (!collection.modes || collection.modes.length === 0) {
+    return [];
+  }
+
   return collection.modes.map((mode) => ({
     modeId: mode.modeId,
     modeName: mode.name,
