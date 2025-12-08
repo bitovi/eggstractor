@@ -1,4 +1,4 @@
-import { StyleToken, TokenCollection, TransformerResult } from '../types';
+import { StyleToken, TokenCollection, TransformerResult, VariableToken } from '../types';
 import { deduplicateMessages, groupBy } from './utils';
 import { createNamingContext, rem } from '../utils';
 import { convertVariantGroupBy } from './variants';
@@ -19,10 +19,23 @@ const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string>
   };
 };
 
+/**
+ * Transforms a token collection to CSS variables and classes.
+ *
+ * @param tokens - The token collection to transform
+ * @param useCombinatorialParsing - Whether to use combinatorial parsing for variants
+ * @param _generateSemantics - (Not used in CSS transformer)
+ * @param outputMode - Determines what to output:
+ *   - 'variables': Only CSS custom properties in :root (no classes)
+ *   - 'components': Only CSS classes from style tokens (no variables)
+ *   - 'all': Both CSS variables and classes (default behavior)
+ * @returns TransformerResult with the generated CSS code
+ */
 export const transformToCss: Transformer = (
   tokens: TokenCollection,
   useCombinatorialParsing: boolean,
-  _config,
+  _generateSemantics,
+  outputMode = 'all',
 ): TransformerResult => {
   let output = '/* Generated CSS */';
 
@@ -31,6 +44,31 @@ export const transformToCss: Transformer = (
     tokens.tokens.filter((token): token is StyleToken => token.type === 'style'),
   );
 
+  // For 'variables' mode, output CSS variables
+  if (outputMode === 'variables') {
+    const variableTokens = tokens.tokens.filter(
+      (token): token is VariableToken => token.type === 'variable',
+    );
+
+    if (variableTokens.length > 0) {
+      output += '\n\n:root {\n';
+      for (const token of variableTokens) {
+        const varName = `--${token.name}`;
+        const rawValue = token.rawValue ?? '';
+        const value = token.valueType === 'px' ? rem(rawValue) : rawValue;
+        output += `  ${varName}: ${value};\n`;
+      }
+      output += '}\n';
+    }
+
+    return {
+      result: output,
+      warnings,
+      errors,
+    };
+  }
+
+  // For 'components' and 'all' modes, generate CSS classes
   // Filter for style tokens only and ensure they have valid values
   const styleTokens = tokens.tokens.filter(
     (token): token is StyleToken =>

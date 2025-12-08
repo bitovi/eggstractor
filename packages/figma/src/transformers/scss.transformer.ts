@@ -62,10 +62,23 @@ const getMixinPropertyAndValue = (
   return { [token.property]: processedValue };
 };
 
+/**
+ * Transforms a token collection to SCSS variables and mixins.
+ *
+ * @param tokens - The token collection to transform
+ * @param useCombinatorialParsing - Whether to use combinatorial parsing for variants
+ * @param _generateSemantics - (Not used in SCSS transformer)
+ * @param outputMode - Determines what to output:
+ *   - 'variables': Only SCSS variables (primitives, semantics, gradients) - no mixins
+ *   - 'components': SCSS variables + mixins (default behavior)
+ *   - 'all': SCSS variables + mixins (default behavior)
+ * @returns TransformerResult with the generated SCSS code
+ */
 export const transformToScss: Transformer = (
   tokens: TokenCollection,
   useCombinatorialParsing: boolean,
-  _config,
+  _generateSemantics,
+  outputMode = 'all',
 ): TransformerResult => {
   let output = '';
 
@@ -156,7 +169,16 @@ export const transformToScss: Transformer = (
     }
   });
 
-  // Generate mixins section
+  // If outputMode is 'variables', skip mixin generation
+  if (outputMode === 'variables') {
+    return {
+      result: output,
+      warnings,
+      errors,
+    };
+  }
+
+  // Generate mixins section (for 'components' and 'all' modes)
   output += '\n// Generated SCSS Mixins\n';
 
   // Filter for style tokens and group by path
