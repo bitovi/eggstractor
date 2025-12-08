@@ -1,4 +1,4 @@
-import { StylesheetFormat } from '@eggstractor/common';
+import { StylesheetFormat, OutputMode } from '@eggstractor/common';
 import { createContext, useContext, useMemo, useState, FC, ReactNode } from 'react';
 import { messageMainThread } from '../../utils';
 
@@ -10,6 +10,7 @@ export interface Config {
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
+  outputMode: OutputMode;
 }
 
 type ConfigType = Config & {
@@ -28,6 +29,7 @@ interface ConfigProps {
   format?: StylesheetFormat;
   useCombinatorialParsing?: boolean;
   generateSemanticColorUtilities?: boolean;
+  outputMode?: OutputMode;
 }
 
 export const ConfigProvider: FC<ConfigProps> = ({
@@ -39,6 +41,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   format: pFormat = 'scss',
   useCombinatorialParsing: pUseComb = true,
   generateSemanticColorUtilities: pGenSemColorUtil = false,
+  outputMode: pOutputMode = 'all',
 }) => {
   // Internal defaults used only when the prop is undefined at mount
   const [repoPath, setRepoPath] = useState<string>(pRepoPath ?? '');
@@ -50,6 +53,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   const [generateSemanticColorUtilities, setGenerateSemanticColorUtilities] = useState<boolean>(
     pGenSemColorUtil ?? false,
   );
+  const [outputMode, setOutputMode] = useState<OutputMode>(pOutputMode ?? 'all');
 
   const value = useMemo(() => {
     const saveConfig = (config: Partial<Config>): void => {
@@ -61,6 +65,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       const _useCombinatorialParsing = config.useCombinatorialParsing ?? useCombinatorialParsing;
       const _generateSemanticColorUtilities =
         config.generateSemanticColorUtilities ?? generateSemanticColorUtilities;
+      const _outputMode = config.outputMode ?? outputMode;
 
       setRepoPath(config.repoPath ?? _reportPath);
       setFilePath(config.filePath ?? _filePath);
@@ -71,6 +76,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       setGenerateSemanticColorUtilities(
         config.generateSemanticColorUtilities ?? _generateSemanticColorUtilities,
       );
+      setOutputMode(config.outputMode ?? _outputMode);
       messageMainThread({
         type: 'save-config',
         repoPath: _reportPath,
@@ -80,6 +86,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
         format: _format,
         useCombinatorialParsing: _useCombinatorialParsing,
         generateSemanticColorUtilities: _generateSemanticColorUtilities,
+        outputMode: _outputMode,
       });
     };
 
@@ -91,6 +98,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       format,
       useCombinatorialParsing,
       generateSemanticColorUtilities,
+      outputMode,
       saveConfig,
     };
   }, [
@@ -101,6 +109,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
     format,
     useCombinatorialParsing,
     generateSemanticColorUtilities,
+    outputMode,
   ]);
 
   return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;

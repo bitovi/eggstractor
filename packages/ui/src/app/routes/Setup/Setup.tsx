@@ -1,5 +1,5 @@
 import { FC, FormEvent, useState } from 'react';
-import type { StylesheetFormat } from '@eggstractor/common';
+import type { StylesheetFormat, OutputMode } from '@eggstractor/common';
 import cn from 'classnames';
 import { useConfig } from '../../context';
 import { Button, Input, ButtonGroup, ButtonGroupOption } from '../../components';
@@ -23,6 +23,12 @@ export const USE_SEMANTIC_COLOR_UTILITIES_OPTIONS: ButtonGroupOption<boolean>[] 
   { value: false, label: 'No' },
 ];
 
+export const OUTPUT_MODE_OPTIONS: ButtonGroupOption<OutputMode>[] = [
+  { value: 'variables', label: 'Figma Variables' },
+  { value: 'components', label: 'Figma Components' },
+  { value: 'all', label: 'All' },
+];
+
 export const Setup: FC = () => {
   const {
     repoPath: initialRepoPath,
@@ -31,6 +37,7 @@ export const Setup: FC = () => {
     format: initialFormat,
     useCombinatorialParsing: initialUseCombinatorialParsing,
     generateSemanticColorUtilities: initialGenerateSemanticColorUtilities,
+    outputMode: initialOutputMode,
     saveConfig,
   } = useConfig();
 
@@ -44,6 +51,7 @@ export const Setup: FC = () => {
   const [generateSemanticColorUtilities, setGenerateSemanticColorUtilities] = useState(
     initialGenerateSemanticColorUtilities,
   );
+  const [outputMode, setOutputMode] = useState<OutputMode>(initialOutputMode);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -54,6 +62,7 @@ export const Setup: FC = () => {
       format,
       useCombinatorialParsing,
       generateSemanticColorUtilities,
+      outputMode,
     });
     alert('Changes saved!');
   };
@@ -108,6 +117,15 @@ export const Setup: FC = () => {
               options={USE_SEMANTIC_COLOR_UTILITIES_OPTIONS}
             ></ButtonGroup>
           ) : null}
+        </div>
+        <div>
+          <ButtonGroup
+            label="What to output"
+            value={outputMode}
+            onChange={setOutputMode}
+            options={OUTPUT_MODE_OPTIONS}
+            hint="Choose what to include in the generated output"
+          ></ButtonGroup>
         </div>
         <div>
           <ButtonGroup

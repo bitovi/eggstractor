@@ -1,3 +1,5 @@
+import type { OutputMode } from './output-mode';
+
 /**
  * TODO: Warning, this type is a little shaky and likely to change.
  */
@@ -9,4 +11,5 @@ export interface GithubConfig {
   branchName?: string | null;
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
+  outputMode: OutputMode;
 }

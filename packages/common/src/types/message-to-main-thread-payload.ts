@@ -1,4 +1,5 @@
 import type { StylesheetFormat } from './stylesheet-format';
+import type { OutputMode } from './output-mode';
 
 export type MessageType =
   | 'load-config'
@@ -40,6 +41,7 @@ export interface SaveConfigPayload extends Omit<CreatePRPayload, 'type'> {
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
+  outputMode: OutputMode;
 }
 
 /**
@@ -50,6 +52,7 @@ export interface GenerateStylesPayload extends BaseMessageToMainThreadPayload {
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
+  outputMode: OutputMode;
 }
 
 /**

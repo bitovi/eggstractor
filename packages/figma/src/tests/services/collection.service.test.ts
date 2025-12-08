@@ -2,8 +2,11 @@ import {
   getFlattenedValidNodes,
   detectComponentSetDuplicates,
   shouldSkipInstanceTokenGeneration,
+  collectTokens,
 } from '../../services/collection.service';
 import { InstanceToken, TokenCollection } from '../../types';
+import * as variableService from '../../services/variable.service';
+import * as effectService from '../../services/effect.service';
 
 beforeEach(() => {
   // Suppress console output for cleaner test results
@@ -179,5 +182,99 @@ describe('shouldSkipInstanceTokenGeneration', () => {
     );
 
     expect(result).toBe(false);
+  });
+});
+
+describe('collectTokens - OutputMode behavior', () => {
+  // Mock Figma API
+  const mockOnProgress = vi.fn();
+
+  beforeEach(() => {
+    // Mock Figma global
+    (global as unknown as { figma: PluginAPI }).figma = {
+      root: {
+        children: [
+          {
+            type: 'PAGE',
+            name: 'Page 1',
+            id: 'page-1',
+            children: [],
+          } as unknown as PageNode,
+        ],
+      } as unknown as DocumentNode,
+      loadAllPagesAsync: vi.fn().mockResolvedValue(undefined),
+    } as unknown as PluginAPI;
+
+    // Mock variable collection functions
+    vi.spyOn(variableService, 'collectPrimitiveVariables').mockResolvedValue(undefined);
+    vi.spyOn(variableService, 'collectSemanticColorVariables').mockResolvedValue(undefined);
+    vi.spyOn(effectService, 'collectAllFigmaEffectStyles').mockResolvedValue(undefined);
+  });
+
+  it('should collect only variables when outputMode is "variables"', async () => {
+    const result = await collectTokens(mockOnProgress, 'variables');
+
+    // Should collect variables
+    expect(variableService.collectPrimitiveVariables).toHaveBeenCalled();
+    expect(variableService.collectSemanticColorVariables).toHaveBeenCalled();
+    expect(effectService.collectAllFigmaEffectStyles).toHaveBeenCalled();
+
+    // Should skip node processing (no "Processing nodes" message)
+    const progressCalls = mockOnProgress.mock.calls;
+    const hasNodeProcessing = progressCalls.some((call) =>
+      call[1]?.toString().includes('Processing'),
+    );
+    expect(hasNodeProcessing).toBe(false);
+
+    // Should complete with variable collection message
+    const lastCall = progressCalls[progressCalls.length - 1];
+    expect(lastCall?.[1]).toContain('Variable collection complete');
+
+    expect(result).toHaveProperty('tokens');
+    expect(result).toHaveProperty('components');
+  });
+
+  it('should skip variable collection when outputMode is "components"', async () => {
+    const result = await collectTokens(mockOnProgress, 'components');
+
+    // Should NOT collect variables
+    expect(variableService.collectPrimitiveVariables).not.toHaveBeenCalled();
+    expect(variableService.collectSemanticColorVariables).not.toHaveBeenCalled();
+    expect(effectService.collectAllFigmaEffectStyles).not.toHaveBeenCalled();
+
+    // Should process nodes
+    expect(figma.loadAllPagesAsync).toHaveBeenCalled();
+
+    expect(result).toHaveProperty('tokens');
+    expect(result).toHaveProperty('components');
+  });
+
+  it('should collect both variables and nodes when outputMode is "all"', async () => {
+    const result = await collectTokens(mockOnProgress, 'all');
+
+    // Should collect variables
+    expect(variableService.collectPrimitiveVariables).toHaveBeenCalled();
+    expect(variableService.collectSemanticColorVariables).toHaveBeenCalled();
+    expect(effectService.collectAllFigmaEffectStyles).toHaveBeenCalled();
+
+    // Should process nodes
+    expect(figma.loadAllPagesAsync).toHaveBeenCalled();
+
+    expect(result).toHaveProperty('tokens');
+    expect(result).toHaveProperty('components');
+  });
+
+  it('should default to "all" mode when no outputMode is provided', async () => {
+    const result = await collectTokens(mockOnProgress);
+
+    // Should collect variables
+    expect(variableService.collectPrimitiveVariables).toHaveBeenCalled();
+    expect(variableService.collectSemanticColorVariables).toHaveBeenCalled();
+    expect(effectService.collectAllFigmaEffectStyles).toHaveBeenCalled();
+
+    // Should process nodes
+    expect(figma.loadAllPagesAsync).toHaveBeenCalled();
+
+    expect(result).toHaveProperty('tokens');
   });
 });
