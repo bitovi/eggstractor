@@ -395,6 +395,9 @@ export function generateThemeDirective(
 
   // Then, output @theme with simplified Tailwind naming convention
   // Maps simplified names (--color-*, --leading-*, etc.) to full CSS variable names
+  // NOTE: With mode support, @theme only includes semantic tokens that reference
+  // the mode-aware variables defined in :root and [data-theme] blocks.
+  // Without modes, it includes both primitives and semantics for backward compatibility.
   result += '/* Generated Tailwind Theme */\n@theme {\n';
 
   // Helper to extract simplified name from full CSS variable name
@@ -450,65 +453,104 @@ export function generateThemeDirective(
     return output;
   };
 
-  if (hasPrimitives) {
-    // Output primitives with simplified names, referencing :root variables
-    const outputPrimitiveTheme = (map: Map<string, string>) => {
-      const entries: Array<[string, string]> = [];
-      for (const [key] of map.entries()) {
-        const simplifiedKey = extractSimplifiedName(key);
-        entries.push([`--${simplifiedKey}`, `var(${key})`]);
-      }
-
-      entries.sort(([a], [b]) =>
-        a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-      );
-
-      let output = '';
-      for (const [simplifiedKey, value] of entries) {
-        output += `  ${simplifiedKey}: ${value};\n`;
-      }
-      return output;
-    };
-
-    result += outputPrimitiveTheme(primitiveCollections.colorTokens);
-    result += outputPrimitiveTheme(primitiveCollections.spacingTokens);
-    result += outputPrimitiveTheme(primitiveCollections.fontFamilyTokens);
-    result += outputPrimitiveTheme(primitiveCollections.fontWeightTokens);
-    result += outputPrimitiveTheme(primitiveCollections.fontSizeTokens);
-    result += outputPrimitiveTheme(primitiveCollections.borderWidthTokens);
-    result += outputPrimitiveTheme(primitiveCollections.borderRadiusTokens);
-    result += outputPrimitiveTheme(primitiveCollections.lineHeightTokens);
-    result += outputPrimitiveTheme(primitiveCollections.iconSizeTokens);
-    result += outputPrimitiveTheme(primitiveCollections.screenSizeTokens);
-    result += outputPrimitiveTheme(primitiveCollections.boxShadowTokens);
-  }
-
-  if (Object.values(semanticCollections).some((map) => map.size > 0)) {
-    // Output semantics with simplified names
-    // When excludeSemanticColorsFromTheme is true, skip semantic colors to prevent
-    // Tailwind from auto-generating utilities (we'll generate custom @utility rules instead)
-    if (!excludeSemanticColorsFromTheme) {
-      result += outputThemeCollection(semanticCollections.colorTokens);
+  // Helper to output theme collection with self-referencing variables
+  // For multi-mode scenarios, semantic tokens reference themselves to allow
+  // [data-theme] overrides to work correctly
+  const outputSelfReferencingCollection = (map: Map<string, string>) => {
+    const entries: Array<string> = [];
+    for (const [key] of map.entries()) {
+      // For semantic tokens in multi-mode, they reference themselves
+      // e.g., --colour-button-primary-text-hover: var(--colour-button-primary-text-hover);
+      entries.push(key);
     }
-    result += outputThemeCollection(semanticCollections.spacingTokens);
-    result += outputThemeCollection(semanticCollections.fontFamilyTokens);
-    result += outputThemeCollection(semanticCollections.fontWeightTokens);
-    result += outputThemeCollection(semanticCollections.fontSizeTokens);
-    result += outputThemeCollection(semanticCollections.borderWidthTokens);
-    result += outputThemeCollection(semanticCollections.borderRadiusTokens);
-    result += outputThemeCollection(semanticCollections.lineHeightTokens);
-    result += outputThemeCollection(semanticCollections.iconSizeTokens);
-    result += outputThemeCollection(semanticCollections.screenSizeTokens);
-    result += outputThemeCollection(semanticCollections.boxShadowTokens);
-  }
 
-  // When excludeSemanticColorsFromTheme is false, also add standalone semantic colors to @theme
-  // (they're already in :root when the flag is true, so only add to @theme when flag is false)
-  if (
-    !excludeSemanticColorsFromTheme &&
-    Object.values(standaloneSemanticCollections).some((map) => map.size > 0)
-  ) {
-    result += outputThemeCollection(standaloneSemanticCollections.colorTokens);
+    // Sort by key name
+    entries.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+
+    let output = '';
+    for (const key of entries) {
+      // Remove the -- prefix for the var() reference
+      const varName = key.substring(2);
+      output += `  ${key}: var(--${varName});\n`;
+    }
+    return output;
+  };
+
+  // Conditional logic: with multiple modes, only output semantics to @theme
+  // Without modes (single mode), output both primitives and semantics
+  const hasMultipleModes = modes.length > 1;
+
+  if (hasMultipleModes) {
+    // Multi-mode: Output semantic tokens in @theme with self-references
+    // This allows [data-theme] blocks to override the actual values
+    // e.g., --colour-button-primary: var(--colour-button-primary);
+    if (Object.values(semanticCollections).some((map) => map.size > 0)) {
+      // When excludeSemanticColorsFromTheme is true, skip semantic colors to prevent
+      // Tailwind from auto-generating utilities (we'll generate custom @utility rules instead)
+      if (!excludeSemanticColorsFromTheme) {
+        result += outputSelfReferencingCollection(semanticCollections.colorTokens);
+      }
+      result += outputSelfReferencingCollection(semanticCollections.spacingTokens);
+      result += outputSelfReferencingCollection(semanticCollections.fontFamilyTokens);
+      result += outputSelfReferencingCollection(semanticCollections.fontWeightTokens);
+      result += outputSelfReferencingCollection(semanticCollections.fontSizeTokens);
+      result += outputSelfReferencingCollection(semanticCollections.borderWidthTokens);
+      result += outputSelfReferencingCollection(semanticCollections.borderRadiusTokens);
+      result += outputSelfReferencingCollection(semanticCollections.lineHeightTokens);
+      result += outputSelfReferencingCollection(semanticCollections.iconSizeTokens);
+      result += outputSelfReferencingCollection(semanticCollections.screenSizeTokens);
+      result += outputSelfReferencingCollection(semanticCollections.boxShadowTokens);
+    }
+
+    // When excludeSemanticColorsFromTheme is false, also add standalone semantic colors to @theme
+    // (they're already in :root when the flag is true, so only add to @theme when flag is false)
+    if (
+      !excludeSemanticColorsFromTheme &&
+      Object.values(standaloneSemanticCollections).some((map) => map.size > 0)
+    ) {
+      result += outputSelfReferencingCollection(standaloneSemanticCollections.colorTokens);
+    }
+  } else {
+    // Single mode (or no modes): Include both primitives and semantics in @theme
+    // This is the original behavior for backward compatibility
+    if (Object.values(primitiveCollections).some((map) => map.size > 0)) {
+      result += outputThemeCollection(primitiveCollections.colorTokens);
+      result += outputThemeCollection(primitiveCollections.spacingTokens);
+      result += outputThemeCollection(primitiveCollections.fontFamilyTokens);
+      result += outputThemeCollection(primitiveCollections.fontWeightTokens);
+      result += outputThemeCollection(primitiveCollections.fontSizeTokens);
+      result += outputThemeCollection(primitiveCollections.borderWidthTokens);
+      result += outputThemeCollection(primitiveCollections.borderRadiusTokens);
+      result += outputThemeCollection(primitiveCollections.lineHeightTokens);
+      result += outputThemeCollection(primitiveCollections.iconSizeTokens);
+      result += outputThemeCollection(primitiveCollections.screenSizeTokens);
+      result += outputThemeCollection(primitiveCollections.boxShadowTokens);
+    }
+
+    if (Object.values(semanticCollections).some((map) => map.size > 0)) {
+      // When excludeSemanticColorsFromTheme is true, skip semantic colors
+      if (!excludeSemanticColorsFromTheme) {
+        result += outputThemeCollection(semanticCollections.colorTokens);
+      }
+      result += outputThemeCollection(semanticCollections.spacingTokens);
+      result += outputThemeCollection(semanticCollections.fontFamilyTokens);
+      result += outputThemeCollection(semanticCollections.fontWeightTokens);
+      result += outputThemeCollection(semanticCollections.fontSizeTokens);
+      result += outputThemeCollection(semanticCollections.borderWidthTokens);
+      result += outputThemeCollection(semanticCollections.borderRadiusTokens);
+      result += outputThemeCollection(semanticCollections.lineHeightTokens);
+      result += outputThemeCollection(semanticCollections.iconSizeTokens);
+      result += outputThemeCollection(semanticCollections.screenSizeTokens);
+      result += outputThemeCollection(semanticCollections.boxShadowTokens);
+    }
+
+    // When excludeSemanticColorsFromTheme is false, also add standalone semantic colors to @theme
+    if (
+      !excludeSemanticColorsFromTheme &&
+      Object.values(standaloneSemanticCollections).some((map) => map.size > 0)
+    ) {
+      result += outputThemeCollection(standaloneSemanticCollections.colorTokens);
+    }
   }
 
   result += '}\n';

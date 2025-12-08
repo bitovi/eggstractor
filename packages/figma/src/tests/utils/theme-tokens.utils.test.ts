@@ -468,9 +468,9 @@ describe('generateThemeDirective', () => {
 
     // @theme should include both primitives and semantics with simplified names
     expect(result).toContain('@theme {');
-    // Primitives use simplified names (--color-* instead of --colors-*)
-    expect(result).toContain('--color-blue-500: var(--color-blue-500);');
-    // Semantics should reference primitives (without --color- prefix)
+    // For single-mode scenarios, primitives use their actual values (not var() references)
+    expect(result).toContain('--color-blue-500: #0080ff;');
+    // Semantics should reference primitives with var()
     expect(result).toContain('--primary: var(--color-blue-500);');
   });
 
@@ -1373,6 +1373,84 @@ describe('Multi-mode theme support', () => {
       // Non-default mode uses fallback naming since we don't have collection.modes
       expect(result).toContain('mode-mode-2'); // Falls back to mode-{id} format
       expect(result).toContain('--color-primary: #0066cc;');
+    });
+
+    it('should output self-referencing semantic tokens in @theme for multi-mode', () => {
+      const multiModeCollection: TokenCollection = {
+        tokens: [
+          // Primitive token
+          {
+            type: 'variable',
+            name: 'color-white',
+            property: 'color',
+            value: '$color-white',
+            rawValue: '#ffffff',
+            valueType: null,
+            path: [],
+            modeValues: {
+              'mode-1': '#ffffff',
+              'mode-2': '#ffffff',
+            },
+            metadata: {
+              variableId: 'var-1',
+              variableName: 'Color/White',
+              variableTokenType: 'primitive',
+              modeId: 'mode-1',
+              modeName: 'light',
+            },
+          },
+          // Semantic token
+          {
+            type: 'variable',
+            name: 'colour-button-primary-text-hover',
+            property: 'color',
+            value: '$colour-button-primary-text-hover',
+            rawValue: '#ffffff',
+            primitiveRef: 'color-white',
+            valueType: null,
+            path: [],
+            modeValues: {
+              'mode-1': '#ffffff',
+              'mode-2': '#eeeeee',
+            },
+            metadata: {
+              figmaId: '',
+              variableId: 'var-2',
+              variableName: 'colour/button/primary/text/hover',
+              variableTokenType: 'semantic',
+              modeId: 'mode-1',
+              modeName: 'light',
+            },
+          },
+        ],
+        components: {},
+        componentSets: {},
+        instances: {},
+        modes: new Map([
+          ['mode-1', 'light'],
+          ['mode-2', 'dark'],
+        ]),
+      };
+
+      const result = generateThemeDirective(multiModeCollection);
+
+      // In multi-mode scenarios, @theme should have self-referencing semantic tokens
+      expect(result).toContain('@theme {');
+      expect(result).toContain(
+        '--colour-button-primary-text-hover: var(--colour-button-primary-text-hover);',
+      );
+
+      // Primitives should NOT be in @theme for multi-mode
+      // Split by @theme to check what's in that section
+      const themeSection = result.split('@theme {')[1]?.split('}')[0];
+      expect(themeSection).toBeDefined();
+      expect(themeSection).not.toContain('--color-white');
+
+      // The semantic token should reference itself, not the primitive
+      expect(themeSection).toContain(
+        '--colour-button-primary-text-hover: var(--colour-button-primary-text-hover)',
+      );
+      expect(themeSection).not.toContain('var(--color-white)');
     });
   });
 });
