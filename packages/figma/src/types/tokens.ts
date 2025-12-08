@@ -21,6 +21,10 @@ export interface BaseToken {
     variableName?: string;
     /** Type of variable token: 'primitive' (base values) or 'semantic' (references to primitives) */
     variableTokenType?: 'primitive' | 'semantic';
+    /** Mode ID this token value belongs to (e.g., '1:0' for light mode, '1:1' for dark mode) */
+    modeId?: string;
+    /** Human-readable mode name (e.g., 'light', 'dark', 'Mode 1') */
+    modeName?: string;
   };
 }
 
@@ -40,6 +44,12 @@ export interface VariableToken extends BaseToken {
    * Undefined for primitive tokens.
    */
   primitiveRef?: string;
+  /**
+   * For variables with multiple modes: stores all mode values.
+   * Key is modeId, value is the resolved value for that mode.
+   * This allows generating theme-specific CSS (e.g., light vs dark mode).
+   */
+  modeValues?: Record<string, string>;
 }
 
 export interface StyleToken extends BaseToken {
@@ -109,6 +119,8 @@ export interface TokenCollection {
   components: Record<ComponentToken['id'], ComponentToken>;
   componentSets: Record<ComponentSetToken['id'], ComponentSetToken>;
   instances: Record<InstanceToken['id'], InstanceToken>;
+  /** Map of modeId -> modeName for all modes found in variable collections */
+  modes?: Map<string, string>;
 }
 
 export interface ProcessedValue {

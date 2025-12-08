@@ -1,4 +1,38 @@
 import { TokenCollection, VariableToken } from '../types';
+import { normalizeModeName } from './mode.utils';
+
+/**
+ * Extract unique mode information from tokens
+ * Returns a map of modeId -> sanitized mode name
+ */
+function extractModesFromTokens(tokens: VariableToken[]): Map<string, string> {
+  const modesMap = new Map<string, string>();
+
+  for (const token of tokens) {
+    if (token.modeValues) {
+      // This token has multiple modes
+      for (const modeId of Object.keys(token.modeValues)) {
+        if (!modesMap.has(modeId)) {
+          // We don't have the original mode name, so we'll use the modeId from metadata
+          // or try to infer from the token's metadata
+          if (token.metadata?.modeId === modeId && token.metadata?.modeName) {
+            modesMap.set(modeId, normalizeModeName(token.metadata.modeName));
+          } else {
+            // Fallback: use modeId as the name
+            modesMap.set(modeId, `mode-${modeId}`);
+          }
+        }
+      }
+    } else if (token.metadata?.modeId && token.metadata?.modeName) {
+      // Single mode token, capture its mode info
+      if (!modesMap.has(token.metadata.modeId)) {
+        modesMap.set(token.metadata.modeId, normalizeModeName(token.metadata.modeName));
+      }
+    }
+  }
+
+  return modesMap;
+}
 
 export function generateThemeDirective(
   collection: TokenCollection,
@@ -250,6 +284,113 @@ export function generateThemeDirective(
     }
 
     result += '}\n\n';
+  }
+
+  // Extract mode information from the collection
+  // If collection.modes is not available, fall back to extracting from tokens
+  const modesMap = collection.modes || extractModesFromTokens(variableTokens);
+  const modes = Array.from(modesMap.entries()); // If we have multiple modes, output mode-specific blocks for tokens that vary by mode
+  if (modes.length > 1) {
+    const defaultModeId = modes[0][0]; // First mode is the default
+    const defaultModeName = modes[0][1];
+
+    // Collect default mode semantic tokens (these go in :root or :root, [data-theme='default'])
+    const defaultModeTokens: VariableToken[] = [];
+
+    for (const token of [
+      ...standaloneSemanticColors,
+      ...standaloneSemanticNonColors,
+      ...boundSemanticTokens,
+    ]) {
+      // For tokens without modeValues, use them as-is
+      // For tokens with modeValues, create a variant with the default mode value
+      if (!token.modeValues) {
+        defaultModeTokens.push(token);
+      } else if (token.modeValues[defaultModeId]) {
+        defaultModeTokens.push({
+          ...token,
+          rawValue: token.modeValues[defaultModeId],
+        });
+      }
+    }
+
+    if (defaultModeTokens.length > 0 && !excludeSemanticColorsFromTheme) {
+      const defaultSemanticCollections = processTokens();
+      processTokenCollection(defaultModeTokens, defaultSemanticCollections);
+
+      const hasSemantics = Object.values(defaultSemanticCollections).some((map) => map.size > 0);
+
+      if (hasSemantics) {
+        result += `/* ${defaultModeName} mode semantic tokens (default) */\n`;
+        result += `:root,\n[data-theme='${defaultModeName}'] {\n`;
+        result += outputCollection(defaultSemanticCollections.colorTokens);
+        result += outputCollection(defaultSemanticCollections.spacingTokens);
+        result += outputCollection(defaultSemanticCollections.fontFamilyTokens);
+        result += outputCollection(defaultSemanticCollections.fontWeightTokens);
+        result += outputCollection(defaultSemanticCollections.fontSizeTokens);
+        result += outputCollection(defaultSemanticCollections.borderWidthTokens);
+        result += outputCollection(defaultSemanticCollections.borderRadiusTokens);
+        result += outputCollection(defaultSemanticCollections.lineHeightTokens);
+        result += outputCollection(defaultSemanticCollections.iconSizeTokens);
+        result += outputCollection(defaultSemanticCollections.screenSizeTokens);
+        result += outputCollection(defaultSemanticCollections.boxShadowTokens);
+        result += '}\n\n';
+      }
+    }
+
+    // Output alternate mode overrides
+    for (let i = 1; i < modes.length; i++) {
+      const [modeId, modeName] = modes[i];
+      const modeTokens: VariableToken[] = [];
+
+      // Process semantic tokens with mode-specific values
+      for (const token of [
+        ...standaloneSemanticColors,
+        ...standaloneSemanticNonColors,
+        ...boundSemanticTokens,
+      ]) {
+        if (token.modeValues && token.modeValues[modeId]) {
+          modeTokens.push({
+            ...token,
+            rawValue: token.modeValues[modeId],
+          });
+        }
+      }
+
+      // Process primitives with mode-specific values
+      for (const token of primitiveTokens) {
+        if (token.modeValues && token.modeValues[modeId]) {
+          modeTokens.push({
+            ...token,
+            rawValue: token.modeValues[modeId],
+          });
+        }
+      }
+
+      if (modeTokens.length > 0) {
+        const modeCollections = processTokens();
+        processTokenCollection(modeTokens, modeCollections);
+
+        const hasTokens = Object.values(modeCollections).some((map) => map.size > 0);
+
+        if (hasTokens) {
+          result += `/* ${modeName} mode overrides */\n`;
+          result += `[data-theme='${modeName}'] {\n`;
+          result += outputCollection(modeCollections.colorTokens);
+          result += outputCollection(modeCollections.spacingTokens);
+          result += outputCollection(modeCollections.fontFamilyTokens);
+          result += outputCollection(modeCollections.fontWeightTokens);
+          result += outputCollection(modeCollections.fontSizeTokens);
+          result += outputCollection(modeCollections.borderWidthTokens);
+          result += outputCollection(modeCollections.borderRadiusTokens);
+          result += outputCollection(modeCollections.lineHeightTokens);
+          result += outputCollection(modeCollections.iconSizeTokens);
+          result += outputCollection(modeCollections.screenSizeTokens);
+          result += outputCollection(modeCollections.boxShadowTokens);
+          result += '}\n\n';
+        }
+      }
+    }
   }
 
   // Then, output @theme with simplified Tailwind naming convention
