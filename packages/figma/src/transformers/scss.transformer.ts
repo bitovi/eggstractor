@@ -65,6 +65,7 @@ const getMixinPropertyAndValue = (
 export const transformToScss: Transformer = (
   tokens: TokenCollection,
   useCombinatorialParsing: boolean,
+  _config,
 ): TransformerResult => {
   let output = '';
 

@@ -79,6 +79,8 @@ export const convertVariantGroupBy = (
         // Variants
         variants: componentId ? tokenCollection.components[componentId].variantProperties : {},
         styles,
+        // Preserve original tokens for semantic variable lookup
+        tokens: groupTokens,
       };
     })
     .filter((variantGroup) => Object.keys(variantGroup.styles).length > 0);

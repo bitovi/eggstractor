@@ -39,6 +39,7 @@ export interface SaveConfigPayload extends Omit<CreatePRPayload, 'type'> {
   type: 'save-config';
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
+  generateSemanticColorUtilities: boolean;
 }
 
 /**
@@ -48,6 +49,7 @@ export interface GenerateStylesPayload extends BaseMessageToMainThreadPayload {
   type: 'generate-styles';
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
+  generateSemanticColorUtilities: boolean;
 }
 
 /**

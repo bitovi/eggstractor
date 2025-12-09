@@ -1,4 +1,8 @@
-import { buildDynamicThemeTokens, generateThemeDirective } from '../../utils/theme-tokens.utils';
+import {
+  buildDynamicThemeTokens,
+  generateThemeDirective,
+  generateSemanticColorUtilities,
+} from '../../utils/theme-tokens.utils';
 import { TokenCollection, VariableToken } from '../../types';
 
 // Mock console to suppress output during tests
@@ -466,8 +470,8 @@ describe('generateThemeDirective', () => {
     expect(result).toContain('@theme {');
     // Primitives use simplified names (--color-* instead of --colors-*)
     expect(result).toContain('--color-blue-500: var(--color-blue-500);');
-    // Semantics should reference primitives, not other semantics
-    expect(result).toContain('--color-primary: var(--color-blue-500);');
+    // Semantics should reference primitives (without --color- prefix)
+    expect(result).toContain('--primary: var(--color-blue-500);');
   });
 
   it('should sort tokens naturally (numeric aware)', () => {
@@ -782,7 +786,7 @@ describe('generateThemeDirective', () => {
 
     // Primitive font family should use --font-inter
     expect(result).toContain('--font-inter: Inter;');
-    // Semantic should reference primitive with correct CSS var name
+    // Semantic should also use --font- prefix and reference primitive
     expect(result).toContain('--font-global-font-uidefaultfont: var(--font-inter);');
   });
 
@@ -828,7 +832,270 @@ describe('generateThemeDirective', () => {
 
     // Primitive size should use --spacing-base-size-2xs
     expect(result).toContain('--spacing-base-size-2xs: 2px;');
-    // Semantic should reference primitive with correct CSS var name including spacing prefix
+    // Semantic should also use --spacing- prefix and reference primitive
     expect(result).toContain('--spacing-border-resting: var(--spacing-base-size-2xs);');
+  });
+
+  describe('semantic color exclusion from @theme', () => {
+    const collectionWithSemanticColors: TokenCollection = {
+      tokens: [
+        // Primitive colors
+        {
+          type: 'variable',
+          name: 'color-base-blue-500',
+          property: 'color',
+          value: '$color-base-blue-500',
+          rawValue: '#0177cc',
+          valueType: null,
+          path: [],
+          metadata: {
+            figmaId: 'var-1',
+            variableName: 'base/blue-500',
+            variableTokenType: 'primitive',
+          },
+        },
+        // Semantic colors with different name patterns
+        {
+          type: 'variable',
+          name: 'color-action-bg',
+          property: 'color',
+          value: '$color-action-bg',
+          rawValue: '#0177cc',
+          valueType: null,
+          path: [],
+          primitiveRef: 'color-base-blue-500',
+          metadata: {
+            figmaId: 'var-2',
+            variableName: 'action/bg',
+            variableTokenType: 'semantic',
+          },
+        },
+        {
+          type: 'variable',
+          name: 'color-text-default',
+          property: 'color',
+          value: '$color-text-default',
+          rawValue: '#000000',
+          valueType: null,
+          path: [],
+          primitiveRef: 'color-base-black',
+          metadata: {
+            figmaId: 'var-3',
+            variableName: 'text/default',
+            variableTokenType: 'semantic',
+          },
+        },
+        {
+          type: 'variable',
+          name: 'color-border-primary',
+          property: 'color',
+          value: '$color-border-primary',
+          rawValue: '#0177cc',
+          valueType: null,
+          path: [],
+          primitiveRef: 'color-base-blue-500',
+          metadata: {
+            figmaId: 'var-4',
+            variableName: 'border/primary',
+            variableTokenType: 'semantic',
+          },
+        },
+      ],
+      components: {},
+      componentSets: {},
+      instances: {},
+    };
+
+    it('should include semantic colors in @theme by default', () => {
+      const result = generateThemeDirective(collectionWithSemanticColors, false);
+
+      // Semantic colors should appear in @theme (without --color- prefix)
+      expect(result).toContain('--action-bg:');
+      expect(result).toContain('--text-default:');
+      expect(result).toContain('--border-primary:');
+    });
+
+    it('should exclude semantic colors from @theme when flag is true', () => {
+      const result = generateThemeDirective(collectionWithSemanticColors, true);
+
+      // Semantic colors should NOT appear in @theme (only in :root)
+      const themeSection = result.substring(result.indexOf('@theme'));
+      expect(themeSection).not.toContain('--action-bg:');
+      expect(themeSection).not.toContain('--text-default:');
+      expect(themeSection).not.toContain('--border-primary:');
+
+      // But primitive colors should still be there
+      expect(result).toContain('--color-base-blue-500:');
+    });
+
+    it('should still include semantic colors in :root even when excluded from @theme', () => {
+      const result = generateThemeDirective(collectionWithSemanticColors, true);
+
+      // :root should contain primitives and semantics
+      const rootSection = result.substring(0, result.indexOf('@theme'));
+      expect(rootSection).toContain('--color-base-blue-500:');
+      expect(rootSection).toContain('--action-bg:');
+      expect(rootSection).toContain('--text-default:');
+      expect(rootSection).toContain('--border-primary:');
+    });
+  });
+});
+
+describe('generateSemanticColorUtilities', () => {
+  it('should generate @utility for colors with "bg" in name', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'color-action-bg',
+        property: 'color',
+        value: '$color-action-bg',
+        rawValue: '#0177cc',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-1',
+          variableName: 'action/bg',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateSemanticColorUtilities(semanticTokens);
+
+    expect(result).toContain('@utility action-bg {');
+    expect(result).toContain('background-color: var(--action-bg);');
+  });
+
+  it('should generate @utility for colors with "text" in name', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'color-text-default',
+        property: 'color',
+        value: '$color-text-default',
+        rawValue: '#000000',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-2',
+          variableName: 'text/default',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateSemanticColorUtilities(semanticTokens);
+
+    expect(result).toContain('@utility text-default {');
+    expect(result).toContain('color: var(--text-default);');
+  });
+
+  it('should generate @utility for colors with "border" in name', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'color-border-primary',
+        property: 'color',
+        value: '$color-border-primary',
+        rawValue: '#0177cc',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-3',
+          variableName: 'border/primary',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateSemanticColorUtilities(semanticTokens);
+
+    expect(result).toContain('@utility border-primary {');
+    expect(result).toContain('border-color: var(--border-primary);');
+  });
+
+  it('should NOT generate @utility for colors without bg/text/border in name', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'color-primary',
+        property: 'color',
+        value: '$color-primary',
+        rawValue: '#0177cc',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-4',
+          variableName: 'primary',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateSemanticColorUtilities(semanticTokens);
+
+    // Should not generate any utility for this token
+    expect(result).not.toContain('@utility primary {');
+  });
+
+  it('should handle multiple semantic colors at once', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'color-action-bg',
+        property: 'color',
+        value: '$color-action-bg',
+        rawValue: '#0177cc',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-1',
+          variableName: 'action/bg',
+          variableTokenType: 'semantic',
+        },
+      },
+      {
+        type: 'variable',
+        name: 'color-action-text',
+        property: 'color',
+        value: '$color-action-text',
+        rawValue: '#ffffff',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-2',
+          variableName: 'action/text',
+          variableTokenType: 'semantic',
+        },
+      },
+      {
+        type: 'variable',
+        name: 'color-border-default',
+        property: 'color',
+        value: '$color-border-default',
+        rawValue: '#d9d9d9',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-3',
+          variableName: 'border/default',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateSemanticColorUtilities(semanticTokens);
+
+    expect(result).toContain('@utility action-bg {');
+    expect(result).toContain('background-color: var(--action-bg);');
+    expect(result).toContain('@utility action-text {');
+    expect(result).toContain('color: var(--action-text);');
+    expect(result).toContain('@utility border-default {');
+    expect(result).toContain('border-color: var(--border-default);');
+  });
+
+  it('should return empty string for empty array', () => {
+    const result = generateSemanticColorUtilities([]);
+    expect(result).toBe('');
   });
 });

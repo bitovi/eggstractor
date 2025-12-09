@@ -9,6 +9,7 @@ export interface Config {
   githubToken: string;
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
+  generateSemanticColorUtilities: boolean;
 }
 
 type ConfigType = Config & {
@@ -26,6 +27,7 @@ interface ConfigProps {
   githubToken?: string;
   format?: StylesheetFormat;
   useCombinatorialParsing?: boolean;
+  generateSemanticColorUtilities?: boolean;
 }
 
 export const ConfigProvider: FC<ConfigProps> = ({
@@ -36,6 +38,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   githubToken: pGithubToken = '',
   format: pFormat = 'scss',
   useCombinatorialParsing: pUseComb = true,
+  generateSemanticColorUtilities: pGenSemColorUtil = false,
 }) => {
   // Internal defaults used only when the prop is undefined at mount
   const [repoPath, setRepoPath] = useState<string>(pRepoPath ?? '');
@@ -44,6 +47,9 @@ export const ConfigProvider: FC<ConfigProps> = ({
   const [githubToken, setGithubToken] = useState<string>(pGithubToken ?? '');
   const [format, setFormat] = useState<StylesheetFormat>(pFormat ?? 'scss');
   const [useCombinatorialParsing, setUseCombinatorialParsing] = useState<boolean>(pUseComb ?? true);
+  const [generateSemanticColorUtilities, setGenerateSemanticColorUtilities] = useState<boolean>(
+    pGenSemColorUtil ?? false,
+  );
 
   const value = useMemo(() => {
     const saveConfig = (config: Partial<Config>): void => {
@@ -53,6 +59,8 @@ export const ConfigProvider: FC<ConfigProps> = ({
       const _githubToken = config.githubToken ?? githubToken;
       const _format = config.format ?? format;
       const _useCombinatorialParsing = config.useCombinatorialParsing ?? useCombinatorialParsing;
+      const _generateSemanticColorUtilities =
+        config.generateSemanticColorUtilities ?? generateSemanticColorUtilities;
 
       setRepoPath(config.repoPath ?? _reportPath);
       setFilePath(config.filePath ?? _filePath);
@@ -60,6 +68,9 @@ export const ConfigProvider: FC<ConfigProps> = ({
       setGithubToken(config.githubToken ?? _githubToken);
       setFormat(config.format ?? _format);
       setUseCombinatorialParsing(config.useCombinatorialParsing ?? _useCombinatorialParsing);
+      setGenerateSemanticColorUtilities(
+        config.generateSemanticColorUtilities ?? _generateSemanticColorUtilities,
+      );
       messageMainThread({
         type: 'save-config',
         repoPath: _reportPath,
@@ -68,6 +79,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
         githubToken: _githubToken,
         format: _format,
         useCombinatorialParsing: _useCombinatorialParsing,
+        generateSemanticColorUtilities: _generateSemanticColorUtilities,
       });
     };
 
@@ -78,9 +90,18 @@ export const ConfigProvider: FC<ConfigProps> = ({
       githubToken,
       format,
       useCombinatorialParsing,
+      generateSemanticColorUtilities,
       saveConfig,
     };
-  }, [repoPath, filePath, branchName, githubToken, format, useCombinatorialParsing]);
+  }, [
+    repoPath,
+    filePath,
+    branchName,
+    githubToken,
+    format,
+    useCombinatorialParsing,
+    generateSemanticColorUtilities,
+  ]);
 
   return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;
 };

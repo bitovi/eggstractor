@@ -8,4 +8,5 @@ export interface GithubConfig {
   githubToken?: string | null;
   branchName?: string | null;
   useCombinatorialParsing: boolean;
+  generateSemanticColorUtilities: boolean;
 }

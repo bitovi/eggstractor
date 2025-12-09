@@ -1,4 +1,4 @@
-import { NonNullableStyleToken, TokenCollection } from '../../types';
+import { NonNullableStyleToken, TokenCollection, VariableToken } from '../../types';
 import { groupBy } from '../utils/group-by.utils';
 import { convertToGeneratorTokens, convertVariantGroupBy } from '../variants';
 import { filterStyleTokens } from './filters';
@@ -9,12 +9,14 @@ import {
   tailwind4NamingConfig,
   generateThemeDirective,
   buildDynamicThemeTokens,
+  generateSemanticColorUtilities,
 } from '../../utils';
 import { Transformer } from '../types';
 
 export const transformToTailwindSassClass: Transformer = (
   collection: TokenCollection,
   useCombinatorialParsing: boolean,
+  _config,
 ) => {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token: NonNullableStyleToken) => token.name);
@@ -57,6 +59,7 @@ export const transformToTailwindSassClass: Transformer = (
 export const transformToTailwindLayerUtilityClassV4: Transformer = (
   collection: TokenCollection,
   useCombinatorialParsing: boolean,
+  generateSemantics = true, // TODO: Remove this default once UI is updated
 ) => {
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
@@ -77,19 +80,40 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
     a.variantPath.localeCompare(b.variantPath),
   );
 
-  let output = generateThemeDirective(collection);
+  // Extract semantic colors for custom utilities (if enabled)
+  let semanticColorTokens: VariableToken[] = [];
 
-  // Build dynamic theme tokens from ALL variable tokens (both primitive and semantic)
-  // so that style tokens can reference either type
-  const variableTokens = collection.tokens.filter((token) => token.type === 'variable');
+  if (generateSemantics) {
+    // Filter for semantic color tokens that were collected by collectSemanticColorVariables
+    semanticColorTokens = collection.tokens.filter(
+      (token): token is VariableToken =>
+        token.type === 'variable' &&
+        token.metadata?.variableTokenType === 'semantic' &&
+        token.property === 'color',
+    );
+  }
 
-  const dynamicThemeTokens = buildDynamicThemeTokens(variableTokens);
+  // Generate the @theme directive
+  // When generateSemantics is true, exclude semantic colors from @theme (they go in :root)
+  const themeDirective = generateThemeDirective(collection, generateSemantics);
+  const variableTokens = collection.tokens.filter(
+    (token): token is VariableToken => token.type === 'variable',
+  );
+  // When generateSemantics is true, exclude semantic colors from dynamic theme mapping
+  const dynamicThemeTokens = buildDynamicThemeTokens(variableTokens, generateSemantics);
+
+  let output = themeDirective;
+
+  // Generate custom semantic color utilities (before component utilities)
+  if (generateSemantics && semanticColorTokens.length > 0) {
+    output += generateSemanticColorUtilities(semanticColorTokens);
+  }
 
   output += '\n\n/* Generated Tailwind Utilities */\n';
 
   for (const { variantPath, tokens } of formattedStyleTokens) {
     // Pass dynamic theme tokens to the generator
-    const classesToApply = createTailwindClasses(tokens, dynamicThemeTokens);
+    const classesToApply = createTailwindClasses(tokens, dynamicThemeTokens, generateSemantics);
     if (classesToApply.length) {
       output += `\n@utility ${variantPath} {\n  @apply ${classesToApply.join(' ')}; \n}\n`;
     }

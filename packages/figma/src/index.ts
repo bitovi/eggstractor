@@ -80,6 +80,7 @@ const main = async () => {
     tokens: Readonly<TokenCollection>,
     format: StylesheetFormat,
     useCombinatorialParsing: boolean,
+    generateSemanticColorUtilities: boolean,
   ): TransformerResult {
     switch (format) {
       case 'scss':
@@ -89,7 +90,11 @@ const main = async () => {
       case 'tailwind-scss':
         return transformToTailwindSassClass(tokens, useCombinatorialParsing);
       case 'tailwind-v4':
-        return transformToTailwindLayerUtilityClassV4(tokens, useCombinatorialParsing);
+        return transformToTailwindLayerUtilityClassV4(
+          tokens,
+          useCombinatorialParsing,
+          generateSemanticColorUtilities,
+        );
       default:
         throw new Error(`Unsupported format: ${format}`);
     }
@@ -99,6 +104,7 @@ const main = async () => {
   async function generateStyles(
     format: StylesheetFormat,
     useCombinatorialParsing: boolean,
+    generateSemanticColorUtilities: boolean,
   ): Promise<TransformerResult> {
     postMessageToUI({
       type: 'progress-start',
@@ -116,7 +122,12 @@ const main = async () => {
 
     await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
 
-    const stylesheet = await transformTokensToStylesheet(tokens, format, useCombinatorialParsing);
+    const stylesheet = await transformTokensToStylesheet(
+      tokens,
+      format,
+      useCombinatorialParsing,
+      generateSemanticColorUtilities,
+    );
 
     postMessageToUI({
       type: 'progress-end',
@@ -131,6 +142,7 @@ const main = async () => {
       const result = await generateStyles(
         getValidStylesheetFormat(msg.format),
         msg.useCombinatorialParsing,
+        msg.generateSemanticColorUtilities,
       );
       generatedScss = result.result; // Store just the generated code
       postMessageToUI({
@@ -148,6 +160,7 @@ const main = async () => {
           filePath: msg.filePath,
           format: getValidStylesheetFormat(msg.format),
           useCombinatorialParsing: msg.useCombinatorialParsing,
+          generateSemanticColorUtilities: msg.generateSemanticColorUtilities,
         }),
       ]);
       postMessageToUI({ type: 'config-saved' });
