@@ -160,6 +160,7 @@ const main = async () => {
           filePath: msg.filePath,
           format: getValidStylesheetFormat(msg.format),
           useCombinatorialParsing: msg.useCombinatorialParsing,
+          generateSemanticColorUtilities: msg.generateSemanticColorUtilities,
         }),
       ]);
       postMessageToUI({ type: 'config-saved' });
