@@ -24,7 +24,8 @@ function inferPropertyFromVariableName(variableName: string): string {
  * Returns the primitive variable name, not the resolved value
  */
 async function resolveToPrimitiveVariableName(variable: Variable): Promise<string | null> {
-  const modeId = Object.keys(variable.valuesByMode)[0];
+  // Get the first mode ID (sorted for deterministic ordering across different Figma files)
+  const modeId = Object.keys(variable.valuesByMode).sort()[0];
   const value = variable.valuesByMode[modeId];
 
   if (value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS') {
@@ -59,7 +60,8 @@ async function resolveToPrimitiveVariableName(variable: Variable): Promise<strin
  * Helper to get the actual value from a variable (following alias chains)
  */
 async function getVariableActualValue(variable: Variable, propertyName: string): Promise<string> {
-  const modeId = Object.keys(variable.valuesByMode)[0];
+  // Get the first mode ID (sorted for deterministic ordering across different Figma files)
+  const modeId = Object.keys(variable.valuesByMode).sort()[0];
   const value = variable.valuesByMode[modeId];
 
   if (value && typeof value === 'object' && 'type' in value && value.type === 'VARIABLE_ALIAS') {
@@ -139,8 +141,7 @@ export async function collectBoundVariable(
 
   // TODO: Consider collecting mode-specific values here as well
   // For now, we use the default mode for bound variables
-  const modeId = Object.keys(variable.valuesByMode)[0];
-
+  // Return StandardVariableToken since we don't track multiple modes for bound variables
   return {
     type: 'variable',
     path,
@@ -155,10 +156,8 @@ export async function collectBoundVariable(
       variableId: variable.id,
       variableName: variable.name,
       variableTokenType: 'semantic',
-      modeId: modeId,
-      modeName: 'default', // We don't have access to collection here to get the actual mode name
     },
-  };
+  } as const;
 }
 
 /**
@@ -177,13 +176,13 @@ export async function createPrimitiveVariableToken(
 
     // If collection has no modes (e.g., in tests), use first mode from valuesByMode
     if (modes.length === 0) {
-      const modeIds = Object.keys(variable.valuesByMode);
+      const modeIds = Object.keys(variable.valuesByMode).sort();
       if (modeIds.length === 0) {
         console.warn(`Variable ${variable.name} has no modes`);
         return null;
       }
 
-      // Create a default mode from the first mode ID
+      // Create a default mode from the first mode ID (sorted for deterministic ordering)
       modes.push({
         modeId: modeIds[0],
         modeName: 'default',
@@ -253,13 +252,13 @@ export async function createPrimitiveVariableToken(
         const propertyName = inferPropertyFromVariableName(variable.name);
         rawValue = normalizeValue({
           propertyName,
-          value: defaultModeValue as number,
+          value: Number(defaultModeValue),
         });
         property = propertyName;
         break;
       }
       case 'STRING': {
-        rawValue = defaultModeValue as string;
+        rawValue = String(defaultModeValue);
         property = variable.name.toLowerCase().includes('font') ? 'font-family' : 'string';
         break;
       }
@@ -267,23 +266,45 @@ export async function createPrimitiveVariableToken(
         return null;
     }
 
-    return {
-      type: 'variable',
-      path: [{ name: variable.name, type: 'FRAME' }],
-      property,
-      name: sanitizeName(variable.name),
-      value: `$${sanitizeName(variable.name)}`,
-      rawValue: rawValue.toLowerCase(),
-      valueType: rawValue.includes('px') ? 'px' : null,
-      modeValues: Object.keys(modeValues).length > 1 ? modeValues : undefined,
-      metadata: {
-        variableId: variable.id,
-        variableName: variable.name,
-        variableTokenType: 'primitive',
+    // Return ModeVariableToken if multiple modes, otherwise StandardVariableToken
+    const hasMultipleModes = Object.keys(modeValues).length > 1;
+
+    if (hasMultipleModes) {
+      return {
+        type: 'variable',
+        path: [{ name: variable.name, type: 'FRAME' }],
+        property,
+        name: sanitizeName(variable.name),
+        value: `$${sanitizeName(variable.name)}`,
+        rawValue: rawValue.toLowerCase(),
+        valueType: rawValue.includes('px') ? 'px' : null,
         modeId: defaultMode.modeId,
         modeName: defaultMode.modeName,
-      },
-    };
+        modes: Object.keys(modeValues).sort(),
+        modeValues: modeValues,
+        metadata: {
+          variableId: variable.id,
+          variableName: variable.name,
+          variableTokenType: 'primitive',
+        },
+      } as const;
+    } else {
+      // Single mode - return StandardVariableToken
+      return {
+        type: 'variable',
+        path: [{ name: variable.name, type: 'FRAME' }],
+        property,
+        name: sanitizeName(variable.name),
+        value: `$${sanitizeName(variable.name)}`,
+        rawValue: rawValue.toLowerCase(),
+        valueType: rawValue.includes('px') ? 'px' : null,
+        metadata: {
+          variableId: variable.id,
+          variableName: variable.name,
+          variableTokenType: 'primitive',
+        },
+      } as const;
+    }
   } catch (error) {
     console.warn(`Failed to create token for variable ${variable.name}:`, error);
     return null;
@@ -383,7 +404,7 @@ export async function collectSemanticColorVariables(
         if (varCollection.variableIds.length > 0) {
           const firstVar = await figma.variables.getVariableByIdAsync(varCollection.variableIds[0]);
           if (firstVar) {
-            const modeIds = Object.keys(firstVar.valuesByMode);
+            const modeIds = Object.keys(firstVar.valuesByMode).sort();
             if (modeIds.length > 0) {
               modes.push({
                 modeId: modeIds[0],
@@ -446,7 +467,6 @@ export async function collectSemanticColorVariables(
           ) {
             continue;
           }
-
           // Resolve to primitive variable name for this mode
           // Note: We need to get the aliased variable for this specific mode
           const aliasedVariableId = modeValue.id;
@@ -469,26 +489,43 @@ export async function collectSemanticColorVariables(
         // Get the actual resolved color value for default mode
         const rawValue = await getVariableActualValue(variable, 'fills');
 
-        // Create token with primitiveRef set and mode values
-        const token: VariableToken = {
-          type: 'variable',
-          path: [], // No component path - standalone utility
-          property: 'color', // COLOR type variable
-          name: sanitizeName(variable.name),
-          value: `$${sanitizeName(variable.name)}`,
-          rawValue: rawValue.toLowerCase(),
-          primitiveRef: primitiveVariableName,
-          valueType: null,
-          modeValues: Object.keys(modeValues).length > 1 ? modeValues : undefined,
-          metadata: {
-            figmaId: '', // No specific node association
-            variableId: variable.id,
-            variableName: variable.name,
-            variableTokenType: 'semantic',
-            modeId: defaultMode.modeId,
-            modeName: defaultMode.modeName,
-          },
-        };
+        // Create token - use ModeVariableToken if multiple modes, otherwise StandardVariableToken
+        const hasMultipleModes = Object.keys(modeValues).length > 1;
+        const token: VariableToken = hasMultipleModes
+          ? ({
+              type: 'variable',
+              path: [], // No component path - standalone utility
+              property: 'color', // COLOR type variable
+              name: sanitizeName(variable.name),
+              value: `$${sanitizeName(variable.name)}`,
+              rawValue: rawValue.toLowerCase(),
+              primitiveRef: primitiveVariableName,
+              valueType: null,
+              modeId: defaultMode.modeId,
+              modeName: defaultMode.modeName,
+              modes: Object.keys(modeValues).sort(),
+              modeValues: modeValues,
+              metadata: {
+                variableId: variable.id,
+                variableName: variable.name,
+                variableTokenType: 'semantic',
+              },
+            } as const)
+          : ({
+              type: 'variable',
+              path: [], // No component path - standalone utility
+              property: 'color', // COLOR type variable
+              name: sanitizeName(variable.name),
+              value: `$${sanitizeName(variable.name)}`,
+              rawValue: rawValue.toLowerCase(),
+              primitiveRef: primitiveVariableName,
+              valueType: null,
+              metadata: {
+                variableId: variable.id,
+                variableName: variable.name,
+                variableTokenType: 'semantic',
+              },
+            } as const);
 
         semanticColorTokens.push(token);
       }

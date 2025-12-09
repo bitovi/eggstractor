@@ -36,11 +36,16 @@ export function getModesFromCollection(collection: VariableCollection): ModeInfo
 
 /**
  * Get the default mode (first mode) from a collection
+ * Figma's first mode in a collection is always the default mode (typically 'Light')
  * @param collection - Figma VariableCollection
  * @returns ModeInfo for the default mode
+ * @throws Error if the collection has no modes
  */
 export function getDefaultMode(collection: VariableCollection): ModeInfo {
   const modes = getModesFromCollection(collection);
+  if (modes.length === 0) {
+    throw new Error('Cannot get default mode: collection has no modes');
+  }
   return modes[0];
 }
 
@@ -50,7 +55,7 @@ export function getDefaultMode(collection: VariableCollection): ModeInfo {
  * @returns true if the collection has more than one mode
  */
 export function hasMultipleModes(collection: VariableCollection): boolean {
-  return collection.modes.length > 1;
+  return collection.modes && collection.modes.length > 1;
 }
 
 /**
@@ -59,6 +64,9 @@ export function hasMultipleModes(collection: VariableCollection): boolean {
  * @returns Array of mode IDs
  */
 export function getModeIds(collection: VariableCollection): string[] {
+  if (!collection.modes || collection.modes.length === 0) {
+    return [];
+  }
   return collection.modes.map((mode) => mode.modeId);
 }
 

@@ -14,21 +14,15 @@ export interface BaseToken {
   path: PathNode[];
   /** Data type classification for the value. */
   valueType?: string | null;
-  /** Figma-specific identifiers and references. */
-  metadata?: {
-    figmaId?: string;
-    variableId?: string;
-    variableName?: string;
-    /** Type of variable token: 'primitive' (base values) or 'semantic' (references to primitives) */
-    variableTokenType?: 'primitive' | 'semantic';
-    /** Mode ID this token value belongs to (e.g., '1:0' for light mode, '1:1' for dark mode) */
-    modeId?: string;
-    /** Human-readable mode name (e.g., 'light', 'dark', 'Mode 1') */
-    modeName?: string;
-  };
+  /** Token-specific metadata (structure varies by token type). */
+  metadata?: Record<string, unknown>;
 }
 
-export interface VariableToken extends BaseToken {
+/**
+ * Single-mode variable token (no mode variation).
+ * Use when a variable has only one mode or mode information is not relevant.
+ */
+export interface StandardVariableToken extends BaseToken {
   type: 'variable';
   /**
    * SASS variable reference e.g. $color-primary.
@@ -44,13 +38,60 @@ export interface VariableToken extends BaseToken {
    * Undefined for primitive tokens.
    */
   primitiveRef?: string;
-  /**
-   * For variables with multiple modes: stores all mode values.
-   * Key is modeId, value is the resolved value for that mode.
-   * This allows generating theme-specific CSS (e.g., light vs dark mode).
-   */
-  modeValues?: Record<string, string>;
+  metadata?: {
+    figmaId?: string;
+    variableId?: string;
+    variableName?: string;
+    /** Type of variable token: 'primitive' (base values) or 'semantic' (references to primitives) */
+    variableTokenType?: 'primitive' | 'semantic';
+  };
 }
+
+/**
+ * Multi-mode variable token with explicit mode tracking.
+ * Use when a variable has multiple modes (e.g., Light, Dark themes).
+ *
+ * The modeId field indicates which mode this token's primary value/rawValue represent.
+ * The modes field lists all available modes for this variable.
+ * All mode values are stored in modeValues for code generation.
+ */
+export interface ModeVariableToken extends BaseToken {
+  type: 'variable';
+  /**
+   * SASS variable reference e.g. $color-primary.
+   */
+  value: string;
+  /**
+   * Actual value e.g. #FF0000.
+   */
+  rawValue: string;
+  /**
+   * For semantic tokens: the primitive variable name it references (e.g., color-blue-500).
+   * Used for category detection when generating CSS variable references.
+   */
+  primitiveRef?: string;
+  /** Mode ID this token's primary value represents (e.g., '2002:1'). */
+  modeId: string;
+  /** Human-readable name of the mode (e.g., 'Light', 'Dark'). */
+  modeName: string;
+  /** All available mode IDs for this variable. */
+  modes: string[];
+  /**
+   * All mode-specific values. Key is modeId, value is the resolved value for that mode.
+   * Enables generating theme-specific CSS (e.g., light vs dark mode).
+   */
+  modeValues: Record<string, string>;
+  metadata?: {
+    figmaId?: string;
+    variableId?: string;
+    variableName?: string;
+    /** Type of variable token: 'primitive' (base values) or 'semantic' (references to primitives) */
+    variableTokenType?: 'primitive' | 'semantic';
+  };
+}
+
+/** Variable token - either single-mode or multi-mode. */
+export type VariableToken = StandardVariableToken | ModeVariableToken;
 
 export interface StyleToken extends BaseToken {
   type: 'style';

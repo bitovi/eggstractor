@@ -1,5 +1,12 @@
-import { TokenCollection, VariableToken } from '../types';
+import { TokenCollection, VariableToken, ModeVariableToken } from '../types';
 import { normalizeModeName } from './mode.utils';
+
+/**
+ * Type guard to check if a VariableToken is a ModeVariableToken
+ */
+function isModeVariableToken(token: VariableToken): token is ModeVariableToken {
+  return 'modeId' in token && 'modes' in token && 'modeValues' in token;
+}
 
 /**
  * Extract unique mode information from tokens
@@ -9,24 +16,17 @@ function extractModesFromTokens(tokens: VariableToken[]): Map<string, string> {
   const modesMap = new Map<string, string>();
 
   for (const token of tokens) {
-    if (token.modeValues) {
-      // This token has multiple modes
-      for (const modeId of Object.keys(token.modeValues)) {
-        if (!modesMap.has(modeId)) {
-          // We don't have the original mode name, so we'll use the modeId from metadata
-          // or try to infer from the token's metadata
-          if (token.metadata?.modeId === modeId && token.metadata?.modeName) {
-            modesMap.set(modeId, normalizeModeName(token.metadata.modeName));
-          } else {
-            // Fallback: use modeId as the name
-            modesMap.set(modeId, `mode-${modeId}`);
-          }
-        }
+    if (isModeVariableToken(token)) {
+      // This token has multiple modes - add all of them
+      if (!modesMap.has(token.modeId)) {
+        modesMap.set(token.modeId, normalizeModeName(token.modeName));
       }
-    } else if (token.metadata?.modeId && token.metadata?.modeName) {
-      // Single mode token, capture its mode info
-      if (!modesMap.has(token.metadata.modeId)) {
-        modesMap.set(token.metadata.modeId, normalizeModeName(token.metadata.modeName));
+      // Also add any other modes from the modes array
+      for (const modeId of token.modes) {
+        if (!modesMap.has(modeId)) {
+          // For non-primary modes, we only have the ID
+          modesMap.set(modeId, `mode-${modeId}`);
+        }
       }
     }
   }
@@ -302,15 +302,15 @@ export function generateThemeDirective(
       ...standaloneSemanticNonColors,
       ...boundSemanticTokens,
     ]) {
-      // For tokens without modeValues, use them as-is
-      // For tokens with modeValues, create a variant with the default mode value
-      if (!token.modeValues) {
-        defaultModeTokens.push(token);
-      } else if (token.modeValues[defaultModeId]) {
+      // For ModeVariableTokens, create a variant with the default mode value
+      if (isModeVariableToken(token)) {
         defaultModeTokens.push({
           ...token,
           rawValue: token.modeValues[defaultModeId],
         });
+      } else {
+        // For StandardVariableTokens, use as-is
+        defaultModeTokens.push(token);
       }
     }
 
@@ -337,7 +337,6 @@ export function generateThemeDirective(
         result += '}\n\n';
       }
     }
-
     // Output alternate mode overrides
     for (let i = 1; i < modes.length; i++) {
       const [modeId, modeName] = modes[i];
@@ -349,7 +348,7 @@ export function generateThemeDirective(
         ...standaloneSemanticNonColors,
         ...boundSemanticTokens,
       ]) {
-        if (token.modeValues && token.modeValues[modeId]) {
+        if (isModeVariableToken(token) && token.modeValues[modeId]) {
           modeTokens.push({
             ...token,
             rawValue: token.modeValues[modeId],
@@ -359,7 +358,7 @@ export function generateThemeDirective(
 
       // Process primitives with mode-specific values
       for (const token of primitiveTokens) {
-        if (token.modeValues && token.modeValues[modeId]) {
+        if (isModeVariableToken(token) && token.modeValues[modeId]) {
           modeTokens.push({
             ...token,
             rawValue: token.modeValues[modeId],

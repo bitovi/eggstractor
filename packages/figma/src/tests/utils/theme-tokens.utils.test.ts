@@ -1114,6 +1114,9 @@ describe('Multi-mode theme support', () => {
             rawValue: '#0080ff', // default mode value
             valueType: null,
             path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
             modeValues: {
               'mode-1': '#0080ff', // light mode
               'mode-2': '#0066cc', // dark mode
@@ -1122,8 +1125,6 @@ describe('Multi-mode theme support', () => {
               variableId: 'var-1',
               variableName: 'Color/Primary',
               variableTokenType: 'primitive',
-              modeId: 'mode-1',
-              modeName: 'light',
             },
           },
           // Semantic token with mode-specific references
@@ -1136,17 +1137,17 @@ describe('Multi-mode theme support', () => {
             primitiveRef: 'color-primary',
             valueType: null,
             path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
             modeValues: {
               'mode-1': '#0080ff', // references color-primary in light mode
               'mode-2': '#0066cc', // references color-primary in dark mode
             },
             metadata: {
-              figmaId: '',
               variableId: 'var-2',
               variableName: 'action/bg',
               variableTokenType: 'semantic',
-              modeId: 'mode-1',
-              modeName: 'light',
             },
           },
         ],
@@ -1188,6 +1189,9 @@ describe('Multi-mode theme support', () => {
             rawValue: '#ffffff',
             valueType: null,
             path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2', 'mode-3'],
             modeValues: {
               'mode-1': '#ffffff', // light
               'mode-2': '#1a1a1a', // dark
@@ -1197,8 +1201,6 @@ describe('Multi-mode theme support', () => {
               variableId: 'var-1',
               variableName: 'Color/Background',
               variableTokenType: 'primitive',
-              modeId: 'mode-1',
-              modeName: 'light',
             },
           },
         ],
@@ -1236,6 +1238,9 @@ describe('Multi-mode theme support', () => {
             rawValue: '#000000',
             valueType: null,
             path: [],
+            modeId: 'mode-123',
+            modeName: 'foundation',
+            modes: ['mode-123', 'mode-456'],
             modeValues: {
               'mode-123': '#000000',
               'mode-456': '#ffffff',
@@ -1244,8 +1249,6 @@ describe('Multi-mode theme support', () => {
               variableId: 'var-1',
               variableName: 'Color/Text',
               variableTokenType: 'primitive',
-              modeId: 'mode-123',
-              modeName: 'foundation',
             },
           },
         ],
@@ -1264,7 +1267,6 @@ describe('Multi-mode theme support', () => {
       // Default mode (foundation) value goes in :root
       expect(result).toContain(':root {');
       expect(result).toContain('--color-text: #000000;');
-
       // Only non-default modes get [data-theme] blocks
       expect(result).toContain("[data-theme='high-contrast']");
       expect(result).toContain('--color-text: #ffffff;');
@@ -1286,6 +1288,9 @@ describe('Multi-mode theme support', () => {
             rawValue: '#0080ff',
             valueType: null,
             path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
             modeValues: {
               'mode-1': '#0080ff',
               'mode-2': '#0066cc',
@@ -1294,11 +1299,9 @@ describe('Multi-mode theme support', () => {
               variableId: 'var-1',
               variableName: 'Color/Primary',
               variableTokenType: 'primitive',
-              modeId: 'mode-1',
-              modeName: 'light',
             },
           },
-          // Single-mode token (no modeValues)
+          // Single-mode token (no modeId/modeName)
           {
             type: 'variable',
             name: 'spacing-base',
@@ -1311,8 +1314,6 @@ describe('Multi-mode theme support', () => {
               variableId: 'var-2',
               variableName: 'Spacing/Base',
               variableTokenType: 'primitive',
-              modeId: 'mode-1',
-              modeName: 'light',
             },
           },
         ],
@@ -1344,6 +1345,9 @@ describe('Multi-mode theme support', () => {
             rawValue: '#0080ff',
             valueType: null,
             path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
             modeValues: {
               'mode-1': '#0080ff',
               'mode-2': '#0066cc',
@@ -1352,8 +1356,6 @@ describe('Multi-mode theme support', () => {
               variableId: 'var-1',
               variableName: 'Color/Primary',
               variableTokenType: 'primitive',
-              modeId: 'mode-1',
-              modeName: 'light',
             },
           },
         ],
@@ -1387,6 +1389,9 @@ describe('Multi-mode theme support', () => {
             rawValue: '#ffffff',
             valueType: null,
             path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
             modeValues: {
               'mode-1': '#ffffff',
               'mode-2': '#ffffff',
@@ -1395,8 +1400,6 @@ describe('Multi-mode theme support', () => {
               variableId: 'var-1',
               variableName: 'Color/White',
               variableTokenType: 'primitive',
-              modeId: 'mode-1',
-              modeName: 'light',
             },
           },
           // Semantic token
@@ -1409,17 +1412,17 @@ describe('Multi-mode theme support', () => {
             primitiveRef: 'color-white',
             valueType: null,
             path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
             modeValues: {
               'mode-1': '#ffffff',
               'mode-2': '#eeeeee',
             },
             metadata: {
-              figmaId: '',
               variableId: 'var-2',
               variableName: 'colour/button/primary/text/hover',
               variableTokenType: 'semantic',
-              modeId: 'mode-1',
-              modeName: 'light',
             },
           },
         ],
