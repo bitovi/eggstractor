@@ -39,7 +39,7 @@ export interface SaveConfigPayload extends Omit<CreatePRPayload, 'type'> {
   type: 'save-config';
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
-  generateSemanticColorUtilities?: boolean;
+  generateSemanticColorUtilities: boolean;
 }
 
 /**
