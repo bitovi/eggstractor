@@ -93,7 +93,11 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
     );
   }
 
-  // Generate the @theme directive
+  // Generate the @theme directive with mode-based CSS
+  // The directive now includes:
+  // - :root with primitive tokens
+  // - :root, [data-theme='default'] with default mode semantics
+  // - [data-theme='mode-name'] blocks for alternate modes
   // When generateSemantics is true, exclude semantic colors from @theme (they go in :root)
   const themeDirective = generateThemeDirective(collection, generateSemantics);
   const variableTokens = collection.tokens.filter(

@@ -468,9 +468,9 @@ describe('generateThemeDirective', () => {
 
     // @theme should include both primitives and semantics with simplified names
     expect(result).toContain('@theme {');
-    // Primitives use simplified names (--color-* instead of --colors-*)
-    expect(result).toContain('--color-blue-500: var(--color-blue-500);');
-    // Semantics should reference primitives (without --color- prefix)
+    // For single-mode scenarios, primitives use their actual values (not var() references)
+    expect(result).toContain('--color-blue-500: #0080ff;');
+    // Semantics should reference primitives with var()
     expect(result).toContain('--primary: var(--color-blue-500);');
   });
 
@@ -1097,5 +1097,363 @@ describe('generateSemanticColorUtilities', () => {
   it('should return empty string for empty array', () => {
     const result = generateSemanticColorUtilities([]);
     expect(result).toBe('');
+  });
+});
+
+describe('Multi-mode theme support', () => {
+  describe('generateThemeDirective with multiple modes', () => {
+    it('should generate CSS for tokens with multiple modes', () => {
+      const multiModeCollection: TokenCollection = {
+        tokens: [
+          // Primitive token with multiple mode values
+          {
+            type: 'variable',
+            name: 'color-primary',
+            property: 'color',
+            value: '$color-primary',
+            rawValue: '#0080ff', // default mode value
+            valueType: null,
+            path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
+            modeValues: {
+              'mode-1': '#0080ff', // light mode
+              'mode-2': '#0066cc', // dark mode
+            },
+            metadata: {
+              variableId: 'var-1',
+              variableName: 'Color/Primary',
+              variableTokenType: 'primitive',
+            },
+          },
+          // Semantic token with mode-specific references
+          {
+            type: 'variable',
+            name: 'action-bg',
+            property: 'color',
+            value: '$action-bg',
+            rawValue: '#0080ff',
+            primitiveRef: 'color-primary',
+            valueType: null,
+            path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
+            modeValues: {
+              'mode-1': '#0080ff', // references color-primary in light mode
+              'mode-2': '#0066cc', // references color-primary in dark mode
+            },
+            metadata: {
+              variableId: 'var-2',
+              variableName: 'action/bg',
+              variableTokenType: 'semantic',
+            },
+          },
+        ],
+        components: {},
+        componentSets: {},
+        instances: {},
+        modes: new Map([
+          ['mode-1', 'light'],
+          ['mode-2', 'dark'],
+        ]),
+      };
+
+      const result = generateThemeDirective(multiModeCollection);
+
+      // Should have primitives in :root
+      expect(result).toContain(':root {');
+      expect(result).toContain('--color-primary: #0080ff;');
+
+      // Should have default mode semantic tokens in :root and [data-theme='light']
+      expect(result).toContain('light mode semantic tokens (default)');
+      expect(result).toContain(":root,\n[data-theme='light'] {");
+      expect(result).toContain('--action-bg: var(--color-primary);');
+
+      // Should have dark mode overrides
+      expect(result).toContain('/* dark mode overrides */');
+      expect(result).toContain("[data-theme='dark'] {");
+      expect(result).toContain('--color-primary: #0066cc;');
+      expect(result).toContain('--action-bg: var(--color-primary);');
+    });
+
+    it('should handle three or more modes', () => {
+      const threeModeCollection: TokenCollection = {
+        tokens: [
+          {
+            type: 'variable',
+            name: 'color-background',
+            property: 'color',
+            value: '$color-background',
+            rawValue: '#ffffff',
+            valueType: null,
+            path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2', 'mode-3'],
+            modeValues: {
+              'mode-1': '#ffffff', // light
+              'mode-2': '#1a1a1a', // dark
+              'mode-3': '#f5f5dc', // sepia
+            },
+            metadata: {
+              variableId: 'var-1',
+              variableName: 'Color/Background',
+              variableTokenType: 'primitive',
+            },
+          },
+        ],
+        components: {},
+        componentSets: {},
+        instances: {},
+        modes: new Map([
+          ['mode-1', 'light'],
+          ['mode-2', 'dark'],
+          ['mode-3', 'sepia'],
+        ]),
+      };
+
+      const result = generateThemeDirective(threeModeCollection);
+
+      // Primitives with mode values: default mode value in :root
+      expect(result).toContain(':root {');
+      expect(result).toContain('--color-background: #ffffff;');
+
+      // Non-default modes get override blocks
+      expect(result).toContain("[data-theme='dark']");
+      expect(result).toContain("[data-theme='sepia']");
+      expect(result).toContain('--color-background: #f5f5dc;');
+      expect(result).toContain('--color-background: #1a1a1a;');
+    });
+
+    it('should use actual mode names from collection.modes', () => {
+      const customModeNamesCollection: TokenCollection = {
+        tokens: [
+          {
+            type: 'variable',
+            name: 'color-text',
+            property: 'color',
+            value: '$color-text',
+            rawValue: '#000000',
+            valueType: null,
+            path: [],
+            modeId: 'mode-123',
+            modeName: 'foundation',
+            modes: ['mode-123', 'mode-456'],
+            modeValues: {
+              'mode-123': '#000000',
+              'mode-456': '#ffffff',
+            },
+            metadata: {
+              variableId: 'var-1',
+              variableName: 'Color/Text',
+              variableTokenType: 'primitive',
+            },
+          },
+        ],
+        components: {},
+        componentSets: {},
+        instances: {},
+        modes: new Map([
+          ['mode-123', 'foundation'],
+          ['mode-456', 'high-contrast'],
+        ]),
+      };
+
+      const result = generateThemeDirective(customModeNamesCollection);
+
+      // Should use actual mode names, not 'default' or 'mode-{id}'
+      // Default mode (foundation) value goes in :root
+      expect(result).toContain(':root {');
+      expect(result).toContain('--color-text: #000000;');
+      // Only non-default modes get [data-theme] blocks
+      expect(result).toContain("[data-theme='high-contrast']");
+      expect(result).toContain('--color-text: #ffffff;');
+
+      // Should not use fallback mode-{id} format
+      expect(result).not.toContain('mode-123');
+      expect(result).not.toContain('mode-456');
+    });
+
+    it('should handle tokens without modeValues (single-mode tokens)', () => {
+      const mixedModeCollection: TokenCollection = {
+        tokens: [
+          // Multi-mode token
+          {
+            type: 'variable',
+            name: 'color-primary',
+            property: 'color',
+            value: '$color-primary',
+            rawValue: '#0080ff',
+            valueType: null,
+            path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
+            modeValues: {
+              'mode-1': '#0080ff',
+              'mode-2': '#0066cc',
+            },
+            metadata: {
+              variableId: 'var-1',
+              variableName: 'Color/Primary',
+              variableTokenType: 'primitive',
+            },
+          },
+          // Single-mode token (no modeId/modeName)
+          {
+            type: 'variable',
+            name: 'spacing-base',
+            property: 'spacing',
+            value: '$spacing-base',
+            rawValue: '16px',
+            valueType: 'px',
+            path: [],
+            metadata: {
+              variableId: 'var-2',
+              variableName: 'Spacing/Base',
+              variableTokenType: 'primitive',
+            },
+          },
+        ],
+        components: {},
+        componentSets: {},
+        instances: {},
+        modes: new Map([
+          ['mode-1', 'light'],
+          ['mode-2', 'dark'],
+        ]),
+      };
+
+      const result = generateThemeDirective(mixedModeCollection);
+
+      // Single-mode token should appear only in :root
+      expect(result).toContain('--spacing-base: 16px;');
+      // Multi-mode token should appear in both :root and mode blocks
+      expect(result).toContain('--color-primary:');
+    });
+
+    it('should fallback to extracting modes from tokens when collection.modes is not available', () => {
+      const noModesMapCollection: TokenCollection = {
+        tokens: [
+          {
+            type: 'variable',
+            name: 'color-primary',
+            property: 'color',
+            value: '$color-primary',
+            rawValue: '#0080ff',
+            valueType: null,
+            path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
+            modeValues: {
+              'mode-1': '#0080ff',
+              'mode-2': '#0066cc',
+            },
+            metadata: {
+              variableId: 'var-1',
+              variableName: 'Color/Primary',
+              variableTokenType: 'primitive',
+            },
+          },
+        ],
+        components: {},
+        componentSets: {},
+        instances: {},
+        // No modes map provided
+      };
+
+      const result = generateThemeDirective(noModesMapCollection);
+
+      // Should still work using fallback extraction
+      // Default mode goes in :root
+      expect(result).toContain(':root {');
+      expect(result).toContain('--color-primary: #0080ff;');
+
+      // Non-default mode uses fallback naming since we don't have collection.modes
+      expect(result).toContain('mode-mode-2'); // Falls back to mode-{id} format
+      expect(result).toContain('--color-primary: #0066cc;');
+    });
+
+    it('should output self-referencing semantic tokens in @theme for multi-mode', () => {
+      const multiModeCollection: TokenCollection = {
+        tokens: [
+          // Primitive token
+          {
+            type: 'variable',
+            name: 'color-white',
+            property: 'color',
+            value: '$color-white',
+            rawValue: '#ffffff',
+            valueType: null,
+            path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
+            modeValues: {
+              'mode-1': '#ffffff',
+              'mode-2': '#ffffff',
+            },
+            metadata: {
+              variableId: 'var-1',
+              variableName: 'Color/White',
+              variableTokenType: 'primitive',
+            },
+          },
+          // Semantic token
+          {
+            type: 'variable',
+            name: 'colour-button-primary-text-hover',
+            property: 'color',
+            value: '$colour-button-primary-text-hover',
+            rawValue: '#ffffff',
+            primitiveRef: 'color-white',
+            valueType: null,
+            path: [],
+            modeId: 'mode-1',
+            modeName: 'light',
+            modes: ['mode-1', 'mode-2'],
+            modeValues: {
+              'mode-1': '#ffffff',
+              'mode-2': '#eeeeee',
+            },
+            metadata: {
+              variableId: 'var-2',
+              variableName: 'colour/button/primary/text/hover',
+              variableTokenType: 'semantic',
+            },
+          },
+        ],
+        components: {},
+        componentSets: {},
+        instances: {},
+        modes: new Map([
+          ['mode-1', 'light'],
+          ['mode-2', 'dark'],
+        ]),
+      };
+
+      const result = generateThemeDirective(multiModeCollection);
+
+      // In multi-mode scenarios, @theme should have self-referencing semantic tokens
+      expect(result).toContain('@theme {');
+      expect(result).toContain(
+        '--colour-button-primary-text-hover: var(--colour-button-primary-text-hover);',
+      );
+
+      // Primitives should NOT be in @theme for multi-mode
+      // Split by @theme to check what's in that section
+      const themeSection = result.split('@theme {')[1]?.split('}')[0];
+      expect(themeSection).toBeDefined();
+      expect(themeSection).not.toContain('--color-white');
+
+      // The semantic token should reference itself, not the primitive
+      expect(themeSection).toContain(
+        '--colour-button-primary-text-hover: var(--colour-button-primary-text-hover)',
+      );
+      expect(themeSection).not.toContain('var(--color-white)');
+    });
   });
 });

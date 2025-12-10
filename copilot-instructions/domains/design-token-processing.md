@@ -358,3 +358,308 @@ const result: ProcessedValue = {
 ```
 
 This architecture ensures comprehensive token extraction while maintaining performance and providing detailed feedback about the processing pipeline.
+
+## Multi-Mode (Theme) Support
+
+### Mode Support Overview
+
+The system supports Figma's variable modes, which allow designers to define multiple values for the same variable (e.g., light mode, dark mode, high contrast). This enables theme switching in the generated CSS output.
+
+### Mode Data Structure
+
+#### TokenCollection Modes Map
+
+Mode information is stored centrally in the `TokenCollection`:
+
+```typescript
+export interface TokenCollection {
+  tokens: (StyleToken | VariableToken)[];
+  components: Record<ComponentToken['id'], ComponentToken>;
+  componentSets: Record<ComponentSetToken['id'], ComponentSetToken>;
+  instances: Record<InstanceToken['id'], InstanceToken>;
+  /** Map of modeId -> modeName for all modes found in variable collections */
+  modes?: Map<string, string>;
+}
+```
+
+The `modes` map is populated during variable collection and provides the canonical source of mode names.
+
+#### VariableToken Mode Fields
+
+Each `VariableToken` can store mode-specific values:
+
+```typescript
+export interface VariableToken extends BaseToken {
+  type: 'variable';
+  property: string;
+  rawValue: string; // Value for the default mode
+  primitiveRef?: string; // Reference to primitive variable (for semantic tokens)
+  valueType: 'px' | null;
+  modeValues?: Record<string, string>; // Map of modeId -> value for all modes
+  metadata?: {
+    // ... other fields
+    modeId?: string; // ID of the default mode
+    modeName?: string; // Name of the default mode
+  };
+}
+```
+
+**Key Points:**
+
+- `rawValue` always contains the default (first) mode's value
+- `modeValues` is only present when a variable has multiple modes (>1)
+- Keys in `modeValues` are Figma's internal mode IDs (e.g., "2002:0", "2002:1")
+- The `metadata.modeId` and `metadata.modeName` refer to the default mode only
+
+### Mode Collection Process
+
+#### Step 1: Collecting Mode Information
+
+During primitive variable collection in `collectPrimitiveVariables`:
+
+```typescript
+// Initialize modes map if not already present
+if (!collection.modes) {
+  collection.modes = new Map<string, string>();
+}
+
+// For each variable collection
+for (const varCollection of variableCollections) {
+  // Collect mode information from this collection
+  const modes = getModesFromCollection(varCollection);
+  for (const mode of modes) {
+    collection.modes.set(mode.modeId, mode.modeName);
+  }
+
+  // Process variables...
+}
+```
+
+The `getModesFromCollection` utility extracts mode information from Figma's `VariableCollection`:
+
+```typescript
+export function getModesFromCollection(collection: VariableCollection): ModeInfo[] {
+  return collection.modes.map((mode) => ({
+    modeId: mode.modeId,
+    modeName: mode.name,
+  }));
+}
+```
+
+#### Step 2: Processing Multi-Mode Variables
+
+In `createPrimitiveVariableToken`, values are collected for all modes:
+
+```typescript
+const modes = getModesFromCollection(collection);
+const defaultMode = modes[0];
+const modeValues: Record<string, string> = {};
+
+// Process all modes and collect their values
+for (const mode of modes) {
+  const value = variable.valuesByMode[mode.modeId];
+  if (!value) continue;
+
+  let modeRawValue: string;
+  // Extract value based on variable type (COLOR, FLOAT, STRING)
+  // ...
+
+  modeValues[mode.modeId] = modeRawValue.toLowerCase();
+}
+
+return {
+  // ... other fields
+  rawValue: defaultModeRawValue, // Default mode value
+  modeValues: Object.keys(modeValues).length > 1 ? modeValues : undefined,
+  metadata: {
+    modeId: defaultMode.modeId,
+    modeName: defaultMode.modeName,
+  },
+};
+```
+
+**Important:** `modeValues` is only set when there are multiple modes (>1), optimizing for the common single-mode case.
+
+### CSS Generation for Modes
+
+#### Output Structure
+
+The `generateThemeDirective` function produces mode-aware CSS:
+
+```css
+/* Primitive tokens - default mode values */
+:root {
+  --color-blue-500: #0080ff;
+  --color-gray-100: #f5f5f5;
+  --spacing-base: 16px;
+}
+
+/* Semantic tokens for default mode (light) */
+:root,
+[data-theme='light'] {
+  --action-bg: var(--color-blue-500);
+  --surface-bg: var(--color-gray-100);
+}
+
+/* Dark mode overrides */
+[data-theme='dark'] {
+  --color-blue-500: #0066cc;
+  --color-gray-100: #1a1a1a;
+  --action-bg: var(--color-blue-500);
+  --surface-bg: var(--color-gray-100);
+}
+```
+
+#### Generation Logic
+
+1. **`:root` block**: Contains primitive tokens with default mode values
+2. **`:root, [data-theme='default-mode']` block**: Contains semantic tokens for the default mode
+3. **`[data-theme='mode-name']` blocks**: Override blocks for each non-default mode
+
+```typescript
+// Extract mode information from the collection
+const modesMap = collection.modes || extractModesFromTokens(variableTokens);
+const modes = Array.from(modesMap.entries());
+
+if (modes.length > 1) {
+  const defaultModeId = modes[0][0];
+  const defaultModeName = modes[0][1];
+
+  // Output default mode semantic tokens
+  result += `/* ${defaultModeName} mode semantic tokens (default) */\n`;
+  result += `:root,\n[data-theme='${defaultModeName}'] {\n`;
+  // ... output tokens
+  result += '}\n\n';
+
+  // Output alternate mode overrides
+  for (let i = 1; i < modes.length; i++) {
+    const [modeId, modeName] = modes[i];
+
+    result += `/* ${modeName} mode overrides */\n`;
+    result += `[data-theme='${modeName}'] {\n`;
+    // ... output tokens with mode-specific values
+    result += '}\n\n';
+  }
+}
+```
+
+### Mode Name Normalization
+
+Mode names from Figma are sanitized for use in CSS selectors:
+
+```typescript
+export function normalizeModeName(modeName: string): string {
+  return sanitizeName(modeName.toLowerCase().replace(/\s+/g, '-'));
+}
+```
+
+**Examples:**
+
+- "Light Mode" → "light-mode"
+- "High Contrast" → "high-contrast"
+- "Foundation" → "foundation"
+
+**Important:** The system respects whatever mode names designers use in Figma. There's no forced mapping to "light"/"dark".
+
+### Using Themes in Applications
+
+#### HTML Data Attribute
+
+Apply themes by setting the `data-theme` attribute on any element:
+
+```html
+<html data-theme="dark">
+  <!-- Dark mode applied -->
+</html>
+
+<div data-theme="high-contrast">
+  <!-- High contrast mode scoped to this div -->
+</div>
+```
+
+#### JavaScript Theme Switching
+
+```typescript
+// Switch global theme
+document.documentElement.setAttribute('data-theme', 'dark');
+
+// Detect system preference
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+```
+
+### Fallback Mode Extraction
+
+If `collection.modes` is not available, the system falls back to extracting mode information from token metadata:
+
+```typescript
+function extractModesFromTokens(tokens: VariableToken[]): Map<string, string> {
+  const modesMap = new Map<string, string>();
+
+  for (const token of tokens) {
+    if (token.modeValues) {
+      for (const modeId of Object.keys(token.modeValues)) {
+        if (!modesMap.has(modeId)) {
+          // Try to match with token's metadata
+          if (token.metadata?.modeId === modeId && token.metadata?.modeName) {
+            modesMap.set(modeId, normalizeModeName(token.metadata.modeName));
+          } else {
+            // Fallback: use modeId as the name
+            modesMap.set(modeId, `mode-${modeId}`);
+          }
+        }
+      }
+    }
+  }
+
+  return modesMap;
+}
+```
+
+This ensures backward compatibility and graceful degradation.
+
+### Testing Multi-Mode Support
+
+Test fixtures should include tokens with `modeValues`:
+
+```typescript
+const multiModeToken: VariableToken = {
+  type: 'variable',
+  name: 'color-primary',
+  property: 'color',
+  value: '$color-primary',
+  rawValue: '#0080ff', // default mode
+  valueType: null,
+  path: [],
+  modeValues: {
+    'mode-1': '#0080ff', // light
+    'mode-2': '#0066cc', // dark
+  },
+  metadata: {
+    variableId: 'var-1',
+    variableName: 'Color/Primary',
+    variableTokenType: 'primitive',
+    modeId: 'mode-1',
+    modeName: 'light',
+  },
+};
+
+const collection: TokenCollection = {
+  tokens: [multiModeToken],
+  components: {},
+  componentSets: {},
+  instances: {},
+  modes: new Map([
+    ['mode-1', 'light'],
+    ['mode-2', 'dark'],
+  ]),
+};
+```
+
+### Best Practices
+
+1. **Always populate `collection.modes`**: Ensures accurate mode names in CSS output
+2. **Use semantic mode names**: Match designer intentions (e.g., "light", "dark", "high-contrast")
+3. **Test with multiple modes**: Verify CSS output for 2+ mode scenarios
+4. **Handle single-mode gracefully**: Tokens without `modeValues` should work seamlessly
+5. **Preserve mode order**: The first mode is always the default
