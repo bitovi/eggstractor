@@ -6,6 +6,7 @@ export interface NamingContext {
     path: BaseToken['path'],
     propertyNameConflicts?: Record<string, string[]>,
     variants?: Record<string, string>,
+    componentSetId?: string | null,
   ) => string;
 }
 
@@ -24,9 +25,16 @@ export const createNamingContext = (
   const nameCountMap = new Map<string, number>();
 
   // Extract path processing
-  const buildBasePath = (path: BaseToken['path']) => {
+  const buildBasePath = (path: BaseToken['path'], componentSetId?: string | null) => {
     const pathSegments = path
-      .filter((part) => part.type !== 'COMPONENT')
+      .filter((part) => {
+        // Only filter out COMPONENT nodes if they're part of a component set (have componentSetId)
+        // Standalone components (no componentSetId) should be kept in the path
+        if (part.type === 'COMPONENT') {
+          return !componentSetId; // Keep if no componentSetId (standalone), filter if has componentSetId (variant)
+        }
+        return true; // Keep all non-COMPONENT nodes
+      })
       .map((part) => part.name.replace(/\s+/g, '-'));
 
     const segmentsToUse = config.includePageInPath ? pathSegments : pathSegments.slice(1);
@@ -83,9 +91,9 @@ export const createNamingContext = (
   };
 
   return {
-    createName(path, propertyNameConflicts = {}, variants = {}): string {
+    createName(path, propertyNameConflicts = {}, variants = {}, componentSetId): string {
       const standardizedVariants = standardizeVariantCombination(path, variants);
-      const basePath = buildBasePath(path);
+      const basePath = buildBasePath(path, componentSetId);
 
       const variantParts = standardizedVariants.split('--').filter(Boolean) || [];
       const parsedVariants = parseVariantParts(variantParts);
