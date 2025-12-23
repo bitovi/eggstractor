@@ -1,12 +1,15 @@
-import { StylesheetFormat, OutputMode } from '@eggstractor/common';
+import { StylesheetFormat, OutputMode, GitProvider } from '@eggstractor/common';
 import { createContext, useContext, useMemo, useState, FC, ReactNode } from 'react';
 import { messageMainThread } from '../../utils';
 
 export interface Config {
+  provider: GitProvider;
   repoPath: string;
   filePath: string;
   branchName: string;
-  githubToken: string;
+  githubToken: string; // Keep for backward compatibility
+  token: string;
+  instanceUrl?: string;
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
@@ -22,10 +25,13 @@ const ConfigContext = createContext<ConfigType | undefined>(undefined);
 interface ConfigProps {
   children: ReactNode;
   /** Optional controlled props — when provided they seed initial state and sync on change */
+  provider?: GitProvider;
   repoPath?: string;
   filePath?: string;
   branchName?: string;
   githubToken?: string;
+  token?: string;
+  instanceUrl?: string;
   format?: StylesheetFormat;
   useCombinatorialParsing?: boolean;
   generateSemanticColorUtilities?: boolean;
@@ -34,20 +40,26 @@ interface ConfigProps {
 
 export const ConfigProvider: FC<ConfigProps> = ({
   children,
+  provider: pProvider = 'github',
   repoPath: pRepoPath = '',
   filePath: pFilePath = '',
   branchName: pBranchName = '',
   githubToken: pGithubToken = '',
+  token: pToken = '',
+  instanceUrl: pInstanceUrl = '',
   format: pFormat = 'scss',
   useCombinatorialParsing: pUseComb = true,
   generateSemanticColorUtilities: pGenSemColorUtil = false,
   outputMode: pOutputMode = 'all',
 }) => {
   // Internal defaults used only when the prop is undefined at mount
+  const [provider, setProvider] = useState<GitProvider>(pProvider ?? 'github');
   const [repoPath, setRepoPath] = useState<string>(pRepoPath ?? '');
   const [filePath, setFilePath] = useState<string>(pFilePath ?? '');
   const [branchName, setBranchName] = useState<string>(pBranchName ?? '');
-  const [githubToken, setGithubToken] = useState<string>(pGithubToken ?? '');
+  const [githubToken, setGithubToken] = useState<string>(pGithubToken ?? pToken ?? '');
+  const [token, setToken] = useState<string>(pToken ?? pGithubToken ?? '');
+  const [instanceUrl, setInstanceUrl] = useState<string>(pInstanceUrl ?? '');
   const [format, setFormat] = useState<StylesheetFormat>(pFormat ?? 'scss');
   const [useCombinatorialParsing, setUseCombinatorialParsing] = useState<boolean>(pUseComb ?? true);
   const [generateSemanticColorUtilities, setGenerateSemanticColorUtilities] = useState<boolean>(
@@ -57,20 +69,27 @@ export const ConfigProvider: FC<ConfigProps> = ({
 
   const value = useMemo(() => {
     const saveConfig = (config: Partial<Config>): void => {
+      const _provider = config.provider ?? provider;
       const _reportPath = config.repoPath ?? repoPath;
       const _filePath = config.filePath ?? filePath;
       const _branchName = config.branchName ?? branchName;
-      const _githubToken = config.githubToken ?? githubToken;
+      // Support both token fields for backward compatibility
+      const _token = config.token ?? config.githubToken ?? token;
+      const _githubToken = config.githubToken ?? config.token ?? githubToken;
+      const _instanceUrl = config.instanceUrl ?? instanceUrl;
       const _format = config.format ?? format;
       const _useCombinatorialParsing = config.useCombinatorialParsing ?? useCombinatorialParsing;
       const _generateSemanticColorUtilities =
         config.generateSemanticColorUtilities ?? generateSemanticColorUtilities;
       const _outputMode = config.outputMode ?? outputMode;
 
+      setProvider(config.provider ?? _provider);
       setRepoPath(config.repoPath ?? _reportPath);
       setFilePath(config.filePath ?? _filePath);
       setBranchName(config.branchName ?? _branchName);
-      setGithubToken(config.githubToken ?? _githubToken);
+      setToken(config.token ?? config.githubToken ?? _token);
+      setGithubToken(config.githubToken ?? config.token ?? _githubToken);
+      setInstanceUrl(config.instanceUrl ?? _instanceUrl);
       setFormat(config.format ?? _format);
       setUseCombinatorialParsing(config.useCombinatorialParsing ?? _useCombinatorialParsing);
       setGenerateSemanticColorUtilities(
@@ -79,10 +98,13 @@ export const ConfigProvider: FC<ConfigProps> = ({
       setOutputMode(config.outputMode ?? _outputMode);
       messageMainThread({
         type: 'save-config',
+        provider: _provider,
         repoPath: _reportPath,
         filePath: _filePath,
         branchName: _branchName,
-        githubToken: _githubToken,
+        githubToken: _githubToken, // Keep for backward compatibility
+        token: _token,
+        instanceUrl: _instanceUrl,
         format: _format,
         useCombinatorialParsing: _useCombinatorialParsing,
         generateSemanticColorUtilities: _generateSemanticColorUtilities,
@@ -91,10 +113,13 @@ export const ConfigProvider: FC<ConfigProps> = ({
     };
 
     return {
+      provider,
       repoPath,
       filePath,
       branchName,
       githubToken,
+      token,
+      instanceUrl,
       format,
       useCombinatorialParsing,
       generateSemanticColorUtilities,
@@ -102,10 +127,13 @@ export const ConfigProvider: FC<ConfigProps> = ({
       saveConfig,
     };
   }, [
+    provider,
     repoPath,
     filePath,
     branchName,
     githubToken,
+    token,
+    instanceUrl,
     format,
     useCombinatorialParsing,
     generateSemanticColorUtilities,

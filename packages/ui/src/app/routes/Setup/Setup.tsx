@@ -1,5 +1,5 @@
 import { FC, FormEvent, useState } from 'react';
-import type { StylesheetFormat, OutputMode } from '@eggstractor/common';
+import type { StylesheetFormat, OutputMode, GitProvider } from '@eggstractor/common';
 import cn from 'classnames';
 import { useConfig } from '../../context';
 import { Button, Input, ButtonGroup, ButtonGroupOption } from '../../components';
@@ -11,6 +11,11 @@ const FORMAT_OPTIONS: ButtonGroupOption<StylesheetFormat>[] = [
   { value: 'scss', label: 'SCSS' },
   { value: 'tailwind-scss', label: 'Tailwind 3 + SCSS' },
   { value: 'tailwind-v4', label: 'Tailwind 4' },
+];
+
+export const PROVIDER_OPTIONS: ButtonGroupOption<GitProvider>[] = [
+  { value: 'github', label: 'GitHub' },
+  { value: 'gitlab', label: 'GitLab' },
 ];
 
 export const OUTPUT_GROUPING_OPTIONS: ButtonGroupOption<'combinatorial' | 'templated'>[] = [
@@ -31,9 +36,12 @@ export const OUTPUT_MODE_OPTIONS: ButtonGroupOption<OutputMode>[] = [
 
 export const Setup: FC = () => {
   const {
+    provider: initialProvider,
     repoPath: initialRepoPath,
     filePath: initialFilePath,
     githubToken: initialGithubToken,
+    token: initialToken,
+    instanceUrl: initialInstanceUrl,
     format: initialFormat,
     useCombinatorialParsing: initialUseCombinatorialParsing,
     generateSemanticColorUtilities: initialGenerateSemanticColorUtilities,
@@ -41,9 +49,11 @@ export const Setup: FC = () => {
     saveConfig,
   } = useConfig();
 
+  const [provider, setProvider] = useState<GitProvider>(initialProvider);
   const [repoPath, setRepoPath] = useState(initialRepoPath);
   const [filePath, setFilePath] = useState(initialFilePath);
-  const [githubToken, setGithubToken] = useState(initialGithubToken);
+  const [token, setToken] = useState(initialToken || initialGithubToken);
+  const [instanceUrl, setInstanceUrl] = useState(initialInstanceUrl || '');
   const [format, setFormat] = useState(initialFormat);
   const [useCombinatorialParsing, setUseCombinatorialParsing] = useState(
     initialUseCombinatorialParsing,
@@ -56,9 +66,12 @@ export const Setup: FC = () => {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     saveConfig({
+      provider,
       repoPath,
       filePath,
-      githubToken,
+      githubToken: token, // Keep for backward compatibility
+      token,
+      instanceUrl: provider === 'gitlab' ? instanceUrl : undefined,
       format,
       useCombinatorialParsing,
       generateSemanticColorUtilities,
@@ -67,19 +80,51 @@ export const Setup: FC = () => {
     alert('Changes saved!');
   };
 
+  const providerLabel = provider === 'github' ? 'GitHub' : 'GitLab';
+  const repoLabel = provider === 'github' ? 'GitHub repository' : 'GitLab project';
+  const repoHint =
+    provider === 'github' ? 'e.g., levi-myers/eggstractor-demo' : 'e.g., username/project-name';
+  const repoLinkHref =
+    provider === 'github'
+      ? 'https://docs.github.com/en/repositories/creating-and-managing-repositories/quickstart-for-repositories'
+      : 'https://docs.gitlab.com/ee/user/project/';
+  const tokenLabel = `${providerLabel} token`;
+  const tokenLinkHref =
+    provider === 'github'
+      ? 'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token'
+      : 'https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html';
+
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       <div className={cn(styles['form-fields'], 'container')}>
         <div>
+          <ButtonGroup
+            label="Git provider"
+            value={provider}
+            onChange={setProvider}
+            options={PROVIDER_OPTIONS}
+          ></ButtonGroup>
+        </div>
+        <div>
           <Input
             value={repoPath}
             onChange={setRepoPath}
-            label="Github repository"
+            label={repoLabel}
             linkLabel="How to find / create your repo"
-            linkHref="https://docs.github.com/en/repositories/creating-and-managing-repositories/quickstart-for-repositories"
-            hint="e.g., levi-myers/eggstractor-demo"
+            linkHref={repoLinkHref}
+            hint={repoHint}
           />
         </div>
+        {provider === 'gitlab' && (
+          <div>
+            <Input
+              value={instanceUrl}
+              onChange={setInstanceUrl}
+              label="GitLab instance URL (optional)"
+              hint="e.g., gitlab.company.com (leave empty for gitlab.com)"
+            />
+          </div>
+        )}
         <div>
           <Input
             value={filePath}
@@ -93,11 +138,11 @@ export const Setup: FC = () => {
         <div>
           <Input
             type="password"
-            value={githubToken}
-            onChange={setGithubToken}
-            label="Github token"
+            value={token}
+            onChange={setToken}
+            label={tokenLabel}
             linkLabel="How to create a token"
-            linkHref="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token"
+            linkHref={tokenLinkHref}
           />
         </div>
         <div>
