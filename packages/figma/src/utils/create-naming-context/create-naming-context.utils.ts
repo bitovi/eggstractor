@@ -6,7 +6,6 @@ export interface NamingContext {
     path: BaseToken['path'],
     propertyNameConflicts?: Record<string, string[]>,
     variants?: Record<string, string>,
-    componentSetId?: string | null,
   ) => string;
 }
 
@@ -25,16 +24,14 @@ export const createNamingContext = (
   const nameCountMap = new Map<string, number>();
 
   // Extract path processing
-  const buildBasePath = (path: BaseToken['path'], componentSetId?: string | null) => {
+  const buildBasePath = (path: BaseToken['path']) => {
     const pathSegments = path
-      .filter((part) => {
-        // Only filter out COMPONENT nodes if they're part of a component set (have componentSetId)
-        // Standalone components (no componentSetId) should be kept in the path
-        if (part.type === 'COMPONENT') {
-          return !componentSetId; // Keep if no componentSetId (standalone), filter if has componentSetId (variant)
-        }
-        return true; // Keep all non-COMPONENT nodes
-      })
+      // Filter out COMPONENT nodes from the path because:
+      // 1. COMPONENT nodes are variants within a COMPONENT_SET (e.g., "state=resting")
+      // 2. Their names contain property=value pairs that get parsed and added as variant suffixes
+      // 3. Including them in the path would duplicate the variant information in the final name
+      // Example: Without filter: "input-state=resting-resting" → With filter: "input-resting"
+      .filter((part) => part.type !== 'COMPONENT')
       .map((part) => part.name.replace(/\s+/g, '-'));
 
     const segmentsToUse = config.includePageInPath ? pathSegments : pathSegments.slice(1);
@@ -91,9 +88,9 @@ export const createNamingContext = (
   };
 
   return {
-    createName(path, propertyNameConflicts = {}, variants = {}, componentSetId): string {
+    createName(path, propertyNameConflicts = {}, variants = {}): string {
       const standardizedVariants = standardizeVariantCombination(path, variants);
-      const basePath = buildBasePath(path, componentSetId);
+      const basePath = buildBasePath(path);
 
       const variantParts = standardizedVariants.split('--').filter(Boolean) || [];
       const parsedVariants = parseVariantParts(variantParts);

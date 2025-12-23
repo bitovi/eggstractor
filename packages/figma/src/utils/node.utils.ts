@@ -7,8 +7,9 @@ export function getParentSceneNodes(node: SceneNode): PathNode[] {
 
   while (current && current.parent) {
     // TODO: This is to skip the "Components" page that Figma adds automatically
-    // This needs to be improved since it can be renamed
-    if (current.name.toLowerCase() !== 'components') {
+    const nodeType = (current as { type: string }).type;
+    const isComponentsPage = nodeType === 'PAGE' && current.name.toLowerCase() === 'components';
+    if (!isComponentsPage) {
       nodes.unshift(current);
     }
     // TODO This doesn't properly verify that it's a SceneNode
