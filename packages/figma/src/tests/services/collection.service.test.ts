@@ -191,7 +191,7 @@ describe('collectTokens - OutputMode behavior', () => {
 
   beforeEach(() => {
     // Mock Figma global
-    (global as unknown as { figma: PluginAPI }).figma = {
+    global.figma = {
       root: {
         children: [
           {
