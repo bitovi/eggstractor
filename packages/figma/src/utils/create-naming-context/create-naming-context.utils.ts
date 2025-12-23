@@ -26,6 +26,11 @@ export const createNamingContext = (
   // Extract path processing
   const buildBasePath = (path: BaseToken['path']) => {
     const pathSegments = path
+      // Filter out COMPONENT nodes from the path because:
+      // 1. COMPONENT nodes are variants within a COMPONENT_SET (e.g., "state=resting")
+      // 2. Their names contain property=value pairs that get parsed and added as variant suffixes
+      // 3. Including them in the path would duplicate the variant information in the final name
+      // Example: Without filter: "input-state=resting-resting" → With filter: "input-resting"
       .filter((part) => part.type !== 'COMPONENT')
       .map((part) => part.name.replace(/\s+/g, '-'));
 
