@@ -21,6 +21,7 @@ export const App = () => {
       format: getValidStylesheetFormat(msg.config.format),
       useCombinatorialParsing: msg.config.useCombinatorialParsing ?? true,
       generateSemanticColorUtilities: msg.config.generateSemanticColorUtilities ?? false,
+      outputMode: msg.config.outputMode ?? 'all',
     });
   });
 

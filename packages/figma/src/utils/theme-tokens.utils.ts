@@ -34,6 +34,103 @@ function extractModesFromTokens(tokens: VariableToken[]): Map<string, string> {
   return modesMap;
 }
 
+/**
+ * Filter out typography-only modes (e.g., line-height variations).
+ * Returns only modes that modify color or non-typography tokens.
+ *
+ * Typography-only modes are those that only vary font-related properties:
+ * - font-family
+ * - font-weight
+ * - font-size
+ * - line-height (font-leading)
+ *
+ * @param modesMap - Map of all modes
+ * @param tokens - All variable tokens
+ * @returns Filtered map containing only non-typography modes
+ */
+function filterTypographyOnlyModes(
+  modesMap: Map<string, string>,
+  tokens: VariableToken[],
+): Map<string, string> {
+  if (modesMap.size <= 1) {
+    return modesMap; // No filtering needed for single mode
+  }
+
+  // Analyze each mode to see what types of tokens it modifies
+  const modeTokenTypes = new Map<string, Set<string>>();
+
+  for (const token of tokens) {
+    if (!isModeVariableToken(token)) continue;
+
+    // Check all modes for this token
+    for (const modeId of token.modes) {
+      if (!modeTokenTypes.has(modeId)) {
+        modeTokenTypes.set(modeId, new Set());
+      }
+
+      // Categorize token by its property type
+      const tokenCategory = categorizeTokenProperty(token);
+      const tokenTypesSet = modeTokenTypes.get(modeId);
+      if (tokenTypesSet) {
+        tokenTypesSet.add(tokenCategory);
+      }
+    }
+  }
+
+  // Filter out modes that ONLY have typography tokens
+  const filteredModes = new Map<string, string>();
+
+  for (const [modeId, modeName] of modesMap.entries()) {
+    const tokenTypes = modeTokenTypes.get(modeId);
+
+    if (!tokenTypes) {
+      // No tokens for this mode, keep it
+      filteredModes.set(modeId, modeName);
+      continue;
+    }
+
+    // Check if this mode has any non-typography tokens
+    const hasNonTypography = Array.from(tokenTypes).some((category) => category !== 'typography');
+
+    if (hasNonTypography) {
+      filteredModes.set(modeId, modeName);
+    }
+    // else: Skip typography-only modes
+  }
+
+  return filteredModes;
+}
+
+/**
+ * Categorize a token's property into broad categories
+ */
+function categorizeTokenProperty(token: VariableToken): string {
+  const { property, name } = token;
+  const lowerName = name.toLowerCase();
+  const lowerProp = property.toLowerCase();
+
+  // Typography-related tokens
+  if (
+    lowerProp.includes('font') ||
+    lowerProp.includes('line-height') ||
+    lowerName.includes('font-family') ||
+    lowerName.includes('font-weight') ||
+    lowerName.includes('font-size') ||
+    lowerName.includes('font-leading') ||
+    lowerName.includes('line-height')
+  ) {
+    return 'typography';
+  }
+
+  // Color tokens
+  if (lowerProp === 'color' || lowerName.includes('color') || lowerName.includes('colour')) {
+    return 'color';
+  }
+
+  // Everything else (spacing, borders, shadows, etc.)
+  return 'other';
+}
+
 export function generateThemeDirective(
   collection: TokenCollection,
   excludeSemanticColorsFromTheme = false,
@@ -289,7 +386,13 @@ export function generateThemeDirective(
   // Extract mode information from the collection
   // If collection.modes is not available, fall back to extracting from tokens
   const modesMap = collection.modes || extractModesFromTokens(variableTokens);
-  const modes = Array.from(modesMap.entries()); // If we have multiple modes, output mode-specific blocks for tokens that vary by mode
+
+  // Filter out typography-only modes (line-height variations)
+  // TODO: Implement proper support for typography modes with separate attribute (e.g., data-line-height)
+  // See: [JIRA ticket to be created]
+  const filteredModesMap = filterTypographyOnlyModes(modesMap, variableTokens);
+
+  const modes = Array.from(filteredModesMap.entries()); // If we have multiple modes, output mode-specific blocks for tokens that vary by mode
   if (modes.length > 1) {
     const defaultModeId = modes[0][0]; // First mode is the default
     const defaultModeName = modes[0][1];
@@ -349,9 +452,16 @@ export function generateThemeDirective(
         ...boundSemanticTokens,
       ]) {
         if (isModeVariableToken(token) && token.modeValues[modeId]) {
+          // For semantic tokens with modePrimitiveRefs, use the mode-specific primitive reference
+          const modePrimitiveRef =
+            token.modePrimitiveRefs && token.modePrimitiveRefs[modeId]
+              ? token.modePrimitiveRefs[modeId]
+              : token.primitiveRef;
+
           modeTokens.push({
             ...token,
             rawValue: token.modeValues[modeId],
+            primitiveRef: modePrimitiveRef,
           });
         }
       }

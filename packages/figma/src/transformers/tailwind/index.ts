@@ -13,11 +13,55 @@ import {
 } from '../../utils';
 import { Transformer } from '../types';
 
+/**
+ * Transforms a token collection to Tailwind-compatible SCSS mixins.
+ *
+ * @param collection - The token collection to transform
+ * @param useCombinatorialParsing - Whether to use combinatorial parsing for variants
+ * @param _generateSemantics - (Deprecated) Semantic utilities are not supported in SCSS mode
+ * @param outputMode - Determines what to output:
+ *   - 'variables': Only CSS variables in :root (no mixins)
+ *   - 'components': Only SCSS mixins with @apply directives (no variables)
+ *   - 'all': Both variables and mixins (default behavior)
+ * @returns TransformerResult with the generated SCSS code
+ */
 export const transformToTailwindSassClass: Transformer = (
   collection: TokenCollection,
   useCombinatorialParsing: boolean,
-  _config,
+  _generateSemantics,
+  outputMode = 'all',
 ) => {
+  // For 'variables' mode, output CSS variables only
+  if (outputMode === 'variables') {
+    const variableTokens = collection.tokens.filter(
+      (token): token is VariableToken => token.type === 'variable',
+    );
+
+    if (variableTokens.length === 0) {
+      return {
+        result: '/* No variables found */',
+        warnings: [],
+        errors: [],
+      };
+    }
+
+    let output = '/* Generated CSS Variables */\n:root {\n';
+
+    for (const token of variableTokens) {
+      const varName = `--${token.name}`;
+      output += `  ${varName}: ${token.rawValue};\n`;
+    }
+
+    output += '}\n';
+
+    return {
+      result: output,
+      warnings: [],
+      errors: [],
+    };
+  }
+
+  // For 'components' and 'all' modes, generate mixins
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token: NonNullableStyleToken) => token.name);
   const namingContext = createNamingContext();
@@ -56,11 +100,54 @@ export const transformToTailwindSassClass: Transformer = (
   };
 };
 
+/**
+ * Transforms a token collection to Tailwind v4 CSS with @theme and @utility directives.
+ *
+ * @param collection - The token collection to transform
+ * @param useCombinatorialParsing - Whether to use combinatorial parsing for variants
+ * @param generateSemantics - Whether to generate semantic color utilities (default: true)
+ * @param outputMode - Determines what to output:
+ *   - 'variables': Only @theme directive with CSS variables (no utilities)
+ *   - 'components': Only @utility directives and semantic color utilities (no theme)
+ *   - 'all': Theme, semantic utilities, and component utilities (default behavior)
+ * @returns TransformerResult with the generated Tailwind v4 CSS code
+ */
 export const transformToTailwindLayerUtilityClassV4: Transformer = (
   collection: TokenCollection,
   useCombinatorialParsing: boolean,
-  generateSemantics = true, // TODO: Remove this default once UI is updated
+  generateSemantics = true,
+  outputMode = 'all',
 ) => {
+  // Extract semantic colors for custom utilities (if enabled)
+  let semanticColorTokens: VariableToken[] = [];
+
+  if (generateSemantics) {
+    // Filter for semantic color tokens that were collected by collectSemanticColorVariables
+    semanticColorTokens = collection.tokens.filter(
+      (token): token is VariableToken =>
+        token.type === 'variable' &&
+        token.metadata?.variableTokenType === 'semantic' &&
+        token.property === 'color',
+    );
+  }
+
+  const variableTokens = collection.tokens.filter(
+    (token): token is VariableToken => token.type === 'variable',
+  );
+
+  // For 'variables' mode, only output the theme directive
+  if (outputMode === 'variables') {
+    // Generate the @theme directive with mode-based CSS
+    const themeDirective = generateThemeDirective(collection, generateSemantics);
+
+    return {
+      result: themeDirective,
+      warnings: [],
+      errors: [],
+    };
+  }
+
+  // For 'components' and 'all' modes, process style tokens
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
   const namingContext = createNamingContext(tailwind4NamingConfig);
@@ -80,35 +167,19 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
     a.variantPath.localeCompare(b.variantPath),
   );
 
-  // Extract semantic colors for custom utilities (if enabled)
-  let semanticColorTokens: VariableToken[] = [];
-
-  if (generateSemantics) {
-    // Filter for semantic color tokens that were collected by collectSemanticColorVariables
-    semanticColorTokens = collection.tokens.filter(
-      (token): token is VariableToken =>
-        token.type === 'variable' &&
-        token.metadata?.variableTokenType === 'semantic' &&
-        token.property === 'color',
-    );
-  }
-
-  // Generate the @theme directive with mode-based CSS
-  // The directive now includes:
-  // - :root with primitive tokens
-  // - :root, [data-theme='default'] with default mode semantics
-  // - [data-theme='mode-name'] blocks for alternate modes
-  // When generateSemantics is true, exclude semantic colors from @theme (they go in :root)
-  const themeDirective = generateThemeDirective(collection, generateSemantics);
-  const variableTokens = collection.tokens.filter(
-    (token): token is VariableToken => token.type === 'variable',
-  );
   // When generateSemantics is true, exclude semantic colors from dynamic theme mapping
   const dynamicThemeTokens = buildDynamicThemeTokens(variableTokens, generateSemantics);
 
-  let output = themeDirective;
+  let output = '';
+
+  // For 'all' mode, include the theme directive
+  if (outputMode === 'all') {
+    const themeDirective = generateThemeDirective(collection, generateSemantics);
+    output = themeDirective;
+  }
 
   // Generate custom semantic color utilities (before component utilities)
+  // Include these in both 'components' and 'all' modes
   if (generateSemantics && semanticColorTokens.length > 0) {
     output += generateSemanticColorUtilities(semanticColorTokens);
   }

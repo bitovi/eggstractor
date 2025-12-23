@@ -22,6 +22,7 @@ export const Export: FC = () => {
     repoPath,
     filePath,
     generateSemanticColorUtilities,
+    outputMode,
   } = useConfig();
   const { loading, setLoading, generatedStyles, setGeneratedStyles } = useGeneratedStyles();
   const { status: prStatus, setCreatingPR, setPRCreated, setIdle } = useStatus();
@@ -34,6 +35,7 @@ export const Export: FC = () => {
       format: getValidStylesheetFormat(format),
       useCombinatorialParsing,
       generateSemanticColorUtilities,
+      outputMode,
     });
   };
 

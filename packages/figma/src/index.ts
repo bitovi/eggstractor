@@ -12,6 +12,7 @@ import {
   StylesheetFormat,
   MessageToMainThreadPayload,
   GithubConfig,
+  OutputMode,
 } from '@eggstractor/common';
 import { TokenCollection, TransformerResult } from './types';
 import { MAX_PROGRESS_PERCENTAGE, serializeFigmaData } from './utils';
@@ -81,19 +82,36 @@ const main = async () => {
     format: StylesheetFormat,
     useCombinatorialParsing: boolean,
     generateSemanticColorUtilities: boolean,
+    outputMode: OutputMode = 'all',
   ): TransformerResult {
     switch (format) {
       case 'scss':
-        return transformToScss(tokens, useCombinatorialParsing);
+        return transformToScss(
+          tokens,
+          useCombinatorialParsing,
+          generateSemanticColorUtilities,
+          outputMode,
+        );
       case 'css':
-        return transformToCss(tokens, useCombinatorialParsing);
+        return transformToCss(
+          tokens,
+          useCombinatorialParsing,
+          generateSemanticColorUtilities,
+          outputMode,
+        );
       case 'tailwind-scss':
-        return transformToTailwindSassClass(tokens, useCombinatorialParsing);
+        return transformToTailwindSassClass(
+          tokens,
+          useCombinatorialParsing,
+          generateSemanticColorUtilities,
+          outputMode,
+        );
       case 'tailwind-v4':
         return transformToTailwindLayerUtilityClassV4(
           tokens,
           useCombinatorialParsing,
           generateSemanticColorUtilities,
+          outputMode,
         );
       default:
         throw new Error(`Unsupported format: ${format}`);
@@ -105,6 +123,7 @@ const main = async () => {
     format: StylesheetFormat,
     useCombinatorialParsing: boolean,
     generateSemanticColorUtilities: boolean,
+    outputMode: OutputMode = 'all',
   ): Promise<TransformerResult> {
     postMessageToUI({
       type: 'progress-start',
@@ -118,7 +137,7 @@ const main = async () => {
         lastProgressTime = now;
         void updateProgress(progress, message);
       }
-    });
+    }, outputMode);
 
     await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
 
@@ -127,6 +146,7 @@ const main = async () => {
       format,
       useCombinatorialParsing,
       generateSemanticColorUtilities,
+      outputMode,
     );
 
     postMessageToUI({
@@ -143,6 +163,7 @@ const main = async () => {
         getValidStylesheetFormat(msg.format),
         msg.useCombinatorialParsing,
         msg.generateSemanticColorUtilities,
+        msg.outputMode ?? 'all',
       );
       generatedScss = result.result; // Store just the generated code
       postMessageToUI({
@@ -161,6 +182,7 @@ const main = async () => {
           format: getValidStylesheetFormat(msg.format),
           useCombinatorialParsing: msg.useCombinatorialParsing,
           generateSemanticColorUtilities: msg.generateSemanticColorUtilities,
+          outputMode: msg.outputMode,
         }),
       ]);
       postMessageToUI({ type: 'config-saved' });

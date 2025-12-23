@@ -15,6 +15,7 @@ import {
 import { collectPrimitiveVariables, collectSemanticColorVariables } from './variable.service';
 import { collectAllFigmaEffectStyles } from './effect.service';
 import { MAX_PROGRESS_PERCENTAGE, delay, getParentSceneNodes } from '../utils';
+import type { OutputMode } from '@eggstractor/common';
 
 /**
  * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
@@ -170,7 +171,20 @@ export function getFlattenedValidNodes(node: BaseNode): {
   return { validNodes: result, warningTokens };
 }
 
-export async function collectTokens(onProgress: (progress: number, message: string) => void) {
+/**
+ * Collects design tokens from the current Figma document.
+ *
+ * @param onProgress - Callback to report progress updates
+ * @param outputMode - Determines what to collect:
+ *   - 'variables': Only variables (primitives, semantics, effects) - skips node traversal
+ *   - 'components': Only component tokens from nodes - skips variables
+ *   - 'all': Everything (default behavior)
+ * @returns TokenCollection with the requested tokens
+ */
+export async function collectTokens(
+  onProgress: (progress: number, message: string) => void,
+  outputMode: OutputMode = 'all',
+) {
   const collection: TokenCollection = {
     tokens: [],
     components: {},
@@ -284,14 +298,22 @@ export async function collectTokens(onProgress: (progress: number, message: stri
   onProgress(0, 'Loading pages...');
   await figma.loadAllPagesAsync();
 
-  // Collect standalone Figma Variables (primitive tokens)
-  await collectPrimitiveVariables(collection, onProgress);
+  // Always collect standalone Figma Variables (primitive tokens) unless mode is 'components'
+  if (outputMode !== 'components') {
+    await collectPrimitiveVariables(collection, onProgress);
 
-  // Collect semantic color variables for utility generation
-  await collectSemanticColorVariables(collection, onProgress);
+    // Collect semantic color variables for utility generation
+    await collectSemanticColorVariables(collection, onProgress);
 
-  // Collect Figma Effect Styles (box-shadow, etc.)
-  await collectAllFigmaEffectStyles(collection, onProgress);
+    // Collect Figma Effect Styles (box-shadow, etc.)
+    await collectAllFigmaEffectStyles(collection, onProgress);
+  }
+
+  // Skip node traversal if we only want variables
+  if (outputMode === 'variables') {
+    onProgress(MAX_PROGRESS_PERCENTAGE, 'Variable collection complete!');
+    return collection as Readonly<TokenCollection>;
+  }
 
   onProgress(5, 'Counting nodes...');
 

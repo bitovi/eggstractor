@@ -68,6 +68,7 @@ export interface ModeVariableToken extends BaseToken {
   /**
    * For semantic tokens: the primitive variable name it references (e.g., color-blue-500).
    * Used for category detection when generating CSS variable references.
+   * This represents the default mode's primitive reference.
    */
   primitiveRef?: string;
   /** Mode ID this token's primary value represents (e.g., '2002:1'). */
@@ -81,6 +82,11 @@ export interface ModeVariableToken extends BaseToken {
    * Enables generating theme-specific CSS (e.g., light vs dark mode).
    */
   modeValues: Record<string, string>;
+  /**
+   * For semantic tokens: mode-specific primitive references. Key is modeId, value is the primitive variable name.
+   * Enables generating correct var() references for each mode (e.g., Light mode → color-red-800, Dark mode → color-red-600).
+   */
+  modePrimitiveRefs?: Record<string, string>;
   metadata?: {
     figmaId?: string;
     variableId?: string;

@@ -334,6 +334,11 @@ export async function collectPrimitiveVariables(
     for (const varCollection of variableCollections) {
       onProgress(7, `Processing variable collection: ${varCollection.name}`);
 
+      // Skip typography/line-height collections - we don't support typography modes yet
+      if (varCollection.name.toLowerCase().includes('typography')) {
+        continue;
+      }
+
       // Collect mode information from this collection
       const modes = getModesFromCollection(varCollection);
       for (const mode of modes) {
@@ -505,6 +510,7 @@ export async function collectSemanticColorVariables(
               modeName: defaultMode.modeName,
               modes: Object.keys(modeValues).sort(),
               modeValues: modeValues,
+              modePrimitiveRefs: modePrimitiveRefs,
               metadata: {
                 variableId: variable.id,
                 variableName: variable.name,
