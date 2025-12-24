@@ -99,6 +99,62 @@ describe('createNamingContext', () => {
         // true/yes = no prefix, false/no = always prefixed
         expect(result).toBe('button-page-button-true-required_false-yes-hidden_no');
       });
+
+      describe('special character handling', () => {
+        it('should remove parentheses from variant values', () => {
+          const result = namingContext.createName(path, {}, { Size: '(md)' });
+          expect(result).toBe('button-page-button-md');
+        });
+
+        it('should handle parentheses with word default', () => {
+          const result = namingContext.createName(path, {}, { Type: 'blue-(default)' });
+          expect(result).toBe('button-page-button-blue-default');
+        });
+
+        it('should remove plus signs from variant values', () => {
+          const result = namingContext.createName(
+            path,
+            {},
+            {
+              Type: 'primary-+-2-secondary-+-link',
+            },
+          );
+          expect(result).toBe('button-page-button-primary-2-secondary-link');
+        });
+
+        it('should remove ampersands from variant values', () => {
+          const result = namingContext.createName(path, {}, { Type: '-&-language' });
+          expect(result).toBe('button-page-button-language');
+        });
+
+        it('should handle multiple special characters together', () => {
+          const result = namingContext.createName(
+            path,
+            {},
+            {
+              Size: '(lg)',
+              Type: 'primary-+-secondary',
+              State: 'active-&-hover',
+            },
+          );
+          expect(result).toBe('button-page-button-lg-primary-secondary-active-hover');
+        });
+
+        it('should remove parentheses from property names', () => {
+          const result = namingContext.createName(path, {}, { 'Size(px)': 'large' });
+          expect(result).toBe('button-page-button-large');
+        });
+
+        it('should collapse consecutive hyphens after removing special chars', () => {
+          const result = namingContext.createName(path, {}, { Type: 'a-+-+-b' });
+          expect(result).toBe('button-page-button-a-b');
+        });
+
+        it('should remove leading/trailing hyphens after special char removal', () => {
+          const result = namingContext.createName(path, {}, { Type: '(&test&)' });
+          expect(result).toBe('button-page-button-test');
+        });
+      });
     });
   });
   describe('with context that has page disabled', () => {
