@@ -4,6 +4,7 @@ export * from './constants.utils';
 export * from './delay.utils';
 export * from './get-valid-stylesheet-format.utils';
 export * from './is-variable-alias.utils';
+export * from './layout-sizing.utils';
 export * from './mode.utils';
 export * from './node.utils';
 export * from './serialize-figma-data.utils';

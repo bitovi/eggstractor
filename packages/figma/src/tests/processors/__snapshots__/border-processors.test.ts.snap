@@ -11,12 +11,18 @@ $gray-500: #687879;
 
 // Generated SCSS Mixins
 @mixin position-inside-custom {
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
 }
 @mixin position-center-custom {
+  width: 6.25rem;
+  height: 6.25rem;
   border: $border-size-primary solid $border-primary;
 }
 @mixin position-outside-custom {
+  width: 6.25rem;
+  height: 6.25rem;
   outline: $border-size-primary solid $border-primary;
 }
 "
@@ -33,12 +39,18 @@ $gray-500: #687879;
 
 // Generated SCSS Mixins
 @mixin position-inside-custom {
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
 }
 @mixin position-center-custom {
+  width: 6.25rem;
+  height: 6.25rem;
   border: $border-size-primary solid $border-primary;
 }
 @mixin position-outside-custom {
+  width: 6.25rem;
+  height: 6.25rem;
   outline: $border-size-primary solid $border-primary;
 }
 "
@@ -57,42 +69,62 @@ $spacing-0: 0rem;
 // Generated SCSS Mixins
 @mixin border-radius-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $corner-radius-primary;
 }
 @mixin border-radius-topright-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $size-null $corner-radius-primary $size-null $size-null;
 }
 @mixin border-radius-bottomright-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $size-null $size-null $corner-radius-primary;
 }
 @mixin border-radius-topleft-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $corner-radius-primary $size-null $size-null;
 }
 @mixin border-radius-bottomleft-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $size-null $size-null $size-null $corner-radius-primary;
 }
 @mixin border-radius-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 1rem;
 }
 @mixin border-radius-topright-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 0 1rem 0 0;
 }
 @mixin border-radius-bottomright-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 0 0 1rem;
 }
 @mixin border-radius-topleft-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 1rem 0 0;
 }
 @mixin border-radius-bottomleft-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 0 0 0 1rem;
 }
 "
@@ -111,42 +143,62 @@ $spacing-0: 0rem;
 // Generated SCSS Mixins
 @mixin border-radius-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $corner-radius-primary;
 }
 @mixin border-radius-topright-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $size-null $corner-radius-primary $size-null $size-null;
 }
 @mixin border-radius-bottomright-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $size-null $size-null $corner-radius-primary;
 }
 @mixin border-radius-topleft-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $corner-radius-primary $size-null $size-null;
 }
 @mixin border-radius-bottomleft-variable {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: $size-null $size-null $size-null $corner-radius-primary;
 }
 @mixin border-radius-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 1rem;
 }
 @mixin border-radius-topright-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 0 1rem 0 0;
 }
 @mixin border-radius-bottomright-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 0 0 1rem;
 }
 @mixin border-radius-topleft-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 1rem 0 0;
 }
 @mixin border-radius-bottomleft-custom {
   background: $colors-primary-brand-teal-teal-800;
+  width: 6.25rem;
+  height: 6.25rem;
   border-radius: 0 0 0 1rem;
 }
 "
@@ -163,18 +215,26 @@ $gray-500: #687879;
 
 // Generated SCSS Mixins
 @mixin shape-rectangle {
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
 }
 @mixin shape-rounded-rectangle {
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
   border-radius: 1.25rem;
 }
 @mixin shape-ellipse {
+  width: 6.25rem;
+  height: 6.25rem;
   border: $border-size-primary solid $border-primary;
   box-shadow: inset 0 0.25rem 0 0 $border-primary, inset -0.25rem 0 0 0 $border-primary, inset 0 -0.25rem 0 0 $border-primary, inset 0.25rem 0 0 0 $border-primary;
   border-radius: 50%;
 }
 @mixin shape-line-curved {
+  width: 6.3125rem;
+  height: 6.3125rem;
   border: $border-size-primary solid $border-primary;
 }
 "
@@ -191,18 +251,26 @@ $gray-500: #687879;
 
 // Generated SCSS Mixins
 @mixin shape-rectangle {
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
 }
 @mixin shape-rounded-rectangle {
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
   border-radius: 1.25rem;
 }
 @mixin shape-ellipse {
+  width: 6.25rem;
+  height: 6.25rem;
   border: $border-size-primary solid $border-primary;
   box-shadow: inset 0 0.25rem 0 0 $border-primary, inset -0.25rem 0 0 0 $border-primary, inset 0 -0.25rem 0 0 $border-primary, inset 0.25rem 0 0 0 $border-primary;
   border-radius: 50%;
 }
 @mixin shape-line-curved {
+  width: 6.3125rem;
+  height: 6.3125rem;
   border: $border-size-primary solid $border-primary;
 }
 "
@@ -224,37 +292,57 @@ $spacing-5: 1rem;
 
 // Generated SCSS Mixins
 @mixin border-center-solid-custom-topleft {
+  width: 6.25rem;
+  height: 6.25rem;
   border-top: 0.125rem solid #869597;
   border-left: 0.125rem solid #869597;
 }
 @mixin border-center-solid-custom-top {
+  width: 6.25rem;
+  height: 6.25rem;
   border: 0.125rem solid #869597;
 }
 @mixin border-center-solid-variable-topleft {
+  width: 6.25rem;
+  height: 6.25rem;
   border-top: $border-size-primary solid $border-primary;
   border-left: $border-size-primary solid $border-primary;
 }
 @mixin border-center-solid-variable-top {
+  width: 6.25rem;
+  height: 6.25rem;
   border: $border-size-primary solid $border-primary;
 }
 @mixin border-center-solid-custom-left {
+  width: 6.25rem;
+  height: 6.25rem;
   border-right: 0.5rem solid #869597;
   border-left: 0.125rem solid #869597;
 }
 @mixin border-center-solid-variable-left {
+  width: 6.25rem;
+  height: 6.25rem;
   border-right: $size-16 solid $border-primary;
   border-left: $border-size-primary solid $border-primary;
 }
 @mixin border-center-solid-custom-right {
+  width: 6.25rem;
+  height: 6.25rem;
   border-right: 0.125rem solid #869597;
 }
 @mixin border-center-solid-variable-right {
+  width: 6.25rem;
+  height: 6.25rem;
   border-right: $border-size-primary solid $border-primary;
 }
 @mixin border-center-solid-custom-bottom {
+  width: 6.25rem;
+  height: 6.25rem;
   border-bottom: 0.125rem solid #869597;
 }
 @mixin border-center-solid-variable-bottom {
+  width: 6.25rem;
+  height: 6.25rem;
   border-bottom: $border-size-primary solid $border-primary;
 }
 "
@@ -276,37 +364,57 @@ $spacing-5: 1rem;
 
 // Generated SCSS Mixins
 @mixin border-center-solid-custom-topleft {
+  width: 6.25rem;
+  height: 6.25rem;
   border-top: 0.125rem solid #869597;
   border-left: 0.125rem solid #869597;
 }
 @mixin border-center-solid-custom-top {
+  width: 6.25rem;
+  height: 6.25rem;
   border: 0.125rem solid #869597;
 }
 @mixin border-center-solid-variable-topleft {
+  width: 6.25rem;
+  height: 6.25rem;
   border-top: $border-size-primary solid $border-primary;
   border-left: $border-size-primary solid $border-primary;
 }
 @mixin border-center-solid-variable-top {
+  width: 6.25rem;
+  height: 6.25rem;
   border: $border-size-primary solid $border-primary;
 }
 @mixin border-center-solid-custom-left {
+  width: 6.25rem;
+  height: 6.25rem;
   border-right: 0.5rem solid #869597;
   border-left: 0.125rem solid #869597;
 }
 @mixin border-center-solid-variable-left {
+  width: 6.25rem;
+  height: 6.25rem;
   border-right: $size-16 solid $border-primary;
   border-left: $border-size-primary solid $border-primary;
 }
 @mixin border-center-solid-custom-right {
+  width: 6.25rem;
+  height: 6.25rem;
   border-right: 0.125rem solid #869597;
 }
 @mixin border-center-solid-variable-right {
+  width: 6.25rem;
+  height: 6.25rem;
   border-right: $border-size-primary solid $border-primary;
 }
 @mixin border-center-solid-custom-bottom {
+  width: 6.25rem;
+  height: 6.25rem;
   border-bottom: 0.125rem solid #869597;
 }
 @mixin border-center-solid-variable-bottom {
+  width: 6.25rem;
+  height: 6.25rem;
   border-bottom: $border-size-primary solid $border-primary;
 }
 "

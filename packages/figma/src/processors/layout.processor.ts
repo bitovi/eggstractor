@@ -1,4 +1,10 @@
 import { StyleProcessor, VariableToken, ProcessedValue } from '../types';
+import {
+  getHorizontalSizing,
+  getVerticalSizing,
+  getWidthValue,
+  getHeightValue,
+} from '../utils/layout-sizing.utils';
 
 interface NodeWithLayout {
   minWidth?: number;
@@ -7,8 +13,12 @@ interface NodeWithLayout {
   maxHeight?: number;
   layoutAlign?: string;
   layoutMode?: 'HORIZONTAL' | 'VERTICAL' | 'NONE';
+  // Legacy auto layout sizing properties (only for auto layout frames)
   primaryAxisSizingMode?: 'FIXED' | 'AUTO';
   counterAxisSizingMode?: 'FIXED' | 'AUTO';
+  // New sizing properties (available for all node types, more explicit)
+  layoutSizingHorizontal?: 'FIXED' | 'HUG' | 'FILL';
+  layoutSizingVertical?: 'FIXED' | 'HUG' | 'FILL';
   absoluteBoundingBox?: { width: number; height: number };
   textAutoResize?: 'NONE' | 'WIDTH' | 'HEIGHT' | 'WIDTH_AND_HEIGHT';
   type?: string;
@@ -211,8 +221,9 @@ export const layoutProcessors: StyleProcessor[] = [
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       if (!hasLayout(node)) return null;
 
-      // Handle text nodes
+      // Handle text nodes - they have special sizing rules
       if (node.type === 'TEXT') {
+        // Only output width if text doesn't auto-resize width
         if (node.textAutoResize === 'NONE' || node.textAutoResize === 'HEIGHT') {
           return {
             value: `${node.absoluteBoundingBox?.width}px`,
@@ -223,16 +234,17 @@ export const layoutProcessors: StyleProcessor[] = [
         return null;
       }
 
-      // Handle auto layout frames
-      if (node.layoutMode) {
-        if (
-          (node.layoutMode === 'HORIZONTAL' && node.primaryAxisSizingMode === 'FIXED') ||
-          (node.layoutMode === 'VERTICAL' && node.counterAxisSizingMode === 'FIXED')
-        ) {
+      // Get horizontal sizing mode (prefers layoutSizingHorizontal, falls back to legacy API)
+      const sizing = getHorizontalSizing(node);
+
+      if (sizing) {
+        const width = node.absoluteBoundingBox?.width;
+        if (width !== undefined) {
+          const value = getWidthValue(width, sizing);
           return {
-            value: `${node.absoluteBoundingBox?.width}px`,
-            rawValue: `${node.absoluteBoundingBox?.width}px`,
-            valueType: 'px',
+            value,
+            rawValue: value,
+            valueType: sizing === 'FIXED' ? 'px' : undefined,
           };
         }
       }
@@ -246,8 +258,10 @@ export const layoutProcessors: StyleProcessor[] = [
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       if (!hasLayout(node)) return null;
 
-      // Handle text nodes - height is usually determined by content
+      // Handle text nodes - they have special sizing rules
+      // Height is usually determined by content
       if (node.type === 'TEXT') {
+        // Only output height if text doesn't auto-resize height
         if (node.textAutoResize === 'NONE' || node.textAutoResize === 'WIDTH_AND_HEIGHT') {
           return {
             value: `${node.absoluteBoundingBox?.height}px`,
@@ -258,16 +272,17 @@ export const layoutProcessors: StyleProcessor[] = [
         return null;
       }
 
-      // Handle auto layout frames
-      if (node.layoutMode) {
-        if (
-          (node.layoutMode === 'VERTICAL' && node.primaryAxisSizingMode === 'FIXED') ||
-          (node.layoutMode === 'HORIZONTAL' && node.counterAxisSizingMode === 'FIXED')
-        ) {
+      // Get vertical sizing mode (prefers layoutSizingVertical, falls back to legacy API)
+      const sizing = getVerticalSizing(node);
+
+      if (sizing) {
+        const height = node.absoluteBoundingBox?.height;
+        if (height !== undefined) {
+          const value = getHeightValue(height, sizing);
           return {
-            value: `${node.absoluteBoundingBox?.height}px`,
-            rawValue: `${node.absoluteBoundingBox?.height}px`,
-            valueType: 'px',
+            value,
+            rawValue: value,
+            valueType: sizing === 'FIXED' ? 'px' : undefined,
           };
         }
       }

@@ -404,6 +404,40 @@ export const generateTailwindOpacityClass: Generator = ({ rawValue }) => {
   return `opacity-${normalizedOpacity}`;
 };
 
+/**
+ * Handles layout sizing values (width/height) with special cases for FILL and HUG modes.
+ *
+ * This function centralizes the logic for converting Figma's layoutSizing values to
+ * Tailwind utility classes:
+ * - FILL (100%) → 'full' utility (w-full, h-full)
+ * - HUG (fit-content) → 'auto' utility (w-auto, h-auto)
+ * - FIXED (px values) → token-based or arbitrary values
+ *
+ * @param rawValue - The raw CSS value (e.g., "100%", "fit-content", "24px")
+ * @param prefix - The Tailwind prefix ('w' for width, 'h' for height)
+ * @param spacingMapping - Theme spacing tokens for size resolution
+ * @returns Tailwind utility class (e.g., "w-full", "h-auto", "w-6")
+ *
+ * @example
+ * handleLayoutValue("100%", "w", spacing) // → "w-full"
+ * handleLayoutValue("fit-content", "h", spacing) // → "h-auto"
+ * handleLayoutValue("24px", "w", spacing) // → "w-6" (if 24px maps to 6 in theme)
+ */
+const handleLayoutValue = (
+  rawValue: string,
+  prefix: string,
+  spacingMapping: Record<string, string>,
+): string => {
+  // Handle FILL sizing (layoutSizingHorizontal/Vertical = "FILL")
+  if (rawValue === '100%') return `${prefix}-full`;
+
+  // Handle HUG sizing (layoutSizingHorizontal/Vertical = "HUG")
+  if (rawValue === 'fit-content') return `${prefix}-auto`;
+
+  // Handle FIXED sizing - use token mapping or arbitrary value
+  return `${prefix}-${normalizeTailwindToken(spacingMapping, rawValue)}`;
+};
+
 const createTailwindClassGenerators = (dynamicTheme?: DynamicTheme): Record<string, Generator> => ({
   padding: generateTailwindPaddingClass,
   display: generateTailwindDisplayClass,
@@ -429,9 +463,9 @@ const createTailwindClassGenerators = (dynamicTheme?: DynamicTheme): Record<stri
   'align-items': ({ rawValue }: GeneratorToken) => alignItems[rawValue],
   'justify-content': ({ rawValue }: GeneratorToken) => justifyContent[rawValue],
   height: ({ rawValue }: GeneratorToken) =>
-    `h-${normalizeTailwindToken(dynamicTheme?.spacing || spacing, rawValue)}`,
+    handleLayoutValue(rawValue, 'h', dynamicTheme?.spacing || spacing),
   width: ({ rawValue }: GeneratorToken) =>
-    `w-${normalizeTailwindToken(dynamicTheme?.spacing || spacing, rawValue)}`,
+    handleLayoutValue(rawValue, 'w', dynamicTheme?.spacing || spacing),
   'max-height': ({ rawValue }: GeneratorToken) =>
     `max-h-${normalizeTailwindToken(dynamicTheme?.spacing || spacing, rawValue)}`,
   'max-width': ({ rawValue }: GeneratorToken) =>

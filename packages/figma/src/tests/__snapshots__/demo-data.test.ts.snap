@@ -28,7 +28,8 @@ $base-colour-grey-300: #747474;
   align-items: flex-start;
   gap: $base-size-xs;
   padding: 0rem;
-  width: 15.9375rem;
+  width: 100%;
+  height: fit-content;
 }
 @mixin input-label {
   display: flex;
@@ -51,7 +52,8 @@ $base-colour-grey-300: #747474;
   gap: $base-size-lg;
   padding: 0.6875rem $base-size-lg;
   background: $base-colour-static-white;
-  width: 15.9375rem;
+  width: 100%;
+  height: fit-content;
   border-radius: $base-radius-sm;
 }
 @mixin input-input-box-resting {
@@ -108,7 +110,8 @@ $base-colour-grey-300: #747474;
   align-items: flex-start;
   gap: $base-size-xs;
   padding: 0rem;
-  width: 15.9375rem;
+  width: 100%;
+  height: fit-content;
 }
 @mixin input-label-resting {
   display: flex;
@@ -127,7 +130,8 @@ $base-colour-grey-300: #747474;
   align-items: center;
   gap: $base-size-lg;
   background: $base-colour-static-white;
-  width: 15.9375rem;
+  width: 100%;
+  height: fit-content;
   border: $global-size-border-width solid $base-colour-grey-100;
   box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-100, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-100, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-100, inset $global-size-border-width 0 0 0 $base-colour-grey-100;
   border-radius: $base-radius-sm;
@@ -150,7 +154,8 @@ $base-colour-grey-300: #747474;
   align-items: flex-start;
   gap: $base-size-xs;
   padding: 0rem;
-  width: 15.9375rem;
+  width: 100%;
+  height: fit-content;
 }
 @mixin input-label-hover {
   display: flex;
@@ -169,7 +174,8 @@ $base-colour-grey-300: #747474;
   align-items: center;
   gap: $base-size-lg;
   background: $base-colour-static-white;
-  width: 15.9375rem;
+  width: 100%;
+  height: fit-content;
   border: $global-size-border-width solid $base-colour-grey-300;
   box-shadow: inset 0 $global-size-border-width 0 0 $base-colour-grey-300, inset (-$global-size-border-width) 0 0 0 $base-colour-grey-300, inset 0 (-$global-size-border-width) 0 0 $base-colour-grey-300, inset $global-size-border-width 0 0 0 $base-colour-grey-300;
   border-radius: $base-radius-sm;
@@ -192,7 +198,8 @@ $base-colour-grey-300: #747474;
   align-items: flex-start;
   gap: $base-size-xs;
   padding: 0rem;
-  width: 15.9375rem;
+  width: 100%;
+  height: fit-content;
 }
 @mixin input-label-active {
   display: flex;
@@ -211,7 +218,8 @@ $base-colour-grey-300: #747474;
   align-items: center;
   gap: $base-size-lg;
   background: $base-colour-static-white;
-  width: 15.9375rem;
+  width: 100%;
+  height: fit-content;
   border: 0.125rem solid $base-colour-blue-300;
   box-shadow: inset 0 0.125rem 0 0 $base-colour-blue-300, inset -0.125rem 0 0 0 $base-colour-blue-300, inset 0 -0.125rem 0 0 $base-colour-blue-300, inset 0.125rem 0 0 0 $base-colour-blue-300;
   border-radius: $base-radius-sm;
