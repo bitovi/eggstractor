@@ -52,8 +52,13 @@ export const createNamingContext = (
       .map(([prop, val]) => `${prop}=${val}`)
       .join('--');
 
-    // Convert spaces to dashes in all variant parts
-    let cleaned = variantsCombination.replace(/[\s._]/g, '-'); // Handle spaces, dots, underscores
+    // Remove characters that break Tailwind 4 utility names or builds
+    // Remove: parentheses, plus signs, ampersands
+    // Then convert remaining special chars (spaces, dots, underscores) to hyphens
+    let cleaned = variantsCombination
+      .replace(/[()]/g, '') // Remove parentheses
+      .replace(/[+&]/g, '') // Remove plus signs and ampersands
+      .replace(/[\s._]/g, '-'); // Convert spaces, dots, underscores to hyphens
 
     // Remove path components
     const pathNames = path
@@ -99,7 +104,16 @@ export const createNamingContext = (
         .map(({ property, value }) => {
           if (value === 'root') return null;
 
-          const cleanValue = value.trim().replace(/\s+/g, '-').toLowerCase();
+          // Clean the value: remove parens, plus, ampersand, convert spaces to hyphens
+          // Then collapse multiple consecutive hyphens and remove leading/trailing hyphens
+          const cleanValue = value
+            .trim()
+            .replace(/[()]/g, '') // Remove parentheses
+            .replace(/[+&]/g, '') // Remove plus signs and ampersands
+            .replace(/\s+/g, '-') // Convert spaces to hyphens
+            .replace(/-+/g, '-') // Collapse multiple hyphens to single hyphen
+            .replace(/^-+|-+$/g, '') // Remove leading and trailing hyphens
+            .toLowerCase();
 
           // Check if this PROPERTY appears in ANY conflict
           const propertyHasConflicts = property
@@ -113,7 +127,14 @@ export const createNamingContext = (
           const isTruthyBoolean = ['true', 'yes'].includes(cleanValue);
 
           if (property) {
-            const cleanProperty = property.trim().replace(/\s+/g, '-');
+            // Clean the property name same as value
+            const cleanProperty = property
+              .trim()
+              .replace(/[()]/g, '') // Remove parentheses
+              .replace(/[+&]/g, '') // Remove plus signs and ampersands
+              .replace(/\s+/g, '-') // Convert spaces to hyphens
+              .replace(/-+/g, '-') // Collapse multiple hyphens
+              .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
 
             // For falsy boolean values, ALWAYS prefix (regardless of conflicts)
             if (isFalsyBoolean) {
