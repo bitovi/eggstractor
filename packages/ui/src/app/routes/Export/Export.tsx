@@ -19,8 +19,7 @@ export const Export: FC = () => {
     format,
     useCombinatorialParsing,
     branchName: initialBranchName,
-    githubToken,
-    token,
+    authToken,
     repoPath,
     filePath,
     instanceUrl,
@@ -76,8 +75,6 @@ export const Export: FC = () => {
     setPRButtonDisabled(true);
     setCreatingPR();
 
-    // Support both token fields for backward compatibility
-    const authToken = token || githubToken;
     const providerName = provider === 'gitlab' ? 'GitLab' : 'GitHub';
 
     const checks = [
@@ -105,8 +102,7 @@ export const Export: FC = () => {
     messageMainThread({
       type: 'create-pr',
       provider,
-      githubToken: authToken, // Keep for backward compatibility
-      token: authToken,
+      authToken,
       instanceUrl,
       repoPath,
       filePath,

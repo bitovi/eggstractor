@@ -34,12 +34,12 @@ const encodeProjectPath = (repoPath: string): string => {
 };
 
 export default {
-  saveToken: async function (token: string) {
+  saveToken: async function (authToken: string) {
     const fileId = getFileId();
     const userTokens = (await figma.clientStorage.getAsync('fileTokens')) || '{}';
     const tokens = JSON.parse(userTokens);
 
-    tokens[fileId] = token;
+    tokens[fileId] = authToken;
     await figma.clientStorage.setAsync('fileTokens', JSON.stringify(tokens));
   },
   getToken: async function (): Promise<string | null> {
@@ -70,16 +70,25 @@ export default {
       // Try new config first
       const savedConfig = figma.root.getPluginData('gitProviderConfig');
       if (savedConfig) {
-        return JSON.parse(savedConfig) as GitProviderConfig;
+        const parsed = JSON.parse(savedConfig) as GitProviderConfig & { githubToken?: string };
+        // Migrate old githubToken to authToken if present
+        if (parsed.githubToken && !parsed.authToken) {
+          parsed.authToken = parsed.githubToken;
+        }
+        return parsed;
       }
 
       // Fall back to old githubConfig for backward compatibility
       const oldConfig = figma.root.getPluginData('githubConfig');
       if (oldConfig) {
-        const parsed = JSON.parse(oldConfig) as GitProviderConfig;
+        const parsed = JSON.parse(oldConfig) as GitProviderConfig & { githubToken?: string };
         // Add default provider if not present
         if (!parsed.provider) {
           parsed.provider = 'github';
+        }
+        // Migrate old githubToken to authToken if present
+        if (parsed.githubToken && !parsed.authToken) {
+          parsed.authToken = parsed.githubToken;
         }
         return parsed;
       }
@@ -93,7 +102,7 @@ export default {
   // Main entry point for creating PR/MR
   createPR: async function createPR(
     provider: GitProvider,
-    token: string,
+    authToken: string,
     repoPath: string,
     filePath: string,
     branchName: string,
@@ -101,12 +110,12 @@ export default {
     instanceUrl?: string | null,
   ): Promise<PRResult> {
     if (provider === 'gitlab') {
-      return this.createGitLabMR(token, repoPath, filePath, branchName, content, instanceUrl);
+      return this.createGitLabMR(authToken, repoPath, filePath, branchName, content, instanceUrl);
     }
-    return this.createGitHubPR(token, repoPath, filePath, branchName, content);
+    return this.createGitHubPR(authToken, repoPath, filePath, branchName, content);
   },
   createGitHubPR: async function createGitHubPR(
-    token: string,
+    authToken: string,
     repoPath: string,
     filePath: string,
     branchName: string,
@@ -114,7 +123,7 @@ export default {
   ): Promise<PRResult> {
     const baseUrl = 'https://api.github.com';
     const headers = {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${authToken}`,
       Accept: 'application/vnd.github.v3+json',
     };
 
@@ -245,7 +254,7 @@ export default {
     }
   },
   createGitLabMR: async function createGitLabMR(
-    token: string,
+    authToken: string,
     repoPath: string,
     filePath: string,
     branchName: string,
@@ -256,7 +265,7 @@ export default {
     const projectId = encodeProjectPath(repoPath);
     const encodedFilePath = encodeFilePath(filePath);
     const headers = {
-      'PRIVATE-TOKEN': token,
+      'PRIVATE-TOKEN': authToken,
       'Content-Type': 'application/json',
     };
 

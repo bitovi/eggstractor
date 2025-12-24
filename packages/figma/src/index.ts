@@ -173,11 +173,8 @@ const main = async () => {
         errors: result.errors,
       });
     } else if (msg.type === 'save-config') {
-      // Support both old and new token fields for backward compatibility
-      const token = msg.token || msg.githubToken;
-
       await Promise.all([
-        token ? gitProvider.saveToken(token) : Promise.resolve(),
+        msg.authToken ? gitProvider.saveToken(msg.authToken) : Promise.resolve(),
         gitProvider.saveBranchName(msg.branchName),
         gitProvider.saveGitProviderConfig({
           provider: msg.provider || 'github', // Default to github for backward compatibility
@@ -192,7 +189,7 @@ const main = async () => {
       ]);
       postMessageToUI({ type: 'config-saved' });
     } else if (msg.type === 'load-config') {
-      const [token, branchName, config] = await Promise.all([
+      const [authToken, branchName, config] = await Promise.all([
         gitProvider.getToken(),
         gitProvider.getBranchName(),
         gitProvider.getGitProviderConfig(),
@@ -200,10 +197,9 @@ const main = async () => {
 
       const modifiedConfig: Partial<GitProviderConfig> = config || {};
 
-      // If there are any changes to the config, add them and remove any missing ones
-      if (token || branchName) {
-        modifiedConfig.token = token;
-        modifiedConfig.githubToken = token; // Maintain backward compatibility
+      // Backward compatibility: migrate old githubToken to authToken
+      if (authToken || branchName) {
+        modifiedConfig.authToken = authToken;
         modifiedConfig.branchName = branchName;
       }
 
@@ -215,13 +211,11 @@ const main = async () => {
       postMessageToUI({ type: 'config-loaded', config: modifiedConfig });
     } else if (msg.type === 'create-pr') {
       try {
-        // Support both old and new token fields for backward compatibility
-        const token = msg.token || msg.githubToken;
         const provider = msg.provider || 'github'; // Default to github for backward compatibility
 
         const result = await gitProvider.createPR(
           provider,
-          token,
+          msg.authToken,
           msg.repoPath,
           msg.filePath,
           msg.branchName,

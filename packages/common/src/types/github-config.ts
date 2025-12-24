@@ -11,8 +11,7 @@ export interface GitProviderConfig {
   repoPath: string;
   filePath: string;
   format: string;
-  githubToken?: string | null; // Keep for backward compatibility
-  token?: string | null; // New generic token field
+  authToken?: string | null;
   branchName?: string | null;
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;

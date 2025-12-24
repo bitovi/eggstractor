@@ -39,8 +39,7 @@ export const Setup: FC = () => {
     provider: initialProvider,
     repoPath: initialRepoPath,
     filePath: initialFilePath,
-    githubToken: initialGithubToken,
-    token: initialToken,
+    authToken: initialAuthToken,
     instanceUrl: initialInstanceUrl,
     format: initialFormat,
     useCombinatorialParsing: initialUseCombinatorialParsing,
@@ -52,7 +51,7 @@ export const Setup: FC = () => {
   const [provider, setProvider] = useState<GitProvider>(initialProvider);
   const [repoPath, setRepoPath] = useState(initialRepoPath);
   const [filePath, setFilePath] = useState(initialFilePath);
-  const [token, setToken] = useState(initialToken || initialGithubToken);
+  const [authToken, setAuthToken] = useState(initialAuthToken);
   const [instanceUrl, setInstanceUrl] = useState(initialInstanceUrl || '');
   const [format, setFormat] = useState(initialFormat);
   const [useCombinatorialParsing, setUseCombinatorialParsing] = useState(
@@ -69,8 +68,7 @@ export const Setup: FC = () => {
       provider,
       repoPath,
       filePath,
-      githubToken: token, // Keep for backward compatibility
-      token,
+      authToken,
       instanceUrl: provider === 'gitlab' ? instanceUrl : undefined,
       format,
       useCombinatorialParsing,
@@ -138,8 +136,8 @@ export const Setup: FC = () => {
         <div>
           <Input
             type="password"
-            value={token}
-            onChange={setToken}
+            value={authToken}
+            onChange={setAuthToken}
             label={tokenLabel}
             linkLabel="How to create a token"
             linkHref={tokenLinkHref}

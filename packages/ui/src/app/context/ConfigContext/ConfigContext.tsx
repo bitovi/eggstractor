@@ -7,8 +7,7 @@ export interface Config {
   repoPath: string;
   filePath: string;
   branchName: string;
-  githubToken: string; // Keep for backward compatibility
-  token: string;
+  authToken: string;
   instanceUrl?: string;
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
@@ -29,8 +28,7 @@ interface ConfigProps {
   repoPath?: string;
   filePath?: string;
   branchName?: string;
-  githubToken?: string;
-  token?: string;
+  authToken?: string;
   instanceUrl?: string;
   format?: StylesheetFormat;
   useCombinatorialParsing?: boolean;
@@ -44,8 +42,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   repoPath: pRepoPath = '',
   filePath: pFilePath = '',
   branchName: pBranchName = '',
-  githubToken: pGithubToken = '',
-  token: pToken = '',
+  authToken: pAuthToken = '',
   instanceUrl: pInstanceUrl = '',
   format: pFormat = 'scss',
   useCombinatorialParsing: pUseComb = true,
@@ -57,8 +54,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   const [repoPath, setRepoPath] = useState<string>(pRepoPath ?? '');
   const [filePath, setFilePath] = useState<string>(pFilePath ?? '');
   const [branchName, setBranchName] = useState<string>(pBranchName ?? '');
-  const [githubToken, setGithubToken] = useState<string>(pGithubToken ?? pToken ?? '');
-  const [token, setToken] = useState<string>(pToken ?? pGithubToken ?? '');
+  const [authToken, setAuthToken] = useState<string>(pAuthToken ?? '');
   const [instanceUrl, setInstanceUrl] = useState<string>(pInstanceUrl ?? '');
   const [format, setFormat] = useState<StylesheetFormat>(pFormat ?? 'scss');
   const [useCombinatorialParsing, setUseCombinatorialParsing] = useState<boolean>(pUseComb ?? true);
@@ -73,9 +69,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       const _reportPath = config.repoPath ?? repoPath;
       const _filePath = config.filePath ?? filePath;
       const _branchName = config.branchName ?? branchName;
-      // Support both token fields for backward compatibility
-      const _token = config.token ?? config.githubToken ?? token;
-      const _githubToken = config.githubToken ?? config.token ?? githubToken;
+      const _authToken = config.authToken ?? authToken;
       const _instanceUrl = config.instanceUrl ?? instanceUrl;
       const _format = config.format ?? format;
       const _useCombinatorialParsing = config.useCombinatorialParsing ?? useCombinatorialParsing;
@@ -87,8 +81,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       setRepoPath(config.repoPath ?? _reportPath);
       setFilePath(config.filePath ?? _filePath);
       setBranchName(config.branchName ?? _branchName);
-      setToken(config.token ?? config.githubToken ?? _token);
-      setGithubToken(config.githubToken ?? config.token ?? _githubToken);
+      setAuthToken(config.authToken ?? _authToken);
       setInstanceUrl(config.instanceUrl ?? _instanceUrl);
       setFormat(config.format ?? _format);
       setUseCombinatorialParsing(config.useCombinatorialParsing ?? _useCombinatorialParsing);
@@ -102,8 +95,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
         repoPath: _reportPath,
         filePath: _filePath,
         branchName: _branchName,
-        githubToken: _githubToken, // Keep for backward compatibility
-        token: _token,
+        authToken: _authToken,
         instanceUrl: _instanceUrl,
         format: _format,
         useCombinatorialParsing: _useCombinatorialParsing,
@@ -117,8 +109,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       repoPath,
       filePath,
       branchName,
-      githubToken,
-      token,
+      authToken,
       instanceUrl,
       format,
       useCombinatorialParsing,
@@ -131,8 +122,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
     repoPath,
     filePath,
     branchName,
-    githubToken,
-    token,
+    authToken,
     instanceUrl,
     format,
     useCombinatorialParsing,
