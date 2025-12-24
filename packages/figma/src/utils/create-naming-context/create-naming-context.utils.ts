@@ -108,11 +108,8 @@ export const createNamingContext = (
           // Then collapse multiple consecutive hyphens and remove leading/trailing hyphens
           const cleanValue = value
             .trim()
-            .replace(/[()]/g, '') // Remove parentheses
-            .replace(/[+&]/g, '') // Remove plus signs and ampersands
             .replace(/\s+/g, '-') // Convert spaces to hyphens
             .replace(/-+/g, '-') // Collapse multiple hyphens to single hyphen
-            .replace(/^-+|-+$/g, '') // Remove leading and trailing hyphens
             .toLowerCase();
 
           // Check if this PROPERTY appears in ANY conflict
@@ -130,11 +127,8 @@ export const createNamingContext = (
             // Clean the property name same as value
             const cleanProperty = property
               .trim()
-              .replace(/[()]/g, '') // Remove parentheses
-              .replace(/[+&]/g, '') // Remove plus signs and ampersands
               .replace(/\s+/g, '-') // Convert spaces to hyphens
-              .replace(/-+/g, '-') // Collapse multiple hyphens
-              .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
+              .replace(/-+/g, '-'); // Collapse multiple hyphens
 
             // For falsy boolean values, ALWAYS prefix (regardless of conflicts)
             if (isFalsyBoolean) {
