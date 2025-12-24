@@ -221,6 +221,8 @@ export const layoutProcessors: StyleProcessor[] = [
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       if (!hasLayout(node)) return null;
 
+      const warningsSet = new Set<string>();
+
       // Handle text nodes - they have special sizing rules
       if (node.type === 'TEXT') {
         // Only output width if text doesn't auto-resize width
@@ -234,8 +236,14 @@ export const layoutProcessors: StyleProcessor[] = [
         return null;
       }
 
+      // Collect warnings in an array, then add to Set for deduplication
+      const warningsArray: string[] = [];
+
       // Get horizontal sizing mode (prefers layoutSizingHorizontal, falls back to legacy API)
-      const sizing = getHorizontalSizing(node);
+      const sizing = getHorizontalSizing(node, warningsArray);
+
+      // Add any warnings to the set
+      warningsArray.forEach((w) => warningsSet.add(w));
 
       if (sizing) {
         const width = node.absoluteBoundingBox?.width;
@@ -245,6 +253,7 @@ export const layoutProcessors: StyleProcessor[] = [
             value,
             rawValue: value,
             valueType: sizing === 'FIXED' ? 'px' : undefined,
+            warnings: warningsSet.size > 0 ? Array.from(warningsSet) : undefined,
           };
         }
       }
@@ -257,6 +266,8 @@ export const layoutProcessors: StyleProcessor[] = [
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
       if (!hasLayout(node)) return null;
+
+      const warningsSet = new Set<string>();
 
       // Handle text nodes - they have special sizing rules
       // Height is usually determined by content
@@ -272,8 +283,14 @@ export const layoutProcessors: StyleProcessor[] = [
         return null;
       }
 
+      // Collect warnings in an array, then add to Set for deduplication
+      const warningsArray: string[] = [];
+
       // Get vertical sizing mode (prefers layoutSizingVertical, falls back to legacy API)
-      const sizing = getVerticalSizing(node);
+      const sizing = getVerticalSizing(node, warningsArray);
+
+      // Add any warnings to the set
+      warningsArray.forEach((w) => warningsSet.add(w));
 
       if (sizing) {
         const height = node.absoluteBoundingBox?.height;
@@ -283,6 +300,7 @@ export const layoutProcessors: StyleProcessor[] = [
             value,
             rawValue: value,
             valueType: sizing === 'FIXED' ? 'px' : undefined,
+            warnings: warningsSet.size > 0 ? Array.from(warningsSet) : undefined,
           };
         }
       }
