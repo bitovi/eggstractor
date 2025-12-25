@@ -16,20 +16,7 @@
  * When legacy API is used, a warning is logged to encourage updating the design file.
  */
 
-type SizingMode = 'FIXED' | 'HUG' | 'FILL';
-
-interface NodeWithSizing {
-  id?: string;
-  name?: string;
-  layoutMode?: 'HORIZONTAL' | 'VERTICAL' | 'NONE';
-  // New API (preferred)
-  layoutSizingHorizontal?: 'FIXED' | 'HUG' | 'FILL';
-  layoutSizingVertical?: 'FIXED' | 'HUG' | 'FILL';
-  // Legacy API (fallback)
-  primaryAxisSizingMode?: 'FIXED' | 'AUTO';
-  counterAxisSizingMode?: 'FIXED' | 'AUTO';
-  absoluteBoundingBox?: { width: number; height: number };
-}
+import type { LayoutNode, SizingMode } from '../processors/layout.processor';
 
 // Track if we've already warned about legacy API usage via console to avoid spam
 let hasWarnedAboutLegacyApiToConsole = false;
@@ -42,10 +29,7 @@ let hasWarnedAboutLegacyApiToConsole = false;
  * @returns The warning message
  * @internal
  */
-function createLegacyApiWarningMessage(
-  node: NodeWithSizing,
-  axis: 'horizontal' | 'vertical',
-): string {
+function createLegacyApiWarningMessage(node: LayoutNode, axis: 'horizontal' | 'vertical'): string {
   const nodeInfo = node.name ? `"${node.name}"` : node.id ? `(${node.id})` : 'unknown node';
   return (
     `Using deprecated layout sizing API for ${axis} sizing on ${nodeInfo}. ` +
@@ -65,7 +49,7 @@ function createLegacyApiWarningMessage(
  * @param axis - Which axis is affected
  * @internal
  */
-function warnAboutLegacyApiToConsole(node: NodeWithSizing, axis: 'horizontal' | 'vertical'): void {
+function warnAboutLegacyApiToConsole(node: LayoutNode, axis: 'horizontal' | 'vertical'): void {
   if (hasWarnedAboutLegacyApiToConsole) return;
 
   const nodeInfo = node.name ? `"${node.name}"` : node.id ? `(${node.id})` : 'unknown node';
@@ -92,7 +76,7 @@ function warnAboutLegacyApiToConsole(node: NodeWithSizing, axis: 'horizontal' | 
  * @internal
  */
 function warnAboutLegacyApi(
-  node: NodeWithSizing,
+  node: LayoutNode,
   axis: 'horizontal' | 'vertical',
   warnings?: string[],
 ): void {
@@ -119,9 +103,9 @@ function warnAboutLegacyApi(
  * When falling back to legacy API (primaryAxisSizingMode/counterAxisSizingMode),
  * a warning is logged to console and optionally added to the warnings array if provided.
  */
-export function getHorizontalSizing(node: NodeWithSizing, warnings?: string[]): SizingMode | null {
+export function getHorizontalSizing(node: LayoutNode, warnings?: string[]): SizingMode | null {
   // Prefer new API: layoutSizingHorizontal
-  if (node.layoutSizingHorizontal) {
+  if ('layoutSizingHorizontal' in node && node.layoutSizingHorizontal) {
     return node.layoutSizingHorizontal;
   }
 
@@ -141,9 +125,9 @@ export function getHorizontalSizing(node: NodeWithSizing, warnings?: string[]): 
  * When falling back to legacy API (primaryAxisSizingMode/counterAxisSizingMode),
  * a warning is logged to console and optionally added to the warnings array if provided.
  */
-export function getVerticalSizing(node: NodeWithSizing, warnings?: string[]): SizingMode | null {
+export function getVerticalSizing(node: LayoutNode, warnings?: string[]): SizingMode | null {
   // Prefer new API: layoutSizingVertical
-  if (node.layoutSizingVertical) {
+  if ('layoutSizingVertical' in node && node.layoutSizingVertical) {
     return node.layoutSizingVertical;
   }
 
@@ -163,9 +147,9 @@ export function getVerticalSizing(node: NodeWithSizing, warnings?: string[]): Si
  * @returns The sizing mode or null if not determinable
  * @internal
  */
-function getHorizontalSizingLegacy(node: NodeWithSizing, warnings?: string[]): SizingMode | null {
+function getHorizontalSizingLegacy(node: LayoutNode, warnings?: string[]): SizingMode | null {
   // Legacy API only works on auto-layout frames
-  if (!node.layoutMode || node.layoutMode === 'NONE') {
+  if (!('layoutMode' in node) || !node.layoutMode || node.layoutMode === 'NONE') {
     return null;
   }
 
@@ -173,14 +157,14 @@ function getHorizontalSizingLegacy(node: NodeWithSizing, warnings?: string[]): S
 
   if (node.layoutMode === 'HORIZONTAL') {
     // Horizontal layout: width is on primary axis
-    if (node.primaryAxisSizingMode === 'FIXED') {
+    if ('primaryAxisSizingMode' in node && node.primaryAxisSizingMode === 'FIXED') {
       return 'FIXED';
     }
     // Note: AUTO could be HUG or FILL, we can't determine which
     // Return null to use default fixed sizing
   } else if (node.layoutMode === 'VERTICAL') {
     // Vertical layout: width is on counter axis
-    if (node.counterAxisSizingMode === 'FIXED') {
+    if ('counterAxisSizingMode' in node && node.counterAxisSizingMode === 'FIXED') {
       return 'FIXED';
     }
   }
@@ -200,9 +184,9 @@ function getHorizontalSizingLegacy(node: NodeWithSizing, warnings?: string[]): S
  * @returns The sizing mode or null if not determinable
  * @internal
  */
-function getVerticalSizingLegacy(node: NodeWithSizing, warnings?: string[]): SizingMode | null {
+function getVerticalSizingLegacy(node: LayoutNode, warnings?: string[]): SizingMode | null {
   // Legacy API only works on auto-layout frames
-  if (!node.layoutMode || node.layoutMode === 'NONE') {
+  if (!('layoutMode' in node) || !node.layoutMode || node.layoutMode === 'NONE') {
     return null;
   }
 
@@ -210,12 +194,12 @@ function getVerticalSizingLegacy(node: NodeWithSizing, warnings?: string[]): Siz
 
   if (node.layoutMode === 'VERTICAL') {
     // Vertical layout: height is on primary axis
-    if (node.primaryAxisSizingMode === 'FIXED') {
+    if ('primaryAxisSizingMode' in node && node.primaryAxisSizingMode === 'FIXED') {
       return 'FIXED';
     }
   } else if (node.layoutMode === 'HORIZONTAL') {
     // Horizontal layout: height is on counter axis
-    if (node.counterAxisSizingMode === 'FIXED') {
+    if ('counterAxisSizingMode' in node && node.counterAxisSizingMode === 'FIXED') {
       return 'FIXED';
     }
   }
@@ -230,7 +214,7 @@ function getVerticalSizingLegacy(node: NodeWithSizing, warnings?: string[]): Siz
  * @param warnings - Optional array to collect warnings
  * @returns True if width should be output
  */
-export function shouldOutputWidth(node: NodeWithSizing, warnings?: string[]): boolean {
+export function shouldOutputWidth(node: LayoutNode, warnings?: string[]): boolean {
   const sizing = getHorizontalSizing(node, warnings);
   // Output width for FIXED, FILL, and HUG
   // Only skip if sizing is explicitly null/undefined
@@ -244,7 +228,7 @@ export function shouldOutputWidth(node: NodeWithSizing, warnings?: string[]): bo
  * @param warnings - Optional array to collect warnings
  * @returns True if height should be output
  */
-export function shouldOutputHeight(node: NodeWithSizing, warnings?: string[]): boolean {
+export function shouldOutputHeight(node: LayoutNode, warnings?: string[]): boolean {
   const sizing = getVerticalSizing(node, warnings);
   // Output height for FIXED, FILL, and HUG
   // Only skip if sizing is explicitly null/undefined
