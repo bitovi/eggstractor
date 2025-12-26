@@ -1,0 +1,212 @@
+{
+  "id": "1:1",
+  "name": "legacy-layout",
+  "type": "PAGE",
+  "children": [
+    {
+      "id": "1:2",
+      "name": "LegacyHorizontalFrame",
+      "type": "FRAME",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "PASS_THROUGH",
+      "isMask": false,
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 0.95,
+            "g": 0.95,
+            "b": 0.95
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "effects": [],
+      "x": 0,
+      "y": 0,
+      "width": 200,
+      "height": 100,
+      "absoluteBoundingBox": {
+        "x": 0,
+        "y": 0,
+        "width": 200,
+        "height": 100
+      },
+      "absoluteRenderBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 200,
+        "height": 100
+      },
+      "rotation": 0,
+      "layoutMode": "HORIZONTAL",
+      "primaryAxisSizingMode": "FIXED",
+      "counterAxisSizingMode": "FIXED",
+      "primaryAxisAlignItems": "MIN",
+      "counterAxisAlignItems": "MIN",
+      "itemSpacing": 10,
+      "paddingTop": 20,
+      "paddingRight": 20,
+      "paddingBottom": 20,
+      "paddingLeft": 20,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "1:2a",
+          "name": "child-rect",
+          "type": "RECTANGLE",
+          "visible": true,
+          "locked": false,
+          "opacity": 1,
+          "blendMode": "PASS_THROUGH",
+          "isMask": false,
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.2,
+                "g": 0.5,
+                "b": 0.8
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 0,
+          "strokeAlign": "INSIDE",
+          "effects": [],
+          "x": 20,
+          "y": 20,
+          "width": 50,
+          "height": 50,
+          "absoluteBoundingBox": {
+            "x": 20,
+            "y": 20,
+            "width": 50,
+            "height": 50
+          },
+          "absoluteRenderBounds": {
+            "x": 20,
+            "y": 20,
+            "width": 50,
+            "height": 50
+          },
+          "rotation": 0,
+          "layoutAlign": "INHERIT"
+        }
+      ]
+    },
+    {
+      "id": "1:3",
+      "name": "LegacyVerticalFrame",
+      "type": "FRAME",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "PASS_THROUGH",
+      "isMask": false,
+      "fills": [
+        {
+          "type": "SOLID",
+          "visible": true,
+          "opacity": 1,
+          "blendMode": "NORMAL",
+          "color": {
+            "r": 0.9,
+            "g": 0.95,
+            "b": 1.0
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "effects": [],
+      "x": 220,
+      "y": 0,
+      "width": 150,
+      "height": 180,
+      "absoluteBoundingBox": {
+        "x": 220,
+        "y": 0,
+        "width": 150,
+        "height": 180
+      },
+      "absoluteRenderBounds": {
+        "x": 220,
+        "y": 0,
+        "width": 150,
+        "height": 180
+      },
+      "rotation": 0,
+      "layoutMode": "VERTICAL",
+      "primaryAxisSizingMode": "FIXED",
+      "counterAxisSizingMode": "FIXED",
+      "primaryAxisAlignItems": "MIN",
+      "counterAxisAlignItems": "MIN",
+      "itemSpacing": 10,
+      "paddingTop": 16,
+      "paddingRight": 16,
+      "paddingBottom": 16,
+      "paddingLeft": 16,
+      "boundVariables": {},
+      "children": [
+        {
+          "id": "1:3a",
+          "name": "child-rect",
+          "type": "RECTANGLE",
+          "visible": true,
+          "locked": false,
+          "opacity": 1,
+          "blendMode": "PASS_THROUGH",
+          "isMask": false,
+          "fills": [
+            {
+              "type": "SOLID",
+              "visible": true,
+              "opacity": 1,
+              "blendMode": "NORMAL",
+              "color": {
+                "r": 0.2,
+                "g": 0.5,
+                "b": 0.8
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 0,
+          "strokeAlign": "INSIDE",
+          "effects": [],
+          "x": 236,
+          "y": 16,
+          "width": 50,
+          "height": 50,
+          "absoluteBoundingBox": {
+            "x": 236,
+            "y": 16,
+            "width": 50,
+            "height": 50
+          },
+          "absoluteRenderBounds": {
+            "x": 236,
+            "y": 16,
+            "width": 50,
+            "height": 50
+          },
+          "rotation": 0,
+          "layoutAlign": "INHERIT"
+        }
+      ]
+    }
+  ],
+  "variables": {}
+}

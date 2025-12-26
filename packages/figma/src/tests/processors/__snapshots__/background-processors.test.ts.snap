@@ -111,19 +111,27 @@ $v500: 31.25rem;
 @mixin opacity-custom {
   background: $brand-primary;
   opacity: 0.5;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin opacity-variable {
   background: $brand-primary;
   opacity: $opacity-48;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin opacity-custom-group {
   padding: 0rem;
   background: #ffffff;
   opacity: 0.5;
+  width: 7.5rem;
+  height: 7.5rem;
 }
 @mixin opacity-custom-group-opacity-custom {
   background: $brand-primary;
   opacity: 0.5;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin opacity-custom-group-lorem-ipsum {
   display: flex;
@@ -141,10 +149,14 @@ $v500: 31.25rem;
   padding: 0rem;
   background: $text-primary;
   opacity: $size-48;
+  width: 7.5rem;
+  height: 7.5rem;
 }
 @mixin opacity-variable-group-opacity-custom {
   background: $brand-primary;
   opacity: $size-48;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin opacity-variable-group-lorem-ipsum {
   display: flex;
@@ -182,19 +194,27 @@ $v500: 31.25rem;
 @mixin opacity-custom {
   background: $brand-primary;
   opacity: 0.5;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin opacity-variable {
   background: $brand-primary;
   opacity: $opacity-48;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin opacity-custom-group {
   padding: 0rem;
   background: #ffffff;
   opacity: 0.5;
+  width: 7.5rem;
+  height: 7.5rem;
 }
 @mixin opacity-custom-group-opacity-custom {
   background: $brand-primary;
   opacity: 0.5;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin opacity-custom-group-lorem-ipsum {
   display: flex;
@@ -212,10 +232,14 @@ $v500: 31.25rem;
   padding: 0rem;
   background: $text-primary;
   opacity: $size-48;
+  width: 7.5rem;
+  height: 7.5rem;
 }
 @mixin opacity-variable-group-opacity-custom {
   background: $brand-primary;
   opacity: $size-48;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin opacity-variable-group-lorem-ipsum {
   display: flex;

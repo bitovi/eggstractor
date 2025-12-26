@@ -1,30 +1,82 @@
 import { StyleProcessor, VariableToken, ProcessedValue } from '../types';
+import {
+  getHorizontalSizing,
+  getVerticalSizing,
+  getWidthValue,
+  getHeightValue,
+} from '../utils/layout-sizing.utils';
 
-interface NodeWithLayout {
+export type SizingMode = 'FIXED' | 'HUG' | 'FILL';
+
+/**
+ * Base properties that exist on nodes with layout capabilities
+ */
+interface BaseLayoutNode {
+  id?: string;
+  name?: string;
   minWidth?: number;
   maxWidth?: number;
   minHeight?: number;
   maxHeight?: number;
-  layoutAlign?: string;
-  layoutMode?: 'HORIZONTAL' | 'VERTICAL' | 'NONE';
-  primaryAxisSizingMode?: 'FIXED' | 'AUTO';
-  counterAxisSizingMode?: 'FIXED' | 'AUTO';
   absoluteBoundingBox?: { width: number; height: number };
-  textAutoResize?: 'NONE' | 'WIDTH' | 'HEIGHT' | 'WIDTH_AND_HEIGHT';
   type?: string;
-  layoutWrap?: 'WRAP' | 'NO_WRAP';
+  textAutoResize?: 'NONE' | 'WIDTH' | 'HEIGHT' | 'WIDTH_AND_HEIGHT';
 }
 
-function hasLayout(node: SceneNode): node is SceneNode & NodeWithLayout {
-  return 'layoutMode' in node || 'absoluteBoundingBox' in node;
+/**
+ * Node with auto-layout enabled (layoutMode is HORIZONTAL or VERTICAL)
+ */
+interface AutoLayoutNode extends BaseLayoutNode {
+  layoutMode: 'HORIZONTAL' | 'VERTICAL';
+  primaryAxisAlignItems: 'MIN' | 'CENTER' | 'MAX' | 'SPACE_BETWEEN';
+  counterAxisAlignItems: 'MIN' | 'CENTER' | 'MAX' | 'BASELINE';
+  itemSpacing: number;
+  layoutWrap?: 'WRAP' | 'NO_WRAP'; // Optional - not all frames support wrapping
 }
+
+/**
+ * Node without auto-layout (layoutMode is NONE or doesn't exist)
+ */
+interface NonAutoLayoutNode extends BaseLayoutNode {
+  layoutMode?: 'NONE';
+}
+
+/**
+ * Node with modern sizing API (layoutSizingHorizontal/Vertical)
+ */
+interface ModernSizingNode extends BaseLayoutNode {
+  layoutSizingHorizontal: SizingMode;
+  layoutSizingVertical: SizingMode;
+}
+
+/**
+ * Node with legacy sizing API (primaryAxisSizingMode/counterAxisSizingMode)
+ * @deprecated Use ModernSizingNode instead
+ */
+interface LegacySizingNode extends BaseLayoutNode {
+  layoutMode: 'HORIZONTAL' | 'VERTICAL'; // Required for legacy API
+  /**
+   * @deprecated Use layoutSizingHorizontal/layoutSizingVertical instead
+   */
+  primaryAxisSizingMode: 'FIXED' | 'AUTO';
+  /**
+   * @deprecated Use layoutSizingHorizontal/layoutSizingVertical instead
+   */
+  counterAxisSizingMode: 'FIXED' | 'AUTO';
+}
+
+/**
+ * Union type representing all possible layout node configurations
+ */
+export type LayoutNode = AutoLayoutNode | NonAutoLayoutNode | ModernSizingNode | LegacySizingNode;
 
 export const layoutProcessors: StyleProcessor[] = [
   {
     property: 'display',
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
-      if ('layoutMode' in node && node.layoutMode !== 'NONE') {
+      const layoutNode = node as LayoutNode;
+      if ('layoutMode' in layoutNode && layoutNode.layoutMode !== 'NONE') {
         const value = 'flex';
         return { value, rawValue: value };
       }
@@ -36,8 +88,9 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'flex-direction',
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
-      if ('layoutMode' in node && node.layoutMode !== 'NONE') {
-        const value = node.layoutMode === 'VERTICAL' ? 'column' : 'row';
+      const layoutNode = node as LayoutNode;
+      if ('layoutMode' in layoutNode && layoutNode.layoutMode !== 'NONE') {
+        const value = layoutNode.layoutMode === 'VERTICAL' ? 'column' : 'row';
         return { value, rawValue: value };
       }
       return null;
@@ -47,18 +100,19 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'justify-content',
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
+      const layoutNode = node as LayoutNode;
       if (
-        'layoutMode' in node &&
-        node.layoutMode !== 'NONE' &&
-        'primaryAxisAlignItems' in node &&
-        node.primaryAxisAlignItems !== 'MIN'
+        'layoutMode' in layoutNode &&
+        layoutNode.layoutMode !== 'NONE' &&
+        'primaryAxisAlignItems' in layoutNode &&
+        layoutNode.primaryAxisAlignItems !== 'MIN'
       ) {
         const alignMap = {
           CENTER: 'center',
           MAX: 'flex-end',
           SPACE_BETWEEN: 'space-between',
-        };
-        const value = alignMap[node.primaryAxisAlignItems] || 'flex-start';
+        } as const;
+        const value = alignMap[layoutNode.primaryAxisAlignItems];
         return { value, rawValue: value };
       }
       return null;
@@ -68,14 +122,19 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'align-items',
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
-      if ('layoutMode' in node && node.layoutMode !== 'NONE' && 'counterAxisAlignItems' in node) {
+      const layoutNode = node as LayoutNode;
+      if (
+        'layoutMode' in layoutNode &&
+        layoutNode.layoutMode !== 'NONE' &&
+        'counterAxisAlignItems' in layoutNode
+      ) {
         const alignMap = {
           MIN: 'flex-start',
           CENTER: 'center',
           MAX: 'flex-end',
           BASELINE: 'baseline',
-        };
-        const value = alignMap[node.counterAxisAlignItems];
+        } as const;
+        const value = alignMap[layoutNode.counterAxisAlignItems];
         return { value, rawValue: value };
       }
       return null;
@@ -94,8 +153,9 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if ('itemSpacing' in node && node.itemSpacing > 0) {
-        const value = `${node.itemSpacing}px`;
+      const layoutNode = node as LayoutNode;
+      if ('itemSpacing' in layoutNode && layoutNode.itemSpacing > 0) {
+        const value = `${layoutNode.itemSpacing}px`;
         return { value, rawValue: value, valueType: 'px' };
       }
       return null;
@@ -117,10 +177,11 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if (hasLayout(node) && node.minWidth) {
+      const layoutNode = node as LayoutNode;
+      if ('minWidth' in layoutNode && layoutNode.minWidth) {
         return {
-          value: `${node.minWidth}px`,
-          rawValue: `${node.minWidth}px`,
+          value: `${layoutNode.minWidth}px`,
+          rawValue: `${layoutNode.minWidth}px`,
           valueType: 'px',
         };
       }
@@ -143,10 +204,11 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if (hasLayout(node) && node.maxWidth) {
+      const layoutNode = node as LayoutNode;
+      if ('maxWidth' in layoutNode && layoutNode.maxWidth) {
         return {
-          value: `${node.maxWidth}px`,
-          rawValue: `${node.maxWidth}px`,
+          value: `${layoutNode.maxWidth}px`,
+          rawValue: `${layoutNode.maxWidth}px`,
           valueType: 'px',
         };
       }
@@ -169,10 +231,11 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if (hasLayout(node) && node.minHeight) {
+      const layoutNode = node as LayoutNode;
+      if ('minHeight' in layoutNode && layoutNode.minHeight) {
         return {
-          value: `${node.minHeight}px`,
-          rawValue: `${node.minHeight}px`,
+          value: `${layoutNode.minHeight}px`,
+          rawValue: `${layoutNode.minHeight}px`,
           valueType: 'px',
         };
       }
@@ -195,10 +258,11 @@ export const layoutProcessors: StyleProcessor[] = [
         };
       }
 
-      if (hasLayout(node) && node.maxHeight) {
+      const layoutNode = node as LayoutNode;
+      if ('maxHeight' in layoutNode && layoutNode.maxHeight) {
         return {
-          value: `${node.maxHeight}px`,
-          rawValue: `${node.maxHeight}px`,
+          value: `${layoutNode.maxHeight}px`,
+          rawValue: `${layoutNode.maxHeight}px`,
           valueType: 'px',
         };
       }
@@ -209,30 +273,45 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'width',
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
-      if (!hasLayout(node)) return null;
+      if (!('absoluteBoundingBox' in node)) return null;
 
-      // Handle text nodes
-      if (node.type === 'TEXT') {
-        if (node.textAutoResize === 'NONE' || node.textAutoResize === 'HEIGHT') {
+      const layoutNode = node as LayoutNode;
+      const warningsSet = new Set<string>();
+
+      // Handle text nodes - they have special sizing rules
+      if ('type' in layoutNode && layoutNode.type === 'TEXT') {
+        // Only output width if text doesn't auto-resize width
+        if (
+          'textAutoResize' in layoutNode &&
+          (layoutNode.textAutoResize === 'NONE' || layoutNode.textAutoResize === 'HEIGHT')
+        ) {
           return {
-            value: `${node.absoluteBoundingBox?.width}px`,
-            rawValue: `${node.absoluteBoundingBox?.width}px`,
+            value: `${layoutNode.absoluteBoundingBox?.width}px`,
+            rawValue: `${layoutNode.absoluteBoundingBox?.width}px`,
             valueType: 'px',
           };
         }
         return null;
       }
 
-      // Handle auto layout frames
-      if (node.layoutMode) {
-        if (
-          (node.layoutMode === 'HORIZONTAL' && node.primaryAxisSizingMode === 'FIXED') ||
-          (node.layoutMode === 'VERTICAL' && node.counterAxisSizingMode === 'FIXED')
-        ) {
+      // Collect warnings in an array, then add to Set for deduplication
+      const warningsArray: string[] = [];
+
+      // Get horizontal sizing mode (prefers layoutSizingHorizontal, falls back to legacy API)
+      const sizing = getHorizontalSizing(layoutNode, warningsArray);
+
+      // Add any warnings to the set
+      warningsArray.forEach((w) => warningsSet.add(w));
+
+      if (sizing) {
+        const width = layoutNode.absoluteBoundingBox?.width;
+        if (width !== undefined) {
+          const value = getWidthValue(width, sizing);
           return {
-            value: `${node.absoluteBoundingBox?.width}px`,
-            rawValue: `${node.absoluteBoundingBox?.width}px`,
-            valueType: 'px',
+            value,
+            rawValue: value,
+            valueType: sizing === 'FIXED' ? 'px' : undefined,
+            warnings: warningsSet.size > 0 ? Array.from(warningsSet) : undefined,
           };
         }
       }
@@ -244,30 +323,46 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'height',
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
-      if (!hasLayout(node)) return null;
+      if (!('absoluteBoundingBox' in node)) return null;
 
-      // Handle text nodes - height is usually determined by content
-      if (node.type === 'TEXT') {
-        if (node.textAutoResize === 'NONE' || node.textAutoResize === 'WIDTH_AND_HEIGHT') {
+      const layoutNode = node as LayoutNode;
+      const warningsSet = new Set<string>();
+
+      // Handle text nodes - they have special sizing rules
+      // Height is usually determined by content
+      if ('type' in layoutNode && layoutNode.type === 'TEXT') {
+        // Only output height if text doesn't auto-resize height
+        if (
+          'textAutoResize' in layoutNode &&
+          (layoutNode.textAutoResize === 'NONE' || layoutNode.textAutoResize === 'WIDTH_AND_HEIGHT')
+        ) {
           return {
-            value: `${node.absoluteBoundingBox?.height}px`,
-            rawValue: `${node.absoluteBoundingBox?.height}px`,
+            value: `${layoutNode.absoluteBoundingBox?.height}px`,
+            rawValue: `${layoutNode.absoluteBoundingBox?.height}px`,
             valueType: 'px',
           };
         }
         return null;
       }
 
-      // Handle auto layout frames
-      if (node.layoutMode) {
-        if (
-          (node.layoutMode === 'VERTICAL' && node.primaryAxisSizingMode === 'FIXED') ||
-          (node.layoutMode === 'HORIZONTAL' && node.counterAxisSizingMode === 'FIXED')
-        ) {
+      // Collect warnings in an array, then add to Set for deduplication
+      const warningsArray: string[] = [];
+
+      // Get vertical sizing mode (prefers layoutSizingVertical, falls back to legacy API)
+      const sizing = getVerticalSizing(layoutNode, warningsArray);
+
+      // Add any warnings to the set
+      warningsArray.forEach((w) => warningsSet.add(w));
+
+      if (sizing) {
+        const height = layoutNode.absoluteBoundingBox?.height;
+        if (height !== undefined) {
+          const value = getHeightValue(height, sizing);
           return {
-            value: `${node.absoluteBoundingBox?.height}px`,
-            rawValue: `${node.absoluteBoundingBox?.height}px`,
-            valueType: 'px',
+            value,
+            rawValue: value,
+            valueType: sizing === 'FIXED' ? 'px' : undefined,
+            warnings: warningsSet.size > 0 ? Array.from(warningsSet) : undefined,
           };
         }
       }
@@ -279,8 +374,13 @@ export const layoutProcessors: StyleProcessor[] = [
     property: 'flex-wrap',
     bindingKey: undefined,
     process: async (_, node: SceneNode): Promise<ProcessedValue | null> => {
-      if ('layoutMode' in node && node.layoutMode !== 'NONE' && 'layoutWrap' in node) {
-        const value = node.layoutWrap === 'WRAP' ? 'wrap' : '';
+      const layoutNode = node as LayoutNode;
+      if (
+        'layoutMode' in layoutNode &&
+        layoutNode.layoutMode !== 'NONE' &&
+        'layoutWrap' in layoutNode
+      ) {
+        const value = layoutNode.layoutWrap === 'WRAP' ? 'wrap' : '';
         return { value, rawValue: value };
       }
       return null;
