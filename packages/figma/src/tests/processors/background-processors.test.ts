@@ -28,8 +28,8 @@ describe('Background Processors', () => {
 
     expect(templateStyles).toMatchSnapshot('solid styles');
     // Semantic variables should reference primitives, not resolved values
-    expect(templateStyles.solid).toBe('background: $brand-primary;');
-    expect(templateStyles.alpha).toBe('background: $teal-800-50;');
+    expect(templateStyles.solid).toBe('background: var(--brand-primary);');
+    expect(templateStyles.alpha).toBe('background: var(--teal-800-50);');
 
     const { result: combinatorial } = transformToCss(tokens, true);
 
@@ -40,8 +40,8 @@ describe('Background Processors', () => {
 
     expect(combinatorialStyles).toMatchSnapshot('solid styles');
     // Semantic variables should reference primitives, not resolved values
-    expect(combinatorialStyles.solid).toBe('background: $brand-primary;');
-    expect(combinatorialStyles.alpha).toBe('background: $teal-800-50;');
+    expect(combinatorialStyles.solid).toBe('background: var(--brand-primary);');
+    expect(combinatorialStyles.alpha).toBe('background: var(--teal-800-50);');
   });
 
   it('should process background solid correctly - sass', async () => {
