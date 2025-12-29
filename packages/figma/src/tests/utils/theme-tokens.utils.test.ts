@@ -470,8 +470,8 @@ describe('generateThemeDirective', () => {
     expect(result).toContain('@theme {');
     // For single-mode scenarios, primitives use their actual values (not var() references)
     expect(result).toContain('--color-blue-500: #0080ff;');
-    // Semantics should reference primitives with var()
-    expect(result).toContain('--primary: var(--color-blue-500);');
+    // Semantics should reference primitives with var() and have --color- prefix
+    expect(result).toContain('--color-primary: var(--color-blue-500);');
   });
 
   it('should sort tokens naturally (numeric aware)', () => {
@@ -909,10 +909,10 @@ describe('generateThemeDirective', () => {
     it('should include semantic colors in @theme by default', () => {
       const result = generateThemeDirective(collectionWithSemanticColors, false);
 
-      // Semantic colors should appear in @theme (without --color- prefix)
-      expect(result).toContain('--action-bg:');
-      expect(result).toContain('--text-default:');
-      expect(result).toContain('--border-primary:');
+      // Semantic colors should appear in @theme WITH --color- prefix for Tailwind 4 compatibility
+      expect(result).toContain('--color-action-bg:');
+      expect(result).toContain('--color-text-default:');
+      expect(result).toContain('--color-border-primary:');
     });
 
     it('should exclude semantic colors from @theme when flag is true', () => {
@@ -1166,9 +1166,9 @@ describe('Multi-mode theme support', () => {
       expect(result).toContain(':root {');
       expect(result).toContain('--color-primary: #0080ff;');
 
-      // Should have default mode semantic tokens in :root and [data-theme='light']
-      expect(result).toContain('light mode semantic tokens (default)');
-      expect(result).toContain(":root,\n[data-theme='light'] {");
+      // Should have light mode overrides (no longer a combined :root,[data-theme='light'] block)
+      expect(result).toContain('/* light mode overrides */');
+      expect(result).toContain("[data-theme='light'] {");
       expect(result).toContain('--action-bg: var(--color-primary);');
 
       // Should have dark mode overrides
@@ -1437,23 +1437,23 @@ describe('Multi-mode theme support', () => {
 
       const result = generateThemeDirective(multiModeCollection);
 
-      // In multi-mode scenarios, @theme should have self-referencing semantic tokens
+      // In multi-mode scenarios, @theme should include primitives and self-referencing semantic tokens
+      // If the token name already starts with "colour-", we don't add "--color-" prefix
       expect(result).toContain('@theme {');
       expect(result).toContain(
         '--colour-button-primary-text-hover: var(--colour-button-primary-text-hover);',
       );
 
-      // Primitives should NOT be in @theme for multi-mode
+      // Primitives should be in @theme for multi-mode (with their actual values)
       // Split by @theme to check what's in that section
       const themeSection = result.split('@theme {')[1]?.split('}')[0];
       expect(themeSection).toBeDefined();
-      expect(themeSection).not.toContain('--color-white');
+      expect(themeSection).toContain('--color-white: #ffffff');
 
-      // The semantic token should reference itself, not the primitive
+      // The semantic token should reference itself, not the primitive value directly
       expect(themeSection).toContain(
         '--colour-button-primary-text-hover: var(--colour-button-primary-text-hover)',
       );
-      expect(themeSection).not.toContain('var(--color-white)');
     });
   });
 });

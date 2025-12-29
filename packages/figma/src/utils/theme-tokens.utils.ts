@@ -131,6 +131,55 @@ function categorizeTokenProperty(token: VariableToken): string {
   return 'other';
 }
 
+/**
+ * Generate Tailwind 4 CSS with @theme directive from design tokens
+ *
+ * This function produces three main CSS blocks:
+ * 1. :root - Contains primitive tokens with actual values (e.g., --color-blue-500: #0080ff)
+ * 2. [data-theme='modeName'] - Contains mode-specific overrides for theming (e.g., light/dark modes)
+ * 3. @theme - Tailwind 4's theme configuration that maps CSS variables to utility classes
+ *
+ * @param collection - Token collection with primitives and semantics
+ * @param excludeSemanticColorsFromTheme - Controls semantic color handling:
+ *   - false (default): Semantic colors appear in @theme → Tailwind auto-generates utilities like `bg-action-bg-primary`
+ *   - true: Semantic colors excluded from @theme → Prevents auto-generation, use custom @utility rules instead
+ *
+ * Key behaviors:
+ *
+ * ## Color Prefixing (--color-)
+ * - ALL color tokens in @theme MUST have --color- prefix per Tailwind 4 requirements
+ * - Primitives: Already prefixed (e.g., --color-blue-500)
+ * - Semantics: Prefixed during @theme output (e.g., --action-bg → --color-action-bg)
+ * - Supports both 'color-' and 'colour-' prefixes (international naming)
+ *
+ * ## Multi-mode vs Single-mode
+ *
+ * ### Multi-mode (Light/Dark themes):
+ * - :root: Contains color primitives + non-color primitives with actual values
+ * - [data-theme]: Contains mode-specific token overrides
+ * - @theme:
+ *   - Primitives: Non-color only (spacing, fonts, borders, etc.) with actual values
+ *   - Color primitives: Excluded when excludeSemanticColorsFromTheme=true, included when false
+ *   - Semantics: Self-referencing (e.g., --color-action-bg: var(--action-bg)) to enable theme switching
+ *
+ * ### Single-mode (No theming):
+ * - :root: Contains primitives with actual values
+ * - @theme: Contains both primitives AND semantics with actual values (backward compatibility)
+ *
+ * ## excludeSemanticColorsFromTheme flag
+ * When true:
+ * - Prevents Tailwind from generating hundreds of color utilities (bg-*, text-*, border-*)
+ * - Semantic colors moved to :root (available as CSS variables)
+ * - Companion function generateSemanticColorUtilities() creates targeted @utility rules
+ * - Non-color semantic tokens (spacing, fonts, etc.) still appear in @theme
+ *
+ * When false:
+ * - Semantic colors appear in @theme
+ * - Tailwind auto-generates full utility class set
+ * - Use this for comprehensive utility coverage at the cost of larger CSS
+ *
+ * @returns CSS string with :root, [data-theme], and @theme blocks
+ */
 export function generateThemeDirective(
   collection: TokenCollection,
   excludeSemanticColorsFromTheme = false,
@@ -394,54 +443,10 @@ export function generateThemeDirective(
 
   const modes = Array.from(filteredModesMap.entries()); // If we have multiple modes, output mode-specific blocks for tokens that vary by mode
   if (modes.length > 1) {
-    const defaultModeId = modes[0][0]; // First mode is the default
-    const defaultModeName = modes[0][1];
-
-    // Collect default mode semantic tokens (these go in :root or :root, [data-theme='default'])
-    const defaultModeTokens: VariableToken[] = [];
-
-    for (const token of [
-      ...standaloneSemanticColors,
-      ...standaloneSemanticNonColors,
-      ...boundSemanticTokens,
-    ]) {
-      // For ModeVariableTokens, create a variant with the default mode value
-      if (isModeVariableToken(token)) {
-        defaultModeTokens.push({
-          ...token,
-          rawValue: token.modeValues[defaultModeId],
-        });
-      } else {
-        // For StandardVariableTokens, use as-is
-        defaultModeTokens.push(token);
-      }
-    }
-
-    if (defaultModeTokens.length > 0 && !excludeSemanticColorsFromTheme) {
-      const defaultSemanticCollections = processTokens();
-      processTokenCollection(defaultModeTokens, defaultSemanticCollections);
-
-      const hasSemantics = Object.values(defaultSemanticCollections).some((map) => map.size > 0);
-
-      if (hasSemantics) {
-        result += `/* ${defaultModeName} mode semantic tokens (default) */\n`;
-        result += `:root,\n[data-theme='${defaultModeName}'] {\n`;
-        result += outputCollection(defaultSemanticCollections.colorTokens);
-        result += outputCollection(defaultSemanticCollections.spacingTokens);
-        result += outputCollection(defaultSemanticCollections.fontFamilyTokens);
-        result += outputCollection(defaultSemanticCollections.fontWeightTokens);
-        result += outputCollection(defaultSemanticCollections.fontSizeTokens);
-        result += outputCollection(defaultSemanticCollections.borderWidthTokens);
-        result += outputCollection(defaultSemanticCollections.borderRadiusTokens);
-        result += outputCollection(defaultSemanticCollections.lineHeightTokens);
-        result += outputCollection(defaultSemanticCollections.iconSizeTokens);
-        result += outputCollection(defaultSemanticCollections.screenSizeTokens);
-        result += outputCollection(defaultSemanticCollections.boxShadowTokens);
-        result += '}\n\n';
-      }
-    }
-    // Output alternate mode overrides
-    for (let i = 1; i < modes.length; i++) {
+    // Output mode overrides for ALL modes
+    // Note: We start from index 0 (not 1) to include all modes
+    // We don't create a redundant :root, [data-theme='Values'] block anymore
+    for (let i = 0; i < modes.length; i++) {
       const [modeId, modeName] = modes[i];
       const modeTokens: VariableToken[] = [];
 
@@ -518,6 +523,9 @@ export function generateThemeDirective(
 
     if (name.startsWith('colors-')) {
       return name.replace('colors-', 'color-');
+    } else if (name.startsWith('color-')) {
+      // Already has color- prefix (primitives), keep it
+      return name;
     } else if (name.startsWith('line-height-')) {
       return name.replace('line-height-', 'leading-');
     } else if (name.startsWith('border-radius-')) {
@@ -539,15 +547,46 @@ export function generateThemeDirective(
     } else if (name.startsWith('shadow-') || name.startsWith('box-shadow-')) {
       return name.replace('box-shadow-', 'shadow-').replace('shadow-', 'shadow-');
     }
+    // For anything else, return as-is (without adding prefixes automatically)
     return name;
   };
 
-  // Helper to output theme collection with simplified names
-  const outputThemeCollection = (map: Map<string, string>) => {
+  /**
+   * Output theme collection with simplified names and actual values
+   * Used for: primitives in both single-mode and multi-mode scenarios
+   *
+   * @param map - Collection of tokens (e.g., colorTokens, spacingTokens)
+   * @param isColorCollection - If true, ensures all keys have --color- prefix for Tailwind 4
+   *
+   * THE --color- PREFIX REQUIREMENT:
+   * Tailwind 4 requires ALL color tokens in @theme to have --color- prefix.
+   * This applies to both primitives and semantics:
+   * - Primitives: --color-blue-500: #0080ff;
+   * - Semantics: --color-action-bg: var(--action-bg);
+   *
+   * Without this prefix, Tailwind won't recognize them as colors and won't generate
+   * color utilities (bg-*, text-*, border-*) for these tokens.
+   *
+   * We check for existing 'color-' or 'colour-' prefixes to support international naming
+   * conventions (e.g., UK English 'colour') and avoid double-prefixing.
+   *
+   * Example output:
+   *   --color-blue-500: #0080ff;
+   *   --spacing-4: 16px;
+   */
+  const outputThemeCollection = (map: Map<string, string>, isColorCollection = false) => {
     const entries: Array<[string, string]> = [];
     for (const [key, value] of map.entries()) {
       const simplifiedKey = extractSimplifiedName(key);
-      entries.push([`--${simplifiedKey}`, value]);
+      // CRITICAL: Check if color prefix already exists to avoid double-prefixing
+      // Handles both 'color-' and 'colour-' for international compatibility
+      // Example: --action-bg becomes --color-action-bg
+      // But: --colour-button-text stays as --colour-button-text
+      const hasColorPrefix =
+        simplifiedKey.startsWith('color-') || simplifiedKey.startsWith('colour-');
+      const finalKey =
+        isColorCollection && !hasColorPrefix ? `--color-${simplifiedKey}` : `--${simplifiedKey}`;
+      entries.push([finalKey, value]);
     }
 
     // Sort by simplified key name
@@ -562,68 +601,84 @@ export function generateThemeDirective(
     return output;
   };
 
-  // Helper to output theme collection with self-referencing variables
-  // For multi-mode scenarios, semantic tokens reference themselves to allow
-  // [data-theme] overrides to work correctly
-  const outputSelfReferencingCollection = (map: Map<string, string>) => {
-    const entries: Array<string> = [];
+  /**
+   * Output theme collection with self-referencing variables
+   * Used for: semantic tokens in multi-mode scenarios to enable theme switching
+   *
+   * @param map - Collection of semantic tokens
+   * @param isColorCollection - If true, ensures all keys have --color- prefix for Tailwind 4
+   *
+   * Why self-referencing?
+   * In multi-mode, semantic tokens in @theme reference their :root counterparts:
+   *   @theme: --color-action-bg: var(--action-bg);
+   * This allows [data-theme] blocks to override --action-bg and have @theme pick up the change
+   *
+   * Example flow:
+   *   :root { --action-bg: var(--color-blue-500); }
+   *   [data-theme='dark'] { --action-bg: var(--color-blue-700); }
+   *   @theme { --color-action-bg: var(--action-bg); }
+   * Result: Tailwind's bg-action-bg utility automatically adapts to theme changes
+   */
+  const outputSelfReferencingCollection = (map: Map<string, string>, isColorCollection = false) => {
+    const entries: Array<[string, string]> = [];
     for (const [key] of map.entries()) {
       // For semantic tokens in multi-mode, they reference themselves
-      // e.g., --colour-button-primary-text-hover: var(--colour-button-primary-text-hover);
-      entries.push(key);
+      // Apply the same simplification logic as outputThemeCollection to add --color- prefix
+      const simplifiedKey = extractSimplifiedName(key);
+      // For color collections, if the key doesn't already have a color- or colour- prefix, add it
+      // e.g., --color-action-bg-error-default: var(--action-bg-error-default);
+      // But preserves existing prefixes like --colour-button-primary-text-hover
+      const hasColorPrefix =
+        simplifiedKey.startsWith('color-') || simplifiedKey.startsWith('colour-');
+      const finalKey =
+        isColorCollection && !hasColorPrefix ? `--color-${simplifiedKey}` : `--${simplifiedKey}`;
+      entries.push([finalKey, key]);
     }
 
-    // Sort by key name
-    entries.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+    // Sort by simplified key name
+    entries.sort(([a], [b]) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
+    );
 
     let output = '';
-    for (const key of entries) {
+    for (const [simplifiedKey, originalKey] of entries) {
       // Remove the -- prefix for the var() reference
-      const varName = key.substring(2);
-      output += `  ${key}: var(--${varName});\n`;
+      const varName = originalKey.substring(2);
+      output += `  ${simplifiedKey}: var(--${varName});\n`;
     }
     return output;
   };
 
-  // Conditional logic: with multiple modes, only output semantics to @theme
-  // Without modes (single mode), output both primitives and semantics
+  /**
+   * MULTI-MODE vs SINGLE-MODE LOGIC
+   *
+   * The @theme directive generation differs based on whether the design system has theming:
+   *
+   * MULTI-MODE (hasMultipleModes = true):
+   * - Design system has Light/Dark or other theme variations
+   * - @theme contains:
+   *   1. Non-color primitives (spacing, fonts, borders, shadows) - actual values
+   *   2. Color primitives - included/excluded based on excludeSemanticColorsFromTheme flag
+   *   3. Semantic tokens - self-referencing to enable theme switching
+   * - Theme switching happens via [data-theme] attribute changing --var values
+   *
+   * SINGLE-MODE (hasMultipleModes = false):
+   * - Design system has no theme variations (one appearance only)
+   * - @theme contains ALL tokens (primitives + semantics) with actual values
+   * - Simpler output for backward compatibility and single-theme systems
+   */
   const hasMultipleModes = modes.length > 1;
 
   if (hasMultipleModes) {
-    // Multi-mode: Output semantic tokens in @theme with self-references
-    // This allows [data-theme] blocks to override the actual values
-    // e.g., --colour-button-primary: var(--colour-button-primary);
-    if (Object.values(semanticCollections).some((map) => map.size > 0)) {
-      // When excludeSemanticColorsFromTheme is true, skip semantic colors to prevent
-      // Tailwind from auto-generating utilities (we'll generate custom @utility rules instead)
-      if (!excludeSemanticColorsFromTheme) {
-        result += outputSelfReferencingCollection(semanticCollections.colorTokens);
-      }
-      result += outputSelfReferencingCollection(semanticCollections.spacingTokens);
-      result += outputSelfReferencingCollection(semanticCollections.fontFamilyTokens);
-      result += outputSelfReferencingCollection(semanticCollections.fontWeightTokens);
-      result += outputSelfReferencingCollection(semanticCollections.fontSizeTokens);
-      result += outputSelfReferencingCollection(semanticCollections.borderWidthTokens);
-      result += outputSelfReferencingCollection(semanticCollections.borderRadiusTokens);
-      result += outputSelfReferencingCollection(semanticCollections.lineHeightTokens);
-      result += outputSelfReferencingCollection(semanticCollections.iconSizeTokens);
-      result += outputSelfReferencingCollection(semanticCollections.screenSizeTokens);
-      result += outputSelfReferencingCollection(semanticCollections.boxShadowTokens);
-    }
-
-    // When excludeSemanticColorsFromTheme is false, also add standalone semantic colors to @theme
-    // (they're already in :root when the flag is true, so only add to @theme when flag is false)
-    if (
-      !excludeSemanticColorsFromTheme &&
-      Object.values(standaloneSemanticCollections).some((map) => map.size > 0)
-    ) {
-      result += outputSelfReferencingCollection(standaloneSemanticCollections.colorTokens);
-    }
-  } else {
-    // Single mode (or no modes): Include both primitives and semantics in @theme
-    // This is the original behavior for backward compatibility
+    // Multi-mode: Output tokens in @theme
+    // When excludeSemanticColorsFromTheme is false, include color primitives in @theme
+    // When true, exclude color primitives but still include all non-color primitives
     if (Object.values(primitiveCollections).some((map) => map.size > 0)) {
-      result += outputThemeCollection(primitiveCollections.colorTokens);
+      if (!excludeSemanticColorsFromTheme) {
+        result += outputThemeCollection(primitiveCollections.colorTokens, true);
+      }
+      // Always output non-color primitives regardless of the flag
+      // These are essential for Tailwind utilities (spacing, fonts, borders, etc.)
       result += outputThemeCollection(primitiveCollections.spacingTokens);
       result += outputThemeCollection(primitiveCollections.fontFamilyTokens);
       result += outputThemeCollection(primitiveCollections.fontWeightTokens);
@@ -636,11 +691,88 @@ export function generateThemeDirective(
       result += outputThemeCollection(primitiveCollections.boxShadowTokens);
     }
 
+    /**
+     * SEMANTIC TOKENS IN MULTI-MODE
+     *
+     * Semantic tokens use self-referencing to enable theme switching:
+     * - They reference their :root counterparts which [data-theme] can override
+     * - This creates a chain: @theme → :root var → [data-theme] override
+     *
+     * excludeSemanticColorsFromTheme behavior:
+     * - true: Skip color semantics → prevents Tailwind utility generation → use custom @utility rules
+     * - false: Include color semantics → Tailwind generates bg-*, text-*, border-* utilities
+     *
+     * Non-color semantics (fonts, spacing, etc.) are ALWAYS included regardless of flag
+     */
     if (Object.values(semanticCollections).some((map) => map.size > 0)) {
-      // When excludeSemanticColorsFromTheme is true, skip semantic colors
       if (!excludeSemanticColorsFromTheme) {
-        result += outputThemeCollection(semanticCollections.colorTokens);
+        // Include semantic colors in @theme → enables auto-generated Tailwind utilities
+        result += outputSelfReferencingCollection(semanticCollections.colorTokens, true);
       }
+      // Always output non-color semantic tokens (fonts, spacing, borders, etc.)
+      // These don't create utility bloat like colors do
+      result += outputSelfReferencingCollection(semanticCollections.spacingTokens);
+      result += outputSelfReferencingCollection(semanticCollections.fontFamilyTokens);
+      result += outputSelfReferencingCollection(semanticCollections.fontWeightTokens);
+      result += outputSelfReferencingCollection(semanticCollections.fontSizeTokens);
+      result += outputSelfReferencingCollection(semanticCollections.borderWidthTokens);
+      result += outputSelfReferencingCollection(semanticCollections.borderRadiusTokens);
+      result += outputSelfReferencingCollection(semanticCollections.lineHeightTokens);
+      result += outputSelfReferencingCollection(semanticCollections.iconSizeTokens);
+      result += outputSelfReferencingCollection(semanticCollections.screenSizeTokens);
+      result += outputSelfReferencingCollection(semanticCollections.boxShadowTokens);
+    }
+
+    /**
+     * STANDALONE SEMANTIC COLORS
+     *
+     * Standalone semantic colors are top-level color tokens not bound to components
+     * (e.g., --action-bg-primary vs component-specific --button-primary-bg)
+     *
+     * When excludeSemanticColorsFromTheme=false: Add to @theme with self-references
+     * When excludeSemanticColorsFromTheme=true: Already in :root, skip @theme
+     */
+    if (
+      !excludeSemanticColorsFromTheme &&
+      Object.values(standaloneSemanticCollections).some((map) => map.size > 0)
+    ) {
+      result += outputSelfReferencingCollection(standaloneSemanticCollections.colorTokens, true);
+    }
+  } else {
+    /**
+     * SINGLE-MODE BEHAVIOR (No theming)
+     *
+     * Simpler output for systems without theme variations:
+     * - @theme gets ALL tokens (primitives + semantics) with actual values
+     * - No self-referencing needed since there are no theme overrides
+     * - Color primitives respect excludeSemanticColorsFromTheme flag
+     * - Backward compatible with pre-theming systems
+     */
+    if (Object.values(primitiveCollections).some((map) => map.size > 0)) {
+      if (!excludeSemanticColorsFromTheme) {
+        // Include color primitives for comprehensive utility generation
+        result += outputThemeCollection(primitiveCollections.colorTokens, true);
+      }
+      // Always output non-color primitives - foundation of design system
+      result += outputThemeCollection(primitiveCollections.spacingTokens);
+      result += outputThemeCollection(primitiveCollections.fontFamilyTokens);
+      result += outputThemeCollection(primitiveCollections.fontWeightTokens);
+      result += outputThemeCollection(primitiveCollections.fontSizeTokens);
+      result += outputThemeCollection(primitiveCollections.borderWidthTokens);
+      result += outputThemeCollection(primitiveCollections.borderRadiusTokens);
+      result += outputThemeCollection(primitiveCollections.lineHeightTokens);
+      result += outputThemeCollection(primitiveCollections.iconSizeTokens);
+      result += outputThemeCollection(primitiveCollections.screenSizeTokens);
+      result += outputThemeCollection(primitiveCollections.boxShadowTokens);
+    }
+
+    // Semantic tokens in single-mode use actual values (no self-referencing needed)
+    if (Object.values(semanticCollections).some((map) => map.size > 0)) {
+      if (!excludeSemanticColorsFromTheme) {
+        // Include semantic colors → enables Tailwind utility generation
+        result += outputThemeCollection(semanticCollections.colorTokens, true);
+      }
+      // Always include non-color semantic tokens
       result += outputThemeCollection(semanticCollections.spacingTokens);
       result += outputThemeCollection(semanticCollections.fontFamilyTokens);
       result += outputThemeCollection(semanticCollections.fontWeightTokens);
@@ -653,12 +785,12 @@ export function generateThemeDirective(
       result += outputThemeCollection(semanticCollections.boxShadowTokens);
     }
 
-    // When excludeSemanticColorsFromTheme is false, also add standalone semantic colors to @theme
+    // Standalone semantic colors in single-mode
     if (
       !excludeSemanticColorsFromTheme &&
       Object.values(standaloneSemanticCollections).some((map) => map.size > 0)
     ) {
-      result += outputThemeCollection(standaloneSemanticCollections.colorTokens);
+      result += outputThemeCollection(standaloneSemanticCollections.colorTokens, true);
     }
   }
 
@@ -816,10 +948,40 @@ export function buildDynamicThemeTokens(
 
 /**
  * Generate custom @utility rules for semantic color tokens based on their naming patterns.
- * Only generates utilities for colors with 'bg', 'text', or 'border' in their names.
+ *
+ * PURPOSE:
+ * This function is the companion to generateThemeDirective when excludeSemanticColorsFromTheme=true.
+ * It creates targeted @utility rules for semantic colors to avoid Tailwind's default behavior of
+ * generating hundreds of color utility variants (bg-*, text-*, border-*) for every semantic color.
+ *
+ * WORKFLOW:
+ * 1. excludeSemanticColorsFromTheme=true → Semantic colors excluded from @theme
+ * 2. generateThemeDirective puts semantic colors in :root as CSS variables
+ * 3. This function generates specific @utility rules for those colors
+ * 4. Result: Precise utility classes (e.g., bg-action-bg-primary) without utility bloat
+ *
+ * NAME-BASED DETECTION:
+ * Determines utility type by token name pattern (case-insensitive):
+ * - Contains 'bg' or 'background' → background-color utility
+ * - Contains 'text' or 'foreground' → color (text color) utility
+ * - Contains 'border' → border-color utility
+ * - No match → skipped (not suitable for utility generation)
+ *
+ * EXAMPLES:
+ * Input tokens:
+ *   --action-bg-primary: var(--color-blue-500)
+ *   --action-text-primary: var(--color-white)
+ *   --action-border-primary: var(--color-blue-600)
+ *
+ * Generated output:
+ *   @utility action-bg-primary { background-color: var(--action-bg-primary); }
+ *   @utility action-text-primary { color: var(--action-text-primary); }
+ *   @utility action-border-primary { border-color: var(--action-border-primary); }
+ *
+ * Usage in HTML: <button class="action-bg-primary action-text-primary">
  *
  * @param semanticColorTokens - Array of semantic color variable tokens
- * @returns CSS string containing @utility rules
+ * @returns CSS string containing @utility rules, or empty string if no tokens
  */
 export function generateSemanticColorUtilities(semanticColorTokens: VariableToken[]): string {
   if (!semanticColorTokens.length) {

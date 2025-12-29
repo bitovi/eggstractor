@@ -165,10 +165,10 @@ describe('Tailwind v4 Transformer - Semantic Color Utilities', () => {
     expect(rootSection).not.toContain('--action-bg:');
     expect(rootSection).not.toContain('--action-text:');
 
-    // But they SHOULD appear in @theme
+    // But they SHOULD appear in @theme WITH --color- prefix
     const themeSection = result.result.split('@theme')[1];
-    expect(themeSection).toContain('--action-bg:');
-    expect(themeSection).toContain('--action-text:');
+    expect(themeSection).toContain('--color-action-bg:');
+    expect(themeSection).toContain('--color-action-text:');
 
     // But primitives should still be there
     expect(result.result).toContain('--color-base-blue-500:');
@@ -184,13 +184,13 @@ describe('Tailwind v4 Transformer - Semantic Color Utilities', () => {
     expect(rootEnabled).toContain('--action-bg:');
     expect(rootEnabled).toContain('--action-text:');
 
-    // Disabled should have semantic colors in @theme (not :root)
+    // Disabled should have semantic colors in @theme (not :root) WITH --color- prefix
     const rootDisabled = resultDisabled.result.split('@theme')[0];
     const themeDisabled = resultDisabled.result.split('@theme')[1];
     expect(rootDisabled).not.toContain('--action-bg:');
     expect(rootDisabled).not.toContain('--action-text:');
-    expect(themeDisabled).toContain('--action-bg:');
-    expect(themeDisabled).toContain('--action-text:');
+    expect(themeDisabled).toContain('--color-action-bg:');
+    expect(themeDisabled).toContain('--color-action-text:');
 
     // Both should have primitives in :root
     expect(resultEnabled.result).toContain('--color-base-blue-500:');
