@@ -342,7 +342,7 @@ export async function collectPrimitiveVariables(
       // Collect mode information from this collection
       const modes = getModesFromCollection(varCollection);
       for (const mode of modes) {
-        collection.modes.set(mode.modeId, mode.modeName);
+        collection.modes.set(mode.modeId, mode.sanitizedName);
       }
 
       // Get all variables in this collection
