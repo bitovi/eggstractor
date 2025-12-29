@@ -13,7 +13,7 @@ $gray-500: #687879;
 @mixin position-inside-custom {
   width: 6.25rem;
   height: 6.25rem;
-  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
+  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset ((-$border-size-primary)) 0 0 0 $border-primary, inset 0 ((-$border-size-primary)) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
 }
 @mixin position-center-custom {
   width: 6.25rem;
@@ -41,7 +41,7 @@ $gray-500: #687879;
 @mixin position-inside-custom {
   width: 6.25rem;
   height: 6.25rem;
-  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
+  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset ((-$border-size-primary)) 0 0 0 $border-primary, inset 0 ((-$border-size-primary)) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
 }
 @mixin position-center-custom {
   width: 6.25rem;
@@ -217,12 +217,12 @@ $gray-500: #687879;
 @mixin shape-rectangle {
   width: 6.25rem;
   height: 6.25rem;
-  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
+  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset ((-$border-size-primary)) 0 0 0 $border-primary, inset 0 ((-$border-size-primary)) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
 }
 @mixin shape-rounded-rectangle {
   width: 6.25rem;
   height: 6.25rem;
-  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
+  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset ((-$border-size-primary)) 0 0 0 $border-primary, inset 0 ((-$border-size-primary)) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
   border-radius: 1.25rem;
 }
 @mixin shape-ellipse {
@@ -253,12 +253,12 @@ $gray-500: #687879;
 @mixin shape-rectangle {
   width: 6.25rem;
   height: 6.25rem;
-  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
+  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset ((-$border-size-primary)) 0 0 0 $border-primary, inset 0 ((-$border-size-primary)) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
 }
 @mixin shape-rounded-rectangle {
   width: 6.25rem;
   height: 6.25rem;
-  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset (-$border-size-primary) 0 0 0 $border-primary, inset 0 (-$border-size-primary) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
+  box-shadow: inset 0 $border-size-primary 0 0 $border-primary, inset ((-$border-size-primary)) 0 0 0 $border-primary, inset 0 ((-$border-size-primary)) 0 0 $border-primary, inset $border-size-primary 0 0 0 $border-primary;
   border-radius: 1.25rem;
 }
 @mixin shape-ellipse {

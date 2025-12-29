@@ -147,7 +147,7 @@ export async function collectBoundVariable(
     path,
     property,
     name: sanitizeName(variable.name),
-    value: `$${sanitizeName(variable.name)}`,
+    value: sanitizeName(variable.name),
     rawValue: rawValue.toLowerCase(),
     primitiveRef: primitiveVariableName,
     valueType: valueType,
@@ -275,7 +275,7 @@ export async function createPrimitiveVariableToken(
         path: [{ name: variable.name, type: 'FRAME' }],
         property,
         name: sanitizeName(variable.name),
-        value: `$${sanitizeName(variable.name)}`,
+        value: sanitizeName(variable.name),
         rawValue: rawValue.toLowerCase(),
         valueType: rawValue.includes('px') ? 'px' : null,
         modeId: defaultMode.modeId,
@@ -295,7 +295,7 @@ export async function createPrimitiveVariableToken(
         path: [{ name: variable.name, type: 'FRAME' }],
         property,
         name: sanitizeName(variable.name),
-        value: `$${sanitizeName(variable.name)}`,
+        value: sanitizeName(variable.name),
         rawValue: rawValue.toLowerCase(),
         valueType: rawValue.includes('px') ? 'px' : null,
         metadata: {
@@ -502,7 +502,7 @@ export async function collectSemanticColorVariables(
               path: [], // No component path - standalone utility
               property: 'color', // COLOR type variable
               name: sanitizeName(variable.name),
-              value: `$${sanitizeName(variable.name)}`,
+              value: sanitizeName(variable.name),
               rawValue: rawValue.toLowerCase(),
               primitiveRef: primitiveVariableName,
               valueType: null,
@@ -522,7 +522,7 @@ export async function collectSemanticColorVariables(
               path: [], // No component path - standalone utility
               property: 'color', // COLOR type variable
               name: sanitizeName(variable.name),
-              value: `$${sanitizeName(variable.name)}`,
+              value: sanitizeName(variable.name),
               rawValue: rawValue.toLowerCase(),
               primitiveRef: primitiveVariableName,
               valueType: null,

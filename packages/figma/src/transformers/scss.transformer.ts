@@ -38,7 +38,123 @@ const getMixinPropertyAndValue = (
     return { [token.property]: value };
   }
 
-  let baseValue = token.value ? (token.valueType === 'px' ? rem(token.value) : token.value) : '';
+  // For non-gradient tokens, convert variable names to SCSS format with $ prefix
+  // Handle both single variables and compound values like "0.5rem spacing-2"
+  // CSS keywords and common font names that should NOT be treated as variables
+  const cssKeywords = new Set([
+    // CSS Keywords
+    'inherit',
+    'initial',
+    'unset',
+    'auto',
+    'none',
+    'normal',
+    'flex',
+    'grid',
+    'block',
+    'inline',
+    'inline-block',
+    'row',
+    'column',
+    'row-reverse',
+    'column-reverse',
+    'center',
+    'flex-start',
+    'flex-end',
+    'space-between',
+    'space-around',
+    'space-evenly',
+    'baseline',
+    'stretch',
+    'start',
+    'end',
+    'wrap',
+    'nowrap',
+    'wrap-reverse',
+    'bold',
+    'bolder',
+    'lighter',
+    'italic',
+    'oblique',
+    'underline',
+    'overline',
+    'line-through',
+    'uppercase',
+    'lowercase',
+    'capitalize',
+    'left',
+    'right',
+    'justify',
+    'solid',
+    'dashed',
+    'dotted',
+    'double',
+    'hidden',
+    'visible',
+    'collapse',
+    'absolute',
+    'relative',
+    'fixed',
+    'sticky',
+    'static',
+    'fit-content',
+    'min-content',
+    'max-content',
+    'inset',
+    // Common font families
+    'Inter',
+    'Roboto',
+    'Arial',
+    'Helvetica',
+    'sans-serif',
+    'serif',
+    'monospace',
+    'Georgia',
+    'Verdana',
+    'Times',
+    'Courier',
+    'Monaco',
+    'Consolas',
+  ]);
+
+  let baseValue = '';
+  if (token.value) {
+    // Split on whitespace and add $ prefix to variable names
+    baseValue = token.value
+      .split(/\s+/)
+      .map((part) => {
+        // Skip CSS keywords and font names - these are CSS values, not variables
+        if (cssKeywords.has(part)) {
+          return part;
+        }
+        // Handle negative variable references: -variable-name → (-$variable-name)
+        // Check for trailing punctuation (comma, semicolon, etc.)
+        const negativeMatchWithPunct = part.match(/^(-[a-z][a-zA-Z0-9_-]*)([,;)]*)$/);
+        if (negativeMatchWithPunct && negativeMatchWithPunct[1].includes('-', 1)) {
+          const varName = negativeMatchWithPunct[1].substring(1); // Remove leading -
+          const punct = negativeMatchWithPunct[2];
+          return `(-$${varName})${punct}`;
+        }
+        // Check if this part is a positive variable reference
+        // Must start with lowercase letter AND contain at least one hyphen or underscore
+        const positiveMatchWithPunct = part.match(/^([a-z][a-zA-Z0-9_-]*)([,;)]*)$/);
+        if (
+          (positiveMatchWithPunct && positiveMatchWithPunct[1].includes('-')) ||
+          (positiveMatchWithPunct && positiveMatchWithPunct[1].includes('_'))
+        ) {
+          const varName = positiveMatchWithPunct[1];
+          const punct = positiveMatchWithPunct[2];
+          return `$${varName}${punct}`;
+        }
+        return part;
+      })
+      .join(' ');
+
+    // Apply rem conversion if needed
+    if (token.valueType === 'px') {
+      baseValue = rem(baseValue);
+    }
+  }
 
   // Replace color values with variable references if they exist
   // Only do this if the baseValue doesn't already contain variable references (e.g., $variable-name)

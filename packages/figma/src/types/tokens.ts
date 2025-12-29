@@ -25,7 +25,8 @@ export interface BaseToken {
 export interface StandardVariableToken extends BaseToken {
   type: 'variable';
   /**
-   * SASS variable reference e.g. $color-primary.
+   * Variable name reference (transformer-agnostic) e.g. color-primary.
+   * Transformers add their own syntax: CSS → var(--color-primary), SCSS → $color-primary
    */
   value: string;
   /**
@@ -58,7 +59,8 @@ export interface StandardVariableToken extends BaseToken {
 export interface ModeVariableToken extends BaseToken {
   type: 'variable';
   /**
-   * SASS variable reference e.g. $color-primary.
+   * Variable name reference (transformer-agnostic) e.g. color-primary.
+   * Transformers add their own syntax: CSS → var(--color-primary), SCSS → $color-primary
    */
   value: string;
   /**
@@ -101,7 +103,7 @@ export type VariableToken = StandardVariableToken | ModeVariableToken;
 
 export interface StyleToken extends BaseToken {
   type: 'style';
-  /** CSS with variable references (e.g., background: $color-primary). */
+  /** CSS-like value with variable references (e.g., background: color-primary or padding: 0.5rem spacing-2). */
   value: string | null;
   /** CSS with actual values (e.g., background: #FF0000). */
   rawValue: string | null;

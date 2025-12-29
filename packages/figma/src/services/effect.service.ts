@@ -39,7 +39,7 @@ function createEffectStyleToken(effectStyle: EffectStyle): VariableToken | null 
       path: [{ name: effectStyle.name, type: 'FRAME' }],
       property: 'box-shadow',
       name: sanitizeName(effectStyle.name),
-      value: `$${sanitizeName(effectStyle.name)}`,
+      value: sanitizeName(effectStyle.name),
       rawValue,
       valueType: null,
       metadata: {

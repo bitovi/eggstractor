@@ -12,15 +12,71 @@ const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string>
     return { [token.property]: '' };
   }
 
-  // Convert ALL SASS variable references ($variable) to CSS custom properties (var(--variable))
-  // This handles both single variables and compound values like "0.5rem $spacing-2"
-  baseValue = baseValue.replace(/\$([a-zA-Z0-9_-]+)/g, 'var(--$1)');
+  // Convert variable references to CSS custom properties (var(--variable))
+  // Property-aware approach: different properties have different patterns
+
+  // For border property, format is: <width> <style> <color>
+  // The middle value (style) is always a CSS keyword like 'solid', 'dashed', etc.
+  if (token.property === 'border') {
+    const parts = baseValue.split(/\s+/);
+    if (parts.length === 3) {
+      const [width, style, color] = parts;
+      // Width and color might be variables, style is always a keyword
+      const processedWidth = isVariableReference(width) ? `var(--${width})` : width;
+      const processedColor = isVariableReference(color) ? `var(--${color})` : color;
+      baseValue = `${processedWidth} ${style} ${processedColor}`;
+    }
+  } else {
+    // For other properties, check each part individually
+    baseValue = baseValue
+      .split(/\s+/)
+      .map((part) => (isVariableReference(part) ? `var(--${part})` : part))
+      .join(' ');
+  }
 
   const processedValue = token.valueType === 'px' ? rem(baseValue) : baseValue;
 
   return {
     [token.property]: processedValue,
   };
+};
+
+/**
+ * Determines if a string token is a variable reference vs a CSS value/keyword
+ * Variables: alphanumeric with hyphens/underscores, starts with letter, contains hyphen
+ * Not variables: CSS keywords, literals with units, numbers, etc.
+ */
+const isVariableReference = (part: string): boolean => {
+  // CSS keywords that should never be treated as variables
+  const cssKeywords = new Set([
+    'inherit',
+    'initial',
+    'unset',
+    'auto',
+    'none',
+    'normal',
+    'solid',
+    'dashed',
+    'dotted',
+    'double',
+    'groove',
+    'ridge',
+    'inset',
+    'outset',
+    'hidden',
+    'visible',
+    'collapse',
+    'transparent',
+    'currentColor',
+  ]);
+
+  if (cssKeywords.has(part)) {
+    return false;
+  }
+
+  // Must look like a variable name: starts with letter, alphanumeric with hyphens/underscores
+  // Must contain at least one hyphen or underscore (to distinguish from single-word values)
+  return /^[a-zA-Z][a-zA-Z0-9_-]*$/.test(part) && /[-_]/.test(part);
 };
 
 /**
