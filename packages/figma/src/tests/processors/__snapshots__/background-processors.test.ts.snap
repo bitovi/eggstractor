@@ -2,15 +2,15 @@
 
 exports[`Background Processors > should process background solid correctly > solid styles 1`] = `
 {
-  "alpha": "background: $teal-800-50;",
-  "solid": "background: $brand-primary;",
+  "alpha": "background: var(--teal-800-50);",
+  "solid": "background: var(--brand-primary);",
 }
 `;
 
 exports[`Background Processors > should process background solid correctly > solid styles 2`] = `
 {
-  "alpha": "background: $teal-800-50;",
-  "solid": "background: $brand-primary;",
+  "alpha": "background: var(--teal-800-50);",
+  "solid": "background: var(--brand-primary);",
 }
 `;
 

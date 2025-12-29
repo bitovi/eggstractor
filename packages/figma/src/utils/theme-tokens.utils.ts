@@ -132,6 +132,120 @@ function categorizeTokenProperty(token: VariableToken): string {
 }
 
 /**
+ * Generate CSS variables with multi-mode support (without category prefixes or @theme directive)
+ *
+ * This function produces CSS variables for plain CSS usage:
+ * 1. :root - Contains all tokens with default mode values
+ * 2. [data-theme='modeName'] - Contains mode-specific overrides for theming
+ *
+ * Unlike generateThemeDirective, this function:
+ * - Does NOT add category prefixes (--color-, --spacing-, etc.)
+ * - Does NOT generate @theme directive
+ * - Uses simple variable names (--primary-color instead of --color-primary)
+ *
+ * @param collection - Token collection with primitives and semantics
+ * @returns CSS string with :root and [data-theme] blocks
+ */
+export function generateCssVariablesWithModes(collection: TokenCollection): string {
+  const variableTokens = collection.tokens.filter((token) => token.type === 'variable');
+
+  // Separate primitives and semantics
+  const primitiveTokens = variableTokens.filter(
+    (token) => token.metadata?.variableTokenType === 'primitive',
+  );
+  const semanticTokens = variableTokens.filter(
+    (token) => token.metadata?.variableTokenType === 'semantic',
+  );
+
+  let result = '';
+
+  // Helper to convert primitive name to simple CSS variable reference (no category prefix)
+  const convertToSimpleVarReference = (primitiveName: string): string => {
+    // For plain CSS, just reference the variable as-is without adding or removing prefixes
+    // The primitive token name is already clean (e.g., "color-primary", "spacing-base")
+    return `var(--${primitiveName})`;
+  };
+
+  // Helper to output variables without category prefixes
+  const outputSimpleVariables = (tokens: VariableToken[]) => {
+    const variables = new Map<string, string>();
+
+    for (const token of tokens) {
+      const varName = `--${token.name}`;
+      let value: string;
+
+      if (token.primitiveRef) {
+        // Semantic token - reference the primitive
+        value = convertToSimpleVarReference(token.primitiveRef);
+      } else {
+        // Primitive token - use raw value
+        value = token.rawValue;
+      }
+
+      variables.set(varName, value);
+    }
+
+    // Sort and output
+    const sorted = Array.from(variables.entries()).sort(([a], [b]) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
+    );
+
+    let output = '';
+    for (const [key, value] of sorted) {
+      output += `  ${key}: ${value};\n`;
+    }
+    return output;
+  };
+
+  // Output :root with all tokens (default mode values)
+  if (variableTokens.length > 0) {
+    result += ':root {\n';
+    result += outputSimpleVariables(primitiveTokens);
+    result += outputSimpleVariables(semanticTokens);
+    result += '}\n\n';
+  }
+
+  // Extract mode information
+  const modesMap = collection.modes || extractModesFromTokens(variableTokens);
+  const filteredModesMap = filterTypographyOnlyModes(modesMap, variableTokens);
+  const modes = Array.from(filteredModesMap.entries());
+
+  // If we have multiple modes, output mode-specific blocks
+  if (modes.length > 1) {
+    for (let i = 0; i < modes.length; i++) {
+      const [modeId, modeName] = modes[i];
+      const modeTokens: VariableToken[] = [];
+
+      // Collect tokens with mode-specific values
+      for (const token of variableTokens) {
+        if (isModeVariableToken(token) && token.modeValues[modeId]) {
+          // For semantic tokens, get mode-specific primitive reference if available
+          const modePrimitiveRef =
+            token.modePrimitiveRefs && token.modePrimitiveRefs[modeId]
+              ? token.modePrimitiveRefs[modeId]
+              : token.primitiveRef;
+
+          modeTokens.push({
+            ...token,
+            rawValue: token.modeValues[modeId],
+            primitiveRef: modePrimitiveRef,
+          });
+        }
+      }
+
+      if (modeTokens.length > 0) {
+        result += `/* ${modeName} mode overrides */\n`;
+        result += `[data-theme='${modeName}'] {\n`;
+        result += outputSimpleVariables(modeTokens);
+        result += '}\n\n';
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
  * Generate Tailwind 4 CSS with @theme directive from design tokens
  *
  * This function produces three main CSS blocks:
