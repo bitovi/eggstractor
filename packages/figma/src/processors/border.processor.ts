@@ -144,7 +144,8 @@ export const borderProcessors: StyleProcessor[] = [
       // The proper solution requires restructuring the entire token pipeline to use
       // structured value types (TokenValuePart union types) instead of string concatenation.
       // This would eliminate the need for both `value` and the pre-formatted fields below.
-      // See TECHNICAL-DEBT.md for full scope. Estimated effort: 3-4 weeks.
+      // See: https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+EGG-132+Border+Token+Pipeline
+      // Estimated effort: 3-4 weeks.
       //
       // Pre-format values for transformers to avoid string parsing
       // Format: <width> <style> <color> where style is always a CSS keyword

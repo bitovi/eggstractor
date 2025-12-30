@@ -20,7 +20,8 @@ const getSCSSVariableName = (variableName: string): string => {
  * @deprecated TECHNICAL DEBT: String parsing with keyword lists is fragile and unmaintainable.
  * This function maintains a large Set of CSS keywords to distinguish them from variable names.
  * The keyword list is incomplete and requires manual updates. The proper solution requires
- * restructuring the token pipeline to use structured value types. See TECHNICAL-DEBT.md
+ * restructuring the token pipeline to use structured value types. See:
+ * https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+EGG-132+Border+Token+Pipeline
  *
  * Current workaround: Processors can provide pre-formatted scssValue to bypass parsing.
  * Only border processor currently does this.

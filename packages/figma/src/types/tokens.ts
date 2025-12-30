@@ -106,7 +106,8 @@ export interface StyleToken extends BaseToken {
   /**
    * CSS-like value with variable references (e.g., background: color-primary or padding: 0.5rem spacing-2).
    *
-   * @deprecated TECHNICAL DEBT: String concatenation loses type information. See TECHNICAL-DEBT.md
+   * @deprecated TECHNICAL DEBT: String concatenation loses type information. See:
+   * https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+EGG-132+Border+Token+Pipeline
    * This field mixes variable references and CSS values in a single string, requiring transformers
    * to parse and guess intent. The proper solution involves restructuring the token pipeline to use
    * structured value types (TokenValuePart union types) throughout. Estimated effort: 3-4 weeks.
@@ -122,7 +123,8 @@ export interface StyleToken extends BaseToken {
    *
    * @deprecated TEMPORARY WORKAROUND: This is a band-aid solution to fix immediate bugs (EGG-132).
    * Only border processor currently uses this. This field should be removed once the token pipeline
-   * is restructured to use TokenValuePart types. See TECHNICAL-DEBT.md for full scope.
+   * is restructured to use TokenValuePart types. See:
+   * https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+EGG-132+Border+Token+Pipeline
    */
   cssValue?: string;
   /**
@@ -133,7 +135,8 @@ export interface StyleToken extends BaseToken {
    *
    * @deprecated TEMPORARY WORKAROUND: This is a band-aid solution to fix immediate bugs (EGG-132).
    * Only border processor currently uses this. This field should be removed once the token pipeline
-   * is restructured to use TokenValuePart types. See TECHNICAL-DEBT.md for full scope.
+   * is restructured to use TokenValuePart types. See:
+   * https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+EGG-132+Border+Token+Pipeline
    */
   scssValue?: string;
   /**
