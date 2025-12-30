@@ -15,12 +15,14 @@ import styles from './Export.module.scss';
 
 export const Export: FC = () => {
   const {
+    provider,
     format,
     useCombinatorialParsing,
     branchName: initialBranchName,
-    githubToken,
+    authToken,
     repoPath,
     filePath,
+    instanceUrl,
     generateSemanticColorUtilities,
     outputMode,
   } = useConfig();
@@ -73,8 +75,10 @@ export const Export: FC = () => {
     setPRButtonDisabled(true);
     setCreatingPR();
 
+    const providerName = provider === 'gitlab' ? 'GitLab' : 'GitHub';
+
     const checks = [
-      { value: githubToken, warning: 'Please add a github token' },
+      { value: authToken, warning: `Please add a ${providerName} token` },
       { value: repoPath, warning: 'Please add path to the repository' },
       {
         value: filePath,
@@ -97,7 +101,9 @@ export const Export: FC = () => {
 
     messageMainThread({
       type: 'create-pr',
-      githubToken,
+      provider,
+      authToken,
+      instanceUrl,
       repoPath,
       filePath,
       branchName,
@@ -178,7 +184,13 @@ export const Export: FC = () => {
                     disabled={prButtonDisabled || prStatus.state === 'creating-pr'}
                     variant="primary"
                   >
-                    {prStatus.state === 'creating-pr' ? <Spinner /> : 'Create Pull Request'}
+                    {prStatus.state === 'creating-pr' ? (
+                      <Spinner />
+                    ) : provider === 'gitlab' ? (
+                      'Create Merge Request'
+                    ) : (
+                      'Create Pull Request'
+                    )}
                   </Button>
                 </div>
               </>
@@ -210,7 +222,9 @@ export const Export: FC = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span>Pull request created!</span>
+                <span>
+                  {provider === 'gitlab' ? 'Merge request created!' : 'Pull request created!'}
+                </span>
               </div>
               <Button
                 variant="primary"
@@ -219,7 +233,7 @@ export const Export: FC = () => {
                 }
                 className={styles['view-button']}
               >
-                Open in Github →
+                {provider === 'gitlab' ? 'Open in GitLab →' : 'Open in GitHub →'}
               </Button>
             </div>
           ) : null}
@@ -230,7 +244,10 @@ export const Export: FC = () => {
           <div className={styles['card-wrapper']}>
             <StaticCard>
               <p>Generating styles can take several minutes, depending on the size of the file.</p>
-              <p>To publish to Github, connect your repo on the "Setup" tab.</p>
+              <p>
+                To publish to {provider === 'gitlab' ? 'GitLab' : 'GitHub'}, connect your repo on
+                the "Setup" tab.
+              </p>
             </StaticCard>
           </div>
         ) : (
