@@ -188,10 +188,10 @@ const getMixinPropertyAndValue = (
     });
   }
 
-  // in SCSS negated variables are a parsing warning unless parenthesized
-  const processedValue = baseValue
-    .replace(/-\$(\w|-)+/g, (match) => `(${match})`)
-    .replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
+  // Fix SCSS variables that start with invalid characters by prefixing with 'v'
+  // NOTE: Negative variables are already wrapped in parens by the logic above (lines 151-155)
+  // so we don't need to wrap them again here
+  const processedValue = baseValue.replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
   return { [token.property]: processedValue };
 };
 
