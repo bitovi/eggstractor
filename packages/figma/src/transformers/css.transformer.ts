@@ -11,7 +11,7 @@ import { Transformer } from './types';
  * This function tries to guess which parts of a compound value (e.g., "0.5rem solid color-primary")
  * are variables vs CSS keywords. The proper solution requires restructuring the entire token pipeline
  * to use structured value types throughout. See:
- * https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+EGG-132+Border+Token+Pipeline
+ * https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+Token+Pipeline+ROUGH+DRAFT
  *
  * Current workaround: Processors can provide pre-formatted cssValue to bypass parsing.
  * Only border processor currently does this.
@@ -36,7 +36,7 @@ const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string>
   // CSS keywords as variables (e.g., "solid" → "var(--solid)"). Properties with
   // compound values should use the cssValue workaround (like border processor does)
   // or wait for the full pipeline refactor to structured types. See:
-  // https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+EGG-132+Border+Token+Pipeline
+  // https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+Token+Pipeline+ROUGH+DRAFT
   baseValue = baseValue
     .split(/\s+/)
     .map((part) => (isVariableReference(part) ? `var(--${part})` : part))
