@@ -4,7 +4,25 @@ import { createNamingContext, rem, generateCssVariablesWithModes } from '../util
 import { convertVariantGroupBy } from './variants';
 import { Transformer } from './types';
 
+/**
+ * Converts StyleToken to CSS property/value pair.
+ *
+ * @deprecated TECHNICAL DEBT: String parsing is fragile and loses type information.
+ * This function tries to guess which parts of a compound value (e.g., "0.5rem solid color-primary")
+ * are variables vs CSS keywords. The proper solution requires restructuring the entire token pipeline
+ * to use structured value types throughout. See TECHNICAL-DEBT.md
+ *
+ * Current workaround: Processors can provide pre-formatted cssValue to bypass parsing.
+ * Only border processor currently does this.
+ */
 const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {
+  // Use pre-formatted cssValue if available (eliminates parsing logic)
+  if (token.cssValue) {
+    const processedValue = token.valueType === 'px' ? rem(token.cssValue) : token.cssValue;
+    return { [token.property]: processedValue };
+  }
+
+  // Fall back to parsing token.value for backward compatibility
   // Use token.value (which contains variable references) instead of rawValue
   // This ensures semantic variables are referenced, not their resolved values
   let baseValue = token.value || token.rawValue;
@@ -13,26 +31,14 @@ const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string>
   }
 
   // Convert variable references to CSS custom properties (var(--variable))
-  // Property-aware approach: different properties have different patterns
-
-  // For border property, format is: <width> <style> <color>
-  // The middle value (style) is always a CSS keyword like 'solid', 'dashed', etc.
-  if (token.property === 'border') {
-    const parts = baseValue.split(/\s+/);
-    if (parts.length === 3) {
-      const [width, style, color] = parts;
-      // Width and color might be variables, style is always a keyword
-      const processedWidth = isVariableReference(width) ? `var(--${width})` : width;
-      const processedColor = isVariableReference(color) ? `var(--${color})` : color;
-      baseValue = `${processedWidth} ${style} ${processedColor}`;
-    }
-  } else {
-    // For other properties, check each part individually
-    baseValue = baseValue
-      .split(/\s+/)
-      .map((part) => (isVariableReference(part) ? `var(--${part})` : part))
-      .join(' ');
-  }
+  // TODO(TECHNICAL-DEBT): This generic parsing is brittle and will incorrectly wrap
+  // CSS keywords as variables (e.g., "solid" → "var(--solid)"). Properties with
+  // compound values should use the cssValue workaround (like border processor does)
+  // or wait for the full pipeline refactor to structured types. See TECHNICAL-DEBT.md
+  baseValue = baseValue
+    .split(/\s+/)
+    .map((part) => (isVariableReference(part) ? `var(--${part})` : part))
+    .join(' ');
 
   const processedValue = token.valueType === 'px' ? rem(baseValue) : baseValue;
 

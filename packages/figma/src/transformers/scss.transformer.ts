@@ -14,10 +14,27 @@ const getSCSSVariableName = (variableName: string): string => {
   return `$${scssVariableName}`;
 };
 
+/**
+ * Converts StyleToken to SCSS property/value pair.
+ *
+ * @deprecated TECHNICAL DEBT: String parsing with keyword lists is fragile and unmaintainable.
+ * This function maintains a large Set of CSS keywords to distinguish them from variable names.
+ * The keyword list is incomplete and requires manual updates. The proper solution requires
+ * restructuring the token pipeline to use structured value types. See TECHNICAL-DEBT.md
+ *
+ * Current workaround: Processors can provide pre-formatted scssValue to bypass parsing.
+ * Only border processor currently does this.
+ */
 const getMixinPropertyAndValue = (
   token: StyleToken,
   primitiveVariables: Map<string, string>,
 ): Record<string, string> => {
+  // Use pre-formatted scssValue if available (eliminates parsing logic)
+  if (token.scssValue) {
+    const processedValue = token.valueType === 'px' ? rem(token.scssValue) : token.scssValue;
+    return { [token.property]: processedValue };
+  }
+
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
     // Only use CSS variables if the token has associated variables
     if (token.variables && token.variables.length > 0) {

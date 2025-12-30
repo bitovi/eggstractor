@@ -103,10 +103,39 @@ export type VariableToken = StandardVariableToken | ModeVariableToken;
 
 export interface StyleToken extends BaseToken {
   type: 'style';
-  /** CSS-like value with variable references (e.g., background: color-primary or padding: 0.5rem spacing-2). */
+  /**
+   * CSS-like value with variable references (e.g., background: color-primary or padding: 0.5rem spacing-2).
+   *
+   * @deprecated TECHNICAL DEBT: String concatenation loses type information. See TECHNICAL-DEBT.md
+   * This field mixes variable references and CSS values in a single string, requiring transformers
+   * to parse and guess intent. The proper solution involves restructuring the token pipeline to use
+   * structured value types (TokenValuePart union types) throughout. Estimated effort: 3-4 weeks.
+   */
   value: string | null;
   /** CSS with actual values (e.g., background: #FF0000). */
   rawValue: string | null;
+  /**
+   * Pre-formatted CSS value (optional). When provided by processors, transformers can use this directly
+   * instead of parsing `value`. For compound values like borders, this eliminates the need to guess
+   * which parts are variables vs CSS keywords.
+   * Example: "0.0625rem solid var(--icon-text-default)"
+   *
+   * @deprecated TEMPORARY WORKAROUND: This is a band-aid solution to fix immediate bugs (EGG-132).
+   * Only border processor currently uses this. This field should be removed once the token pipeline
+   * is restructured to use TokenValuePart types. See TECHNICAL-DEBT.md for full scope.
+   */
+  cssValue?: string;
+  /**
+   * Pre-formatted SCSS value (optional). When provided by processors, transformers can use this directly
+   * instead of parsing `value`. For compound values like borders, this eliminates the need to guess
+   * which parts are variables vs CSS keywords.
+   * Example: "$spacing-1 solid $color-primary"
+   *
+   * @deprecated TEMPORARY WORKAROUND: This is a band-aid solution to fix immediate bugs (EGG-132).
+   * Only border processor currently uses this. This field should be removed once the token pipeline
+   * is restructured to use TokenValuePart types. See TECHNICAL-DEBT.md for full scope.
+   */
+  scssValue?: string;
   /**
    * Array of associated VariableToken objects.
    *
@@ -172,10 +201,21 @@ export interface TokenCollection {
   modes?: Map<string, string>;
 }
 
+// px, %, ref, rbg etc
 export interface ProcessedValue {
   value: string | null; // Value with variable references
   rawValue: string | null; // Value with actual values
   valueType?: string | null;
+  /**
+   * Pre-formatted CSS value (optional) - avoids parsing in transformers.
+   * @deprecated TEMPORARY WORKAROUND - see StyleToken.cssValue deprecation note
+   */
+  cssValue?: string;
+  /**
+   * Pre-formatted SCSS value (optional) - avoids parsing in transformers.
+   * @deprecated TEMPORARY WORKAROUND - see StyleToken.scssValue deprecation note
+   */
+  scssValue?: string;
   warnings?: string[];
   errors?: string[];
 }
