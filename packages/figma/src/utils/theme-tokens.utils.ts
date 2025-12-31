@@ -246,6 +246,178 @@ export function generateCssVariablesWithModes(collection: TokenCollection): stri
 }
 
 /**
+ * Generate SCSS with CSS custom properties for multi-mode support (hybrid approach)
+ *
+ * This generates:
+ * 1. CSS custom properties in :root and [data-theme] blocks for runtime theming
+ * 2. SCSS variables that reference the CSS custom properties for SCSS compatibility
+ *
+ * Example output:
+ * ```scss
+ * // CSS Custom Properties (runtime theming)
+ * :root {
+ *   --color-primary: #0080ff;
+ *   --spacing-base: 1rem;
+ * }
+ *
+ * [data-theme='dark'] {
+ *   --color-primary: #66b3ff;
+ * }
+ *
+ * // SCSS Variables (for SCSS compatibility)
+ * $color-primary: var(--color-primary);
+ * $spacing-base: var(--spacing-base);
+ * $brand-color: var(--color-primary); // Semantic
+ * ```
+ *
+ * @param collection - Token collection with primitives and semantics
+ * @returns SCSS string with CSS custom properties and SCSS variables
+ */
+export function generateScssVariablesWithModes(collection: TokenCollection): string {
+  const variableTokens = collection.tokens.filter(
+    (token) => token.type === 'variable',
+  ) as VariableToken[];
+
+  if (variableTokens.length === 0) {
+    return '';
+  }
+
+  const primitiveTokens = variableTokens.filter(
+    (t) => t.metadata?.variableTokenType === 'primitive',
+  );
+  const semanticTokens = variableTokens.filter((t) => t.metadata?.variableTokenType === 'semantic');
+
+  let result = '';
+
+  // Helper to convert primitive name to simple CSS variable reference
+  const convertToSimpleVarReference = (primitiveName: string): string => {
+    return `var(--${primitiveName})`;
+  };
+
+  // Helper to get SCSS variable name with $ prefix
+  const getScssVariableName = (variableName: string): string => {
+    let scssVariableName = variableName;
+    // If the name starts with a non-letter, prefix with 'v'
+    if (!/^[a-zA-Z]/.test(scssVariableName)) {
+      scssVariableName = 'v' + scssVariableName;
+    }
+    return `$${scssVariableName}`;
+  };
+
+  // Helper to output CSS custom properties
+  const outputCssVariables = (tokens: VariableToken[]) => {
+    const variables = new Map<string, string>();
+
+    for (const token of tokens) {
+      const varName = `--${token.name}`;
+      let value: string;
+
+      if (token.primitiveRef) {
+        // Semantic token - reference the primitive
+        value = convertToSimpleVarReference(token.primitiveRef);
+      } else {
+        // Primitive token - use raw value
+        value = token.rawValue;
+      }
+
+      variables.set(varName, value);
+    }
+
+    // Sort and output
+    const sorted = Array.from(variables.entries()).sort(([a], [b]) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
+    );
+
+    let output = '';
+    for (const [key, value] of sorted) {
+      output += `  ${key}: ${value};\n`;
+    }
+    return output;
+  };
+
+  // Helper to output SCSS variables that reference CSS custom properties
+  const outputScssVariables = (tokens: VariableToken[], header: string) => {
+    if (tokens.length === 0) return '';
+
+    const variables = new Map<string, string>();
+
+    for (const token of tokens) {
+      const scssVarName = getScssVariableName(token.name);
+      const cssVarReference = `var(--${token.name})`;
+      variables.set(scssVarName, cssVarReference);
+    }
+
+    // Sort and output
+    const sorted = Array.from(variables.entries()).sort(([a], [b]) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
+    );
+
+    let output = `${header}\n`;
+    for (const [key, value] of sorted) {
+      output += `${key}: ${value};\n`;
+    }
+    return output;
+  };
+
+  // Part 1: CSS Custom Properties for runtime theming
+  result += '// CSS Custom Properties (runtime theming)\n';
+
+  // Output :root with all tokens (default mode values)
+  if (variableTokens.length > 0) {
+    result += ':root {\n';
+    result += outputCssVariables(primitiveTokens);
+    result += outputCssVariables(semanticTokens);
+    result += '}\n\n';
+  }
+
+  // Extract mode information
+  const modesMap = collection.modes || extractModesFromTokens(variableTokens);
+  const filteredModesMap = filterTypographyOnlyModes(modesMap, variableTokens);
+  const modes = Array.from(filteredModesMap.entries());
+
+  // If we have multiple modes, output mode-specific blocks
+  if (modes.length > 1) {
+    for (let i = 0; i < modes.length; i++) {
+      const [modeId, modeName] = modes[i];
+      const modeTokens: VariableToken[] = [];
+
+      // Collect tokens with mode-specific values
+      for (const token of variableTokens) {
+        if (isModeVariableToken(token) && token.modeValues[modeId]) {
+          // For semantic tokens, get mode-specific primitive reference if available
+          const modePrimitiveRef =
+            token.modePrimitiveRefs && token.modePrimitiveRefs[modeId]
+              ? token.modePrimitiveRefs[modeId]
+              : token.primitiveRef;
+
+          modeTokens.push({
+            ...token,
+            rawValue: token.modeValues[modeId],
+            primitiveRef: modePrimitiveRef,
+          });
+        }
+      }
+
+      if (modeTokens.length > 0) {
+        result += `/* ${modeName} mode overrides */\n`;
+        result += `[data-theme='${modeName}'] {\n`;
+        result += outputCssVariables(modeTokens);
+        result += '}\n\n';
+      }
+    }
+  }
+
+  // Part 2: SCSS Variables for SCSS compatibility
+  result += outputScssVariables(primitiveTokens, '// Primitive SCSS Variables');
+  if (primitiveTokens.length > 0 && semanticTokens.length > 0) {
+    result += '\n';
+  }
+  result += outputScssVariables(semanticTokens, '// Semantic SCSS Variables');
+
+  return result;
+}
+
+/**
  * Generate Tailwind 4 CSS with @theme directive from design tokens
  *
  * This function produces three main CSS blocks:

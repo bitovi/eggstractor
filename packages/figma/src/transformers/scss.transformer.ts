@@ -1,5 +1,5 @@
 import { TokenCollection, StyleToken, TransformerResult } from '../types';
-import { sanitizeName, rem, createNamingContext } from '../utils';
+import { sanitizeName, rem, createNamingContext, generateScssVariablesWithModes } from '../utils';
 import { deduplicateMessages, groupBy } from './utils';
 import { convertVariantGroupBy } from './variants';
 import type { Transformer } from './types';
@@ -14,10 +14,28 @@ const getSCSSVariableName = (variableName: string): string => {
   return `$${scssVariableName}`;
 };
 
+/**
+ * Converts StyleToken to SCSS property/value pair.
+ *
+ * @deprecated TECHNICAL DEBT: String parsing with keyword lists is fragile and unmaintainable.
+ * This function maintains a large Set of CSS keywords to distinguish them from variable names.
+ * The keyword list is incomplete and requires manual updates. The proper solution requires
+ * restructuring the token pipeline to use structured value types. See:
+ * https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+Token+Pipeline+ROUGH+DRAFT
+ *
+ * Current workaround: Processors can provide pre-formatted scssValue to bypass parsing.
+ * Only border processor currently does this.
+ */
 const getMixinPropertyAndValue = (
   token: StyleToken,
   primitiveVariables: Map<string, string>,
 ): Record<string, string> => {
+  // Use pre-formatted scssValue if available (eliminates parsing logic)
+  if (token.scssValue) {
+    const processedValue = token.valueType === 'px' ? rem(token.scssValue) : token.scssValue;
+    return { [token.property]: processedValue };
+  }
+
   if (token.property === 'fills' && token?.rawValue?.includes('gradient')) {
     // Only use CSS variables if the token has associated variables
     if (token.variables && token.variables.length > 0) {
@@ -38,7 +56,123 @@ const getMixinPropertyAndValue = (
     return { [token.property]: value };
   }
 
-  let baseValue = token.value ? (token.valueType === 'px' ? rem(token.value) : token.value) : '';
+  // For non-gradient tokens, convert variable names to SCSS format with $ prefix
+  // Handle both single variables and compound values like "0.5rem spacing-2"
+  // CSS keywords and common font names that should NOT be treated as variables
+  const cssKeywords = new Set([
+    // CSS Keywords
+    'inherit',
+    'initial',
+    'unset',
+    'auto',
+    'none',
+    'normal',
+    'flex',
+    'grid',
+    'block',
+    'inline',
+    'inline-block',
+    'row',
+    'column',
+    'row-reverse',
+    'column-reverse',
+    'center',
+    'flex-start',
+    'flex-end',
+    'space-between',
+    'space-around',
+    'space-evenly',
+    'baseline',
+    'stretch',
+    'start',
+    'end',
+    'wrap',
+    'nowrap',
+    'wrap-reverse',
+    'bold',
+    'bolder',
+    'lighter',
+    'italic',
+    'oblique',
+    'underline',
+    'overline',
+    'line-through',
+    'uppercase',
+    'lowercase',
+    'capitalize',
+    'left',
+    'right',
+    'justify',
+    'solid',
+    'dashed',
+    'dotted',
+    'double',
+    'hidden',
+    'visible',
+    'collapse',
+    'absolute',
+    'relative',
+    'fixed',
+    'sticky',
+    'static',
+    'fit-content',
+    'min-content',
+    'max-content',
+    'inset',
+    // Common font families
+    'Inter',
+    'Roboto',
+    'Arial',
+    'Helvetica',
+    'sans-serif',
+    'serif',
+    'monospace',
+    'Georgia',
+    'Verdana',
+    'Times',
+    'Courier',
+    'Monaco',
+    'Consolas',
+  ]);
+
+  let baseValue = '';
+  if (token.value) {
+    // Split on whitespace and add $ prefix to variable names
+    baseValue = token.value
+      .split(/\s+/)
+      .map((part) => {
+        // Skip CSS keywords and font names - these are CSS values, not variables
+        if (cssKeywords.has(part)) {
+          return part;
+        }
+        // Handle negative variable references: -variable-name → (-$variable-name)
+        // Check for trailing punctuation (comma, semicolon, etc.)
+        const negativeMatchWithPunct = part.match(/^(-[a-z][a-zA-Z0-9_-]*)([,;)]*)$/);
+        if (negativeMatchWithPunct && negativeMatchWithPunct[1].includes('-', 1)) {
+          const varName = negativeMatchWithPunct[1].substring(1); // Remove leading -
+          const punct = negativeMatchWithPunct[2];
+          return `(-$${varName})${punct}`;
+        }
+        // Check if this part is a positive variable reference
+        // Must start with lowercase letter AND contain at least one hyphen or underscore
+        const positiveMatchWithPunct = part.match(/^([a-z][a-zA-Z0-9_-]*)([,;)]*)$/);
+        if (
+          (positiveMatchWithPunct && positiveMatchWithPunct[1].includes('-')) ||
+          (positiveMatchWithPunct && positiveMatchWithPunct[1].includes('_'))
+        ) {
+          const varName = positiveMatchWithPunct[1];
+          const punct = positiveMatchWithPunct[2];
+          return `$${varName}${punct}`;
+        }
+        return part;
+      })
+      .join(' ');
+
+    // Apply rem conversion if needed
+    if (token.valueType === 'px') {
+      baseValue = rem(baseValue);
+    }
+  }
 
   // Replace color values with variable references if they exist
   // Only do this if the baseValue doesn't already contain variable references (e.g., $variable-name)
@@ -55,10 +189,10 @@ const getMixinPropertyAndValue = (
     });
   }
 
-  // in SCSS negated variables are a parsing warning unless parenthesized
-  const processedValue = baseValue
-    .replace(/-\$(\w|-)+/g, (match) => `(${match})`)
-    .replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
+  // Fix SCSS variables that start with invalid characters by prefixing with 'v'
+  // NOTE: Negative variables are already wrapped in parens by the logic above (lines 151-155)
+  // so we don't need to wrap them again here
+  const processedValue = baseValue.replace(/\$(?!-)([^a-zA-Z])/g, (_, char) => `$v${char}`);
   return { [token.property]: processedValue };
 };
 
@@ -87,58 +221,87 @@ export const transformToScss: Transformer = (
     tokens.tokens.filter((token): token is StyleToken => token.type === 'style'),
   );
 
-  // Separate primitive and semantic variables
-  const primitiveVariables = new Map<string, string>();
-  const semanticVariables = new Map<string, string>();
+  // Check if we have multi-mode tokens
+  const variableTokens = tokens.tokens.filter((token) => token.type === 'variable');
+  const hasMultiMode = variableTokens.some(
+    (token) => 'modeId' in token && 'modes' in token && 'modeValues' in token,
+  );
 
-  tokens.tokens.forEach((token) => {
-    if (token.type === 'variable') {
-      const sanitizedName = sanitizeName(token.name);
+  // If we have multi-mode tokens, use the new hybrid CSS custom properties + SCSS variables approach
+  if (hasMultiMode) {
+    output += generateScssVariablesWithModes(tokens);
+    if (output && !output.endsWith('\n\n')) {
+      output += '\n';
+    }
+  } else {
+    // Single-mode: use traditional SCSS variables only
+    // Separate primitive and semantic variables
+    const primitiveVariables = new Map<string, string>();
+    const semanticVariables = new Map<string, string>();
 
-      if (token.metadata?.variableTokenType === 'primitive') {
-        const rawValue = token.rawValue;
-        if (rawValue) {
-          const value = token.valueType === 'px' ? rem(rawValue) : rawValue;
-          primitiveVariables.set(sanitizedName, value);
+    tokens.tokens.forEach((token) => {
+      if (token.type === 'variable') {
+        const sanitizedName = sanitizeName(token.name);
+
+        if (token.metadata?.variableTokenType === 'primitive') {
+          const rawValue = token.rawValue;
+          if (rawValue) {
+            const value = token.valueType === 'px' ? rem(rawValue) : rawValue;
+            primitiveVariables.set(sanitizedName, value);
+          }
+        } else if (token.metadata?.variableTokenType === 'semantic' && token.primitiveRef) {
+          // For semantic variables, reference the primitive variable
+          const primitiveRefName = sanitizeName(token.primitiveRef);
+          semanticVariables.set(sanitizedName, getSCSSVariableName(primitiveRefName));
         }
-      } else if (token.metadata?.variableTokenType === 'semantic' && token.primitiveRef) {
-        // For semantic variables, reference the primitive variable
-        const primitiveRefName = sanitizeName(token.primitiveRef);
-        semanticVariables.set(sanitizedName, getSCSSVariableName(primitiveRefName));
+      }
+    });
+
+    // Deduplicate: if a variable appears in both primitive and semantic,
+    // remove it from semantic section (primitives take precedence)
+    semanticVariables.forEach((_, name) => {
+      if (primitiveVariables.has(name)) {
+        //TODO: EGG-113, review variable functions while adding functionality.
+        console.warn(
+          `Variable "${name}" is defined as both primitive and semantic. Removing semantic definition. This probably shoudn't be happening.`,
+        );
+        semanticVariables.delete(name);
+      }
+    });
+
+    // Output primitive variables first
+    if (primitiveVariables.size > 0) {
+      output += '// Primitive SCSS Variables\n';
+      primitiveVariables.forEach((value, name) => {
+        output += `${getSCSSVariableName(name)}: ${value};\n`;
+      });
+    }
+
+    // Output semantic variables
+    if (semanticVariables.size > 0) {
+      if (primitiveVariables.size > 0) {
+        output += '\n';
+      }
+      output += '// Semantic SCSS Variables\n';
+      semanticVariables.forEach((value, name) => {
+        output += `${getSCSSVariableName(name)}: ${value};\n`;
+      });
+    }
+  }
+
+  // For gradient variables, we need to build the primitiveVariables map for replacement
+  // (needed regardless of single/multi-mode)
+  const primitiveVariablesForGradients = new Map<string, string>();
+  tokens.tokens.forEach((token) => {
+    if (token.type === 'variable' && token.metadata?.variableTokenType === 'primitive') {
+      const sanitizedName = sanitizeName(token.name);
+      const rawValue = token.rawValue;
+      if (rawValue) {
+        const value = token.valueType === 'px' ? rem(rawValue) : rawValue;
+        primitiveVariablesForGradients.set(sanitizedName, value);
       }
     }
   });
-
-  // Deduplicate: if a variable appears in both primitive and semantic,
-  // remove it from semantic section (primitives take precedence)
-  semanticVariables.forEach((_, name) => {
-    if (primitiveVariables.has(name)) {
-      //TODO: EGG-113, review variable functions while adding functionality.
-      console.warn(
-        `Variable "${name}" is defined as both primitive and semantic. Removing semantic definition. This probably shoudn't be happening.`,
-      );
-      semanticVariables.delete(name);
-    }
-  });
-
-  // Output primitive variables first
-  if (primitiveVariables.size > 0) {
-    output += '// Primitive SCSS Variables\n';
-    primitiveVariables.forEach((value, name) => {
-      output += `${getSCSSVariableName(name)}: ${value};\n`;
-    });
-  }
-
-  // Output semantic variables
-  if (semanticVariables.size > 0) {
-    if (primitiveVariables.size > 0) {
-      output += '\n';
-    }
-    output += '// Semantic SCSS Variables\n';
-    semanticVariables.forEach((value, name) => {
-      output += `${getSCSSVariableName(name)}: ${value};\n`;
-    });
-  }
 
   // Then collect and output gradient variables
   const gradientVariables = new Map<string, StyleToken>();
@@ -161,7 +324,7 @@ export const transformToScss: Transformer = (
   gradientVariables.forEach((token, name) => {
     // Replace color values with variable references if they exist
     let gradientValue = token.rawValue ?? '';
-    primitiveVariables.forEach((value, colorName) => {
+    primitiveVariablesForGradients.forEach((value, colorName) => {
       gradientValue = gradientValue.replace(value, `${getSCSSVariableName(colorName)}`);
     });
     if (gradientValue) {
@@ -199,7 +362,7 @@ export const transformToScss: Transformer = (
   const selectors = convertVariantGroupBy(
     tokens,
     variantGroups,
-    (token) => getMixinPropertyAndValue(token, primitiveVariables),
+    (token) => getMixinPropertyAndValue(token, primitiveVariablesForGradients),
     namingContext,
     useCombinatorialParsing,
   );

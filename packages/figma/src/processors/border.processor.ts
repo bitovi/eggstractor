@@ -140,9 +140,25 @@ export const borderProcessors: StyleProcessor[] = [
       const value = `${width.value} ${type} ${color.value}`;
       const rawValue = `${width.rawValue} ${type} ${color.rawValue}`;
 
+      // TODO(TECHNICAL-DEBT): This pre-formatting is a temporary workaround for EGG-132.
+      // The proper solution requires restructuring the entire token pipeline to use
+      // structured value types (TokenValuePart union types) instead of string concatenation.
+      // This would eliminate the need for both `value` and the pre-formatted fields below.
+      // See: https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+Token+Pipeline+ROUGH+DRAFT
+      // Estimated effort: 3-4 weeks.
+      //
+      // Pre-format values for transformers to avoid string parsing
+      // Format: <width> <style> <color> where style is always a CSS keyword
+      const widthForCss = width.value || width.rawValue;
+      const widthForScss = width.value ? `$${width.value}` : width.rawValue;
+      const colorForCss = color.value ? `var(--${color.value})` : color.rawValue;
+      const colorForScss = color.value ? `$${color.value}` : color.rawValue;
+
       return {
         value,
         rawValue,
+        cssValue: `${widthForCss} ${type} ${colorForCss}`,
+        scssValue: `${widthForScss} ${type} ${colorForScss}`,
         valueType: 'px',
       };
     },

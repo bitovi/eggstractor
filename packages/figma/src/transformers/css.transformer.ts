@@ -4,7 +4,26 @@ import { createNamingContext, rem, generateCssVariablesWithModes } from '../util
 import { convertVariantGroupBy } from './variants';
 import { Transformer } from './types';
 
+/**
+ * Converts StyleToken to CSS property/value pair.
+ *
+ * @deprecated TECHNICAL DEBT: String parsing is fragile and loses type information.
+ * This function tries to guess which parts of a compound value (e.g., "0.5rem solid color-primary")
+ * are variables vs CSS keywords. The proper solution requires restructuring the entire token pipeline
+ * to use structured value types throughout. See:
+ * https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+Token+Pipeline+ROUGH+DRAFT
+ *
+ * Current workaround: Processors can provide pre-formatted cssValue to bypass parsing.
+ * Only border processor currently does this.
+ */
 const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string> => {
+  // Use pre-formatted cssValue if available (eliminates parsing logic)
+  if (token.cssValue) {
+    const processedValue = token.valueType === 'px' ? rem(token.cssValue) : token.cssValue;
+    return { [token.property]: processedValue };
+  }
+
+  // Fall back to parsing token.value for backward compatibility
   // Use token.value (which contains variable references) instead of rawValue
   // This ensures semantic variables are referenced, not their resolved values
   let baseValue = token.value || token.rawValue;
@@ -12,15 +31,60 @@ const getClassNamePropertyAndValue = (token: StyleToken): Record<string, string>
     return { [token.property]: '' };
   }
 
-  // Convert ALL SASS variable references ($variable) to CSS custom properties (var(--variable))
-  // This handles both single variables and compound values like "0.5rem $spacing-2"
-  baseValue = baseValue.replace(/\$([a-zA-Z0-9_-]+)/g, 'var(--$1)');
+  // Convert variable references to CSS custom properties (var(--variable))
+  // TODO(TECHNICAL-DEBT): This generic parsing is brittle and will incorrectly wrap
+  // CSS keywords as variables (e.g., "solid" → "var(--solid)"). Properties with
+  // compound values should use the cssValue workaround (like border processor does)
+  // or wait for the full pipeline refactor to structured types. See:
+  // https://wiki.at.bitovi.com/wiki/spaces/Eggstractor/pages/1847820398/Technical+Debt+Token+Pipeline+ROUGH+DRAFT
+  baseValue = baseValue
+    .split(/\s+/)
+    .map((part) => (isVariableReference(part) ? `var(--${part})` : part))
+    .join(' ');
 
   const processedValue = token.valueType === 'px' ? rem(baseValue) : baseValue;
 
   return {
     [token.property]: processedValue,
   };
+};
+
+/**
+ * Determines if a string token is a variable reference vs a CSS value/keyword
+ * Variables: alphanumeric with hyphens/underscores, starts with letter, contains hyphen
+ * Not variables: CSS keywords, literals with units, numbers, etc.
+ */
+const isVariableReference = (part: string): boolean => {
+  // CSS keywords that should never be treated as variables
+  const cssKeywords = new Set([
+    'inherit',
+    'initial',
+    'unset',
+    'auto',
+    'none',
+    'normal',
+    'solid',
+    'dashed',
+    'dotted',
+    'double',
+    'groove',
+    'ridge',
+    'inset',
+    'outset',
+    'hidden',
+    'visible',
+    'collapse',
+    'transparent',
+    'currentColor',
+  ]);
+
+  if (cssKeywords.has(part)) {
+    return false;
+  }
+
+  // Must look like a variable name: starts with letter, alphanumeric with hyphens/underscores
+  // Must contain at least one hyphen or underscore (to distinguish from single-word values)
+  return /^[a-zA-Z][a-zA-Z0-9_-]*$/.test(part) && /[-_]/.test(part);
 };
 
 /**
