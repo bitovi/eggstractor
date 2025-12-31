@@ -1308,3 +1308,121 @@ export function generateSemanticColorUtilities(semanticColorTokens: VariableToke
 
   return output;
 }
+
+/**
+ * Generate SCSS @layer utilities from semantic color tokens for Tailwind-SCSS
+ *
+ * This function creates utility classes wrapped in @layer utilities that reference
+ * CSS variables, making them usable within SCSS mixins with @apply.
+ *
+ * PROPERTY DETECTION STRATEGY (with fallback):
+ *
+ * 1. **Token property field** (if available):
+ *    - property: 'background' or 'background-color' → background-color utility
+ *    - property: 'color' → color utility
+ *    - property: 'border-color' → border-color utility
+ *
+ * 2. **Name pattern matching** (optimistic, not guaranteed):
+ *    - Name contains 'bg' or 'background' → background-color utility
+ *    - Name contains 'text' or 'foreground' → color utility
+ *    - Name contains 'border' → border-color utility
+ *
+ *    NOTE: This is optimistic pattern matching. There is NO expectation that Figma
+ *    designers will follow this naming convention. It's provided as a convenience
+ *    when they do, but should not be relied upon.
+ *
+ * 3. **Fallback - Generate all three variants**:
+ *    If neither the property field nor name patterns provide clear guidance, we
+ *    generate bg-*, text-*, and border-* prefixed utilities so developers have
+ *    all options available. This mirrors how Tailwind itself provides bg-blue-500,
+ *    text-blue-500, and border-blue-500 for the same color.
+ *
+ * EXAMPLES:
+ *
+ * Clear property from field:
+ *   Input: { name: 'content-bg-neutral', property: 'background' }
+ *   Output: .content-bg-neutral { background-color: var(--content-bg-neutral); }
+ *
+ * Clear from name pattern:
+ *   Input: { name: 'action-bg-primary', property: 'color' }
+ *   Output: .action-bg-primary { background-color: var(--action-bg-primary); }
+ *
+ * Ambiguous (fallback generates all three):
+ *   Input: { name: 'action-primary-default', property: 'color' }
+ *   Output:
+ *     .bg-action-primary-default { background-color: var(--action-primary-default); }
+ *     .text-action-primary-default { color: var(--action-primary-default); }
+ *     .border-action-primary-default { border-color: var(--action-primary-default); }
+ *
+ * Usage in SCSS mixins:
+ *   @mixin my-button {
+ *     @apply bg-action-primary-default text-white border-action-primary-default;
+ *   }
+ *
+ * @param semanticColorTokens - Array of semantic color variable tokens
+ * @returns SCSS string containing @layer utilities rules, or empty string if no tokens
+ */
+export function generateScssLayerUtilitiesFromModes(semanticColorTokens: VariableToken[]): string {
+  if (!semanticColorTokens.length) {
+    return '';
+  }
+
+  let output = '\n@layer utilities {\n';
+  const processedUtilities = new Set<string>(); // Track processed utilities to avoid duplicates
+
+  for (const token of semanticColorTokens) {
+    const tokenName = token.name;
+
+    // Try to determine CSS property from token.property field first
+    let cssProperty: string | null = null;
+
+    if (token.property === 'background' || token.property === 'background-color') {
+      cssProperty = 'background-color';
+    } else if (token.property === 'border-color') {
+      cssProperty = 'border-color';
+    } else if (token.property === 'color') {
+      // For 'color' property, check name patterns to determine intent
+      const lowerName = tokenName.toLowerCase();
+
+      if (lowerName.includes('bg') || lowerName.includes('background')) {
+        cssProperty = 'background-color';
+      } else if (lowerName.includes('text') || lowerName.includes('foreground')) {
+        cssProperty = 'color';
+      } else if (lowerName.includes('border')) {
+        cssProperty = 'border-color';
+      }
+      // If no pattern match, cssProperty remains null and we'll generate all three
+    }
+
+    // If we determined a specific property, generate that single utility
+    if (cssProperty) {
+      const utilityKey = `${tokenName}-${cssProperty}`;
+      if (!processedUtilities.has(utilityKey)) {
+        processedUtilities.add(utilityKey);
+        output += `  .${tokenName} {\n    ${cssProperty}: var(--${tokenName});\n  }\n`;
+      }
+    } else {
+      // Fallback: Generate all three variants (bg-, text-, border-)
+      // This ensures developers always have utilities available regardless of Figma naming
+      const variants = [
+        { prefix: 'bg', property: 'background-color' },
+        { prefix: 'text', property: 'color' },
+        { prefix: 'border', property: 'border-color' },
+      ];
+
+      for (const { prefix, property } of variants) {
+        const className = `${prefix}-${tokenName}`;
+        const utilityKey = `${className}-${property}`;
+
+        if (!processedUtilities.has(utilityKey)) {
+          processedUtilities.add(utilityKey);
+          output += `  .${className} {\n    ${property}: var(--${tokenName});\n  }\n`;
+        }
+      }
+    }
+  }
+
+  output += '}\n';
+
+  return output;
+}

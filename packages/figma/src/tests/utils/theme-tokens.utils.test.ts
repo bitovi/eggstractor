@@ -2,6 +2,7 @@ import {
   buildDynamicThemeTokens,
   generateThemeDirective,
   generateSemanticColorUtilities,
+  generateScssLayerUtilitiesFromModes,
 } from '../../utils/theme-tokens.utils';
 import { TokenCollection, VariableToken } from '../../types';
 
@@ -1097,6 +1098,259 @@ describe('generateSemanticColorUtilities', () => {
   it('should return empty string for empty array', () => {
     const result = generateSemanticColorUtilities([]);
     expect(result).toBe('');
+  });
+});
+
+describe('generateScssLayerUtilitiesFromModes', () => {
+  it('should generate @layer utilities for background-color property', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'content-bg-neutral-default',
+        property: 'background',
+        value: 'content-bg-neutral-default',
+        rawValue: '#ffffff',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-1',
+          variableName: 'content/bg/neutral/default',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateScssLayerUtilitiesFromModes(semanticTokens);
+
+    expect(result).toContain('@layer utilities {');
+    expect(result).toContain('.content-bg-neutral-default {');
+    expect(result).toContain('background-color: var(--content-bg-neutral-default);');
+    expect(result).toContain('}');
+  });
+
+  it('should generate @layer utilities for color property', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'content-text-primary',
+        property: 'color',
+        value: 'content-text-primary',
+        rawValue: '#000000',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-2',
+          variableName: 'content/text/primary',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateScssLayerUtilitiesFromModes(semanticTokens);
+
+    expect(result).toContain('@layer utilities {');
+    expect(result).toContain('.content-text-primary {');
+    expect(result).toContain('color: var(--content-text-primary);');
+  });
+
+  it('should generate @layer utilities for border-color property', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'content-border-accent',
+        property: 'border-color',
+        value: 'content-border-accent',
+        rawValue: '#0177cc',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-3',
+          variableName: 'content/border/accent',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateScssLayerUtilitiesFromModes(semanticTokens);
+
+    expect(result).toContain('@layer utilities {');
+    expect(result).toContain('.content-border-accent {');
+    expect(result).toContain('border-color: var(--content-border-accent);');
+  });
+
+  it('should handle background-color property (alternative to background)', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'surface-bg-default',
+        property: 'background-color',
+        value: 'surface-bg-default',
+        rawValue: '#f5f5f5',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-4',
+          variableName: 'surface/bg/default',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateScssLayerUtilitiesFromModes(semanticTokens);
+
+    expect(result).toContain('.surface-bg-default {');
+    expect(result).toContain('background-color: var(--surface-bg-default);');
+  });
+
+  it('should NOT generate utilities for unsupported properties', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'spacing-base',
+        property: 'spacing',
+        value: 'spacing-base',
+        rawValue: '16px',
+        valueType: 'px',
+        path: [],
+        metadata: {
+          figmaId: 'var-5',
+          variableName: 'spacing/base',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateScssLayerUtilitiesFromModes(semanticTokens);
+
+    // Should only contain the @layer wrapper, no utilities
+    expect(result).toContain('@layer utilities {');
+    expect(result).not.toContain('.spacing-base {');
+  });
+
+  it('should handle multiple semantic color tokens at once', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'action-bg-primary',
+        property: 'background',
+        value: 'action-bg-primary',
+        rawValue: '#0177cc',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-1',
+          variableName: 'action/bg/primary',
+          variableTokenType: 'semantic',
+        },
+      },
+      {
+        type: 'variable',
+        name: 'action-text-primary',
+        property: 'color',
+        value: 'action-text-primary',
+        rawValue: '#ffffff',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-2',
+          variableName: 'action/text/primary',
+          variableTokenType: 'semantic',
+        },
+      },
+      {
+        type: 'variable',
+        name: 'action-border-primary',
+        property: 'border-color',
+        value: 'action-border-primary',
+        rawValue: '#015fa3',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-3',
+          variableName: 'action/border/primary',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateScssLayerUtilitiesFromModes(semanticTokens);
+
+    expect(result).toContain('@layer utilities {');
+    expect(result).toContain('.action-bg-primary {');
+    expect(result).toContain('background-color: var(--action-bg-primary);');
+    expect(result).toContain('.action-text-primary {');
+    expect(result).toContain('color: var(--action-text-primary);');
+    expect(result).toContain('.action-border-primary {');
+    expect(result).toContain('border-color: var(--action-border-primary);');
+  });
+
+  it('should avoid duplicates when same token name appears multiple times', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'content-bg-default',
+        property: 'background',
+        value: 'content-bg-default',
+        rawValue: '#ffffff',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-1',
+          variableName: 'content/bg/default',
+          variableTokenType: 'semantic',
+        },
+      },
+      {
+        type: 'variable',
+        name: 'content-bg-default', // duplicate
+        property: 'background',
+        value: 'content-bg-default',
+        rawValue: '#ffffff',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-1',
+          variableName: 'content/bg/default',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateScssLayerUtilitiesFromModes(semanticTokens);
+
+    // Should only have one instance of the utility
+    const matches = result.match(/\.content-bg-default \{/g);
+    expect(matches).toHaveLength(1);
+  });
+
+  it('should return empty string for empty array', () => {
+    const result = generateScssLayerUtilitiesFromModes([]);
+    expect(result).toBe('');
+  });
+
+  it('should use token name as-is without modification', () => {
+    const semanticTokens: VariableToken[] = [
+      {
+        type: 'variable',
+        name: 'my-custom-bg-token-name',
+        property: 'background',
+        value: 'my-custom-bg-token-name',
+        rawValue: '#123456',
+        valueType: null,
+        path: [],
+        metadata: {
+          figmaId: 'var-1',
+          variableName: 'my/custom/bg/token/name',
+          variableTokenType: 'semantic',
+        },
+      },
+    ];
+
+    const result = generateScssLayerUtilitiesFromModes(semanticTokens);
+
+    // Should use exact token name for both class and variable reference
+    expect(result).toContain('.my-custom-bg-token-name {');
+    expect(result).toContain('var(--my-custom-bg-token-name)');
   });
 });
 

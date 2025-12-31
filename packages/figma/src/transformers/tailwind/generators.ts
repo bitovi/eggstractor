@@ -489,7 +489,6 @@ export function createTailwindClasses(
     // If generating semantic utilities and this token has a semantic variable name,
     // use it directly - but ONLY for color properties (background, color, border)
     // Other properties (spacing, etc.) should use normal generators
-    // TODO: Move this logic when we add 'semanticVariableName' to token's properties.
     const isColorProperty = ['background', 'color', 'border'].includes(token.property);
     if (generateSemantics && token.semanticVariableName && isColorProperty) {
       const cleanName = token.semanticVariableName.replace(/^colors-/, '').replace(/^color-/, '');
