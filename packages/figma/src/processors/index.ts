@@ -3,6 +3,7 @@ import { backgroundProcessors } from './background.processor';
 import { fontProcessors } from './font.processor';
 import { layoutProcessors } from './layout.processor';
 import { borderProcessors } from './border.processor';
+import { shadowProcessors } from './shadow.processor';
 import { spacingProcessors } from './spacing.processor';
 
 const TEXT_PROCESSORS = fontProcessors;
@@ -10,6 +11,7 @@ const LAYOUT_PROCESSORS = [
   ...backgroundProcessors,
   ...layoutProcessors,
   ...borderProcessors,
+  ...shadowProcessors,
   ...spacingProcessors,
 ];
 

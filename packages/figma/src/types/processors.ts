@@ -22,6 +22,7 @@ export interface VariableBindings {
   minHeight?: VariableAlias | VariableAlias[];
   maxHeight?: VariableAlias | VariableAlias[];
   opacity?: VariableAlias | VariableAlias[];
+  effects?: VariableAlias | VariableAlias[];
 }
 
 export interface StyleProcessor {
