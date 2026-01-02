@@ -10,6 +10,8 @@ import {
   generateThemeDirective,
   buildDynamicThemeTokens,
   generateSemanticColorUtilities,
+  generateCssVariablesWithModes,
+  generateScssLayerUtilitiesFromModes,
 } from '../../utils';
 import { Transformer } from '../types';
 
@@ -20,9 +22,9 @@ import { Transformer } from '../types';
  * @param useCombinatorialParsing - Whether to use combinatorial parsing for variants
  * @param _generateSemantics - (Deprecated) Semantic utilities are not supported in SCSS mode
  * @param outputMode - Determines what to output:
- *   - 'variables': Only CSS variables in :root (no mixins)
+ *   - 'variables': CSS variables with multi-mode support + @layer utilities (no mixins)
  *   - 'components': Only SCSS mixins with @apply directives (no variables)
- *   - 'all': Both variables and mixins (default behavior)
+ *   - 'all': CSS variables with multi-mode + @layer utilities + mixins (default behavior)
  * @returns TransformerResult with the generated SCSS code
  */
 export const transformToTailwindSassClass: Transformer = (
@@ -31,7 +33,7 @@ export const transformToTailwindSassClass: Transformer = (
   _generateSemantics,
   outputMode = 'all',
 ) => {
-  // For 'variables' mode, output CSS variables only
+  // For 'variables' mode, output CSS variables with multi-mode support + @layer utilities
   if (outputMode === 'variables') {
     const variableTokens = collection.tokens.filter(
       (token): token is VariableToken => token.type === 'variable',
@@ -45,14 +47,28 @@ export const transformToTailwindSassClass: Transformer = (
       };
     }
 
-    let output = '/* Generated CSS Variables */\n:root {\n';
+    let output = '/* Generated CSS Variables */\n';
 
-    for (const token of variableTokens) {
-      const varName = `--${token.name}`;
-      output += `  ${varName}: ${token.rawValue};\n`;
+    // Generate CSS variables with multi-mode support (:root and [data-theme] blocks)
+    const cssVariables = generateCssVariablesWithModes(collection);
+    if (cssVariables) {
+      output += cssVariables;
     }
 
-    output += '}\n';
+    // Generate @layer utilities from semantic color tokens
+    const semanticColorTokens = variableTokens.filter(
+      (token) =>
+        token.metadata?.variableTokenType === 'semantic' &&
+        token.path.length === 0 && // standalone, not bound to components
+        (token.property === 'color' ||
+          token.property === 'background' ||
+          token.property === 'background-color' ||
+          token.property === 'border-color'),
+    );
+
+    if (semanticColorTokens.length > 0) {
+      output += generateScssLayerUtilitiesFromModes(semanticColorTokens);
+    }
 
     return {
       result: output,
@@ -75,6 +91,38 @@ export const transformToTailwindSassClass: Transformer = (
 
   let output = '/* Generated Tailwind-SCSS */';
 
+  // For 'all' mode, include CSS variables with multi-mode + @layer utilities
+  if (outputMode === 'all') {
+    const variableTokens = collection.tokens.filter(
+      (token): token is VariableToken => token.type === 'variable',
+    );
+
+    if (variableTokens.length > 0) {
+      output += '\n\n/* CSS Variables */\n';
+
+      // Generate CSS variables with multi-mode support
+      const cssVariables = generateCssVariablesWithModes(collection);
+      if (cssVariables) {
+        output += cssVariables;
+      }
+
+      // Generate @layer utilities from semantic color tokens
+      const semanticColorTokens = variableTokens.filter(
+        (token) =>
+          token.metadata?.variableTokenType === 'semantic' &&
+          token.path.length === 0 && // standalone, not bound to components
+          (token.property === 'color' ||
+            token.property === 'background' ||
+            token.property === 'background-color' ||
+            token.property === 'border-color'),
+      );
+
+      if (semanticColorTokens.length > 0) {
+        output += generateScssLayerUtilitiesFromModes(semanticColorTokens);
+      }
+    }
+  }
+
   /**
    * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
    */
@@ -83,10 +131,19 @@ export const transformToTailwindSassClass: Transformer = (
   );
 
   /**
-   * don't use a theme mapping for Tailwind-SCSS generation; themeMapping works only for Tailwind v4+, and sass variables aren't compatible with tailwind built-in utilities.
+   * Build dynamic theme tokens for SCSS generation.
+   * Pass generateSemantics = true to make the generator use semanticVariableName directly
+   * (same behavior as Tailwind v4), which bypasses the prefix-adding logic and uses
+   * the semantic utility names as-is (e.g., 'action-bg-primary' instead of 'bg-action-bg-primary').
+   * This allows @apply to reference the @layer utilities we generated above.
    */
+  const variableTokens = collection.tokens.filter(
+    (token): token is VariableToken => token.type === 'variable',
+  );
+  const dynamicThemeTokens = buildDynamicThemeTokens(variableTokens, false);
+
   for (const { variantPath, tokens } of formattedStyleTokens) {
-    const classesToApply = createTailwindClasses(tokens);
+    const classesToApply = createTailwindClasses(tokens, dynamicThemeTokens, true);
 
     if (classesToApply.length) {
       output += `\n@mixin ${variantPath} {\n  @apply ${classesToApply.join(' ')}; \n}\n`;
