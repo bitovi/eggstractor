@@ -167,6 +167,22 @@ export const borderProcessors: StyleProcessor[] = [
     property: 'box-shadow',
     bindingKey: undefined,
     process: async (variableTokenMapByProperty, node): Promise<ProcessedValue | null> => {
+      /* INSIDE stroke alignment cannot be represented with CSS border properties
+      because CSS borders always render outside or centered on the element boundary.
+      We use inset box-shadow instead, which renders inside the element bounds.
+      
+      IMPORTANT: Using box-shadow for borders has limitations:
+      - Cannot use different border styles (solid, dashed, dotted, etc.)
+      - Box-shadow stacks with actual shadows, potentially causing conflicts
+      - Less semantic than true CSS borders
+      
+      DEVELOPER GUIDANCE: When possible, encourage designers to use CENTER or OUTSIDE
+      stroke alignment, which can be properly represented as CSS border properties.
+      Only use INSIDE strokes when the design specifically requires inset rendering.
+      
+      Note: When shadow effects are also present, the shadow processor handles
+      combining INSIDE borders with shadows into a single box-shadow declaration.
+      */
       if ('strokeAlign' in node && node.strokeAlign !== 'INSIDE') {
         return null;
       }
@@ -188,54 +204,14 @@ export const borderProcessors: StyleProcessor[] = [
         }
       }
 
-      const weights = getBorderWeights(node);
-      if (!hasAnyBorder(weights)) {
+      // Use the exported function to convert INSIDE borders to box-shadow
+      const result = convertInsideBordersToBoxShadow(node, variableTokenMapByProperty);
+      if (!result) {
         return null;
       }
 
-      const color = getBorderColor(node, variableTokenMapByProperty);
-      if (!color) return null;
-
-      // Get width variables for each side
-      const topWidth = getBorderWidth('strokeTopWeight', weights.top, variableTokenMapByProperty);
-      const rightWidth = getBorderWidth(
-        'strokeRightWeight',
-        weights.right,
-        variableTokenMapByProperty,
-      );
-      const bottomWidth = getBorderWidth(
-        'strokeBottomWeight',
-        weights.bottom,
-        variableTokenMapByProperty,
-      );
-      const leftWidth = getBorderWidth(
-        'strokeLeftWeight',
-        weights.left,
-        variableTokenMapByProperty,
-      );
-
-      const shadows = [];
-      const rawShadows = [];
-
-      if (weights.top > 0) {
-        shadows.push(`inset 0 ${topWidth.value} 0 0 ${color.value}`);
-        rawShadows.push(`inset 0 ${topWidth.rawValue} 0 0 ${color.rawValue}`);
-      }
-      if (weights.right > 0) {
-        shadows.push(`inset -${rightWidth.value} 0 0 0 ${color.value}`);
-        rawShadows.push(`inset -${rightWidth.rawValue} 0 0 0 ${color.rawValue}`);
-      }
-      if (weights.bottom > 0) {
-        shadows.push(`inset 0 -${bottomWidth.value} 0 0 ${color.value}`);
-        rawShadows.push(`inset 0 -${bottomWidth.rawValue} 0 0 ${color.rawValue}`);
-      }
-      if (weights.left > 0) {
-        shadows.push(`inset ${leftWidth.value} 0 0 0 ${color.value}`);
-        rawShadows.push(`inset ${leftWidth.rawValue} 0 0 0 ${color.rawValue}`);
-      }
-
-      const value = shadows.join(', ');
-      const rawValue = rawShadows.join(', ');
+      const value = result.values.join(', ');
+      const rawValue = result.rawValues.join(', ');
 
       return {
         value,
@@ -358,6 +334,7 @@ const getBorderWidth = (
     return {
       value: widthVariable.value,
       rawValue: widthVariable.rawValue,
+      variable: widthVariable,
     };
   }
 
@@ -367,6 +344,67 @@ const getBorderWidth = (
     rawValue: value,
   };
 };
+
+/**
+ * Converts INSIDE stroke alignment borders to CSS box-shadow inset values.
+ * This is exported for use by the shadow processor when combining borders with shadow effects.
+ *
+ * @param node - The Figma node with INSIDE stroke alignment
+ * @param variableTokenMapByProperty - Map of variable tokens by property name
+ * @returns Object containing arrays of CSS box-shadow values and raw values, or null if no borders
+ */
+export function convertInsideBordersToBoxShadow(
+  node: SceneNode,
+  variableTokenMapByProperty?: Map<string, VariableToken>,
+): { values: string[]; rawValues: string[] } | null {
+  // Only process INSIDE stroke alignment
+  if (!('strokeAlign' in node) || node.strokeAlign !== 'INSIDE') {
+    return null;
+  }
+
+  const weights = getBorderWeights(node);
+  if (!hasAnyBorder(weights)) {
+    return null;
+  }
+
+  const color = getBorderColor(node, variableTokenMapByProperty);
+  if (!color) return null;
+
+  const shadows: string[] = [];
+  const rawShadows: string[] = [];
+
+  // Generate inset box-shadow for each border side
+  if (weights.top > 0) {
+    const topWidth = getBorderWidth('strokeTopWeight', weights.top, variableTokenMapByProperty);
+    shadows.push(`inset 0 ${topWidth.value} 0 0 ${color.value}`);
+    rawShadows.push(`inset 0 ${topWidth.rawValue} 0 0 ${color.rawValue}`);
+  }
+  if (weights.right > 0) {
+    const rightWidth = getBorderWidth(
+      'strokeRightWeight',
+      weights.right,
+      variableTokenMapByProperty,
+    );
+    shadows.push(`inset -${rightWidth.value} 0 0 0 ${color.value}`);
+    rawShadows.push(`inset -${rightWidth.rawValue} 0 0 0 ${color.rawValue}`);
+  }
+  if (weights.bottom > 0) {
+    const bottomWidth = getBorderWidth(
+      'strokeBottomWeight',
+      weights.bottom,
+      variableTokenMapByProperty,
+    );
+    shadows.push(`inset 0 -${bottomWidth.value} 0 0 ${color.value}`);
+    rawShadows.push(`inset 0 -${bottomWidth.rawValue} 0 0 ${color.rawValue}`);
+  }
+  if (weights.left > 0) {
+    const leftWidth = getBorderWidth('strokeLeftWeight', weights.left, variableTokenMapByProperty);
+    shadows.push(`inset ${leftWidth.value} 0 0 0 ${color.value}`);
+    rawShadows.push(`inset ${leftWidth.rawValue} 0 0 0 ${color.rawValue}`);
+  }
+
+  return { values: shadows, rawValues: rawShadows };
+}
 
 const processBorderSide = async (
   config: BorderSideConfig,
