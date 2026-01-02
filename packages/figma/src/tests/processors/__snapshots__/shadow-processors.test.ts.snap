@@ -5,36 +5,54 @@ exports[`Shadow Processors > should generate correct snapshot output for combina
 // Generated SCSS Mixins
 @mixin single-drop-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.25);
 }
 @mixin multiple-drop-shadows {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1), 0rem 0.5rem 0.9375rem 0.125rem rgba(0, 0, 0, 0.2);
 }
 @mixin inner-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0rem 0.125rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.3);
 }
 @mixin combined-shadows {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.15), inset 0rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.2);
 }
 @mixin no-effects {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin inside-border-with-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 0.125rem 0 0 #3366cc, inset -0.125rem 0 0 0 #3366cc, inset 0 -0.125rem 0 0 #3366cc, inset 0.125rem 0 0 0 #3366cc, 0rem 0.1875rem 0.5rem rgba(0, 0, 0, 0.2);
 }
 @mixin inside-border-only {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 0.1875rem 0 0 #3366cc, inset -0.1875rem 0 0 0 #3366cc, inset 0 -0.1875rem 0 0 #3366cc, inset 0.1875rem 0 0 0 #3366cc;
 }
 @mixin zero-opacity-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin invisible-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 "
 `;
@@ -44,36 +62,54 @@ exports[`Shadow Processors > should generate correct snapshot output for templat
 // Generated SCSS Mixins
 @mixin single-drop-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.25);
 }
 @mixin multiple-drop-shadows {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1), 0rem 0.5rem 0.9375rem 0.125rem rgba(0, 0, 0, 0.2);
 }
 @mixin inner-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0rem 0.125rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.3);
 }
 @mixin combined-shadows {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.15), inset 0rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.2);
 }
 @mixin no-effects {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin inside-border-with-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 0.125rem 0 0 #3366cc, inset -0.125rem 0 0 0 #3366cc, inset 0 -0.125rem 0 0 #3366cc, inset 0.125rem 0 0 0 #3366cc, 0rem 0.1875rem 0.5rem rgba(0, 0, 0, 0.2);
 }
 @mixin inside-border-only {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 0.1875rem 0 0 #3366cc, inset -0.1875rem 0 0 0 #3366cc, inset 0 -0.1875rem 0 0 #3366cc, inset 0.1875rem 0 0 0 #3366cc;
 }
 @mixin zero-opacity-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin invisible-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 "
 `;
@@ -83,36 +119,54 @@ exports[`Shadow Processors > should process single drop shadow correctly > shado
 // Generated SCSS Mixins
 @mixin single-drop-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.25);
 }
 @mixin multiple-drop-shadows {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1), 0rem 0.5rem 0.9375rem 0.125rem rgba(0, 0, 0, 0.2);
 }
 @mixin inner-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0rem 0.125rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.3);
 }
 @mixin combined-shadows {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.15), inset 0rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.2);
 }
 @mixin no-effects {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin inside-border-with-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 0.125rem 0 0 #3366cc, inset -0.125rem 0 0 0 #3366cc, inset 0 -0.125rem 0 0 #3366cc, inset 0.125rem 0 0 0 #3366cc, 0rem 0.1875rem 0.5rem rgba(0, 0, 0, 0.2);
 }
 @mixin inside-border-only {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 0.1875rem 0 0 #3366cc, inset -0.1875rem 0 0 0 #3366cc, inset 0 -0.1875rem 0 0 #3366cc, inset 0.1875rem 0 0 0 #3366cc;
 }
 @mixin zero-opacity-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin invisible-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 "
 `;
@@ -122,36 +176,54 @@ exports[`Shadow Processors > should process single drop shadow correctly > shado
 // Generated SCSS Mixins
 @mixin single-drop-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.25);
 }
 @mixin multiple-drop-shadows {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.1), 0rem 0.5rem 0.9375rem 0.125rem rgba(0, 0, 0, 0.2);
 }
 @mixin inner-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0rem 0.125rem 0.5rem 0.0625rem rgba(0, 0, 0, 0.3);
 }
 @mixin combined-shadows {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.15), inset 0rem 0.0625rem 0.3125rem rgba(0, 0, 0, 0.2);
 }
 @mixin no-effects {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin inside-border-with-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 0.125rem 0 0 #3366cc, inset -0.125rem 0 0 0 #3366cc, inset 0 -0.125rem 0 0 #3366cc, inset 0.125rem 0 0 0 #3366cc, 0rem 0.1875rem 0.5rem rgba(0, 0, 0, 0.2);
 }
 @mixin inside-border-only {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
   box-shadow: inset 0 0.1875rem 0 0 #3366cc, inset -0.1875rem 0 0 0 #3366cc, inset 0 -0.1875rem 0 0 #3366cc, inset 0.1875rem 0 0 0 #3366cc;
 }
 @mixin zero-opacity-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 @mixin invisible-shadow {
   background: #cccccc;
+  width: 6.25rem;
+  height: 6.25rem;
 }
 "
 `;
