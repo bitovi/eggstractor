@@ -167,18 +167,35 @@ export const generateTailwindGapClass: Generator = ({ rawValue }, dynamicTheme?)
 };
 
 export function parseBorderShorthand(border: string) {
-  const parts = border.trim().split(/\s+/);
+  const trimmed = border.trim();
   let width: string | undefined;
   let style: string | undefined;
   let color: string | undefined;
 
-  for (const part of parts) {
+  // Handle rgba/rgb colors with parentheses by extracting them first
+  const rgbaMatch = trimmed.match(/rgba?\([^)]+\)/);
+  let remainingParts: string[];
+
+  if (rgbaMatch) {
+    // Extract rgba color and remove spaces within it for Tailwind
+    color = rgbaMatch[0].replace(/\s+/g, '');
+    // Get the remaining parts (excluding the rgba portion)
+    const beforeRgba = trimmed.substring(0, rgbaMatch.index).trim();
+    remainingParts = beforeRgba ? beforeRgba.split(/\s+/) : [];
+  } else {
+    // No rgba, split by whitespace as before
+    remainingParts = trimmed.split(/\s+/);
+  }
+
+  // Parse width and style from remaining parts
+  for (const part of remainingParts) {
     if (!width && part.includes('px')) {
-      width = part; // First part is the width
+      width = part;
     } else if (!style && borderStyles.has(part)) {
-      style = part; // Second part is the border style (from the Set)
+      style = part;
     } else if (!color) {
-      color = part; // Remaining part is the color
+      // If we haven't found a color yet and it's not width or style, it's a color
+      color = part;
     }
   }
 
