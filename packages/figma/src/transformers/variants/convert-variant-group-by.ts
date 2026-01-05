@@ -16,7 +16,11 @@ export const convertVariantGroupBy = (
   transform: (token: StyleToken) => Record<string, string>,
   namingContext: NamingContext,
   useCombinatorialParsing: boolean,
-): ({ key: string } & StylesForVariantsCombination)[] => {
+): {
+  selectors: ({ key: string } & StylesForVariantsCombination)[];
+  warnings: string[];
+} => {
+  const warnings: string[] = [];
   const globalValueConflicts = new Map<string, Set<string>>();
 
   Object.values(styleTokensGroupedByVariantCombination).forEach((groupTokens) => {
@@ -42,21 +46,93 @@ export const convertVariantGroupBy = (
 
   const instanceGroupedByVariants = Object.entries(styleTokensGroupedByVariantCombination)
     .map(([key, groupTokens]) => {
-      const componentId = groupTokens[0].componentId
-        ? groupTokens.every((token) => token.componentId === groupTokens[0].componentId)
-          ? groupTokens[0].componentId
-          : (() => {
-              throw new Error('Unexpected component id mismatch');
-            })()
-        : undefined;
+      // Check for component ID mismatch
+      let componentId: string | undefined = undefined;
+      if (groupTokens[0].componentId) {
+        const allMatch = groupTokens.every(
+          (token) => token.componentId === groupTokens[0].componentId,
+        );
+        if (allMatch) {
+          componentId = groupTokens[0].componentId;
+        } else {
+          // Get unique component IDs and their counts
+          const idCounts = new Map<string, number>();
+          const idToPath = new Map<string, string>();
 
-      const componentSetId = groupTokens[0].componentSetId
-        ? groupTokens.every((token) => token.componentSetId === groupTokens[0].componentSetId)
-          ? groupTokens[0].componentSetId
-          : (() => {
-              throw new Error('Unexpected component id mismatch');
-            })()
-        : undefined;
+          groupTokens.forEach((token) => {
+            const id = token.componentId || 'undefined';
+            idCounts.set(id, (idCounts.get(id) || 0) + 1);
+            if (!idToPath.has(id)) {
+              const pathStr = token.path.map((p) => p.name).join(' > ');
+              idToPath.set(id, pathStr);
+            }
+          });
+
+          const uniqueIds = Array.from(idCounts.entries())
+            .map(([id, count]) => `${id} (${count}x) at "${idToPath.get(id)}"`)
+            .join('\n   ');
+
+          const warningMessage =
+            `Component ID mismatch for variant group "${key}": ` +
+            `This group has ${groupTokens.length} tokens from ${idCounts.size} different components. ` +
+            `Check Figma for duplicate component names or detached instances.`;
+
+          warnings.push(warningMessage);
+
+          console.error(
+            `🚨 Component ID mismatch for variant group "${key}":\n` +
+              `   This group has ${groupTokens.length} tokens from ${idCounts.size} different components:\n` +
+              `   ${uniqueIds}\n` +
+              `   💡 Check Figma for duplicate component names or detached instances.\n` +
+              `   Skipping this variant group and continuing...`,
+          );
+          return null; // Skip this variant group
+        }
+      }
+
+      // Check for component set ID mismatch
+      let componentSetId: string | undefined = undefined;
+      if (groupTokens[0].componentSetId) {
+        const allMatch = groupTokens.every(
+          (token) => token.componentSetId === groupTokens[0].componentSetId,
+        );
+        if (allMatch) {
+          componentSetId = groupTokens[0].componentSetId;
+        } else {
+          // Get unique component set IDs and their counts
+          const idCounts = new Map<string, number>();
+          const idToPath = new Map<string, string>();
+
+          groupTokens.forEach((token) => {
+            const id = token.componentSetId || 'undefined';
+            idCounts.set(id, (idCounts.get(id) || 0) + 1);
+            if (!idToPath.has(id)) {
+              const pathStr = token.path.map((p) => p.name).join(' > ');
+              idToPath.set(id, pathStr);
+            }
+          });
+
+          const uniqueIds = Array.from(idCounts.entries())
+            .map(([id, count]) => `${id} (${count}x) at "${idToPath.get(id)}"`)
+            .join('\n   ');
+
+          const warningMessage =
+            `Component Set ID mismatch for variant group "${key}": ` +
+            `This group has ${groupTokens.length} tokens from ${idCounts.size} different component sets. ` +
+            `Check Figma for duplicate component set names or detached instances.`;
+
+          warnings.push(warningMessage);
+
+          console.error(
+            `🚨 Component Set ID mismatch for variant group "${key}":\n` +
+              `   This group has ${groupTokens.length} tokens from ${idCounts.size} different component sets:\n` +
+              `   ${uniqueIds}\n` +
+              `   💡 Check Figma for duplicate component set names or detached instances.\n` +
+              `   Skipping this variant group and continuing...`,
+          );
+          return null; // Skip this variant group
+        }
+      }
 
       const styles = groupTokens.reduce(
         (styles, token) => {
@@ -83,16 +159,20 @@ export const convertVariantGroupBy = (
         tokens: groupTokens,
       };
     })
+    .filter(
+      (variantGroup): variantGroup is NonNullable<typeof variantGroup> => variantGroup !== null,
+    )
     .filter((variantGroup) => Object.keys(variantGroup.styles).length > 0);
 
   if (!useCombinatorialParsing) {
-    return instanceGroupedByVariants.map((variantGroup) => {
+    const selectors = instanceGroupedByVariants.map((variantGroup) => {
       const key = namingContext.createName(variantGroup.path, conflictMap, variantGroup.variants);
       return updatePaddingStylesBasedOnBorder({
         ...variantGroup,
         key,
       });
     });
+    return { selectors, warnings };
   }
 
   const instancesWithVariant: (Omit<
@@ -160,7 +240,8 @@ export const convertVariantGroupBy = (
   );
 
   // With combination parsing: new behavior
-  return [...instancesWithoutVariant, ...parsedVariantInstances].map((instance) =>
+  const selectors = [...instancesWithoutVariant, ...parsedVariantInstances].map((instance) =>
     updatePaddingStylesBasedOnBorder(instance),
   );
+  return { selectors, warnings };
 };

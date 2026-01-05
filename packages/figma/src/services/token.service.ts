@@ -89,6 +89,9 @@ export async function extractNodeToken(
     token ??= await collectBoundVariable(varId, property, pathNodes, node);
 
     if (!token) {
+      // TODO(ERROR-HANDLING): Replace throw with log-and-continue strategy.
+      // Should log warning with variable ID (varId), property, and node path,
+      // skip this token, and add to warnings array to show in UI. Don't halt entire process.
       throw new Error('Unexpected null token for variable');
     }
 

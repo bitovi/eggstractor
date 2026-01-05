@@ -38,13 +38,15 @@ describe('convertVariantGroupBy', () => {
     const templateNamingContext = createNamingContext(partialConfig);
     const combinatorialNamingContext = createNamingContext(partialConfig);
 
-    const templateStyles = convertVariantGroupBy(
+    const { selectors: templateSelectorsRaw } = convertVariantGroupBy(
       styleTokenCollection,
       styleTokensGroupedByVariantCombination,
       transform,
       templateNamingContext,
       false,
-    )
+    );
+
+    const templateStyles = templateSelectorsRaw
       // Remove extra properties for just required properties
       .map((token) => ({
         key: token.key,
@@ -53,13 +55,15 @@ describe('convertVariantGroupBy', () => {
         variants: token.variants,
       }));
 
-    const combinatorialStyles = convertVariantGroupBy(
+    const { selectors: combinatorialSelectorsRaw } = convertVariantGroupBy(
       styleTokenCollection,
       styleTokensGroupedByVariantCombination,
       transform,
       combinatorialNamingContext,
       true,
-    )
+    );
+
+    const combinatorialStyles = combinatorialSelectorsRaw
       // Remove extra properties for just required properties
       .map((token) => ({
         key: token.key,

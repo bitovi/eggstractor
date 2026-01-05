@@ -359,13 +359,16 @@ export const transformToScss: Transformer = (
   );
 
   const namingContext = createNamingContext();
-  const selectors = convertVariantGroupBy(
+  const { selectors, warnings: variantWarnings } = convertVariantGroupBy(
     tokens,
     variantGroups,
     (token) => getMixinPropertyAndValue(token, primitiveVariablesForGradients),
     namingContext,
     useCombinatorialParsing,
   );
+
+  // Merge variant warnings with existing warnings
+  const allWarnings = [...(warnings || []), ...variantWarnings];
 
   for (const selector of selectors) {
     output += `@mixin ${selector.key} {\n`;
@@ -377,7 +380,7 @@ export const transformToScss: Transformer = (
 
   return {
     result: output,
-    warnings,
+    warnings: allWarnings,
     errors,
   };
 };

@@ -35,6 +35,9 @@ async function resolveToPrimitiveVariableName(variable: Variable): Promise<strin
       const aliasVariableFromFigma = await figma.variables.getVariableByIdAsync(value.id);
 
       if (!aliasVariableFromFigma) {
+        // TODO(ERROR-HANDLING): Replace throw with log-and-continue strategy.
+        // Should log warning with variable ID (value.id), use fallback value or skip the token,
+        // and add to warnings array to show in UI. Don't halt entire process.
         throw new Error('Unexpected missing variable from Figma');
       }
 
@@ -71,6 +74,9 @@ async function getVariableActualValue(variable: Variable, propertyName: string):
       const aliasVariableFromFigma = await figma.variables.getVariableByIdAsync(value.id);
 
       if (!aliasVariableFromFigma) {
+        // TODO(ERROR-HANDLING): Replace throw with log-and-continue strategy.
+        // Should log warning with variable ID (value.id), use fallback value or skip the token,
+        // and add to warnings array to show in UI. Don't halt entire process.
         throw new Error('Unexpected missing variable from Figma');
       }
 

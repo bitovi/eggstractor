@@ -125,35 +125,58 @@ const main = async () => {
     generateSemanticColorUtilities: boolean,
     outputMode: OutputMode = 'all',
   ): Promise<TransformerResult> {
-    postMessageToUI({
-      type: 'progress-start',
-    });
+    try {
+      postMessageToUI({
+        type: 'progress-start',
+      });
 
-    let lastProgressTime = 0;
-    const tokens = await collectTokens((progress, message) => {
-      const now = Date.now();
+      let lastProgressTime = 0;
+      const tokens = await collectTokens((progress, message) => {
+        const now = Date.now();
 
-      if (now - lastProgressTime > 500) {
-        lastProgressTime = now;
-        void updateProgress(progress, message);
-      }
-    }, outputMode);
+        if (now - lastProgressTime > 500) {
+          lastProgressTime = now;
+          void updateProgress(progress, message);
+        }
+      }, outputMode);
 
-    await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
+      await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
 
-    const stylesheet = await transformTokensToStylesheet(
-      tokens,
-      format,
-      useCombinatorialParsing,
-      generateSemanticColorUtilities,
-      outputMode,
-    );
+      const stylesheet = await transformTokensToStylesheet(
+        tokens,
+        format,
+        useCombinatorialParsing,
+        generateSemanticColorUtilities,
+        outputMode,
+      );
 
-    postMessageToUI({
-      type: 'progress-end',
-    });
+      postMessageToUI({
+        type: 'progress-end',
+      });
 
-    return stylesheet;
+      return stylesheet;
+    } catch (error) {
+      // Log error to console so it persists and can be debugged
+      console.error('🚨 Error generating styles:', error);
+
+      // End progress and send error to UI
+      postMessageToUI({
+        type: 'progress-end',
+      });
+
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      postMessageToUI({
+        type: 'error',
+        message: `Failed to generate styles: ${errorMessage}`,
+      });
+
+      // Return empty result with error
+      return {
+        result: '',
+        warnings: [],
+        errors: [errorMessage],
+      };
+    }
   }
 
   // Listen for messages from the UI

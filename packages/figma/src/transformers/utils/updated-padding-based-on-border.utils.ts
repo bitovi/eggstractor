@@ -134,6 +134,9 @@ const parseShorthand = (value: string): ParsedShorthand => {
         left: parts[3],
       };
     default:
+      // TODO(ERROR-HANDLING): Replace throw with log-and-continue strategy.
+      // Should log warning with the invalid shorthand value, use fallback padding values,
+      // and add to warnings array to show in UI. Don't halt entire process.
       throw new Error('Invalid shorthand');
   }
 };

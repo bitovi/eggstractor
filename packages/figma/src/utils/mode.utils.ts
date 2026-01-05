@@ -44,6 +44,9 @@ export function getModesFromCollection(collection: VariableCollection): ModeInfo
 export function getDefaultMode(collection: VariableCollection): ModeInfo {
   const modes = getModesFromCollection(collection);
   if (modes.length === 0) {
+    // TODO(ERROR-HANDLING): Replace throw with log-and-continue strategy.
+    // Should log warning with collection ID and name, skip this collection,
+    // and add to warnings array to show in UI. Don't halt entire process.
     throw new Error('Cannot get default mode: collection has no modes');
   }
   return modes[0];
