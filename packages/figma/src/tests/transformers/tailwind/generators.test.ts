@@ -228,6 +228,33 @@ describe('generateTailwindBorderClass', () => {
     const result = generateTailwindBorderClass(borderTokenNoColor);
     expect(result).toBe('border-2 border-[#0daeff]');
   });
+
+  it('should handle border with rgba() color correctly', () => {
+    const borderTokenRgba = {
+      ...borderToken,
+      rawValue: '1px solid rgba(0, 0, 0, 1)',
+    };
+    const result = generateTailwindBorderClass(borderTokenRgba);
+    expect(result).toBe('border border-solid border-[rgba(0,0,0,1)]');
+  });
+
+  it('should handle border with rgba() color with different opacity', () => {
+    const borderTokenRgba = {
+      ...borderToken,
+      rawValue: '2px solid rgba(255, 128, 64, 0.5)',
+    };
+    const result = generateTailwindBorderClass(borderTokenRgba);
+    expect(result).toBe('border-2 border-solid border-[rgba(255,128,64,0.5)]');
+  });
+
+  it('should handle border with only rgba() color (no width or style)', () => {
+    const borderTokenRgba = {
+      ...borderToken,
+      rawValue: 'rgba(0, 0, 0, 0.03)',
+    };
+    const result = generateTailwindBorderClass(borderTokenRgba);
+    expect(result).toBe('border-[rgba(0,0,0,0.03)]');
+  });
 });
 
 describe('generateTailwindBorderRadiusClass', () => {
