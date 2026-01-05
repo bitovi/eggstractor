@@ -65,13 +65,16 @@ export const transformToTailwindSassClass: Transformer = (
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token: NonNullableStyleToken) => token.name);
   const namingContext = createNamingContext();
-  const selectors = convertVariantGroupBy(
+  const { selectors, warnings: variantWarnings } = convertVariantGroupBy(
     collection,
     groupedTokens,
     getStylePropertyAndValue,
     namingContext,
     useCombinatorialParsing,
   );
+
+  // Merge warnings from filterStyleTokens and convertVariantGroupBy
+  const allWarnings = [...warnings, ...variantWarnings];
 
   let output = '/* Generated Tailwind-SCSS */';
 
@@ -95,7 +98,7 @@ export const transformToTailwindSassClass: Transformer = (
 
   return {
     result: output,
-    warnings,
+    warnings: allWarnings,
     errors,
   };
 };
@@ -152,13 +155,16 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
   const namingContext = createNamingContext(tailwind4NamingConfig);
 
-  const selectors = convertVariantGroupBy(
+  const { selectors, warnings: variantWarnings } = convertVariantGroupBy(
     collection,
     groupedTokens,
     getStylePropertyAndValue,
     namingContext,
     useCombinatorialParsing,
   );
+
+  // Merge warnings from filterStyleTokens and convertVariantGroupBy
+  const allWarnings = [...warnings, ...variantWarnings];
 
   /**
    * @deprecated - This is a temporary fix to ensure the output is consistent with the previous version.
@@ -196,7 +202,7 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
 
   return {
     result: output,
-    warnings,
+    warnings: allWarnings,
     errors,
   };
 };

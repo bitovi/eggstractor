@@ -35,6 +35,13 @@ export const GeneratingStylesProgressBar: FC = () => {
     setWarnings(msg.warnings || []);
   });
 
+  useOnPluginMessage('error', () => {
+    // Reset loading state when an error occurs
+    setLoading(false);
+    setPercentage(0);
+    setMessage('');
+  });
+
   if (!loading) {
     return null;
   }
