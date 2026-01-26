@@ -53,11 +53,11 @@ export const createNamingContext = (
       .join('--');
 
     // Remove characters that break Tailwind 4 utility names or builds
-    // Remove: parentheses, plus signs, ampersands
+    // Remove: parentheses, plus signs, ampersands, apostrophes
     // Then convert remaining special chars (spaces, dots, underscores) to hyphens
     let cleaned = variantsCombination
       .replace(/[()]/g, '') // Remove parentheses
-      .replace(/[+&]/g, '') // Remove plus signs and ampersands
+      .replace(/[+&']/g, '') // Remove plus signs, ampersands, and apostrophes
       .replace(/[\s._]/g, '-'); // Convert spaces, dots, underscores to hyphens
 
     // Remove path components
@@ -104,10 +104,11 @@ export const createNamingContext = (
         .map(({ property, value }) => {
           if (value === 'root') return null;
 
-          // Clean the value: remove parens, plus, ampersand, convert spaces to hyphens
+          // Clean the value: remove parens, plus, ampersand, apostrophes, convert spaces to hyphens
           // Then collapse multiple consecutive hyphens and remove leading/trailing hyphens
           const cleanValue = value
             .trim()
+            .replace(/[+&'()]/g, '') // Remove problematic characters
             .replace(/\s+/g, '-') // Convert spaces to hyphens
             .replace(/-+/g, '-') // Collapse multiple hyphens to single hyphen
             .toLowerCase();
