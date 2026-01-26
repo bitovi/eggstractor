@@ -12,4 +12,5 @@ export interface GithubConfig {
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
   outputMode: OutputMode;
+  includePageInPath: boolean;
 }

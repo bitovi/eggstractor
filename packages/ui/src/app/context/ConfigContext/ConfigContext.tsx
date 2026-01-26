@@ -11,6 +11,7 @@ export interface Config {
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
   outputMode: OutputMode;
+  includePageInPath: boolean;
 }
 
 type ConfigType = Config & {
@@ -30,6 +31,7 @@ interface ConfigProps {
   useCombinatorialParsing?: boolean;
   generateSemanticColorUtilities?: boolean;
   outputMode?: OutputMode;
+  includePageInPath?: boolean;
 }
 
 export const ConfigProvider: FC<ConfigProps> = ({
@@ -42,6 +44,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   useCombinatorialParsing: pUseComb = true,
   generateSemanticColorUtilities: pGenSemColorUtil = false,
   outputMode: pOutputMode = 'all',
+  includePageInPath: pIncludePageInPath = true,
 }) => {
   // Internal defaults used only when the prop is undefined at mount
   const [repoPath, setRepoPath] = useState<string>(pRepoPath ?? '');
@@ -54,6 +57,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
     pGenSemColorUtil ?? false,
   );
   const [outputMode, setOutputMode] = useState<OutputMode>(pOutputMode ?? 'all');
+  const [includePageInPath, setIncludePageInPath] = useState<boolean>(pIncludePageInPath ?? true);
 
   const value = useMemo(() => {
     const saveConfig = (config: Partial<Config>): void => {
@@ -66,6 +70,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       const _generateSemanticColorUtilities =
         config.generateSemanticColorUtilities ?? generateSemanticColorUtilities;
       const _outputMode = config.outputMode ?? outputMode;
+      const _includePageInPath = config.includePageInPath ?? includePageInPath;
 
       setRepoPath(config.repoPath ?? _reportPath);
       setFilePath(config.filePath ?? _filePath);
@@ -77,6 +82,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
         config.generateSemanticColorUtilities ?? _generateSemanticColorUtilities,
       );
       setOutputMode(config.outputMode ?? _outputMode);
+      setIncludePageInPath(config.includePageInPath ?? _includePageInPath);
       messageMainThread({
         type: 'save-config',
         repoPath: _reportPath,
@@ -87,6 +93,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
         useCombinatorialParsing: _useCombinatorialParsing,
         generateSemanticColorUtilities: _generateSemanticColorUtilities,
         outputMode: _outputMode,
+        includePageInPath: _includePageInPath,
       });
     };
 
@@ -99,6 +106,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       useCombinatorialParsing,
       generateSemanticColorUtilities,
       outputMode,
+      includePageInPath,
       saveConfig,
     };
   }, [
@@ -110,6 +118,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
     useCombinatorialParsing,
     generateSemanticColorUtilities,
     outputMode,
+    includePageInPath,
   ]);
 
   return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;

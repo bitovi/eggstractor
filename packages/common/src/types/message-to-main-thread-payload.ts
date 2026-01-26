@@ -42,6 +42,7 @@ export interface SaveConfigPayload extends Omit<CreatePRPayload, 'type'> {
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
   outputMode: OutputMode;
+  includePageInPath: boolean;
 }
 
 /**
@@ -53,6 +54,7 @@ export interface GenerateStylesPayload extends BaseMessageToMainThreadPayload {
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
   outputMode: OutputMode;
+  includePageInPath: boolean;
 }
 
 /**

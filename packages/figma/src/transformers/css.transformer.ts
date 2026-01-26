@@ -1,6 +1,11 @@
 import { StyleToken, TokenCollection, TransformerResult } from '../types';
 import { deduplicateMessages, groupBy } from './utils';
-import { createNamingContext, rem, generateCssVariablesWithModes } from '../utils';
+import {
+  createNamingContext,
+  rem,
+  generateCssVariablesWithModes,
+  defaultContextConfig,
+} from '../utils';
 import { convertVariantGroupBy } from './variants';
 import { Transformer } from './types';
 
@@ -104,6 +109,7 @@ export const transformToCss: Transformer = (
   useCombinatorialParsing: boolean,
   _generateSemantics,
   outputMode = 'all',
+  includePageInPath = true,
 ): TransformerResult => {
   let output = '/* Generated CSS */';
 
@@ -178,7 +184,10 @@ export const transformToCss: Transformer = (
     {} as Record<string, StyleToken[]>,
   );
 
-  const namingContext = createNamingContext();
+  const namingContext = createNamingContext({
+    ...defaultContextConfig,
+    includePageInPath,
+  });
   const selectors = convertVariantGroupBy(
     tokens,
     variantGroups,

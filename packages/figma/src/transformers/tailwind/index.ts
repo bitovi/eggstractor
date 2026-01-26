@@ -12,6 +12,7 @@ import {
   generateSemanticColorUtilities,
   generateCssVariablesWithModes,
   generateScssLayerUtilitiesFromModes,
+  defaultContextConfig,
 } from '../../utils';
 import { Transformer } from '../types';
 
@@ -32,6 +33,7 @@ export const transformToTailwindSassClass: Transformer = (
   useCombinatorialParsing: boolean,
   _generateSemantics,
   outputMode = 'all',
+  includePageInPath = true,
 ) => {
   // For 'variables' mode, output CSS variables with multi-mode support + @layer utilities
   if (outputMode === 'variables') {
@@ -80,7 +82,10 @@ export const transformToTailwindSassClass: Transformer = (
   // For 'components' and 'all' modes, generate mixins
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token: NonNullableStyleToken) => token.name);
-  const namingContext = createNamingContext();
+  const namingContext = createNamingContext({
+    ...defaultContextConfig,
+    includePageInPath,
+  });
   const selectors = convertVariantGroupBy(
     collection,
     groupedTokens,
@@ -174,6 +179,7 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
   useCombinatorialParsing: boolean,
   generateSemantics = true,
   outputMode = 'all',
+  includePageInPath = true,
 ) => {
   // Extract semantic colors for custom utilities (if enabled)
   let semanticColorTokens: VariableToken[] = [];
@@ -207,7 +213,10 @@ export const transformToTailwindLayerUtilityClassV4: Transformer = (
   // For 'components' and 'all' modes, process style tokens
   const { styleTokens, warnings, errors } = filterStyleTokens(collection);
   const groupedTokens = groupBy(styleTokens, (token) => token.name);
-  const namingContext = createNamingContext(tailwind4NamingConfig);
+  const namingContext = createNamingContext({
+    ...tailwind4NamingConfig,
+    includePageInPath,
+  });
 
   const selectors = convertVariantGroupBy(
     collection,

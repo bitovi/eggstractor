@@ -1,5 +1,11 @@
 import { TokenCollection, StyleToken, TransformerResult } from '../types';
-import { sanitizeName, rem, createNamingContext, generateScssVariablesWithModes } from '../utils';
+import {
+  sanitizeName,
+  rem,
+  createNamingContext,
+  generateScssVariablesWithModes,
+  defaultContextConfig,
+} from '../utils';
 import { deduplicateMessages, groupBy } from './utils';
 import { convertVariantGroupBy } from './variants';
 import type { Transformer } from './types';
@@ -213,6 +219,7 @@ export const transformToScss: Transformer = (
   useCombinatorialParsing: boolean,
   _generateSemantics,
   outputMode = 'all',
+  includePageInPath = true,
 ): TransformerResult => {
   let output = '';
 
@@ -358,7 +365,10 @@ export const transformToScss: Transformer = (
     {} as Record<string, StyleToken[]>,
   );
 
-  const namingContext = createNamingContext();
+  const namingContext = createNamingContext({
+    ...defaultContextConfig,
+    includePageInPath,
+  });
   const selectors = convertVariantGroupBy(
     tokens,
     variantGroups,

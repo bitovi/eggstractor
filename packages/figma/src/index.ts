@@ -83,6 +83,7 @@ const main = async () => {
     useCombinatorialParsing: boolean,
     generateSemanticColorUtilities: boolean,
     outputMode: OutputMode = 'all',
+    includePageInPath = true,
   ): TransformerResult {
     switch (format) {
       case 'scss':
@@ -91,6 +92,7 @@ const main = async () => {
           useCombinatorialParsing,
           generateSemanticColorUtilities,
           outputMode,
+          includePageInPath,
         );
       case 'css':
         return transformToCss(
@@ -98,6 +100,7 @@ const main = async () => {
           useCombinatorialParsing,
           generateSemanticColorUtilities,
           outputMode,
+          includePageInPath,
         );
       case 'tailwind-scss':
         return transformToTailwindSassClass(
@@ -105,6 +108,7 @@ const main = async () => {
           useCombinatorialParsing,
           generateSemanticColorUtilities,
           outputMode,
+          includePageInPath,
         );
       case 'tailwind-v4':
         return transformToTailwindLayerUtilityClassV4(
@@ -112,6 +116,7 @@ const main = async () => {
           useCombinatorialParsing,
           generateSemanticColorUtilities,
           outputMode,
+          includePageInPath,
         );
       default:
         throw new Error(`Unsupported format: ${format}`);
@@ -124,6 +129,7 @@ const main = async () => {
     useCombinatorialParsing: boolean,
     generateSemanticColorUtilities: boolean,
     outputMode: OutputMode = 'all',
+    includePageInPath = true,
   ): Promise<TransformerResult> {
     postMessageToUI({
       type: 'progress-start',
@@ -147,6 +153,7 @@ const main = async () => {
       useCombinatorialParsing,
       generateSemanticColorUtilities,
       outputMode,
+      includePageInPath,
     );
 
     postMessageToUI({
@@ -164,6 +171,7 @@ const main = async () => {
         msg.useCombinatorialParsing,
         msg.generateSemanticColorUtilities,
         msg.outputMode ?? 'all',
+        msg.includePageInPath,
       );
       generatedScss = result.result; // Store just the generated code
       postMessageToUI({
@@ -183,6 +191,7 @@ const main = async () => {
           useCombinatorialParsing: msg.useCombinatorialParsing,
           generateSemanticColorUtilities: msg.generateSemanticColorUtilities,
           outputMode: msg.outputMode,
+          includePageInPath: msg.includePageInPath,
         }),
       ]);
       postMessageToUI({ type: 'config-saved' });

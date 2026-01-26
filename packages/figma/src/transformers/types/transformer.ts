@@ -11,4 +11,5 @@ export type Transformer = (
   useCombinatorialParsing: boolean,
   generateSemanticColorUtilities?: boolean,
   outputMode?: OutputMode,
+  includePageInPath?: boolean,
 ) => TransformerResult;

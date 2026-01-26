@@ -29,6 +29,11 @@ export const OUTPUT_MODE_OPTIONS: ButtonGroupOption<OutputMode>[] = [
   { value: 'all', label: 'All' },
 ];
 
+export const INCLUDE_PAGE_IN_PATH_OPTIONS: ButtonGroupOption<boolean>[] = [
+  { value: true, label: 'Yes' },
+  { value: false, label: 'No' },
+];
+
 export const Setup: FC = () => {
   const {
     repoPath: initialRepoPath,
@@ -38,6 +43,7 @@ export const Setup: FC = () => {
     useCombinatorialParsing: initialUseCombinatorialParsing,
     generateSemanticColorUtilities: initialGenerateSemanticColorUtilities,
     outputMode: initialOutputMode,
+    includePageInPath: initialIncludePageInPath,
     saveConfig,
   } = useConfig();
 
@@ -52,6 +58,7 @@ export const Setup: FC = () => {
     initialGenerateSemanticColorUtilities,
   );
   const [outputMode, setOutputMode] = useState<OutputMode>(initialOutputMode);
+  const [includePageInPath, setIncludePageInPath] = useState(initialIncludePageInPath);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -63,6 +70,7 @@ export const Setup: FC = () => {
       useCombinatorialParsing,
       generateSemanticColorUtilities,
       outputMode,
+      includePageInPath,
     });
     alert('Changes saved!');
   };
@@ -134,6 +142,15 @@ export const Setup: FC = () => {
             onChange={(value) => setUseCombinatorialParsing(value === 'combinatorial')}
             options={OUTPUT_GROUPING_OPTIONS}
             hint="Combinatorial uses AI to group and minimize output styles"
+          ></ButtonGroup>
+        </div>
+        <div>
+          <ButtonGroup
+            label="Include page name in utilities"
+            value={includePageInPath}
+            onChange={setIncludePageInPath}
+            options={INCLUDE_PAGE_IN_PATH_OPTIONS}
+            hint="e.g., 'button-page-button-large' vs 'button-large'"
           ></ButtonGroup>
         </div>
       </div>

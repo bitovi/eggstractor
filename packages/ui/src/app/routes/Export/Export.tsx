@@ -23,6 +23,7 @@ export const Export: FC = () => {
     filePath,
     generateSemanticColorUtilities,
     outputMode,
+    includePageInPath,
   } = useConfig();
   const { loading, setLoading, generatedStyles, setGeneratedStyles } = useGeneratedStyles();
   const { status: prStatus, setCreatingPR, setPRCreated, setIdle } = useStatus();
@@ -36,6 +37,7 @@ export const Export: FC = () => {
       useCombinatorialParsing,
       generateSemanticColorUtilities,
       outputMode,
+      includePageInPath,
     });
   };
 
