@@ -18,7 +18,27 @@ export const convertToGeneratorTokens = (
       if (styleToken?.variableTokenMapByProperty) {
         const variableToken = styleToken.variableTokenMapByProperty.get(property);
         if (variableToken?.metadata?.variableTokenType === 'semantic') {
-          semanticVariableName = variableToken.name;
+          // Only use semantic variable name if the variable is a TRUE alias
+          // (its name differs from its primitiveRef). Primitives bound directly
+          // to nodes have name === primitiveRef and should NOT be used as semantic
+          // utility names since those utilities may not exist in the design system
+          // (e.g., prevents generating 'icon-blue-500' instead of 'icon-text-primary-default').
+          if (!variableToken.primitiveRef || variableToken.name !== variableToken.primitiveRef) {
+            semanticVariableName = variableToken.name;
+          }
+        }
+
+        // For box-shadow property, also check 'strokes' key since INSIDE borders
+        // use stroke color variables but the style property is 'box-shadow'
+        if (!semanticVariableName && property === 'box-shadow') {
+          const strokeToken = styleToken.variableTokenMapByProperty.get('strokes');
+          if (
+            strokeToken?.metadata?.variableTokenType === 'semantic' &&
+            strokeToken.primitiveRef &&
+            strokeToken.name !== strokeToken.primitiveRef
+          ) {
+            semanticVariableName = strokeToken.name;
+          }
         }
       }
 

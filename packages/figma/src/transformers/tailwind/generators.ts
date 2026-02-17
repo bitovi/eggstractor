@@ -193,10 +193,21 @@ export function parseBorderShorthand(border: string) {
     - "5px 10px 15px 20px"    → top-left, top-right, bottom-right, bottom-left
 */
 export const generateTailwindBorderRadiusClass: Generator = ({ rawValue }, dynamicTheme?) => {
-  const borderRadiusMapping = dynamicTheme?.borderRadius || borderRadius;
+  // Merge static fallbacks with theme mappings. 50% is used by ellipse/circle
+  // elements and should map to 'full' (equivalent to Tailwind's rounded-full).
+  const borderRadiusMapping = { '50%': 'full', ...(dynamicTheme?.borderRadius || borderRadius) };
   const radiusCorners = ['tl', 'tr', 'br', 'bl'] as const;
-  return normalizeBorderRadius(rawValue)
-    .map((v) => (v === '0' ? '0px' : v)) //changing 0 to 0px tailwind utility picks it up
+
+  const normalizedCorners = normalizeBorderRadius(rawValue).map((v) => (v === '0' ? '0px' : v));
+
+  // When all corners have the same value, use the shorthand form
+  // (e.g., rounded-full instead of rounded-tl-full rounded-tr-full ...)
+  if (normalizedCorners.every((v) => v === normalizedCorners[0])) {
+    const normalizedToken = normalizeTailwindToken(borderRadiusMapping, normalizedCorners[0]);
+    return normalizedToken ? `rounded-${normalizedToken}` : 'rounded';
+  }
+
+  return normalizedCorners
     .map((sizeValue, i) => {
       const normalizedToken = normalizeTailwindToken(borderRadiusMapping, sizeValue);
 
@@ -232,13 +243,21 @@ export const generateTailwindBorderClass: Generator = (token, dynamicTheme?) => 
   }
 
   if (color) {
-    borderResult.push(
-      `${borderPropertyToShorthand[token.property]}-${normalizeTailwindToken(
-        colorsMapping,
-        color,
-        color,
-      )}`,
-    );
+    // When a semantic variable is available, use it for the color part instead
+    // of resolving through the primitive hex-to-name mapping. This ensures
+    // border colors reference semantic tokens that adapt to theme changes.
+    if (token.semanticVariableName) {
+      const cleanName = token.semanticVariableName.replace(/^colors-/, '').replace(/^color-/, '');
+      borderResult.push(`${borderPropertyToShorthand[token.property]}-${cleanName}`);
+    } else {
+      borderResult.push(
+        `${borderPropertyToShorthand[token.property]}-${normalizeTailwindToken(
+          colorsMapping,
+          color,
+          color,
+        )}`,
+      );
+    }
   }
 
   return borderResult.join(' ');
@@ -340,6 +359,15 @@ export const generateTailwindBoxShadowClass: Generator = (token, dynamicTheme?) 
 
       const colorPattern = /#[0-9a-fA-F]{6}/g;
       resolvedShadow = resolvedShadow.replace(colorPattern, (hexColor) => {
+        // When a semantic variable is available (e.g., for INSIDE border colors),
+        // use it instead of the primitive hex-to-name mapping. This ensures
+        // box-shadow border colors reference semantic tokens that adapt to themes.
+        if (token.semanticVariableName) {
+          const cleanName = token.semanticVariableName
+            .replace(/^colors-/, '')
+            .replace(/^color-/, '');
+          return `var(--${cleanName})`;
+        }
         const normalizedHex = hexColor.toLowerCase();
         const colorThemeName = colorMapping[normalizedHex];
         return colorThemeName ? `var(--${colorThemeName})` : hexColor;
