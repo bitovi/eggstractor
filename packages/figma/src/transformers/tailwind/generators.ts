@@ -193,8 +193,11 @@ export function parseBorderShorthand(border: string) {
     - "5px 10px 15px 20px"    → top-left, top-right, bottom-right, bottom-left
 */
 export const generateTailwindBorderRadiusClass: Generator = ({ rawValue }, dynamicTheme?) => {
-  // Merge static fallbacks with theme mappings. 50% is used by ellipse/circle
-  // elements and should map to 'full' (equivalent to Tailwind's rounded-full).
+  // Figma's border.processor emits '50%' for ELLIPSE nodes (circles/ovals) since
+  // CSS `border-radius: 50%` is how circles are defined. Tailwind's default theme
+  // uses '9999px' for 'full', so '50%' has no match in theme-tokens. We add it as
+  // a static fallback here so ellipses correctly produce `rounded-full`.
+  // The spread order lets a dynamicTheme override '50%' if a design system needs to.
   const borderRadiusMapping = { '50%': 'full', ...(dynamicTheme?.borderRadius || borderRadius) };
   const radiusCorners = ['tl', 'tr', 'br', 'bl'] as const;
 
