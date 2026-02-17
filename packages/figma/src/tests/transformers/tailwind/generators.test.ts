@@ -53,6 +53,7 @@ vi.mock('../../../theme-tokens', () => ({
     },
     borderRadius: {
       '4px': 'DEFAULT',
+      '50%': 'full',
     },
   },
 }));
@@ -228,6 +229,25 @@ describe('generateTailwindBorderClass', () => {
     const result = generateTailwindBorderClass(borderTokenNoColor);
     expect(result).toBe('border-2 border-[#0daeff]');
   });
+  it('should use semantic variable name for border color when available', () => {
+    const borderTokenWithSemantic = {
+      ...borderToken,
+      rawValue: '1px solid #4f5153',
+      semanticVariableName: 'navigation-border-neutral-footer-divider',
+    };
+    const result = generateTailwindBorderClass(borderTokenWithSemantic);
+    expect(result).toBe('border border-solid border-navigation-border-neutral-footer-divider');
+  });
+
+  it('should strip colors- prefix from semantic variable in border color', () => {
+    const borderTokenWithPrefix = {
+      ...borderToken,
+      rawValue: '2px solid #4f5153',
+      semanticVariableName: 'colors-navigation-border-neutral-footer-divider',
+    };
+    const result = generateTailwindBorderClass(borderTokenWithPrefix);
+    expect(result).toBe('border-2 border-solid border-navigation-border-neutral-footer-divider');
+  });
 });
 
 describe('generateTailwindBorderRadiusClass', () => {
@@ -238,7 +258,7 @@ describe('generateTailwindBorderRadiusClass', () => {
   };
   it('should return tailwind utilities for border radius when given one property', () => {
     const result = generateTailwindBorderRadiusClass(borderRadiusToken);
-    expect(result).toBe('rounded-tl-[20px] rounded-tr-[20px] rounded-br-[20px] rounded-bl-[20px]');
+    expect(result).toBe('rounded-[20px]');
   });
 
   it('should return tailwind utilities for border radius when given one property', () => {
@@ -248,7 +268,17 @@ describe('generateTailwindBorderRadiusClass', () => {
       rawValue: '4px', // "1px" : "DEFAULT" in borderRadius
     };
     const result = generateTailwindBorderRadiusClass(defaultBorderRadiusToken);
-    expect(result).toBe('rounded-tl rounded-tr rounded-br rounded-bl');
+    expect(result).toBe('rounded');
+  });
+
+  it('should return rounded-full for 50% border radius (ellipse/circle elements)', () => {
+    const circularToken = {
+      ...basicToken,
+      property: 'border-radius',
+      rawValue: '50%',
+    };
+    const result = generateTailwindBorderRadiusClass(circularToken);
+    expect(result).toBe('rounded-full');
   });
 
   it('should return tailwind utilities for border radius when given two properties', () => {
@@ -560,6 +590,38 @@ describe('generateTailwindBoxShadowClass', () => {
     };
     const result = generateTailwindBoxShadowClass(mixedShadowToken);
     expect(result).toBe('shadow-[0_4px_6px_rgba(0,0,0,0.1),inset_0_1px_0_0_var(--blue-900)]');
+  });
+
+  it('should use semantic variable name for box-shadow color when available', () => {
+    const insetShadowToken = {
+      ...boxShadowToken,
+      rawValue: 'inset 0 1px 0 0 #4f5153',
+      semanticVariableName: 'form-border-neutral-disabled',
+    };
+    const result = generateTailwindBoxShadowClass(insetShadowToken);
+    expect(result).toBe('shadow-[inset_0_1px_0_0_var(--form-border-neutral-disabled)]');
+  });
+
+  it('should strip colors- prefix from semantic variable in box-shadow color', () => {
+    const insetShadowToken = {
+      ...boxShadowToken,
+      rawValue: 'inset 0 1px 0 0 #4f5153',
+      semanticVariableName: 'colors-form-border-neutral-disabled',
+    };
+    const result = generateTailwindBoxShadowClass(insetShadowToken);
+    expect(result).toBe('shadow-[inset_0_1px_0_0_var(--form-border-neutral-disabled)]');
+  });
+
+  it('should use semantic variable for all hex colors in multiple box shadows', () => {
+    const multiShadowToken = {
+      ...boxShadowToken,
+      rawValue: 'inset 0 1px 0 0 #4f5153, inset -1px 0 0 0 #4f5153',
+      semanticVariableName: 'form-border-neutral-disabled',
+    };
+    const result = generateTailwindBoxShadowClass(multiShadowToken);
+    expect(result).toBe(
+      'shadow-[inset_0_1px_0_0_var(--form-border-neutral-disabled),inset_-1px_0_0_0_var(--form-border-neutral-disabled)]',
+    );
   });
 
   it('should use dynamic theme tokens when available', () => {
