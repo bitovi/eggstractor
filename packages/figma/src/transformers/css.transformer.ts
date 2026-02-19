@@ -179,13 +179,16 @@ export const transformToCss: Transformer = (
   );
 
   const namingContext = createNamingContext();
-  const selectors = convertVariantGroupBy(
+  const { selectors, warnings: variantWarnings } = convertVariantGroupBy(
     tokens,
     variantGroups,
     getClassNamePropertyAndValue,
     namingContext,
     useCombinatorialParsing,
   );
+
+  // Merge variant warnings with existing warnings
+  const allWarnings = [...(warnings || []), ...variantWarnings];
 
   for (const selector of selectors) {
     output += `\n.${selector.key} {\n`;
@@ -197,7 +200,7 @@ export const transformToCss: Transformer = (
 
   return {
     result: output,
-    warnings,
+    warnings: allWarnings,
     errors,
   };
 };

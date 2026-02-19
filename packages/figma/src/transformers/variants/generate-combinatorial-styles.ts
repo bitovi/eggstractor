@@ -231,6 +231,9 @@ const convertStyleNodesToCssStylesheet = (
         styleTags[key].styles[style.cssProperty],
         style.cssValue,
       );
+      // TODO(ERROR-HANDLING): Replace throw with log-and-continue strategy.
+      // Should add to warnings array, skip this specific style property, and continue processing.
+      // Similar to component ID mismatch handling in convert-variant-group-by.ts
       throw new Error('Unexpected style exists for combination of variant');
     }
     styleTags[key].styles[style.cssProperty] = style.cssValue;

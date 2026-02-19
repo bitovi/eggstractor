@@ -7,7 +7,7 @@ import { StyleToken } from '../../types';
  * Used specifically for tailwind styles using Generators.
  */
 export const convertToGeneratorTokens = (
-  parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>,
+  parsedStyleTokens: ReturnType<typeof convertVariantGroupBy>['selectors'],
 ): { variantPath: string; tokens: GeneratorToken[] }[] => {
   return parsedStyleTokens.map((parsedStyleToken) => {
     const tokens = Object.entries(parsedStyleToken.styles).map(([property, rawValue]) => {
