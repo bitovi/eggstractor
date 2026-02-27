@@ -165,7 +165,7 @@ saveToken: async function (token: string) {
 
 ### Plugin Data vs Client Storage
 
-- **Plugin Data**: Used for file-specific data that travels with the file (`customFileId`, `githubConfig`)
+- **Plugin Data**: Used for file-specific data that travels with the file (`customFileId`, `gitProviderConfig`)
 - **Client Storage**: Used for user-specific data across sessions (`fileTokens`, `fileBranches`, `route`)
 
 ## Development Environment Support

@@ -67,32 +67,10 @@ export default {
   },
   getGitProviderConfig: async function getGitProviderConfig(): Promise<GitProviderConfig | null> {
     try {
-      // Try new config first
       const savedConfig = figma.root.getPluginData('gitProviderConfig');
       if (savedConfig) {
-        const parsed = JSON.parse(savedConfig) as GitProviderConfig & { githubToken?: string };
-        // Migrate old githubToken to authToken if present
-        if (parsed.githubToken && !parsed.authToken) {
-          parsed.authToken = parsed.githubToken;
-        }
-        return parsed;
+        return JSON.parse(savedConfig) as GitProviderConfig;
       }
-
-      // Fall back to old githubConfig for backward compatibility
-      const oldConfig = figma.root.getPluginData('githubConfig');
-      if (oldConfig) {
-        const parsed = JSON.parse(oldConfig) as GitProviderConfig & { githubToken?: string };
-        // Add default provider if not present
-        if (!parsed.provider) {
-          parsed.provider = 'github';
-        }
-        // Migrate old githubToken to authToken if present
-        if (parsed.githubToken && !parsed.authToken) {
-          parsed.authToken = parsed.githubToken;
-        }
-        return parsed;
-      }
-
       return null;
     } catch (error) {
       console.error('Error reading config:', error);

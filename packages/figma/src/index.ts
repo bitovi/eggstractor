@@ -177,7 +177,7 @@ const main = async () => {
         msg.authToken ? gitProvider.saveToken(msg.authToken) : Promise.resolve(),
         gitProvider.saveBranchName(msg.branchName),
         gitProvider.saveGitProviderConfig({
-          provider: msg.provider || 'github', // Default to github for backward compatibility
+          provider: msg.provider,
           repoPath: msg.repoPath,
           filePath: msg.filePath,
           format: getValidStylesheetFormat(msg.format),
@@ -197,21 +197,15 @@ const main = async () => {
 
       const modifiedConfig: Partial<GitProviderConfig> = config || {};
 
-      // Backward compatibility: migrate old githubToken to authToken
       if (authToken || branchName) {
         modifiedConfig.authToken = authToken;
         modifiedConfig.branchName = branchName;
       }
 
-      // Default provider to 'github' if not set
-      if (!modifiedConfig.provider) {
-        modifiedConfig.provider = 'github';
-      }
-
       postMessageToUI({ type: 'config-loaded', config: modifiedConfig });
     } else if (msg.type === 'create-pr') {
       try {
-        const provider = msg.provider || 'github'; // Default to github for backward compatibility
+        const provider = msg.provider;
 
         const result = await gitProvider.createPR(
           provider,

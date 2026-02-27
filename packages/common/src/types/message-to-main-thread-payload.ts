@@ -28,7 +28,7 @@ export interface LoadConfigPayload extends BaseMessageToMainThreadPayload {
  */
 export interface CreatePRPayload extends BaseMessageToMainThreadPayload {
   type: 'create-pr';
-  provider?: GitProvider; // Optional for backward compatibility
+  provider: GitProvider;
   authToken: string;
   filePath: string;
   repoPath: string;

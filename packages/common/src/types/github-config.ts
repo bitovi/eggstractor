@@ -3,11 +3,10 @@ import type { OutputMode } from './output-mode';
 export type GitProvider = 'github' | 'gitlab';
 
 /**
- * Configuration for Git provider integration (GitHub or GitLab).
- * Supports both cloud-hosted (github.com, gitlab.com) and self-hosted instances.
+ * TODO: Warning, this type is a little shaky and likely to change.
  */
 export interface GitProviderConfig {
-  provider?: GitProvider; // Optional for backward compatibility, defaults to 'github'
+  provider?: GitProvider;
   repoPath: string;
   filePath: string;
   format: string;
@@ -18,8 +17,3 @@ export interface GitProviderConfig {
   outputMode: OutputMode;
   instanceUrl?: string | null; // For self-hosted GitLab (e.g., 'gitlab.company.com')
 }
-
-/**
- * @deprecated Use GitProviderConfig instead
- */
-export type GithubConfig = GitProviderConfig;
