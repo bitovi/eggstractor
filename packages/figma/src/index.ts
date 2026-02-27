@@ -5,7 +5,7 @@ import {
   transformToTailwindLayerUtilityClassV4,
   transformToTailwindSassClass,
 } from './transformers';
-import gitProvider from './git-provider';
+import GitProvider from './git-provider';
 import {
   MessageToUIPayload,
   getValidStylesheetFormat,
@@ -174,9 +174,9 @@ const main = async () => {
       });
     } else if (msg.type === 'save-config') {
       await Promise.all([
-        msg.authToken ? gitProvider.saveToken(msg.authToken) : Promise.resolve(),
-        gitProvider.saveBranchName(msg.branchName),
-        gitProvider.saveGitProviderConfig({
+        msg.authToken ? GitProvider.saveToken(msg.authToken) : Promise.resolve(),
+        GitProvider.saveBranchName(msg.branchName),
+        GitProvider.saveGitProviderConfig({
           provider: msg.provider,
           repoPath: msg.repoPath,
           filePath: msg.filePath,
@@ -190,9 +190,9 @@ const main = async () => {
       postMessageToUI({ type: 'config-saved' });
     } else if (msg.type === 'load-config') {
       const [authToken, branchName, config] = await Promise.all([
-        gitProvider.getToken(),
-        gitProvider.getBranchName(),
-        gitProvider.getGitProviderConfig(),
+        GitProvider.getToken(),
+        GitProvider.getBranchName(),
+        GitProvider.getGitProviderConfig(),
       ]);
 
       const modifiedConfig: Partial<GitProviderConfig> = config || {};
@@ -207,7 +207,7 @@ const main = async () => {
       try {
         const provider = msg.provider;
 
-        const result = await gitProvider.createPR(
+        const result = await GitProvider.createPR(
           provider,
           msg.authToken,
           msg.repoPath,
