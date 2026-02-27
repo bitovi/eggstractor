@@ -9,7 +9,7 @@
   "editorType": ["figma", "dev"],
   "networkAccess": {
     "allowedDomains": ["*"],
-    "reasoning": "Requires access to GitHub API and GitLab API (including self-hosted instances) for creating pull requests and merge requests"
+    "reasoning": "Requires access to GitHub API and GitLab API (including self-hosted instances that can be any domain) for creating pull requests and merge requests"
   },
   "ui": "packages/ui/dist/index.html"
 }
