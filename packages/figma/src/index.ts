@@ -5,13 +5,13 @@ import {
   transformToTailwindLayerUtilityClassV4,
   transformToTailwindSassClass,
 } from './transformers';
-import Github from './github';
+import GitProvider from './git-provider';
 import {
   MessageToUIPayload,
   getValidStylesheetFormat,
   StylesheetFormat,
   MessageToMainThreadPayload,
-  GithubConfig,
+  GitProviderConfig,
   OutputMode,
 } from '@eggstractor/common';
 import { TokenCollection, TransformerResult } from './types';
@@ -197,42 +197,47 @@ const main = async () => {
       });
     } else if (msg.type === 'save-config') {
       await Promise.all([
-        Github.saveToken(msg.githubToken),
-        Github.saveBranchName(msg.branchName),
-        Github.saveGithubConfig({
+        msg.authToken ? GitProvider.saveToken(msg.authToken) : Promise.resolve(),
+        GitProvider.saveBranchName(msg.branchName),
+        GitProvider.saveGitProviderConfig({
+          provider: msg.provider,
           repoPath: msg.repoPath,
           filePath: msg.filePath,
           format: getValidStylesheetFormat(msg.format),
           useCombinatorialParsing: msg.useCombinatorialParsing,
           generateSemanticColorUtilities: msg.generateSemanticColorUtilities,
           outputMode: msg.outputMode,
+          instanceUrl: msg.instanceUrl,
         }),
       ]);
       postMessageToUI({ type: 'config-saved' });
     } else if (msg.type === 'load-config') {
-      const [githubToken, branchName, config] = await Promise.all([
-        Github.getToken(),
-        Github.getBranchName(),
-        Github.getGithubConfig(),
+      const [authToken, branchName, config] = await Promise.all([
+        GitProvider.getToken(),
+        GitProvider.getBranchName(),
+        GitProvider.getGitProviderConfig(),
       ]);
 
-      const modifiedConfig: Partial<GithubConfig> = config || {};
+      const modifiedConfig: Partial<GitProviderConfig> = config || {};
 
-      // If there are any changes to the config, add them and remove any missing ones
-      if (githubToken || branchName) {
-        modifiedConfig.githubToken = githubToken;
+      if (authToken || branchName) {
+        modifiedConfig.authToken = authToken;
         modifiedConfig.branchName = branchName;
       }
 
       postMessageToUI({ type: 'config-loaded', config: modifiedConfig });
     } else if (msg.type === 'create-pr') {
       try {
-        const result = await Github.createGithubPR(
-          msg.githubToken,
+        const provider = msg.provider;
+
+        const result = await GitProvider.createPR(
+          provider,
+          msg.authToken,
           msg.repoPath,
           msg.filePath,
           msg.branchName,
           generatedScss,
+          msg.instanceUrl,
         );
         postMessageToUI({
           type: 'pr-created',

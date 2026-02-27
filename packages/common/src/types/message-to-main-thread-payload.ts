@@ -1,5 +1,6 @@
 import type { StylesheetFormat } from './stylesheet-format';
 import type { OutputMode } from './output-mode';
+import type { GitProvider } from './github-config';
 
 export type MessageType =
   | 'load-config'
@@ -23,18 +24,20 @@ export interface LoadConfigPayload extends BaseMessageToMainThreadPayload {
 }
 
 /**
- * Creates GitHub pull request with generated styles.
+ * Creates a pull request (GitHub) or merge request (GitLab) with generated styles.
  */
 export interface CreatePRPayload extends BaseMessageToMainThreadPayload {
   type: 'create-pr';
-  githubToken: string;
+  provider: GitProvider;
+  authToken: string;
   filePath: string;
   repoPath: string;
   branchName: string;
+  instanceUrl?: string; // For self-hosted GitLab
 }
 
 /**
- * Persists GitHub configuration and tokens.
+ * Persists Git provider configuration and tokens.
  */
 export interface SaveConfigPayload extends Omit<CreatePRPayload, 'type'> {
   type: 'save-config';

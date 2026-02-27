@@ -14,10 +14,12 @@ export const App = () => {
 
   useOnPluginMessage('config-loaded', (msg) => {
     setLoadedConfig({
+      provider: msg.config.provider ?? 'github',
       branchName: msg.config.branchName ?? '',
       filePath: msg.config.filePath ?? '',
-      githubToken: msg.config.githubToken ?? '',
+      authToken: msg.config.authToken ?? '',
       repoPath: msg.config.repoPath ?? '',
+      instanceUrl: msg.config.instanceUrl ?? undefined,
       format: getValidStylesheetFormat(msg.config.format),
       useCombinatorialParsing: msg.config.useCombinatorialParsing ?? true,
       generateSemanticColorUtilities: msg.config.generateSemanticColorUtilities ?? false,

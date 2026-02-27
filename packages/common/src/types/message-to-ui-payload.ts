@@ -1,4 +1,4 @@
-import type { GithubConfig } from './github-config';
+import type { GitProviderConfig } from './github-config';
 
 export interface BaseMessageToUIPayload {
   type: string;
@@ -32,7 +32,7 @@ export interface ConfigSavedPayload extends BaseMessageToUIPayload {
 
 export interface ConfigLoadedPayload extends BaseMessageToUIPayload {
   type: 'config-loaded';
-  config: Partial<GithubConfig>;
+  config: Partial<GitProviderConfig>;
 }
 
 export interface PRCreatedPayload extends BaseMessageToUIPayload {

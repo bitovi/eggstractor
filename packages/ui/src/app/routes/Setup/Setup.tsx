@@ -1,8 +1,8 @@
-import { FC, FormEvent, useState } from 'react';
-import type { StylesheetFormat, OutputMode } from '@eggstractor/common';
+import { FC } from 'react';
+import type { StylesheetFormat, OutputMode, GitProvider } from '@eggstractor/common';
 import cn from 'classnames';
-import { useConfig } from '../../context';
 import { Button, Input, ButtonGroup, ButtonGroupOption } from '../../components';
+import { useSetupForm } from './hooks';
 import styles from './Setup.module.scss';
 
 const FORMAT_OPTIONS: ButtonGroupOption<StylesheetFormat>[] = [
@@ -11,6 +11,11 @@ const FORMAT_OPTIONS: ButtonGroupOption<StylesheetFormat>[] = [
   { value: 'scss', label: 'SCSS' },
   { value: 'tailwind-scss', label: 'Tailwind 3 + SCSS' },
   { value: 'tailwind-v4', label: 'Tailwind 4' },
+];
+
+export const PROVIDER_OPTIONS: ButtonGroupOption<GitProvider>[] = [
+  { value: 'github', label: 'GitHub' },
+  { value: 'gitlab', label: 'GitLab' },
 ];
 
 export const OUTPUT_GROUPING_OPTIONS: ButtonGroupOption<'combinatorial' | 'templated'>[] = [
@@ -31,55 +36,63 @@ export const OUTPUT_MODE_OPTIONS: ButtonGroupOption<OutputMode>[] = [
 
 export const Setup: FC = () => {
   const {
-    repoPath: initialRepoPath,
-    filePath: initialFilePath,
-    githubToken: initialGithubToken,
-    format: initialFormat,
-    useCombinatorialParsing: initialUseCombinatorialParsing,
-    generateSemanticColorUtilities: initialGenerateSemanticColorUtilities,
-    outputMode: initialOutputMode,
-    saveConfig,
-  } = useConfig();
-
-  const [repoPath, setRepoPath] = useState(initialRepoPath);
-  const [filePath, setFilePath] = useState(initialFilePath);
-  const [githubToken, setGithubToken] = useState(initialGithubToken);
-  const [format, setFormat] = useState(initialFormat);
-  const [useCombinatorialParsing, setUseCombinatorialParsing] = useState(
-    initialUseCombinatorialParsing,
-  );
-  const [generateSemanticColorUtilities, setGenerateSemanticColorUtilities] = useState(
-    initialGenerateSemanticColorUtilities,
-  );
-  const [outputMode, setOutputMode] = useState<OutputMode>(initialOutputMode);
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    saveConfig({
-      repoPath,
-      filePath,
-      githubToken,
-      format,
-      useCombinatorialParsing,
-      generateSemanticColorUtilities,
-      outputMode,
-    });
-    alert('Changes saved!');
-  };
+    provider,
+    repoPath,
+    filePath,
+    authToken,
+    instanceUrl,
+    format,
+    useCombinatorialParsing,
+    generateSemanticColorUtilities,
+    outputMode,
+    setProvider,
+    setRepoPath,
+    setFilePath,
+    setAuthToken,
+    setInstanceUrl,
+    setFormat,
+    setUseCombinatorialParsing,
+    setGenerateSemanticColorUtilities,
+    setOutputMode,
+    handleSubmit,
+    repoLabel,
+    repoHint,
+    repoLinkHref,
+    tokenLabel,
+    tokenLinkHref,
+  } = useSetupForm();
 
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <div className={cn(styles['form-fields'], 'container')}>
+        <div>
+          <ButtonGroup
+            label="Git provider"
+            value={provider}
+            onChange={setProvider}
+            options={PROVIDER_OPTIONS}
+          ></ButtonGroup>
+        </div>
         <div>
           <Input
             value={repoPath}
             onChange={setRepoPath}
-            label="Github repository"
+            label={repoLabel}
             linkLabel="How to find / create your repo"
-            linkHref="https://docs.github.com/en/repositories/creating-and-managing-repositories/quickstart-for-repositories"
-            hint="e.g., levi-myers/eggstractor-demo"
+            linkHref={repoLinkHref}
+            hint={repoHint}
           />
         </div>
+        {provider === 'gitlab' && (
+          <div>
+            <Input
+              value={instanceUrl}
+              onChange={setInstanceUrl}
+              label="GitLab instance URL (optional)"
+              hint="e.g., gitlab.company.com (leave empty for gitlab.com)"
+            />
+          </div>
+        )}
         <div>
           <Input
             value={filePath}
@@ -93,11 +106,11 @@ export const Setup: FC = () => {
         <div>
           <Input
             type="password"
-            value={githubToken}
-            onChange={setGithubToken}
-            label="Github token"
+            value={authToken}
+            onChange={setAuthToken}
+            label={tokenLabel}
             linkLabel="How to create a token"
-            linkHref="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token"
+            linkHref={tokenLinkHref}
           />
         </div>
         <div>
