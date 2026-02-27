@@ -261,6 +261,20 @@ export default {
     content: string,
     instanceUrl?: string | null,
   ): Promise<PRResult> {
+    // Validate required parameters
+    if (!authToken || !authToken.trim()) {
+      throw new Error('GitLab token is required');
+    }
+    if (!repoPath || !repoPath.trim()) {
+      throw new Error('GitLab project path is required (e.g., username/project-name)');
+    }
+    if (!filePath || !filePath.trim()) {
+      throw new Error('File path is required');
+    }
+    if (!branchName || !branchName.trim()) {
+      throw new Error('Branch name is required');
+    }
+
     const baseUrl = getGitLabBaseUrl(instanceUrl);
     const projectId = encodeProjectPath(repoPath);
     const encodedFilePath = encodeFilePath(filePath);
@@ -269,6 +283,15 @@ export default {
       'Content-Type': 'application/json',
     };
 
+    console.log('GitLab MR creation starting:', {
+      baseUrl,
+      repoPath,
+      projectId,
+      filePath,
+      encodedFilePath,
+      branchName,
+    });
+
     try {
       // Get project info and default branch
       const projectResponse = await fetch(`${baseUrl}/projects/${projectId}`, {
@@ -276,9 +299,28 @@ export default {
       });
       if (!projectResponse.ok) {
         const errorData = await projectResponse.json().catch(() => ({}));
-        throw new Error(
-          `Project not found: ${repoPath}. ${(errorData as { message?: string }).message || ''}`,
-        );
+        console.error('GitLab project fetch failed:', {
+          status: projectResponse.status,
+          statusText: projectResponse.statusText,
+          errorData,
+          url: `${baseUrl}/projects/${projectId}`,
+        });
+
+        if (projectResponse.status === 401) {
+          throw new Error(
+            `Authentication failed: Invalid GitLab token or insufficient permissions. ` +
+              `Please ensure your token has the 'api' scope (required for merge request creation). ` +
+              `Create a token at: ${baseUrl.replace('/api/v4', '')}/-/user_settings/personal_access_tokens`,
+          );
+        } else if (projectResponse.status === 404) {
+          throw new Error(
+            `Project not found: ${repoPath}. Please verify the project path is correct (e.g., username/project-name).`,
+          );
+        } else {
+          throw new Error(
+            `Failed to access project: ${repoPath}. ${(errorData as { message?: string }).message || 'Status: ' + projectResponse.status}`,
+          );
+        }
       }
       const projectData = (await projectResponse.json()) as {
         default_branch: string;
@@ -379,6 +421,15 @@ export default {
 
           if (!mrResponse.ok) {
             const errorData = (await mrResponse.json().catch(() => ({}))) as { message?: string };
+            console.error('GitLab MR creation failed:', {
+              status: mrResponse.status,
+              statusText: mrResponse.statusText,
+              errorData,
+              requestBody: {
+                source_branch: branchName,
+                target_branch: defaultBranch,
+              },
+            });
             throw new Error(
               `Failed to create merge request: ${errorData.message || 'Unknown error'}`,
             );
@@ -434,10 +485,17 @@ export default {
         prUrl,
       };
     } catch (error) {
+      // Log the full error for debugging
+      console.error('GitLab MR creation error:', error);
+
       if (error instanceof Error) {
         throw new Error(`GitLab API Error: ${error.message}`);
       }
-      throw new Error('GitLab API Error: An unknown error occurred');
+
+      // Try to extract any useful information from non-Error objects
+      const errorStr =
+        typeof error === 'object' && error !== null ? JSON.stringify(error) : String(error);
+      throw new Error(`GitLab API Error: An unknown error occurred. Details: ${errorStr}`);
     }
   },
 };

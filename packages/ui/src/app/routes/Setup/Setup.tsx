@@ -1,8 +1,8 @@
-import { FC, FormEvent, useState } from 'react';
+import { FC } from 'react';
 import type { StylesheetFormat, OutputMode, GitProvider } from '@eggstractor/common';
 import cn from 'classnames';
-import { useConfig } from '../../context';
 import { Button, Input, ButtonGroup, ButtonGroupOption } from '../../components';
+import { useSetupForm } from './hooks';
 import styles from './Setup.module.scss';
 
 const FORMAT_OPTIONS: ButtonGroupOption<StylesheetFormat>[] = [
@@ -36,64 +36,34 @@ export const OUTPUT_MODE_OPTIONS: ButtonGroupOption<OutputMode>[] = [
 
 export const Setup: FC = () => {
   const {
-    provider: initialProvider,
-    repoPath: initialRepoPath,
-    filePath: initialFilePath,
-    authToken: initialAuthToken,
-    instanceUrl: initialInstanceUrl,
-    format: initialFormat,
-    useCombinatorialParsing: initialUseCombinatorialParsing,
-    generateSemanticColorUtilities: initialGenerateSemanticColorUtilities,
-    outputMode: initialOutputMode,
-    saveConfig,
-  } = useConfig();
-
-  const [provider, setProvider] = useState<GitProvider>(initialProvider);
-  const [repoPath, setRepoPath] = useState(initialRepoPath);
-  const [filePath, setFilePath] = useState(initialFilePath);
-  const [authToken, setAuthToken] = useState(initialAuthToken);
-  const [instanceUrl, setInstanceUrl] = useState(initialInstanceUrl || '');
-  const [format, setFormat] = useState(initialFormat);
-  const [useCombinatorialParsing, setUseCombinatorialParsing] = useState(
-    initialUseCombinatorialParsing,
-  );
-  const [generateSemanticColorUtilities, setGenerateSemanticColorUtilities] = useState(
-    initialGenerateSemanticColorUtilities,
-  );
-  const [outputMode, setOutputMode] = useState<OutputMode>(initialOutputMode);
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    saveConfig({
-      provider,
-      repoPath,
-      filePath,
-      authToken,
-      instanceUrl: provider === 'gitlab' ? instanceUrl : undefined,
-      format,
-      useCombinatorialParsing,
-      generateSemanticColorUtilities,
-      outputMode,
-    });
-    alert('Changes saved!');
-  };
-
-  const providerLabel = provider === 'github' ? 'GitHub' : 'GitLab';
-  const repoLabel = provider === 'github' ? 'GitHub repository' : 'GitLab project';
-  const repoHint =
-    provider === 'github' ? 'e.g., levi-myers/eggstractor-demo' : 'e.g., username/project-name';
-  const repoLinkHref =
-    provider === 'github'
-      ? 'https://docs.github.com/en/repositories/creating-and-managing-repositories/quickstart-for-repositories'
-      : 'https://docs.gitlab.com/ee/user/project/';
-  const tokenLabel = `${providerLabel} token`;
-  const tokenLinkHref =
-    provider === 'github'
-      ? 'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token'
-      : 'https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html';
+    provider,
+    repoPath,
+    filePath,
+    authToken,
+    instanceUrl,
+    format,
+    useCombinatorialParsing,
+    generateSemanticColorUtilities,
+    outputMode,
+    setProvider,
+    setRepoPath,
+    setFilePath,
+    setAuthToken,
+    setInstanceUrl,
+    setFormat,
+    setUseCombinatorialParsing,
+    setGenerateSemanticColorUtilities,
+    setOutputMode,
+    handleSubmit,
+    repoLabel,
+    repoHint,
+    repoLinkHref,
+    tokenLabel,
+    tokenLinkHref,
+  } = useSetupForm();
 
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <div className={cn(styles['form-fields'], 'container')}>
         <div>
           <ButtonGroup

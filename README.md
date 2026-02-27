@@ -2,7 +2,7 @@
 
 <img align="left" src="img/eggstractor.png" height="80px" style="margin-right: 20px;">
 
-This plugin generates SCSS variables and mixins from Figma, it also enables you to create a new branch, commit, and push your changes to GitHub.
+This plugin generates SCSS variables and mixins from Figma, it also enables you to create a new branch, commit, and push your changes to GitHub or GitLab.
 
 <br>
 
@@ -12,6 +12,7 @@ This plugin generates SCSS variables and mixins from Figma, it also enables you 
 - Generates SCSS variables for each color.
 - Handles text nodes to extract font colors.
 - Outputs the generated SCSS code to the plugin UI.
+- Supports GitHub Pull Requests and GitLab Merge Requests (including self-hosted instances).
 
 <a href="https://www.youtube.com/watch?v=m7i-IexlZqQ">
   <img src="https://github.com/user-attachments/assets/3b8925f5-2fd5-47b3-8a7b-7763cec1eeec" alt="Eggstractor Introduction - Figma to CSS Mixins - Design and Development working in harmony" width="300">

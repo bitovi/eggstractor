@@ -25,9 +25,10 @@ export const mockFigma = () => {
         mockPostMessageToUI({
           type: 'config-loaded',
           config: {
+            provider: 'github',
             repoPath: 'mock-repo-path',
             branchName: 'mock-branch-name',
-            githubToken: 'mock-github-token',
+            authToken: 'mock-auth-token',
             format: 'scss',
             filePath: 'styles/eggstracted.scss',
             useCombinatorialParsing: true,
