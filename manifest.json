@@ -7,5 +7,9 @@
   "enableProposedApi": false,
   "documentAccess": "dynamic-page",
   "editorType": ["figma", "dev"],
+  "networkAccess": {
+    "allowedDomains": ["*"],
+    "reasoning": "Requires access to GitHub API and GitLab API (including self-hosted instances) for creating pull requests and merge requests"
+  },
   "ui": "packages/ui/dist/index.html"
 }
