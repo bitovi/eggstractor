@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { convertToGeneratorTokens } from '../../../transformers/variants/convert-to-generator-tokens';
 import { StyleToken, VariableToken } from '../../../types';
+import type { convertVariantGroupBy } from '../../../transformers/variants/convert-variant-group-by';
 
 /**
  * Helper to build a minimal parsedStyleToken input for convertToGeneratorTokens.
@@ -47,9 +48,7 @@ function createParsedStyleToken({
       styles: { [property]: rawValue },
       tokens: [styleToken],
     },
-  ] as unknown as ReturnType<
-    typeof import('../../../transformers/variants/convert-variant-group-by').convertVariantGroupBy
-  >;
+  ] as unknown as ReturnType<typeof convertVariantGroupBy>;
 }
 
 function createVariableToken(
