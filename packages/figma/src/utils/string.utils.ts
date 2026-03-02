@@ -25,6 +25,7 @@ export function toBase64(str: string): string {
 export function sanitizeName(name: string): string {
   return name
     .toLowerCase()
+    .replace(/'/g, '') // Remove apostrophes entirely
     .replace(/[^a-z0-9]/g, '-') // Replace non-alphanumeric characters with hyphens
     .replace(/-+/g, '-') // Replace multiple consecutive hyphens with single hyphen
     .replace(/^-|-$/g, ''); // Remove leading and trailing hyphens
@@ -33,6 +34,7 @@ export function sanitizeName(name: string): string {
 export function sanitizeSegment(segment: string): string {
   return segment
     .toLowerCase()
+    .replace(/'/g, '') // Remove apostrophes entirely
     .replace(/[^a-z0-9]/g, '-') // Replace non-alphanumeric characters with hyphens
     .replace(/-+/g, '-') // Replace multiple consecutive hyphens with single hyphen
     .replace(/^-|-$/g, ''); // Remove leading and trailing hyphens
