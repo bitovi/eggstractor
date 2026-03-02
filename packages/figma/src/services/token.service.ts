@@ -61,6 +61,19 @@ interface Issue {
   error: string;
 }
 
+/**
+ * Map Figma API property names to CSS property names
+ * This is needed because Figma uses different names (e.g., 'effects')
+ * than we use for CSS properties (e.g., 'box-shadow')
+ */
+function mapFigmaPropertyToCSSProperty(figmaProperty: string): string {
+  const propertyMap: Record<string, string> = {
+    effects: 'box-shadow',
+    // Add more mappings here as needed
+  };
+  return propertyMap[figmaProperty] ?? figmaProperty;
+}
+
 export async function extractNodeToken(
   node: SceneNode,
   processor: StyleProcessor,
@@ -123,14 +136,17 @@ export async function extractNodeToken(
   if ('boundVariables' in node && node.boundVariables) {
     for (const [key, value] of Object.entries(node.boundVariables)) {
       if (typeof key === 'string' && value) {
+        // Map Figma property names to CSS property names (e.g., 'effects' -> 'box-shadow')
+        const cssProperty = mapFigmaPropertyToCSSProperty(key);
+
         if (Array.isArray(value)) {
           for (const v of value) {
             if (v.type === 'VARIABLE_ALIAS') {
-              await getOrCreateVariableToken(v.id, key);
+              await getOrCreateVariableToken(v.id, cssProperty);
             }
           }
         } else if (value?.type === 'VARIABLE_ALIAS') {
-          await getOrCreateVariableToken(String(value.id), key);
+          await getOrCreateVariableToken(String(value.id), cssProperty);
         }
       }
     }
