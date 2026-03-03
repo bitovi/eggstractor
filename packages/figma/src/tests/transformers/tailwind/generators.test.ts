@@ -255,6 +255,8 @@ describe('generateTailwindBorderClass', () => {
     };
     const result = generateTailwindBorderClass(borderTokenRgba);
     expect(result).toBe('border-[rgba(0,0,0,0.03)]');
+  });
+
   it('should use semantic variable name for border color when available', () => {
     const borderTokenWithSemantic = {
       ...borderToken,
