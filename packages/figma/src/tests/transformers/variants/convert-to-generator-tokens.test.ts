@@ -48,7 +48,7 @@ function createParsedStyleToken({
       styles: { [property]: rawValue },
       tokens: [styleToken],
     },
-  ] as unknown as ReturnType<typeof convertVariantGroupBy>;
+  ] as unknown as ReturnType<typeof convertVariantGroupBy>['selectors'];
 }
 
 function createVariableToken(
@@ -184,7 +184,7 @@ describe('convertToGeneratorTokens', () => {
         },
       ] as unknown as ReturnType<
         typeof import('../../../transformers/variants/convert-variant-group-by').convertVariantGroupBy
-      >;
+      >['selectors'];
 
       const result = convertToGeneratorTokens(input);
       expect(result[0].tokens[0].semanticVariableName).toBe('form-border-neutral-disabled');
@@ -223,7 +223,7 @@ describe('convertToGeneratorTokens', () => {
         },
       ] as unknown as ReturnType<
         typeof import('../../../transformers/variants/convert-variant-group-by').convertVariantGroupBy
-      >;
+      >['selectors'];
 
       const result = convertToGeneratorTokens(input);
       expect(result[0].tokens[0].semanticVariableName).toBeUndefined();
