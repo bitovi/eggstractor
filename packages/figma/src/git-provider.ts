@@ -1,5 +1,44 @@
-import { GitProviderConfig, GitProvider } from '@eggstractor/common';
+import { GitProviderConfig, GitProvider, StylesheetFormat, OutputMode } from '@eggstractor/common';
 import { toBase64 } from './utils';
+
+const FORMAT_LABELS: Record<StylesheetFormat, string> = {
+  scss: 'SCSS variables',
+  css: 'CSS custom properties',
+  'tailwind-scss': 'Tailwind utilities',
+  'tailwind-v4': 'Tailwind utilities',
+};
+
+const OUTPUT_MODE_LABELS: Record<OutputMode, string> = {
+  variables: 'variables',
+  components: 'component utilities',
+  all: 'styles',
+};
+
+const getFormatLabel = (format: StylesheetFormat): string => FORMAT_LABELS[format] || 'styles';
+
+const getOutputModeLabel = (outputMode: OutputMode): string =>
+  OUTPUT_MODE_LABELS[outputMode] || 'styles';
+
+const generateCommitMessage = (format: StylesheetFormat, outputMode: OutputMode): string => {
+  const formatLabel = getFormatLabel(format);
+  const modeLabel = getOutputModeLabel(outputMode);
+  if (outputMode === 'all') {
+    return `Update ${formatLabel} from Figma`;
+  }
+  return `Update ${formatLabel} (${modeLabel}) from Figma`;
+};
+
+const generatePRTitle = (format: StylesheetFormat, outputMode: OutputMode): string =>
+  generateCommitMessage(format, outputMode);
+
+const generatePRBody = (format: StylesheetFormat, outputMode: OutputMode): string => {
+  const formatLabel = getFormatLabel(format);
+  const modeLabel = getOutputModeLabel(outputMode);
+  if (outputMode === 'all') {
+    return `This PR updates ${formatLabel} automatically generated from Figma using Eggstractor.`;
+  }
+  return `This PR updates ${formatLabel} (${modeLabel}) automatically generated from Figma using Eggstractor.`;
+};
 
 export interface PRResult {
   prUrl: string;
@@ -86,11 +125,13 @@ export default {
     branchName: string,
     content: string,
     instanceUrl?: string | null,
+    format?: StylesheetFormat,
+    outputMode?: OutputMode,
   ): Promise<PRResult> {
     if (provider === 'gitlab') {
-      return this.createGitLabMR(authToken, repoPath, filePath, branchName, content, instanceUrl);
+      return this.createGitLabMR(authToken, repoPath, filePath, branchName, content, instanceUrl, format, outputMode);
     }
-    return this.createGitHubPR(authToken, repoPath, filePath, branchName, content);
+    return this.createGitHubPR(authToken, repoPath, filePath, branchName, content, format, outputMode);
   },
   createGitHubPR: async function createGitHubPR(
     authToken: string,
@@ -98,6 +139,8 @@ export default {
     filePath: string,
     branchName: string,
     content: string,
+    format?: StylesheetFormat,
+    outputMode?: OutputMode,
   ): Promise<PRResult> {
     const baseUrl = 'https://api.github.com';
     const headers = {
@@ -175,7 +218,7 @@ export default {
         method: 'PUT',
         headers,
         body: JSON.stringify({
-          message: 'Update SCSS variables from Figma',
+          message: format && outputMode ? generateCommitMessage(format, outputMode) : 'Update styles from Figma',
           content: toBase64(content),
           branch: branchName,
           ...(fileSha && { sha: fileSha }), // Include SHA if file exists
@@ -206,8 +249,8 @@ export default {
           method: 'POST',
           headers,
           body: JSON.stringify({
-            title: 'Update SCSS variables from Figma',
-            body: 'This PR was automatically created by the Figma SCSS plugin.',
+            title: format && outputMode ? generatePRTitle(format, outputMode) : 'Update styles from Figma',
+            body: format && outputMode ? generatePRBody(format, outputMode) : 'This PR was automatically created by the Figma Eggstractor plugin.',
             head: branchName,
             base: defaultBranch,
           }),
@@ -238,6 +281,8 @@ export default {
     branchName: string,
     content: string,
     instanceUrl?: string | null,
+    format?: StylesheetFormat,
+    outputMode?: OutputMode,
   ): Promise<PRResult> {
     // Validate required parameters
     if (!authToken || !authToken.trim()) {
@@ -359,7 +404,7 @@ export default {
         body: JSON.stringify({
           branch: branchName,
           content: toBase64(content),
-          commit_message: 'Update SCSS variables from Figma',
+          commit_message: format && outputMode ? generateCommitMessage(format, outputMode) : 'Update styles from Figma',
           encoding: 'base64',
         }),
       });
@@ -392,8 +437,8 @@ export default {
             body: JSON.stringify({
               source_branch: branchName,
               target_branch: defaultBranch,
-              title: 'Update SCSS variables from Figma',
-              description: 'This merge request was automatically created by the Figma SCSS plugin.',
+              title: format && outputMode ? generatePRTitle(format, outputMode) : 'Update styles from Figma',
+              description: format && outputMode ? generatePRBody(format, outputMode) : 'This merge request was automatically created by the Figma Eggstractor plugin.',
             }),
           });
 
@@ -423,8 +468,8 @@ export default {
           body: JSON.stringify({
             source_branch: branchName,
             target_branch: defaultBranch,
-            title: 'Update SCSS variables from Figma',
-            description: 'This merge request was automatically created by the Figma SCSS plugin.',
+            title: format && outputMode ? generatePRTitle(format, outputMode) : 'Update styles from Figma',
+            description: format && outputMode ? generatePRBody(format, outputMode) : 'This merge request was automatically created by the Figma Eggstractor plugin.',
           }),
         });
 
