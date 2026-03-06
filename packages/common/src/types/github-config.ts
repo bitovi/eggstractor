@@ -12,6 +12,8 @@ export interface GitProviderConfig {
   format: string;
   authToken?: string | null;
   branchName?: string | null;
+  /** The base/target branch the PR or MR will merge into. Defaults to the repo's default branch when omitted. */
+  targetBranch?: string | null;
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
   outputMode: OutputMode;

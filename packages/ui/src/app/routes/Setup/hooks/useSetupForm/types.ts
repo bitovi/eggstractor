@@ -7,6 +7,8 @@ export interface SetupFormValues {
   filePath: string;
   authToken: string;
   instanceUrl: string;
+  /** The base/target branch the PR or MR will merge into. Empty string means use the repo's default branch. */
+  targetBranch: string;
   format: StylesheetFormat;
   useCombinatorialParsing: boolean;
   generateSemanticColorUtilities: boolean;
@@ -19,6 +21,7 @@ export interface SetupFormHandlers {
   setFilePath: (filePath: string) => void;
   setAuthToken: (authToken: string) => void;
   setInstanceUrl: (instanceUrl: string) => void;
+  setBaseBranch: (targetBranch: string) => void;
   setFormat: (format: StylesheetFormat) => void;
   setUseCombinatorialParsing: (value: boolean) => void;
   setGenerateSemanticColorUtilities: (value: boolean) => void;
