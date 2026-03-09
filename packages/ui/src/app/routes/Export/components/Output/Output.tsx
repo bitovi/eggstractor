@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useMemo, useCallback, memo } from 'react';
 import { copyToClipboard, highlightCode } from '../../../../utils';
 import { useOnPluginMessage } from '../../../../hooks';
 import { useGeneratedStyles } from '../../../../context';
@@ -6,15 +6,30 @@ import { Button, ExpandableCard } from '../../../../components';
 import { CopyIcon } from '../CopyIcon';
 import styles from './Output.module.scss';
 
-export const Output: FC = () => {
+const OutputInner: FC = () => {
   const { generatedStyles, setGeneratedStyles, warnings, setWarnings } = useGeneratedStyles();
   const [copied, setCopied] = useState(false);
   const [warningsExpanded, setWarningsExpanded] = useState(true);
 
-  useOnPluginMessage('output-styles', (msg) => {
-    setGeneratedStyles(msg.styles);
-    setWarnings(msg.warnings || []);
-  });
+  const handleOutputStyles = useCallback(
+    (msg: { type: 'output-styles'; styles: string; warnings: string[]; errors: string[] }) => {
+      setGeneratedStyles(msg.styles);
+      setWarnings(msg.warnings || []);
+    },
+    [setGeneratedStyles, setWarnings],
+  );
+
+  useOnPluginMessage('output-styles', handleOutputStyles);
+
+  /**
+   * Memoised so hljs only runs when `generatedStyles` actually changes — not
+   * on every re-render triggered by parent state (e.g. branch-name typing) or
+   * local state (e.g. warnings expand/collapse toggle).
+   */
+  const highlightedCode = useMemo(() => {
+    if (!generatedStyles) return null;
+    return highlightCode(generatedStyles);
+  }, [generatedStyles]);
 
   if (!generatedStyles) {
     return null;
@@ -55,12 +70,17 @@ export const Output: FC = () => {
         </Button>
         <pre
           dangerouslySetInnerHTML={{
-            __html: generatedStyles
-              ? highlightCode(generatedStyles)
-              : 'Generated code will be displayed here...',
+            __html: highlightedCode ?? generatedStyles,
           }}
         />
       </div>
     </div>
   );
 };
+
+/**
+ * React.memo prevents re-renders when parent state changes (e.g. the branch
+ * name Input in Export) because Output receives no props. It will still
+ * re-render when the shared GeneratedStylesContext values change.
+ */
+export const Output = memo(OutputInner);
