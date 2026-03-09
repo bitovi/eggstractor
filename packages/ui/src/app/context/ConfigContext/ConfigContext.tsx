@@ -7,6 +7,8 @@ export interface Config {
   repoPath: string;
   filePath: string;
   branchName: string;
+  /** The base/target branch the PR or MR will merge into. Defaults to the repo's default branch when omitted. */
+  targetBranch?: string;
   authToken: string;
   instanceUrl?: string;
   format: StylesheetFormat;
@@ -28,6 +30,7 @@ interface ConfigProps {
   repoPath?: string;
   filePath?: string;
   branchName?: string;
+  targetBranch?: string;
   authToken?: string;
   instanceUrl?: string;
   format?: StylesheetFormat;
@@ -42,6 +45,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   repoPath: pRepoPath = '',
   filePath: pFilePath = '',
   branchName: pBranchName = '',
+  targetBranch: pTargetBranch = '',
   authToken: pAuthToken = '',
   instanceUrl: pInstanceUrl = '',
   format: pFormat = 'scss',
@@ -54,6 +58,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
   const [repoPath, setRepoPath] = useState<string>(pRepoPath ?? '');
   const [filePath, setFilePath] = useState<string>(pFilePath ?? '');
   const [branchName, setBranchName] = useState<string>(pBranchName ?? '');
+  const [targetBranch, setBaseBranch] = useState<string>(pTargetBranch ?? '');
   const [authToken, setAuthToken] = useState<string>(pAuthToken ?? '');
   const [instanceUrl, setInstanceUrl] = useState<string>(pInstanceUrl ?? '');
   const [format, setFormat] = useState<StylesheetFormat>(pFormat ?? 'scss');
@@ -69,6 +74,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       const _reportPath = config.repoPath ?? repoPath;
       const _filePath = config.filePath ?? filePath;
       const _branchName = config.branchName ?? branchName;
+      const _targetBranch = config.targetBranch ?? targetBranch;
       const _authToken = config.authToken ?? authToken;
       const _instanceUrl = config.instanceUrl ?? instanceUrl;
       const _format = config.format ?? format;
@@ -81,6 +87,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       setRepoPath(config.repoPath ?? _reportPath);
       setFilePath(config.filePath ?? _filePath);
       setBranchName(config.branchName ?? _branchName);
+      setBaseBranch(config.targetBranch ?? _targetBranch);
       setAuthToken(config.authToken ?? _authToken);
       setInstanceUrl(config.instanceUrl ?? _instanceUrl);
       setFormat(config.format ?? _format);
@@ -95,6 +102,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
         repoPath: _reportPath,
         filePath: _filePath,
         branchName: _branchName,
+        targetBranch: _targetBranch || undefined,
         authToken: _authToken,
         instanceUrl: _instanceUrl,
         format: _format,
@@ -109,6 +117,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
       repoPath,
       filePath,
       branchName,
+      targetBranch,
       authToken,
       instanceUrl,
       format,
@@ -122,6 +131,7 @@ export const ConfigProvider: FC<ConfigProps> = ({
     repoPath,
     filePath,
     branchName,
+    targetBranch,
     authToken,
     instanceUrl,
     format,

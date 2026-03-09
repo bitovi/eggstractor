@@ -19,6 +19,7 @@ export const Export: FC = () => {
     format,
     useCombinatorialParsing,
     branchName: initialBranchName,
+    targetBranch,
     authToken,
     repoPath,
     filePath,
@@ -107,6 +108,7 @@ export const Export: FC = () => {
       repoPath,
       filePath,
       branchName,
+      targetBranch: targetBranch || undefined,
     });
   };
 

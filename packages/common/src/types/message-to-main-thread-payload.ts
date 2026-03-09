@@ -33,6 +33,8 @@ export interface CreatePRPayload extends BaseMessageToMainThreadPayload {
   filePath: string;
   repoPath: string;
   branchName: string;
+  /** Target base branch for the PR/MR. Falls back to the repo's default branch when omitted. */
+  targetBranch?: string;
   instanceUrl?: string; // For self-hosted GitLab
 }
 
