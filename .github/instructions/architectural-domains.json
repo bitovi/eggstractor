@@ -47,16 +47,18 @@
       "message-typing": "useOnPluginMessage must use type-safe message filtering based on message.type"
     }
   },
-  "github-integration": {
+  "git-provider-integration": {
     "required_patterns": {
-      "github-service": "Use centralized Github service for all repository operations",
-      "file-scoped-storage": "Store tokens and configurations per-file using unique file IDs",
-      "pr-creation-workflow": "Follow create branch → commit file → create PR workflow"
+      "git-provider-service": "Use centralized git-provider service (git-provider.ts) for all repository operations across GitHub and GitLab",
+      "file-scoped-storage": "Store tokens and branch names per-file in clientStorage ('fileTokens', 'fileBranches'); store config in setPluginData('gitProviderConfig')",
+      "pr-mr-creation-workflow": "Follow create branch → commit file → check existing PR/MR → create PR/MR workflow; both GitHub and GitLab are supported",
+      "provider-dispatch": "createPR() dispatches to createGitHubPR() or createGitLabMR() based on explicit provider field — no URL-sniffing fallback"
     },
     "architectural_constraints": {
-      "storage-scope": "All GitHub data must be scoped to individual Figma files via getFileId()",
-      "api-limitations": "Only GitHub REST API is supported, no GraphQL",
-      "authentication": "Must use personal access tokens, no OAuth flow"
+      "storage-scope": "All git provider data must be scoped to individual Figma files via getFileId(); tokens and branches use clientStorage, config uses setPluginData",
+      "api-support": "GitHub REST API and GitLab REST API v4 are both supported; no GraphQL",
+      "network-access": "manifest.json uses allowedDomains: ['*'] (wildcard) to support self-hosted GitLab instances at arbitrary domains",
+      "authentication": "Must use personal access tokens; GitHub uses Bearer header, GitLab uses PRIVATE-TOKEN header; no OAuth flow"
     }
   },
   "component-structure": {
