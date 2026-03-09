@@ -46,6 +46,13 @@
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    // Smooth transition as hljs span colours arrive from the worker
+    transition: opacity 0.15s ease;
+  }
+
+  pre.plain-text {
+    // Subtly dimmed while waiting for the worker to highlight
+    opacity: 0.6;
   }
 }
 

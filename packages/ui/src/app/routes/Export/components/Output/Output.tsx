@@ -1,5 +1,5 @@
-import { FC, useState, useMemo, useCallback, memo } from 'react';
-import { copyToClipboard, highlightCode } from '../../../../utils';
+import { FC, useState, useCallback, memo } from 'react';
+import { copyToClipboard, useHighlightWorker } from '../../../../utils';
 import { useOnPluginMessage } from '../../../../hooks';
 import { useGeneratedStyles } from '../../../../context';
 import { Button, ExpandableCard } from '../../../../components';
@@ -21,15 +21,10 @@ const OutputInner: FC = () => {
 
   useOnPluginMessage('output-styles', handleOutputStyles);
 
-  /**
-   * Memoised so hljs only runs when `generatedStyles` actually changes — not
-   * on every re-render triggered by parent state (e.g. branch-name typing) or
-   * local state (e.g. warnings expand/collapse toggle).
-   */
-  const highlightedCode = useMemo(() => {
-    if (!generatedStyles) return null;
-    return highlightCode(generatedStyles);
-  }, [generatedStyles]);
+  // Runs hljs in a Web Worker so the main thread stays responsive while
+  // processing large outputs. Renders plain text immediately, then swaps to
+  // highlighted HTML once the worker responds.
+  const { highlightedCode } = useHighlightWorker(generatedStyles);
 
   if (!generatedStyles) {
     return null;
@@ -69,6 +64,7 @@ const OutputInner: FC = () => {
           <CopyIcon copied={copied} />
         </Button>
         <pre
+          className={highlightedCode ? undefined : styles['plain-text']}
           dangerouslySetInnerHTML={{
             __html: highlightedCode ?? generatedStyles,
           }}
