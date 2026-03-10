@@ -7,12 +7,15 @@ import HighlightWorker from './highlight.worker?worker&inline';
 
 interface WorkerResponse {
   id: number;
-  result: string;
+  lines: string[];
 }
 
 export interface UseHighlightWorkerResult {
-  /** Syntax-highlighted HTML string, or null while the first highlight is pending. */
-  highlightedCode: string | null;
+  /**
+   * Per-line syntax-highlighted HTML strings, each self-contained (no unclosed
+   * spans). Empty array while the first highlight is still pending.
+   */
+  lines: string[];
   /** True while the worker is processing. */
   highlighting: boolean;
 }
@@ -26,7 +29,7 @@ export interface UseHighlightWorkerResult {
  * first invocation pays the startup cost.
  */
 export function useHighlightWorker(code: string): UseHighlightWorkerResult {
-  const [highlightedCode, setHighlightedCode] = useState<string | null>(null);
+  const [lines, setLines] = useState<string[]>([]);
   const [highlighting, setHighlighting] = useState(false);
   const workerRef = useRef<Worker | null>(null);
   const requestIdRef = useRef(0);
@@ -43,7 +46,7 @@ export function useHighlightWorker(code: string): UseHighlightWorkerResult {
   // Send a new highlight request whenever `code` changes.
   useEffect(() => {
     if (!code) {
-      setHighlightedCode(null);
+      setLines([]);
       setHighlighting(false);
       return;
     }
@@ -57,7 +60,7 @@ export function useHighlightWorker(code: string): UseHighlightWorkerResult {
     const handler = (e: MessageEvent<WorkerResponse>) => {
       // Discard responses from superseded requests (e.g. rapid re-generations).
       if (e.data.id !== id) return;
-      setHighlightedCode(e.data.result);
+      setLines(e.data.lines);
       setHighlighting(false);
     };
 
@@ -69,5 +72,5 @@ export function useHighlightWorker(code: string): UseHighlightWorkerResult {
     };
   }, [code]);
 
-  return { highlightedCode, highlighting };
+  return { lines, highlighting };
 }

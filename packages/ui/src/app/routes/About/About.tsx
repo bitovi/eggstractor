@@ -20,13 +20,13 @@ export const About: FC = () => {
       </p>
       <p className={styles.p}>Eggstractor is an open source project by Bitovi. Need some help?</p>
       <p className={styles.p}>
-        <a className={styles.link}>Chat with us on Discord</a> •{' '}
-        <a className={styles.link}>Send feature requests</a> •{' '}
-        <a className={styles.link}>Email us</a>
+        <button className={styles.link}>Chat with us on Discord</button> •{' '}
+        <button className={styles.link}>Send feature requests</button> •{' '}
+        <button className={styles.link}>Email us</button>
       </p>
       <p className={styles.last}>
         Need pros to help design & build your design system or app? <br />
-        <a className={styles.link}>That's us!</a>
+        <button className={styles.link}>That&apos;s us!</button>
       </p>
       <img className={styles.img} src={wordmarkUrl} alt="Bitovi" />
       <StaticCard
