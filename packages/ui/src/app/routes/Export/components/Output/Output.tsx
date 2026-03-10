@@ -7,12 +7,6 @@ import { Button, ExpandableCard } from '../../../../components';
 import { CopyIcon } from '../CopyIcon';
 import styles from './Output.module.scss';
 
-/**
- * Line height in pixels: $size-xl (1rem = 16px) × line-height 1.5 = 24px.
- * Used as the fixed row size for the virtualizer.
- */
-const LINE_HEIGHT_PX = 24;
-
 const OutputInner: FC = () => {
   const { generatedStyles, setGeneratedStyles, warnings, setWarnings } = useGeneratedStyles();
   const [copied, setCopied] = useState(false);
@@ -37,7 +31,11 @@ const OutputInner: FC = () => {
   const virtualizer = useVirtualizer({
     count: lines.length,
     getScrollElement: () => scrollRef.current,
-    estimateSize: () => LINE_HEIGHT_PX,
+    // Rough estimate used only for the initial scroll height before any rows
+    // are measured. The actual height of each row is read from the DOM via
+    // measureElement, so this value doesn't need to stay in sync with the CSS.
+    estimateSize: () => 24,
+    measureElement: (el) => el.getBoundingClientRect().height,
     overscan: 15,
   });
 
@@ -90,6 +88,8 @@ const OutputInner: FC = () => {
               {virtualizer.getVirtualItems().map((item) => (
                 <div
                   key={item.key}
+                  ref={virtualizer.measureElement}
+                  data-index={item.index}
                   className={styles['virtual-line']}
                   style={{ transform: `translateY(${item.start}px)` }}
                   dangerouslySetInnerHTML={{ __html: lines[item.index] ?? '' }}

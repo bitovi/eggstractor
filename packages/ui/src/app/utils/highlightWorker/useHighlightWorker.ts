@@ -12,8 +12,8 @@ interface WorkerResponse {
 
 export interface UseHighlightWorkerResult {
   /**
-   * Per-line syntax-highlighted HTML strings, each self-contained (no unclosed
-   * spans). Empty array while the first highlight is still pending.
+   * Per-line strings rendered into the virtual list. Plain-text immediately,
+   * replaced by syntax-highlighted HTML once the worker responds.
    */
   lines: string[];
   /** True while the worker is processing. */
@@ -22,8 +22,9 @@ export interface UseHighlightWorkerResult {
 
 /**
  * Runs hljs inside a Web Worker so the main thread stays responsive while
- * processing large outputs. Returns plain-text immediately (highlighting=true)
- * then switches to the highlighted HTML once the worker responds.
+ * processing large outputs. Returns plain-text lines immediately
+ * (highlighting=true) then replaces them with highlighted HTML once the worker
+ * responds.
  *
  * The worker is created once and reused for every subsequent call, so only the
  * first invocation pays the startup cost.
@@ -55,21 +56,22 @@ export function useHighlightWorker(code: string): UseHighlightWorkerResult {
     if (!worker) return;
 
     const id = ++requestIdRef.current;
+
+    // Immediately surface plain-text lines so the virtualiser has content
+    // while the worker processes the highlighted version.
+    setLines(code.split('\n'));
     setHighlighting(true);
 
-    const handler = (e: MessageEvent<WorkerResponse>) => {
+    // Assigning onmessage replaces any prior handler automatically, so no
+    // explicit removeEventListener cleanup step is needed.
+    worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
       // Discard responses from superseded requests (e.g. rapid re-generations).
       if (e.data.id !== id) return;
       setLines(e.data.lines);
       setHighlighting(false);
     };
 
-    worker.addEventListener('message', handler);
     worker.postMessage({ id, code });
-
-    return () => {
-      worker.removeEventListener('message', handler);
-    };
   }, [code]);
 
   return { lines, highlighting };
