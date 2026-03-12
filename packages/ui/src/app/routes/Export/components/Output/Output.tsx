@@ -53,22 +53,24 @@ const OutputInner: FC = () => {
 
   return (
     <div className={styles['code-sample']}>
-      {warnings.length > 0 ? (
-        <ExpandableCard
-          title="Warnings"
-          expanded={warningsExpanded}
-          onToggle={() => setWarningsExpanded(!warningsExpanded)}
-        >
-          <ul className={styles['warnings-list']}>
-            {warnings.map((warning, idx) => (
-              <li key={idx}>{warning}</li>
-            ))}
-          </ul>
-        </ExpandableCard>
-      ) : null}
       <div className={styles['code-block']}>
         {/* Dedicated scroll container for the virtualizer. */}
         <div ref={scrollRef} className={styles['virtual-scroll']}>
+          {warnings.length > 0 ? (
+            <div className={styles['warnings-card']}>
+              <ExpandableCard
+                title="Warnings"
+                expanded={warningsExpanded}
+                onToggle={() => setWarningsExpanded(!warningsExpanded)}
+              >
+                <ul className={styles['warnings-list']}>
+                  {warnings.map((warning, idx) => (
+                    <li key={idx}>{warning}</li>
+                  ))}
+                </ul>
+              </ExpandableCard>
+            </div>
+          ) : null}
           <Button
             variant="icon"
             type="button"

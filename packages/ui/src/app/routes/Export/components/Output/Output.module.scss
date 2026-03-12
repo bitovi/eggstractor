@@ -2,7 +2,6 @@
 @use '../../../../../resets.scss' as *;
 
 .code-sample {
-  padding: $size-2xl;
   background: transparent;
   border: none;
   overflow: hidden;
@@ -13,11 +12,6 @@
   flex-direction: column;
   box-sizing: border-box;
   position: relative;
-
-  /* Add spacing below Card component when present */
-  :global(.card) {
-    margin-bottom: $size-2xl;
-  }
 }
 
 .code-block {
@@ -25,7 +19,6 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  padding: $size-2xl 0;
 }
 
 .virtual-scroll {
@@ -33,6 +26,7 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  padding: $size-2xl;
 
   /* Custom scrollbar styling */
   &::-webkit-scrollbar {
@@ -68,8 +62,9 @@
   font-size: $size-xl;
   line-height: 1.5;
   color: $colour-text;
-  white-space: pre;
-  overflow: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 pre.plain-text {
@@ -92,6 +87,10 @@ pre.plain-text {
   top: $size-2xl;
   z-index: 10;
   float: right;
+}
+
+.warnings-card {
+  margin-bottom: $size-2xl;
 }
 
 .warnings-list {
