@@ -173,10 +173,17 @@ export async function collectBoundVariable(
 export async function createPrimitiveVariableToken(
   variable: Variable,
   collection: VariableCollection,
+  { preserveStringCase = false }: { preserveStringCase?: boolean } = {},
 ): Promise<VariableToken | null> {
   try {
     // Note: Alias check is now done in collectPrimitiveVariables, so we don't check again here
     // This function should only receive true primitives
+
+    // Lowercasing normalizes color hex/units, but it mangles STRING values (e.g. font family
+    // names like "Inter"). CSS opts to preserve their original case; other formats keep the
+    // existing lowercase behavior so their output is unchanged.
+    const keepCase = preserveStringCase && variable.resolvedType === 'STRING';
+    const normalizeCase = (v: string) => (keepCase ? v : v.toLowerCase());
 
     const modes = getModesFromCollection(collection);
 
@@ -239,7 +246,7 @@ export async function createPrimitiveVariableToken(
           continue;
       }
 
-      modeValues[mode.modeId] = modeRawValue.toLowerCase();
+      modeValues[mode.modeId] = normalizeCase(modeRawValue);
     }
 
     // Set the primary property and rawValue from the default mode
@@ -282,7 +289,7 @@ export async function createPrimitiveVariableToken(
         property,
         name: sanitizeName(variable.name),
         value: sanitizeName(variable.name),
-        rawValue: rawValue.toLowerCase(),
+        rawValue: normalizeCase(rawValue),
         valueType: rawValue.includes('px') ? 'px' : null,
         modeId: defaultMode.modeId,
         modeName: defaultMode.modeName,
@@ -302,7 +309,7 @@ export async function createPrimitiveVariableToken(
         property,
         name: sanitizeName(variable.name),
         value: sanitizeName(variable.name),
-        rawValue: rawValue.toLowerCase(),
+        rawValue: normalizeCase(rawValue),
         valueType: rawValue.includes('px') ? 'px' : null,
         metadata: {
           variableId: variable.id,
@@ -318,12 +325,19 @@ export async function createPrimitiveVariableToken(
 }
 
 /**
- * Collect primitive variables from all Figma variable collections
- * Only collects TRUE primitives - variables that don't alias in any mode
+ * Collect primitive variables from all Figma variable collections.
+ * Only collects TRUE primitives - variables that don't alias in any mode.
+ *
+ * By default (SCSS/Tailwind) typography collections are skipped to preserve existing behavior.
+ * CSS opts in via `includeTypographyCollections` so typography primitives/modes are captured.
  */
 export async function collectPrimitiveVariables(
   collection: TokenCollection,
   onProgress: (progress: number, message: string) => void,
+  {
+    includeTypographyCollections = false,
+    preserveStringCase = false,
+  }: { includeTypographyCollections?: boolean; preserveStringCase?: boolean } = {},
 ) {
   try {
     onProgress(5, 'Collecting Figma Variables...');
@@ -340,8 +354,12 @@ export async function collectPrimitiveVariables(
     for (const varCollection of variableCollections) {
       onProgress(7, `Processing variable collection: ${varCollection.name}`);
 
-      // Skip typography/line-height collections - we don't support typography modes yet
-      if (varCollection.name.toLowerCase().includes('typography')) {
+      // Skip typography/line-height collections unless explicitly opted in (CSS).
+      // SCSS/Tailwind do not yet support typography modes.
+      if (
+        !includeTypographyCollections &&
+        varCollection.name.toLowerCase().includes('typography')
+      ) {
         continue;
       }
 
@@ -375,7 +393,9 @@ export async function collectPrimitiveVariables(
 
           // Create VariableToken for each true primitive variable
           // Pass the varCollection so we can extract mode information
-          const token = await createPrimitiveVariableToken(variable, varCollection);
+          const token = await createPrimitiveVariableToken(variable, varCollection, {
+            preserveStringCase,
+          });
           if (token) {
             primitiveTokens.push(token);
           }
@@ -391,13 +411,25 @@ export async function collectPrimitiveVariables(
 }
 
 /**
- * Collect semantic color variables for utility generation
- * Only collects color alias variables that match bg/text/border patterns
- * Now supports multiple modes - creates tokens for each mode
+ * Collect semantic alias variables for utility generation.
+ *
+ * By default (used by SCSS/Tailwind) this only collects COLOR alias variables that match
+ * bg/text/border patterns - preserving existing behavior for those outputs.
+ *
+ * When `includeAllSemanticTypes` is true (used by the plain CSS output) it collects every
+ * semantic alias regardless of resolved type or name, so families like typography, elevation,
+ * radius, size and spacing are captured - not just colors. This is intentionally scoped to CSS
+ * so SCSS and Tailwind output remain unchanged.
+ *
+ * Supports multiple modes - creates tokens for each mode.
  */
 export async function collectSemanticColorVariables(
   collection: TokenCollection,
   onProgress: (progress: number, message: string) => void,
+  {
+    includeAllSemanticTypes = false,
+    preserveStringCase = false,
+  }: { includeAllSemanticTypes?: boolean; preserveStringCase?: boolean } = {},
 ) {
   try {
     onProgress(6, 'Collecting semantic color variables...');
@@ -440,27 +472,81 @@ export async function collectSemanticColorVariables(
 
         if (!variable) continue;
 
-        // Only collect COLOR variables that are aliases (semantic variables)
-        if (variable.resolvedType !== 'COLOR') continue;
+        // Legacy behavior (SCSS/Tailwind): only COLOR aliases are treated as semantic.
+        // CSS opts in to all resolved types via includeAllSemanticTypes.
+        if (!includeAllSemanticTypes && variable.resolvedType !== 'COLOR') continue;
 
-        // Check if this is an alias variable - must be alias in at least the default mode
+        // Check if this is an alias variable - must be alias in at least the default mode.
+        // When includeAllSemanticTypes is set we collect all resolved types (COLOR, FLOAT,
+        // STRING) so semantic families like typography, elevation, radius, size and spacing
+        // are captured - not just colors.
         const defaultValue = variable.valuesByMode[defaultMode.modeId];
+        const defaultIsAlias =
+          !!defaultValue &&
+          typeof defaultValue === 'object' &&
+          'type' in defaultValue &&
+          defaultValue.type === 'VARIABLE_ALIAS';
 
-        // Skip if not an alias (must be a semantic/reference variable)
+        if (includeAllSemanticTypes) {
+          // CSS: collect the token if it aliases in ANY mode. This keeps "mixed" tokens
+          // (literal in one mode, alias in another - e.g. dataviz colors) that would
+          // otherwise fall through both the primitive and semantic collectors.
+          const aliasesInSomeMode = Object.values(variable.valuesByMode).some(
+            (v) => v && typeof v === 'object' && 'type' in v && v.type === 'VARIABLE_ALIAS',
+          );
+          if (!aliasesInSomeMode) continue;
+        } else if (!defaultIsAlias) {
+          // Legacy (SCSS/Tailwind): only collect tokens that are aliases in the default mode.
+          continue;
+        }
+
+        // Legacy behavior (SCSS/Tailwind): only collect tokens matching bg/text/border.
+        // CSS opts out of this filter to capture the full semantic set.
         if (
-          !defaultValue ||
-          typeof defaultValue !== 'object' ||
-          !('type' in defaultValue) ||
-          defaultValue.type !== 'VARIABLE_ALIAS'
+          !includeAllSemanticTypes &&
+          !/\/(bg|background|text|foreground|border)\//.test(variable.name.toLowerCase())
         ) {
           continue;
         }
 
-        // Filter by pattern: bg/background, text/foreground, border
-        const varName = variable.name.toLowerCase();
-        if (!/\/(bg|background|text|foreground|border)\//.test(varName)) {
-          continue;
-        }
+        // Determine the property / normalization context from the variable's resolved type.
+        // - COLOR resolves as a color
+        // - FLOAT uses name-based inference (spacing/opacity/line-height/font-weight)
+        // - STRING is emitted verbatim (font-family when the name references a font)
+        const tokenProperty =
+          variable.resolvedType === 'COLOR'
+            ? 'color'
+            : variable.resolvedType === 'FLOAT'
+              ? inferPropertyFromVariableName(variable.name)
+              : variable.name.toLowerCase().includes('font')
+                ? 'font-family'
+                : 'string';
+        const resolveProperty = variable.resolvedType === 'FLOAT' ? tokenProperty : 'fills';
+
+        // Preserve case for STRING values (e.g. font family names) when requested (CSS).
+        const keepCase = preserveStringCase && variable.resolvedType === 'STRING';
+        const normalizeCase = (v: string) => (keepCase ? v : v.toLowerCase());
+
+        // True if the variable is a plain value (not an alias) in at least one mode.
+        const hasLiteralMode = Object.values(variable.valuesByMode).some(
+          (v) => !(v && typeof v === 'object' && 'type' in v && v.type === 'VARIABLE_ALIAS'),
+        );
+
+        // Convert a raw, non-alias mode value into its CSS string representation.
+        const convertModeLiteral = (raw: unknown): string | null => {
+          if (variable.resolvedType === 'COLOR') {
+            if (raw && typeof raw === 'object' && 'r' in raw) {
+              const color = raw as RGB | RGBA;
+              const opacity = 'a' in color ? color.a : 1;
+              return rgbaToString(color.r, color.g, color.b, opacity);
+            }
+            return null;
+          }
+          if (variable.resolvedType === 'FLOAT') {
+            return normalizeValue({ propertyName: tokenProperty, value: Number(raw) });
+          }
+          return String(raw);
+        };
 
         // Collect mode-specific values
         const modeValues: Record<string, string> = {};
@@ -468,37 +554,45 @@ export async function collectSemanticColorVariables(
 
         for (const mode of modes) {
           const modeValue = variable.valuesByMode[mode.modeId];
+          if (!modeValue) continue;
 
-          // Skip if this mode doesn't have a value or isn't an alias
-          if (
-            !modeValue ||
-            typeof modeValue !== 'object' ||
-            !('type' in modeValue) ||
-            modeValue.type !== 'VARIABLE_ALIAS'
-          ) {
-            continue;
-          }
-          // Resolve to primitive variable name for this mode
-          // Note: We need to get the aliased variable for this specific mode
-          const aliasedVariableId = modeValue.id;
-          const aliasedVariable = await figma.variables.getVariableByIdAsync(aliasedVariableId);
+          const modeIsAlias =
+            typeof modeValue === 'object' &&
+            'type' in modeValue &&
+            modeValue.type === 'VARIABLE_ALIAS';
 
-          if (aliasedVariable) {
-            const primitiveRef = sanitizeName(aliasedVariable.name);
-            modePrimitiveRefs[mode.modeId] = primitiveRef;
-
-            // Get the actual resolved color value for this mode
-            const actualValue = await getVariableActualValue(variable, 'fills');
-            modeValues[mode.modeId] = actualValue.toLowerCase();
+          if (modeIsAlias) {
+            // Alias mode: reference the primitive it points at for this mode.
+            const aliasedVariable = await figma.variables.getVariableByIdAsync(modeValue.id);
+            if (aliasedVariable) {
+              modePrimitiveRefs[mode.modeId] = sanitizeName(aliasedVariable.name);
+              const actualValue = await getVariableActualValue(variable, resolveProperty);
+              modeValues[mode.modeId] = normalizeCase(actualValue);
+            }
+          } else if (includeAllSemanticTypes) {
+            // Literal mode (CSS only): emit the raw value so mixed literal/alias tokens
+            // keep their per-mode literal instead of being dropped or inheriting a ref.
+            const literal = convertModeLiteral(modeValue);
+            if (literal !== null) {
+              modeValues[mode.modeId] = normalizeCase(literal);
+            }
           }
         }
 
-        // Resolve to primitive variable name (for default mode - backward compatibility)
-        const primitiveVariableName = await resolveToPrimitiveVariableName(variable);
-        if (!primitiveVariableName) continue;
+        // Default-mode primitive reference. Set only when the default mode is itself an alias
+        // AND the token has no literal modes - otherwise the generator's fallback would emit
+        // this ref for the literal modes too. For mixed/literal-default tokens we leave it
+        // undefined so each mode emits its own literal (modeValues) or alias ref
+        // (modePrimitiveRefs), and :root emits the default literal/resolved value.
+        let primitiveVariableName: string | undefined;
+        if (defaultIsAlias) {
+          const resolved = await resolveToPrimitiveVariableName(variable);
+          if (!resolved) continue;
+          primitiveVariableName = includeAllSemanticTypes && hasLiteralMode ? undefined : resolved;
+        }
 
-        // Get the actual resolved color value for default mode
-        const rawValue = await getVariableActualValue(variable, 'fills');
+        // Get the actual resolved value for default mode (literal or resolved alias value).
+        const rawValue = await getVariableActualValue(variable, resolveProperty);
 
         // Create token - use ModeVariableToken if multiple modes, otherwise StandardVariableToken
         const hasMultipleModes = Object.keys(modeValues).length > 1;
@@ -506,10 +600,10 @@ export async function collectSemanticColorVariables(
           ? ({
               type: 'variable',
               path: [], // No component path - standalone utility
-              property: 'color', // COLOR type variable
+              property: tokenProperty,
               name: sanitizeName(variable.name),
               value: sanitizeName(variable.name),
-              rawValue: rawValue.toLowerCase(),
+              rawValue: normalizeCase(rawValue),
               primitiveRef: primitiveVariableName,
               valueType: null,
               modeId: defaultMode.modeId,
@@ -526,10 +620,10 @@ export async function collectSemanticColorVariables(
           : ({
               type: 'variable',
               path: [], // No component path - standalone utility
-              property: 'color', // COLOR type variable
+              property: tokenProperty,
               name: sanitizeName(variable.name),
               value: sanitizeName(variable.name),
-              rawValue: rawValue.toLowerCase(),
+              rawValue: normalizeCase(rawValue),
               primitiveRef: primitiveVariableName,
               valueType: null,
               metadata: {

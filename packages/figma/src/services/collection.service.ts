@@ -15,7 +15,7 @@ import {
 import { collectPrimitiveVariables, collectSemanticColorVariables } from './variable.service';
 import { collectAllFigmaEffectStyles } from './effect.service';
 import { MAX_PROGRESS_PERCENTAGE, delay, getParentSceneNodes } from '../utils';
-import type { OutputMode } from '@eggstractor/common';
+import type { OutputMode, StylesheetFormat } from '@eggstractor/common';
 
 /**
  * @deprecated - TODO: Separate warning tokens as a separate thing than StyleTokens.
@@ -179,11 +179,14 @@ export function getFlattenedValidNodes(node: BaseNode): {
  *   - 'variables': Only variables (primitives, semantics, effects) - skips node traversal
  *   - 'components': Only component tokens from nodes - skips variables
  *   - 'all': Everything (default behavior)
+ * @param format - Target stylesheet format. Only 'css' opts into the expanded semantic
+ *   collection (all resolved types + typography); other formats keep legacy behavior.
  * @returns TokenCollection with the requested tokens
  */
 export async function collectTokens(
   onProgress: (progress: number, message: string) => void,
   outputMode: OutputMode = 'all',
+  format?: StylesheetFormat,
 ) {
   const collection: TokenCollection = {
     tokens: [],
@@ -300,10 +303,20 @@ export async function collectTokens(
 
   // Always collect standalone Figma Variables (primitive tokens) unless mode is 'components'
   if (outputMode !== 'components') {
-    await collectPrimitiveVariables(collection, onProgress);
+    // CSS captures the full semantic set (all resolved types + typography); other formats
+    // keep their existing (color-only, bg/text/border) behavior so their output is unchanged.
+    const isCssFormat = format === 'css';
 
-    // Collect semantic color variables for utility generation
-    await collectSemanticColorVariables(collection, onProgress);
+    await collectPrimitiveVariables(collection, onProgress, {
+      includeTypographyCollections: isCssFormat,
+      preserveStringCase: isCssFormat,
+    });
+
+    // Collect semantic alias variables for utility generation
+    await collectSemanticColorVariables(collection, onProgress, {
+      includeAllSemanticTypes: isCssFormat,
+      preserveStringCase: isCssFormat,
+    });
 
     // Collect Figma Effect Styles (box-shadow, etc.)
     await collectAllFigmaEffectStyles(collection, onProgress);
