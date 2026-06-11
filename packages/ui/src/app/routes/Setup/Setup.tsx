@@ -6,8 +6,7 @@ import { useSetupForm } from './hooks';
 import styles from './Setup.module.scss';
 
 const FORMAT_OPTIONS: ButtonGroupOption<StylesheetFormat>[] = [
-  // Only include 'css' option in dev mode for testing purposes (for now)
-  ...(__DEV__ ? [{ value: 'css' as const, label: 'CSS' }] : []),
+  { value: 'css', label: 'CSS' },
   { value: 'scss', label: 'SCSS' },
   { value: 'tailwind-scss', label: 'Tailwind 3 + SCSS' },
   { value: 'tailwind-v4', label: 'Tailwind 4' },

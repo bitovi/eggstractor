@@ -131,14 +131,18 @@ const main = async () => {
       });
 
       let lastProgressTime = 0;
-      const tokens = await collectTokens((progress, message) => {
-        const now = Date.now();
+      const tokens = await collectTokens(
+        (progress, message) => {
+          const now = Date.now();
 
-        if (now - lastProgressTime > 500) {
-          lastProgressTime = now;
-          void updateProgress(progress, message);
-        }
-      }, outputMode);
+          if (now - lastProgressTime > 500) {
+            lastProgressTime = now;
+            void updateProgress(progress, message);
+          }
+        },
+        outputMode,
+        format,
+      );
 
       await updateProgress(MAX_PROGRESS_PERCENTAGE, 'Transforming…');
 
