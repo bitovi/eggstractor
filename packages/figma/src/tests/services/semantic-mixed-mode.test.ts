@@ -1,5 +1,5 @@
 import { collectSemanticColorVariables } from '../../services/variable.service';
-import { TokenCollection, VariableToken } from '../../types';
+import { ModeVariableToken, TokenCollection } from '../../types';
 
 /**
  * Regression test for the "dataviz" edge case: a variable that is a plain literal in the
@@ -84,7 +84,7 @@ const newCollection = (): TokenCollection => ({
 
 const findDataviz = (collection: TokenCollection) =>
   collection.tokens.find(
-    (t): t is VariableToken => t.type === 'variable' && t.name === 'color-dataviz-category-02',
+    (t): t is ModeVariableToken => t.type === 'variable' && t.name === 'color-dataviz-category-02',
   );
 
 describe('collectSemanticColorVariables - mixed literal/alias modes (dataviz edge case)', () => {
