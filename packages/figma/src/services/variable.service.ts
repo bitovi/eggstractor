@@ -7,11 +7,14 @@ const variableCache = new Map<string, Variable>();
  * Infer property name from variable name for FLOAT variables
  * This helps normalizeValue apply the correct formatting
  */
-function inferPropertyFromVariableName(variableName: string): string {
+export function inferPropertyFromVariableName(variableName: string): string {
   const lowerName = variableName.toLowerCase();
 
   if (lowerName.includes('opacity')) return 'opacity';
-  if (lowerName.includes('line') || lowerName.includes('linespacing')) return 'line-height';
+  // Match line-height variants specifically (line-height, lineheight, line-spacing,
+  // linespacing, leading) rather than a bare "line" substring, which would wrongly
+  // capture unrelated names like "hairline" and strip their px unit.
+  if (/line[-_\s]?(height|spacing)|leading/.test(lowerName)) return 'line-height';
   if (lowerName.includes('font-weight') || lowerName.includes('weight')) return 'font-weight';
   if (lowerName.includes('font') && !lowerName.includes('size')) return 'font-family';
 
