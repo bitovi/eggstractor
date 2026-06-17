@@ -18,6 +18,18 @@
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
       "version": "0.13.0"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--browser",
+        "chromium",
+        "--no-sandbox",
+        "--caps=vision"
+      ],
+      "type": "stdio"
     }
   }
 }
