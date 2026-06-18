@@ -19,6 +19,6 @@
   "devDependencies": {
     "culori": "^4.0.1",
     "lodash.merge": "^4.6.2",
-    "vite-plugin-singlefile": "^2.3.0"
+    "vite-plugin-singlefile": "^2.3.3"
   }
 }
