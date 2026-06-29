@@ -9,4 +9,16 @@ export default [
     // Override or add rules here
     rules: {},
   },
+  {
+    // Web Workers use `self` instead of `window`; allow it for worker files.
+    files: ['src/**/*.worker.ts'],
+    languageOptions: {
+      globals: {
+        self: 'readonly',
+      },
+    },
+    rules: {
+      'no-restricted-globals': 'off',
+    },
+  },
 ];

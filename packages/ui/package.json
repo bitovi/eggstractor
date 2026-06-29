@@ -10,6 +10,7 @@
     "lint:fix": "nx lint ui --fix"
   },
   "dependencies": {
+    "@tanstack/react-virtual": "^3.13.21",
     "classnames": "^2.5.1",
     "highlight.js": "^11.11.1",
     "react": "^19.0.0",

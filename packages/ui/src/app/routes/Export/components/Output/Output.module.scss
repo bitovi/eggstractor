@@ -2,13 +2,31 @@
 @use '../../../../../resets.scss' as *;
 
 .code-sample {
-  padding: $size-2xl;
   background: transparent;
   border: none;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
+  // flex: 1 fills the horizontal main axis of .content-area (flex row).
+  // align-items: stretch (default) fills the vertical cross axis automatically.
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   position: relative;
+}
+
+.code-block {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.virtual-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: $size-2xl;
 
   /* Custom scrollbar styling */
   &::-webkit-scrollbar {
@@ -21,7 +39,6 @@
 
   &::-webkit-scrollbar-thumb {
     background: $colour-grey-400;
-    // TODO: consider design match (probably too large)
     border-radius: 100px;
     border: $size-sm solid transparent;
   }
@@ -29,28 +46,40 @@
   &::-webkit-scrollbar-thumb:hover {
     background: $colour-grey-500;
   }
-
-  /* Add spacing below Card component when present */
-  :global(.card) {
-    margin-bottom: $size-2xl;
-  }
-
-  pre {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto Mono', monospace;
-    font-size: $size-xl;
-    line-height: 1.5;
-    color: $colour-text;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
 }
 
-.code-block {
-  padding: $size-2xl 0;
+.virtual-list {
+  position: relative;
+  width: 100%;
+}
+
+.virtual-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-family: 'Roboto Mono', monospace;
+  font-size: $size-xl;
+  line-height: 1.5;
+  color: $colour-text;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+pre.plain-text {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto Mono', monospace;
+  font-size: $size-xl;
+  line-height: 1.5;
+  color: $colour-text;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  // Subtly dimmed while waiting for the worker to highlight
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
 }
 
 .copy-button {
@@ -58,6 +87,10 @@
   top: $size-2xl;
   z-index: 10;
   float: right;
+}
+
+.warnings-card {
+  margin-bottom: $size-2xl;
 }
 
 .warnings-list {
