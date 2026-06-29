@@ -1,5 +1,5 @@
 import { GitProviderConfig, GitProvider } from '@eggstractor/common';
-import { toBase64 } from './utils';
+import { toBase64, sanitizeName } from './utils';
 
 export interface PRResult {
   prUrl: string;
@@ -87,10 +87,11 @@ export default {
     content: string,
     instanceUrl?: string | null,
   ): Promise<PRResult> {
+    const safeBranchName = sanitizeName(branchName);
     if (provider === 'gitlab') {
-      return this.createGitLabMR(authToken, repoPath, filePath, branchName, content, instanceUrl);
+      return this.createGitLabMR(authToken, repoPath, filePath, safeBranchName, content, instanceUrl);
     }
-    return this.createGitHubPR(authToken, repoPath, filePath, branchName, content);
+    return this.createGitHubPR(authToken, repoPath, filePath, safeBranchName, content);
   },
   createGitHubPR: async function createGitHubPR(
     authToken: string,
