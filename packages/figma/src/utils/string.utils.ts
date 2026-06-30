@@ -30,6 +30,10 @@ export function sanitizeName(name: string): string {
     .replace(/^-|-$/g, ''); // Remove leading and trailing hyphens
 }
 
+export function sanitizeBranchName(name: string): string {
+  return name.toLowerCase().replace(/ +/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+}
+
 export function sanitizeSegment(segment: string): string {
   return segment
     .toLowerCase()

@@ -1,5 +1,5 @@
 import { GitProviderConfig, GitProvider } from '@eggstractor/common';
-import { toBase64 } from './utils';
+import { toBase64, sanitizeBranchName } from './utils';
 
 export interface PRResult {
   prUrl: string;
@@ -87,18 +87,21 @@ export default {
     content: string,
     instanceUrl?: string | null,
   ): Promise<PRResult> {
-    if (!branchName || !branchName.trim()) {
+    const safeBranchName = sanitizeBranchName(branchName);
+    if (!safeBranchName) {
       throw new Error('Branch name is required');
     }
-    if (/[ ~^:?*\\[\]]|@\{|\.\.|^\.|\.lock$|\.$|\/\/|\/$/.test(branchName)) {
-      throw new Error(
-        `Invalid branch name "${branchName}": avoid spaces and the characters ~ ^ : ? * \\ [ ]`,
+    if (provider === 'gitlab') {
+      return this.createGitLabMR(
+        authToken,
+        repoPath,
+        filePath,
+        safeBranchName,
+        content,
+        instanceUrl,
       );
     }
-    if (provider === 'gitlab') {
-      return this.createGitLabMR(authToken, repoPath, filePath, branchName, content, instanceUrl);
-    }
-    return this.createGitHubPR(authToken, repoPath, filePath, branchName, content);
+    return this.createGitHubPR(authToken, repoPath, filePath, safeBranchName, content);
   },
   createGitHubPR: async function createGitHubPR(
     authToken: string,
