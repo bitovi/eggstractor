@@ -337,7 +337,16 @@ export const generateTailwindBoxShadowClass: Generator = (token, dynamicTheme?) 
   const normalizeBoxShadow = (value: string) => {
     return value
       .split(',')
-      .map((shadow) => shadow.trim().replace(/\s+/g, ' '))
+      .map((shadow) => {
+        // Normalize spaces between shadow components
+        let normalized = shadow.trim().replace(/\s+/g, ' ');
+        // Normalize spaces inside rgba() - remove all spaces for consistent comparison
+        normalized = normalized.replace(
+          /rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/g,
+          'rgba($1,$2,$3,$4)',
+        );
+        return normalized;
+      })
       .join(', ');
   };
 
@@ -347,6 +356,44 @@ export const generateTailwindBoxShadowClass: Generator = (token, dynamicTheme?) 
     const normalizedThemeValue = normalizeBoxShadow(themeValue);
     if (normalizedTokenValue === normalizedThemeValue) {
       return `shadow-${themeName}`;
+    }
+  }
+
+  // Try matching contiguous segments of multi-shadow values against theme tokens
+  // This handles cases where box-shadow combines border insets + drop shadows
+  const shadowSegments = token.rawValue.split(',').map((s) => s.trim());
+
+  for (let startIdx = 0; startIdx < shadowSegments.length; startIdx++) {
+    for (let endIdx = startIdx; endIdx < shadowSegments.length; endIdx++) {
+      const candidateSegments = shadowSegments.slice(startIdx, endIdx + 1);
+      const candidateValue = candidateSegments.join(', ');
+      const normalizedCandidate = normalizeBoxShadow(candidateValue);
+
+      for (const [themeValue, themeName] of Object.entries(boxShadowMapping)) {
+        const normalizedThemeValue = normalizeBoxShadow(themeValue);
+        if (normalizedCandidate === normalizedThemeValue) {
+          // Build result with matched variable and unmatched literals
+          const beforeSegments = shadowSegments.slice(0, startIdx);
+          const afterSegments = shadowSegments.slice(endIdx + 1);
+          const allParts = [...beforeSegments, `var(--${themeName})`, ...afterSegments];
+
+          const resolvedParts = allParts.map((part) => {
+            if (part.startsWith('var(--')) return part; // Already a variable
+
+            // Resolve colors in literal segments
+            let resolved = part;
+            const colorPattern = /#[0-9a-fA-F]{6}/g;
+            resolved = resolved.replace(colorPattern, (hexColor) => {
+              const normalizedHex = hexColor.toLowerCase();
+              const colorThemeName = colorMapping[normalizedHex];
+              return colorThemeName ? `var(--${colorThemeName})` : hexColor;
+            });
+            return resolved.replace(/\s+/g, '_');
+          });
+
+          return `shadow-[${resolvedParts.join(',')}]`;
+        }
+      }
     }
   }
 
