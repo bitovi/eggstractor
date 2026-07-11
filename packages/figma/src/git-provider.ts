@@ -86,11 +86,20 @@ export default {
     branchName: string,
     content: string,
     instanceUrl?: string | null,
+    targetBranch?: string | null,
   ): Promise<PRResult> {
     if (provider === 'gitlab') {
-      return this.createGitLabMR(authToken, repoPath, filePath, branchName, content, instanceUrl);
+      return this.createGitLabMR(
+        authToken,
+        repoPath,
+        filePath,
+        branchName,
+        content,
+        instanceUrl,
+        targetBranch,
+      );
     }
-    return this.createGitHubPR(authToken, repoPath, filePath, branchName, content);
+    return this.createGitHubPR(authToken, repoPath, filePath, branchName, content, targetBranch);
   },
   createGitHubPR: async function createGitHubPR(
     authToken: string,
@@ -98,6 +107,7 @@ export default {
     filePath: string,
     branchName: string,
     content: string,
+    targetBranch?: string | null,
   ): Promise<PRResult> {
     const baseUrl = 'https://api.github.com';
     const headers = {
@@ -116,7 +126,9 @@ export default {
       const repoData = (await repoResponse.json()) as {
         default_branch: string;
       };
-      const defaultBranch = repoData.default_branch;
+      // Use the caller-specified base branch, or fall back to the repo's default branch
+      const defaultBranch =
+        targetBranch && targetBranch.trim() ? targetBranch.trim() : repoData.default_branch;
 
       // Try to create branch, but don't fail if it exists
       try {
@@ -125,7 +137,11 @@ export default {
           { headers },
         );
         if (!refResponse.ok) {
-          throw new Error(`Default branch "${defaultBranch}" not found`);
+          throw new Error(
+            targetBranch && targetBranch.trim()
+              ? `Target branch "${defaultBranch}" not found in ${repoPath}. Please check the Base Branch field in Settings.`
+              : `Default branch "${defaultBranch}" not found`,
+          );
         }
         const refData = (await refResponse.json()) as {
           object: { sha: string };
@@ -238,6 +254,7 @@ export default {
     branchName: string,
     content: string,
     instanceUrl?: string | null,
+    targetBranch?: string | null,
   ): Promise<PRResult> {
     // Validate required parameters
     if (!authToken || !authToken.trim()) {
@@ -304,7 +321,9 @@ export default {
         default_branch: string;
         id: number;
       };
-      const defaultBranch = projectData.default_branch;
+      // Use the caller-specified base branch, or fall back to the project's default branch
+      const defaultBranch =
+        targetBranch && targetBranch.trim() ? targetBranch.trim() : projectData.default_branch;
 
       // Try to create branch from default branch
       try {

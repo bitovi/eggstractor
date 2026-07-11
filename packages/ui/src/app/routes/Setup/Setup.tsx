@@ -40,6 +40,7 @@ export const Setup: FC = () => {
     filePath,
     authToken,
     instanceUrl,
+    targetBranch,
     format,
     useCombinatorialParsing,
     generateSemanticColorUtilities,
@@ -49,6 +50,7 @@ export const Setup: FC = () => {
     setFilePath,
     setAuthToken,
     setInstanceUrl,
+    setBaseBranch,
     setFormat,
     setUseCombinatorialParsing,
     setGenerateSemanticColorUtilities,
@@ -100,6 +102,14 @@ export const Setup: FC = () => {
             linkLabel="Locating your file"
             hint="e.g., src/scss/_eggstracted.scss"
             linkHref="https://docs.github.com/en/repositories/working-with-files/using-files/viewing-and-understanding-files"
+          />
+        </div>
+        <div>
+          <Input
+            value={targetBranch}
+            onChange={setBaseBranch}
+            label="Target branch (optional)"
+            hint="Branch the PR/MR will merge into. Leave empty to use the repo's default branch (e.g., main)."
           />
         </div>
         <div>
