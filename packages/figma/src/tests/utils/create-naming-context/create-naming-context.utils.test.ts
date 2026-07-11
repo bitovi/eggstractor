@@ -127,6 +127,11 @@ describe('createNamingContext', () => {
           expect(result).toBe('button-page-button-language');
         });
 
+        it('should remove apostrophes from variant values', () => {
+          const result = namingContext.createName(path, {}, { Brand: "moody's" });
+          expect(result).toBe('button-page-button-moodys');
+        });
+
         it('should handle multiple special characters together', () => {
           const result = namingContext.createName(
             path,
