@@ -34,6 +34,8 @@ export interface CreatePRPayload extends BaseMessageToMainThreadPayload {
   repoPath: string;
   branchName: string;
   instanceUrl?: string; // For self-hosted GitLab
+  format: StylesheetFormat;
+  outputMode: OutputMode;
 }
 
 /**

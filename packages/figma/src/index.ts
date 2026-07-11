@@ -242,6 +242,8 @@ const main = async () => {
           msg.branchName,
           generatedScss,
           msg.instanceUrl,
+          msg.format,
+          msg.outputMode,
         );
         postMessageToUI({
           type: 'pr-created',

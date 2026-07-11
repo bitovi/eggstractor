@@ -107,6 +107,8 @@ export const Export: FC = () => {
       repoPath,
       filePath,
       branchName,
+      format: getValidStylesheetFormat(format),
+      outputMode,
     });
   };
 
